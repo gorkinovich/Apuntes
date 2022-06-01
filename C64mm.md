@@ -1,5 +1,7 @@
 ﻿# Commodore 64: Mapa de memoria
 
+Este es un resumen y traducción parcial del siguiente [mapa de memoria](https://sta.c64.org/cbm64mem.html) del Commodore 64. Para más información, en inglés, sobre los elementos en la memoria del C64 consulta la siguiente [documentación](https://sta.c64.org/cbmdocs.html).
+
 ## Página Cero
 
 | Dirección | Hexadecimal | Defecto | Descripción |
@@ -9,15 +11,15 @@
 | 2 | \$0002 | - | Sin uso. |
 | 3-4 | \$0003-\$0004 | \$B1AA | Sin uso (dirección de la rutina de conversión de números flotantes a enteros). |
 | 5-6 | \$0005-\$0006 | \$B391 | Sin uso (dirección de la rutina de conversión de números enteros a flotantes). |
-| 7 | \$0007 | - | . |
-| 8 | \$0008 | - | . |
-| 9 | \$0009 | - | . |
-| 10 | \$000A | - | . |
-| 11 | \$000B | - | . |
-| 12 | \$000C | - | . |
-| 13 | \$000D | - | . |
-| 14 | \$000E | - | . |
-| 15 | \$000F | - | . |
+| 7 | \$0007 | - | Usado por varias operaciones (`INPUT`, `AND`, `OR`, `INT`). |
+| 8 | \$0008 | - | Usado por varias operaciones (*tokenizer*, `AND`, `OR`). |
+| 9 | \$0009 | - | Columna actual al usar `SPC` y `TAB`. |
+| 10 | \$000A | - | Flag `LOAD`/`VERIFY` (**\$00** = `LOAD`; **\$01**-**\$FF** = `VERIFY`). |
+| 11 | \$000B | - | Usado por varias operaciones (*tokenizer*, editor BASIC, flag `AND`/`OR`, dimensiones de un array). |
+| 12 | \$000C | - | Flag para operaciones con arrays (**\$00** = Fuera de un `DIM`; **\$40**-**\$FF** = Dentro de un `DIM`). |
+| 13 | \$000D | - | Tipo de expresión (**\$00** = Numérica; **\$FF** = Cadena). |
+| 14 | \$000E | - | Tipo de expresión numérica (**Bit 7:** **0** = Flotante; **1** = Entera). |
+| 15 | \$000F | - | + Modo de dobles comillas del *tokenizer* (**Bit 6:** **0** = Desactivado; **1** = Activado) o de `LIST` (**\$00** = Desactivado; **\$FE** = Activado).<br/>+ Recolector de basura al reservar memoria para cadenas (**\$00**-**\$7F** = Recolección no realizada; **\$80** = Recolección realizada). |
 | 16 | \$0010 | - | . |
 | 17 | \$0011 | - | . |
 | 18 | \$0012 | - | . |
@@ -28,7 +30,7 @@
 | 25-33 | \$0019-\$0021 | - | . |
 | 34-37 | \$0022-\$0025 | - | . |
 | 38-41 | \$0026-\$0029 | - | . |
-| 42 | \$002A | - | . |
+| 42 | \$002A | - | Sin uso salvo para responder cuál es el sentido de la vida, el universo y todo lo demás. |
 | 43-44 | \$002B-\$002C | - | . |
 | 45-46 | \$002D-\$002E | - | . |
 | 47-48 | \$002F-\$0030 | - | . |
@@ -49,7 +51,7 @@
 | 77 | \$004D | - | . |
 | 78-79 | \$004E-\$004F | - | . |
 | 80-81 | \$0050-\$0051 | - | . |
-| 82 | \$0052 | - | . |
+| 82 | \$0052 | - | Sin uso. |
 | 83 | \$0053 | - | . |
 | 84-86 | \$0054-\$0056 | - | . |
 | 87-91 | \$0057-\$005B | - | . |
@@ -133,16 +135,15 @@
 | 245-246 | \$00F5-\$00F6 | - | . |
 | 247-248 | \$00F7-\$00F8 | - | . |
 | 249-250 | \$00F9-\$00FA | - | . |
-| 251-254 | \$00FB-\$00FE | - | . |
-| 255-266 | \$00FF-\$010A | - | . |
+| 251-254 | \$00FB-\$00FE | - | Sin uso (4 bytes). |
+| 255-266 | \$00FF-\$010A | - | Buffer para convertir número flotantes a cadena (12 bytes).<br/>**NOTA:** Invade el espacio final de la pila de programa. |
 
 ## Pila de programa
 
-| Dirección | Hexadecimal | Defecto | Descripción |
-|:---------:|:-----------:|:-------:|-------------|
-| 255-266 | \$00FF-\$010A | - | . |
-| 256-317 | \$0100-\$013D | - | . |
-| 256-511 | \$0100-\$01FF | - | . |
+| Dirección | Hexadecimal | Descripción |
+|:---------:|:-----------:|-------------|
+| 256-317 | \$0100-\$013D | Punteros a los bytes de lectura con errores durante la lectura del *datasette* (62 bytes, 31 entradas). |
+| 256-511 | \$0100-\$01FF | Pila del procesador. También se utiliza para almacenar datos para gestionar los `FOR` y los `GOSUB`. |
 
 ## Memoria del sistema
 
@@ -155,7 +156,7 @@
 | 631-640 | \$0277-\$0280 | - | . |
 | 641-642 | \$0281-\$0282 | - | . |
 | 643-644 | \$0283-\$0284 | - | . |
-| 645 | \$0285 | - | . |
+| 645 | \$0285 | - | Sin uso (Serial bus timeout). |
 | 646 | \$0286 | - | . |
 | 647 | \$0287 | - | . |
 | 648 | \$0288 | - | . |
@@ -185,7 +186,7 @@
 | 676 | \$02A4 | - | . |
 | 677 | \$02A5 | - | . |
 | 678 | \$02A6 | - | . |
-| 679-767 | \$02A7-\$02FF | - | . |
+| 679-767 | \$02A7-\$02FF | - | Sin uso (89 bytes). |
 | 768-769 | \$0300-\$0301 | - | . |
 | 770-771 | \$0302-\$0303 | - | . |
 | 772-773 | \$0304-\$0305 | - | . |
@@ -197,7 +198,7 @@
 | 782 | \$030E | - | . |
 | 783 | \$030F | - | . |
 | 784-786 | \$0310-\$0312 | - | . |
-| 787 | \$0313 | - | . |
+| 787 | \$0313 | - | Sin uso. |
 | 788-789 | \$0314-\$0315 | - | . |
 | 790-791 | \$0316-\$0317 | - | . |
 | 792-793 | \$0318-\$0319 | - | . |
@@ -211,38 +212,43 @@
 | 808-809 | \$0328-\$0329 | - | . |
 | 810-811 | \$032A-\$032B | - | . |
 | 812-813 | \$032C-\$032D | - | . |
-| 814-815 | \$032E-\$032F | - | . |
+| 814-815 | \$032E-\$032F | \$FE66 | Sin uso. |
 | 816-817 | \$0330-\$0331 | - | . |
 | 818-819 | \$0332-\$0333 | - | . |
-| 820-827 | \$0334-\$033B | - | . |
+| 820-827 | \$0334-\$033B | - | Sin uso (8 bytes). |
 | 828-1019 | \$033C-\$03FB | - | . |
-| 1020-1023 | \$03FC-\$03FF | - | . |
+| 1020-1023 | \$03FC-\$03FF | - | Sin uso (4 bytes). |
 
 ## Buffer de pantalla inicial
 
-| Dirección | Hexadecimal | Defecto | Descripción |
-|:---------:|:-----------:|:-------:|-------------|
-| 1024-2023 | \$0400-\$07E7 | - | . |
-| 2024-2039 | \$07E8-\$07F7 | - | . |
-| 2040-2047 | \$07F8-\$07FF | - | . |
+| Dirección | Hexadecimal | Descripción |
+|:---------:|:-----------:|-------------|
+| 1024-2023 | \$0400-\$07E7 | Buffer de pantalla (1000 bytes). |
+| 2024-2039 | \$07E8-\$07F7 | Sin uso (16 bytes). |
+| 2040-2047 | \$07F8-\$07FF | Punteros de sprites (8 bytes). |
+
+**NOTA:** Al iniciar el C64 esta es la región por defecto para el buffer de pantalla y los punteros de sprite, pero se puede cambiar esa configuración en los registros del VIC-II.
 
 ## Memoria de programas
 
-| Dirección | Hexadecimal | Defecto | Descripción |
-|:---------:|:-----------:|:-------:|-------------|
-| 2048 | \$0800 | - | . |
-| 2049-40959 | \$0801-\$9FFF | - | . |
-| 32768-40959 | \$8000-\$9FFF | - | . |
-| 40960-49151 | \$A000-\$BFFF | - | . |
-| 49152-53247 | \$C000-\$CFFF | - | . |
+| Dirección | Hexadecimal | Descripción |
+|:---------:|:-----------:|-------------|
+| 2048 | \$0800 | Sin uso (necesita el valor 0 para poder ejecutar los programas BASIC). |
+| 2049-40959 | \$0801-\$9FFF | Memoria para programas BASIC (38911 bytes). |
+| 32768-40959 | \$8000-\$9FFF | ROM de cartuchos opcional (8192 bytes).<br/>\$8000-\$8001: Puntero a la ejecución del reinicio frío.<br/>\$8002-\$8003: Puntero a la ejecución de rutinas de interrupción no enmascarables.<br/>\$8004-\$8008: Firma del cartucho, si contiene la cadena PETSCII `"CBM80"` los vectores de rutinas son aceptados por el KERNAL. |
+| 40960-49151 | \$A000-\$BFFF | ROM BASIC/Memoria RAM. |
+| 49152-53247 | \$C000-\$CFFF | Memoria RAM superior. |
 
 ## ROM de las fuentes de caracteres
 
-| Dirección | Hexadecimal | Defecto | Descripción |
-|:---------:|:-----------:|:-------:|-------------|
-| 53248-57343 | \$D000-\$DFFF | - | . |
-| 53248-55295 | \$D000-\$D7FF | - | . |
-| 55295-57343 | \$D800-\$DFFF | - | . |
+| Dirección | Hexadecimal | Descripción |
+|:---------:|:-----------:|-------------|
+| 53248-55295 | \$D000-\$D7FF | Fuente del modo mayúsculas (2048 bytes, 256 caracteres). |
+| 55295-57343 | \$D800-\$DFFF | Fuente del modo minúsculas (2048 bytes, 256 caracteres). |
+
+<p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d8/Fonts-C64.png" alt="Fuentes del C64"></p>
+
+**NOTA:** Por defecto esta ROM no es accesible, porque la memoria está configurada para acceder a los registros en memoria del VIC-II, SID, CIA1 y CIA2, para realizar operaciones de entrada y salida.
 
 ## Chip gráfico VIC-II
 
@@ -330,16 +336,16 @@
 
 ## Buffer de color de pantalla
 
-| Dirección | Hexadecimal | Defecto | Descripción |
-|:---------:|:-----------:|:-------:|-------------|
-| 55296-56295 | \$D800-\$DBE7 | - | . |
-| 56296-56319 | \$DBE8-\$DBFF | - | . |
+| Dirección | Hexadecimal | Descripción |
+|:---------:|:-----------:|-------------|
+| 55296-56295 | \$D800-\$DBE7 |Buffer de color de la pantalla (1000 bytes)<br/>**Bits 0-3:** Color del 0 al 15. |
+| 56296-56319 | \$DBE8-\$DBFF | Sin uso (24 bytes). |
 
 ## CIA1: Entrada, Datasette, IRQ
 
 | Dirección | Hexadecimal | Defecto | Descripción |
 |:---------:|:-----------:|:-------:|-------------|
-| 56320 | \$DC00 | - | . |
+| 56320 | \$DC00 | - | Puerto A: Matriz de teclado y joystick 2. Lectura |
 | 56321 | \$DC01 | - | . |
 | 56322 | \$DC02 | - | . |
 | 56323 | \$DC03 | - | . |
@@ -353,7 +359,7 @@
 | 56333 | \$DC0D | - | . |
 | 56334 | \$DC0E | - | . |
 | 56335 | \$DC0F | - | . |
-| 56336-56575 | \$DC10-\$DCFF | - | . |
+| 56336-56575 | \$DC10-\$DCFF | - | Duplicados de la CIA1 (segmentos de 16 bytes). |
 
 ## CIA2: Serial Bus, RS-232, NMI
 
@@ -373,7 +379,7 @@
 | 56589 | \$DD0D | - | . |
 | 56590 | \$DD0E | - | . |
 | 56591 | \$DD0F | - | . |
-| 56592-56831 | \$DD10-\$DDFF | - | . |
+| 56592-56831 | \$DD10-\$DDFF | - | Duplicados de la CIA2 (segmentos de 16 bytes). |
 
 ## Bloques finales de memoria
 
