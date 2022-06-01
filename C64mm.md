@@ -6,8 +6,8 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 
 | Dirección | Hexadecimal | Defecto | Descripción |
 |:---------:|:-----------:|:-------:|-------------|
-| 0 | \$0000 | \$2F (00101111) | Configuración del registro de puertos de la CPU. Valores para cada bit: **0** = Modo lectura; **1** = Modo lectura/escritura. |
-| 1 | \$0001 | \$37 (00110111) | Registro de puertos de la CPU:<br/>**Bits 0-2:** Configuración de los bloques de memoria en \$A000-\$BFFF, \$D000-\$DFFF y \$E000-\$FFFF.<br/> + **000;100:** RAM visible en los tres bloques.<br/> + **x01:** RAM visible en \$A000-\$BFFF y \$E000-\$FFFF.<br/> + **x10:** RAM visible en \$A000-\$BFFF y KERNAL ROM visible en \$E000-\$FFFF.<br/> + **x11:** BASIC ROM visible en \$A000-\$BFFF y KERNAL ROM visible en \$E000-\$FFFF.<br/> + **0xx:** ROM de caracteres visible en \$D000-\$DFFF (excepto valor 000).<br/> + **1xx:** Chips E/S visibles en \$D000-\$DFFF (excepto valor 100).<br/>**Bit 3:** Nivel de señal de salida del *datasette*.<br/>**Bit 4:** Estado de los botones del *datasette*: **0** = Uno o más botones pulsados; **1** = Ningún botón pulsado.<br/>**Bit 5:** Control del motor del *datasette*: **0** = Encendido; **1** = Apagado. |
+| 0 | \$0000 | \$2F (00101111) | Configuración del registro de puertos de la CPU. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
+| 1 | \$0001 | \$37 (00110111) | Registro de puertos de la CPU:<br/>**Bits 0-2:** Configuración de los bloques de memoria en \$A000-\$BFFF, \$D000-\$DFFF y \$E000-\$FFFF.<br/> + **000;100** = RAM visible en los tres bloques.<br/> + **x01** = RAM visible en \$A000-\$BFFF y \$E000-\$FFFF.<br/> + **x10** = RAM visible en \$A000-\$BFFF y KERNAL ROM visible en \$E000-\$FFFF.<br/> + **x11** = BASIC ROM visible en \$A000-\$BFFF y KERNAL ROM visible en \$E000-\$FFFF.<br/> + **0xx** = ROM de caracteres visible en \$D000-\$DFFF (excepto valor 000).<br/> + **1xx** = Chips E/S visibles en \$D000-\$DFFF (excepto valor 100).<br/>**Bit 3:** Nivel de señal de salida del *datasette*.<br/>**Bit 4:** Estado de los botones del *datasette*: **0** = Uno o más botones pulsados; **1** = Ningún botón pulsado.<br/>**Bit 5:** Control del motor del *datasette*: **0** = Encendido; **1** = Apagado. |
 | 2 | \$0002 | - | Sin uso. |
 | 3-4 | \$0003-\$0004 | \$B1AA | Sin uso (dirección de la rutina de conversión de números flotantes a enteros). |
 | 5-6 | \$0005-\$0006 | \$B391 | Sin uso (dirección de la rutina de conversión de números enteros a flotantes). |
@@ -345,7 +345,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 
 | Dirección | Hexadecimal | Defecto | Descripción |
 |:---------:|:-----------:|:-------:|-------------|
-| 56320 | \$DC00 | - | Puerto A: Matriz de teclado y joystick 2. Lectura |
+| 56320 | \$DC00 | - | Puerto A: Matriz de teclado y joystick 2. Lectura de bits:<br>+ **Bit 0:** **0** = Arriba del Joystick 2 pulsado.<br>+ **Bit 1:** **0** = Abajo del Joystick 2 pulsado.<br>+ **Bit 2:** **0** = Izquierda del Joystick 2 pulsado.<br>+ **Bit 3:** **0** = Derecha del Joystick 2 pulsado.<br>+ **Bit 4:** **0** = Disparo del Joystick 2 pulsado.<br>Escritura de bits:<br>+ **Bit 0-7:** **0** = Seleccionar que fila en la matrix del teclado leer.<br>+ **Bit 6-7:** **01** Paddle 1; **10** Paddle 2.  |
 | 56321 | \$DC01 | - | . |
 | 56322 | \$DC02 | - | . |
 | 56323 | \$DC03 | - | . |
