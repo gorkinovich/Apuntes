@@ -301,38 +301,59 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 53292 | \$D02C | - | . |
 | 53293 | \$D02D | - | . |
 | 53294 | \$D02E | - | . |
-| 53295-53311 | \$D02F-\$D03F | - | . |
-| 53312-54271 | \$D040-\$D3FF | - | . |
+| 53295-53311 | \$D02F-\$D03F | - | Sin uso (17 bytes). |
+| 53312-54271 | \$D040-\$D3FF | - | Duplicados del VIC-II (segmentos de 64 bytes). |
 
 ## Chip sonoro SID
 
-| Dirección | Hexadecimal | Defecto | Descripción |
-|:---------:|:-----------:|:-------:|-------------|
-| 54272-54273 | \$D400-\$D401 | - | . |
-| 54274-54275 | \$D402-\$D403 | - | . |
-| 54276 | \$D404 | - | . |
-| 54277 | \$D405 | - | . |
-| 54278 | \$D406 | - | . |
-| 54279-54280 | \$D407-\$D408 | - | . |
-| 54281-54282 | \$D409-\$D40A | - | . |
-| 54283 | \$D40B | - | . |
-| 54284 | \$D40C | - | . |
-| 54285 | \$D40D | - | . |
-| 54286-54287 | \$D40E-\$D40F | - | . |
-| 54288-54289 | \$D410-\$D411 | - | . |
-| 54290 | \$D412 | - | . |
-| 54291 | \$D413 | - | . |
-| 54292 | \$D414 | - | . |
-| 54293 | \$D415 | - | . |
-| 54294 | \$D416 | - | . |
-| 54295 | \$D417 | - | . |
-| 54296 | \$D418 | - | . |
-| 54297 | \$D419 | - | . |
-| 54298 | \$D41A | - | . |
-| 54299 | \$D41B | - | . |
-| 54300 | \$D41C | - | . |
-| 54301-54303 | \$D41D-\$D41F | - | . |
-| 54304-55295 | \$D420-\$D7FF | - | . |
+| Dirección | Hexadecimal | Modo L/E | Descripción |
+|:---------:|:-----------:|:--------:|-------------|
+| 54272-54273 | \$D400-\$D401 | Escritura | Frecuencia de la voz 1 (*Frequency*). |
+| 54274-54275 | \$D402-\$D403 | Escritura | Ancho de pulso de la voz 1 (*Pulse Width*). |
+| 54276 | \$D404 | Escritura | Registros de control de la voz 1:<br/>+ **Bit 0:** **0** = Apagar voz (modo *Release*); **1** = Encender voz (modo *Attack-Decay-Sustain*).<br/>+ **Bit 1:** **1** = Activar sincronización.<br/>+ **Bit 2:** **1** = Activar modulación de anillo (*Ring Modulator*).<br/>+ **Bit 3:** **1** = Desactivar voz, reiniciar generador de ruido (*Noise Generator*).<br/>+ **Bit 4:** **1** = Activar onda triangular (*Triangle*).<br/>+ **Bit 5:** **1** = Activar onda en sierra (*Saw*).<br/>+ **Bit 6:** **1** = Activar onda cuadrada (*Square*).<br/>+ **Bit 7:** **1** = Activar ruido (*Noise*). |
+| 54277 | \$D405 | Escritura | *Attack* y *Decay* de la voz 1:<br/>+ **Bits 0-3:** Nivel de *Decay* (0-15).<br/>+ **Bits 4-7:** Nivel de *Attack* (0-15). |
+| 54278 | \$D406 | Escritura | *Sustain* y *Release* de la voz 1:<br/>+ **Bits 0-3:** Nivel de *Release* (0-15).<br/>+ **Bits 4-7:** Volumen de *Sustain* (0-15). |
+| 54279-54280 | \$D407-\$D408 | Escritura | Frecuencia de la voz 2 (*Frequency*). |
+| 54281-54282 | \$D409-\$D40A | Escritura | Ancho de pulso de la voz 2 (*Pulse Width*). |
+| 54283 | \$D40B | Escritura | Registros de control de la voz 2. |
+| 54284 | \$D40C | Escritura | *Attack* y *Decay* de la voz 2. |
+| 54285 | \$D40D | Escritura | *Sustain* y *Release* de la voz 2. |
+| 54286-54287 | \$D40E-\$D40F | Escritura | Frecuencia de la voz 3 (*Frequency*). |
+| 54288-54289 | \$D410-\$D411 | Escritura | Ancho de pulso de la voz 3 (*Pulse Width*). |
+| 54290 | \$D412 | Escritura | Registros de control de la voz 3. |
+| 54291 | \$D413 | Escritura | *Attack* y *Decay* de la voz 3. |
+| 54292 | \$D414 | Escritura | *Sustain* y *Release* de la voz 3. |
+| 54293 | \$D415 | Escritura | Filtro de corte de frecuencias (*Cut Off*).<br/>**Bits 0-2:** Bits 0-2 del valor final. |
+| 54294 | \$D416 | Escritura | Filtro de corte de frecuencias (*Cut Off*).<br/>**Bits 0-7:** Bits 3-10 del valor final. |
+| 54295 | \$D417 | Escritura | Control del filtro:<br/>+ **Bit 0:** **1** = Voz 1 filtrada.<br/>+ **Bit 1:** **1** = Voz 2 filtrada.<br/>+ **Bit 2:** **1** = Voz 3 filtrada.<br/>+ **Bit 3:** **1** = Voz externa filtrada.<br/>+ **Bits 4-7:** Resonancia del filtro (*Resonance*). |
+| 54296 | \$D418 | Escritura | Volumen y modos de filtrado:<br/>+ **Bits 0-3:** Volumen.<br/>+ **Bit 4:** **1** = Filtro de paso bajo activado (LPF).<br/>+ **Bit 5:** **1** = Filtro de paso banda activado (BPF).<br/>+ **Bit 6:** **1** = Filtro de paso alto activado (HPF).<br/>+ **Bit 7:** Voz 3 desactivada. |
+| 54297 | \$D419 | Lectura | Valor X del paddle seleccionado en \$DC00. (Se actualiza cada 512 ciclos.) |
+| 54298 | \$D41A | Lectura | Valor Y del paddle seleccionado en \$DC00. (Se actualiza cada 512 ciclos.) |
+| 54299 | \$D41B | Lectura | Salida de onda de la voz 3. |
+| 54300 | \$D41C | Lectura | Salida del ADSR de la voz 3. |
+| 54301-54303 | \$D41D-\$D41F | - | Sin uso (3 bytes). |
+| 54304-55295 | \$D420-\$D7FF | - | Duplicados del SID (segmentos de 32 bytes). |
+
+Tabla de valores para los niveles del ADSR:
+
+| Nivel | Binario | Hexadecimal | Attack | Decay | Release |
+|:-----:|:-------:|:-----------:|:------:|:-----:|:-------:|
+| 0  | 0000 | 0 |   2 ms |   6 ms |   6 ms |
+| 1  | 0001 | 1 |   8 ms |  24 ms |  24 ms |
+| 2  | 0010 | 2 |  16 ms |  48 ms |  48 ms |
+| 3  | 0011 | 3 |  24 ms |  72 ms |  72 ms |
+| 4  | 0100 | 4 |  38 ms | 114 ms | 114 ms |
+| 5  | 0101 | 5 |  56 ms | 168 ms | 168 ms |
+| 6  | 0110 | 6 |  68 ms | 204 ms | 204 ms |
+| 7  | 0111 | 7 |  80 ms | 240 ms | 240 ms |
+| 8  | 1000 | 8 | 100 ms | 300 ms | 300 ms |
+| 9  | 1001 | 9 | 250 ms | 750 ms | 750 ms |
+| 10 | 1010 | A | 500 ms | 1.5 s  | 1.5 s  |
+| 11 | 1011 | B | 800 ms | 2.4 s  | 2.4 s  |
+| 12 | 1100 | C |   1 s  |   3 s  |   3 s  |
+| 13 | 1101 | D |   3 s  |   9 s  |   9 s  |
+| 14 | 1110 | E |   5 s  |  15 s  |  15 s  |
+| 15 | 1111 | F |   8 s  |  24 s  |  24 s  |
 
 ## Buffer de color de pantalla
 
