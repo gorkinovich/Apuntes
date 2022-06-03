@@ -345,20 +345,20 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 
 | Dirección | Hexadecimal | Defecto | Descripción |
 |:---------:|:-----------:|:-------:|-------------|
-| 56320 | \$DC00 | - | Puerto A: Matriz de teclado y joystick 2. Lectura de bits:<br>+ **Bit 0:** **0** = Arriba del Joystick 2 pulsado.<br>+ **Bit 1:** **0** = Abajo del Joystick 2 pulsado.<br>+ **Bit 2:** **0** = Izquierda del Joystick 2 pulsado.<br>+ **Bit 3:** **0** = Derecha del Joystick 2 pulsado.<br>+ **Bit 4:** **0** = Disparo del Joystick 2 pulsado.<br>Escritura de bits:<br>+ **Bit 0-7:** **0** = Seleccionar que fila en la matrix del teclado leer.<br>+ **Bit 6-7:** **01** Paddle 1; **10** Paddle 2.  |
-| 56321 | \$DC01 | - | . |
-| 56322 | \$DC02 | - | . |
-| 56323 | \$DC03 | - | . |
-| 56324-56325 | \$DC04-\$DC05 | - | . |
-| 56326-56327 | \$DC06-\$DC07 | - | . |
-| 56328 | \$DC08 | - | . |
-| 56329 | \$DC09 | - | . |
-| 56330 | \$DC0A | - | . |
-| 56331 | \$DC0B | - | . |
-| 56332 | \$DC0C | - | . |
-| 56333 | \$DC0D | - | . |
-| 56334 | \$DC0E | - | . |
-| 56335 | \$DC0F | - | . |
+| 56320 | \$DC00 | - | Puerto A: Matriz de teclado y joystick 2. Lectura de bits:<br>+ **Bit 0:** **0** = Arriba del Joystick 2 pulsado.<br>+ **Bit 1:** **0** = Abajo del Joystick 2 pulsado.<br>+ **Bit 2:** **0** = Izquierda del Joystick 2 pulsado.<br>+ **Bit 3:** **0** = Derecha del Joystick 2 pulsado.<br>+ **Bit 4:** **0** = Disparo del Joystick 2 pulsado.<br>Escritura de bits:<br>+ **Bit 0-7:** **0** = Seleccionar que fila en la matriz del teclado leer.<br>+ **Bit 6-7:** **01** Paddle 1; **10** Paddle 2.  |
+| 56321 | \$DC01 | - | Puerto B: Matriz de teclado y joystick 1. Lectura de bits:<br>+ **Bit 0:** **0** = Arriba del Joystick 1 pulsado.<br>+ **Bit 1:** **0** = Abajo del Joystick 1 pulsado.<br>+ **Bit 2:** **0** = Izquierda del Joystick 1 pulsado.<br>+ **Bit 3:** **0** = Derecha del Joystick 1 pulsado.<br>+ **Bit 4:** **0** = Disparo del Joystick 1 pulsado.<br>+ **Bit 0-7:** **0** = Tecla pulsada en la fila seleccionada de la matriz del teclado. |
+| 56322 | \$DC02 | - | Configuración del puerto A. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
+| 56323 | \$DC03 | - | Configuración del puerto B. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
+| 56324-56325 | \$DC04-\$DC05 | - | Cuenta atrás A (*Timer*). Lectura: Valor actual. Escritura: Marca de tiempo inicial. |
+| 56326-56327 | \$DC06-\$DC07 | - | Cuenta atrás B (*Timer*). Lectura: Valor actual. Escritura: Marca de tiempo inicial. |
+| 56328 | \$DC08 | - | Reloj Del Sistema: Décimas en formato BCD (\$00-\$09).  Lectura: Valor actual. Escritura: Configurar RDS o alarma. |
+| 56329 | \$DC09 | - | Reloj Del Sistema: Segundos en formato BCD (\$00-\$59).  Lectura: Valor actual. Escritura: Configurar RDS o alarma. |
+| 56330 | \$DC0A | - | Reloj Del Sistema: Minutos en formato BCD (\$00-\$59).  Lectura: Valor actual. Escritura: Configurar RDS o alarma. |
+| 56331 | \$DC0B | - | Reloj Del Sistema: Horas en formato BCD (**Bits 0-5:** Horas; **Bit 7:** **0** = AM, **1** = PM).  Lectura: Valor actual. Escritura: Configurar RDS o alarma. |
+| 56332 | \$DC0C | - | Registro de cambios en serie (*serial shift*). (Los bits son leídos y escritos cada salto positivo del pin CNT.) |
+| 56333 | \$DC0D | - | Registro de estado y control de interrupciones. Bits de lectura:<br>+ **Bit 0:** **1** = Desbordamiento inferior en la cuenta atrás A.<br>+ **Bit 1:** **1** = Desbordamiento inferior en la cuenta atrás B.<br>+ **Bit 2:** **1** = El RDS es igual a la hora de alarma.<br>+ **Bit 3:** **1** = Un byte completo se ha recibido o enviado desde el registro de cambios en serie (*serial shift*).<br>+ **Bit 4:** Nivel de señal en el pin FLAG, lectura del *datasette*.<br>+ **Bit 7:** Una interrupción ha sido generada.<br>Bits de escritura:<br>+ **Bit 0:** **1** = Activar las interrupciones de desbordamiento inferior en la cuenta atrás A.<br>+ **Bit 1:** **1** = Activar las interrupciones de desbordamiento inferior en la cuenta atrás B.<br>+ **Bit 2:** **1** = Activar las interrupciones de la alarma.<br>+ **Bit 3:** **1** = Activar las interrupciones por recibir/enviar un byte completo en el registro de cambios en serie (*serial shift*).<br>+ **Bit 4:** **1** = Activar las interrupciones por un salto positivo en el pin FLAG.<br>+ **Bit 7:** Bit de relleno para los bits 0-6 (1 = Toman el valor del bit; 0 = No son modificados). |
+| 56334 | \$DC0E | - | Registro de control de la cuenta atrás A:<br>+ **Bit 0:** **0** = Parar; **1** = Iniciar.<br>+ **Bit 1:** **1** = Indica desbordamiento inferior del temporizador en el bit 6 del puerto B.<br>+ **Bit 2:** **0** = Invertir el bit 6 del puerto B con el desbordamiento inferior; **1** = Generar con el desbordamiento inferior un salto positivo en el bit 6 del puerto B durante un ciclo de la CPU.<br>+ **Bit 3:** Acción de la cuenta atrás cuando hay un desbordamiento inferior. **0** = Reiniciar; **1** = Parar.<br>+ **Bit 4:** **1** = Carga el valor de inicio de la cuenta atrás.<br>+ **Bit 5:** Modo de la cuenta atrás. **0** = Ciclos de la CPU; **1** = Saltos positivos del pin CNT.<br>+ **Bit 6:** Configuración del registro de cambios en serie (*serial shift*). **0** = Lectura; **1** = Escritura.<br>+ **Bit 7:** Velocidad del RDS. **0** = 60 Hz; **1** = 50 Hz. |
+| 56335 | \$DC0F | - | Registro de control de la cuenta atrás B:<br>+ **Bit 0:** **0** = Parar; **1** = Iniciar.<br>+ **Bit 1:** **1** = Indica desbordamiento inferior del temporizador en el bit 7 del puerto B.<br>+ **Bit 2:** **0** = Invertir el bit 7 del puerto B con el desbordamiento inferior; **1** = Generar con el desbordamiento inferior un salto positivo en el bit 7 del puerto B durante un ciclo de la CPU.<br>+ **Bit 3:** Acción de la cuenta atrás cuando hay un desbordamiento inferior. **0** = Reiniciar; **1** = Parar.<br>+ **Bit 4:** **1** = Carga el valor de inicio de la cuenta atrás.<br>+ **Bit 5-6:** Acciones de la cuenta atrás. **00** = Contar ciclos de la CPU; **01** = Contar saltos positivos del pin CNT; **10** = Contar desbordamientos inferiores de la cuenta atrás A; **11** = Contar desbordamientos inferiores de la cuenta atrás A que ocurren cuando hay un salto positivo en el pin CNT.<br>+ **Bit 7:** Acción cuando se escribe el RDS. **0** = Configurar el RDS; **1** = Configurar la alarma. |
 | 56336-56575 | \$DC10-\$DCFF | - | Duplicados de la CIA1 (segmentos de 16 bytes). |
 
 ## CIA2: Serial Bus, RS-232, NMI
