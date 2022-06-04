@@ -20,65 +20,65 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 13 | \$000D | - | Tipo de expresión (**\$00** = Numérica; **\$FF** = Cadena). |
 | 14 | \$000E | - | Tipo de expresión numérica (**Bit 7:** **0** = Flotante; **1** = Entera). |
 | 15 | \$000F | - | + Modo de dobles comillas del *tokenizer* (**Bit 6:** **0** = Desactivado; **1** = Activado) o de `LIST` (**\$00** = Desactivado; **\$FE** = Activado).<br/>+ Recolector de basura al reservar memoria para cadenas (**\$00**-**\$7F** = Recolección no realizada; **\$80** = Recolección realizada). |
-| 16 | \$0010 | - | . |
-| 17 | \$0011 | - | . |
-| 18 | \$0012 | - | . |
-| 19 | \$0013 | - | . |
-| 20-21 | \$0014-\$0015 | - | . |
-| 22 | \$0016 | - | . |
-| 23-24 | \$0017-\$0018 | - | . |
-| 25-33 | \$0019-\$0021 | - | . |
-| 34-37 | \$0022-\$0025 | - | . |
-| 38-41 | \$0026-\$0029 | - | . |
+| 16 | \$0010 | - | Flag durante la obtención del nombre de variable (**\$00** = Se aceptan variables enteras; **\$01-\$FF** = No se aceptan variables enteras). |
+| 17 | \$0011 | - | Flag `GET`/`INPUT`/`READ` (**\$00** = `GET`; **\$40** = `INPUT`; **\$98** = `READ`). |
+| 18 | \$0012 | - | Signo durante `SIN` y `TAN` (**\$00** = Positivo; **\$FF** = Negativo). |
+| 19 | \$0013 | \$00 | Número de dispositivo de E/S actual. (Por defecto el teclado para la entrada y la pantalla para la salida.) |
+| 20-21 | \$0014-\$0015 | - | Usado por varias operaciones (`GOSUB`, `GOTO`, `RUN`, `LIST`, `PEEK`, `POKE`, `SYS` y `WAIT`). |
+| 22 | \$0016 | - | Puntero a la siguiente expresión en la pila de cadenas. |
+| 23-24 | \$0017-\$0018 | - | Puntero a la anterior expresión en la pila de cadenas. |
+| 25-33 | \$0019-\$0021 | - | Área temporal para procesar expresiones de cadenas (9 bytes, 3 entradas). |
+| 34-37 | \$0022-\$0025 | - | Área temporal para varias operaciones (4 bytes). |
+| 38-41 | \$0026-\$0029 | - | Registro aritmético auxiliar para divisiones y multiplicaciones (4 bytes). |
 | 42 | \$002A | - | Sin uso salvo para responder cuál es el sentido de la vida, el universo y todo lo demás. |
-| 43-44 | \$002B-\$002C | - | . |
-| 45-46 | \$002D-\$002E | - | . |
-| 47-48 | \$002F-\$0030 | - | . |
-| 49-50 | \$0031-\$0032 | - | . |
-| 51-52 | \$0033-\$0034 | - | . |
-| 53-54 | \$0035-\$0036 | - | . |
-| 55-56 | \$0037-\$0038 | - | . |
-| 57-58 | \$0039-\$003A | - | . |
-| 59-60 | \$003B-\$003C | - | . |
-| 61-62 | \$003D-\$003E | - | . |
-| 63-64 | \$003F-\$0040 | - | . |
-| 65-66 | \$0041-\$0042 | - | . |
-| 67-68 | \$0043-\$0044 | - | . |
-| 69-70 | \$0045-\$0046 | - | . |
-| 71-72 | \$0047-\$0048 | - | . |
-| 73-74 | \$0049-\$004A | - | . |
-| 75-76 | \$004B-\$004C | - | . |
-| 77 | \$004D | - | . |
-| 78-79 | \$004E-\$004F | - | . |
-| 80-81 | \$0050-\$0051 | - | . |
+| 43-44 | \$002B-\$002C | \$0801 | Puntero al inicio de la memoria de programas BASIC. |
+| 45-46 | \$002D-\$002E | - | Puntero al inicio del bloque de variables. (Final de programa +1.) |
+| 47-48 | \$002F-\$0030 | - | Puntero al inicio del bloque de variables de arrays. |
+| 49-50 | \$0031-\$0032 | - | Puntero al final del bloque de variables. |
+| 51-52 | \$0033-\$0034 | - | Puntero al inicio del bloque de variables de cadenas. (Crece desde el final de la memoria de programas BASIC hacia abajo.) |
+| 53-54 | \$0035-\$0036 | - | Puntero a la memoria reservada para la variable de cadena actual. |
+| 55-56 | \$0037-\$0038 | \$A000 | Puntero al final de la memoria de programas BASIC. |
+| 57-58 | \$0039-\$003A | - | Línea actual de BASIC:<br/>+ **\$0000-\$F9FF** (0-63999) = Número de línea.<br/>+ **\$FF00-\$FFFF** = Modo directo, no se está ejecutando ningún programa BASIC. |
+| 59-60 | \$003B-\$003C | - | Línea actual de BASIC para `CONT`. |
+| 61-62 | \$003D-\$003E | - | Puntero a la siguiente instrucción BASIC para `CONT`:<br/>+ **\$0000-\$00FF** = No es posible continuar.<br/>+ **\$0100-\$FFFF** = Puntero a la siguiente instrucción. |
+| 63-64 | \$003F-\$0040 | - | Línea actual de BASIC para el elemento actual de `DATA` para `READ`. |
+| 65-66 | \$0041-\$0042 | - | Puntero al siguiente elemento `DATA` para `READ`. |
+| 67-68 | \$0043-\$0044 | - | Puntero al resultado durante `GET`, `INPUT` y `READ`. |
+| 69-70 | \$0045-\$0046 | - | Nombre y tipo de la variable actual:<br/>+ **Bits 0-6 de \$0045:** Primer carácter del nombre.<br/>+ **Bits 0-6 de \$0046:** Segundo carácter del nombre.<br/>+ **Bit 7 de \$0045 y \$0046:** **00** = Flotante; **01** = Cadena; **10** = Función; **11** = Entera. |
+| 71-72 | \$0047-\$0048 | - | Puntero al valor de la variable o función `FN` actual. |
+| 73-74 | \$0049-\$004A | - | Usado por varias operaciones (`LET`, `WAIT`, `OPEN`, `CLOSE`, `LOAD`, `SAVE` y `VERIFY`). |
+| 75-76 | \$004B-\$004C | - | Área temporal para guardar el puntero original a la instrucción BASIC actual durante `GET`, `INPUT` y `READ`. |
+| 77 | \$004D | - | Indicador de operador de comparación:<br/>+ **Bit 1:** **1** = `>` se encuentra en la expresión.<br/>+ **Bit 2:** **1** = `=` se encuentra en la expresión.<br/>+ **Bit 3:** **1** = `<` se encuentra en la expresión. |
+| 78-79 | \$004E-\$004F | - | Puntero a la función `FN` actual. |
+| 80-81 | \$0050-\$0051 | - | Puntero a la variable de cadena actual durante la reserva de memoria. |
 | 82 | \$0052 | - | Sin uso. |
-| 83 | \$0053 | - | . |
-| 84-86 | \$0054-\$0056 | - | . |
-| 87-91 | \$0057-\$005B | - | . |
-| 92-96 | \$005C-\$0060 | - | . |
-| 97-101 | \$0061-\$0065 | - | . |
-| 102 | \$0066 | - | . |
-| 103 | \$0067 | - | . |
-| 104 | \$0068 | - | . |
-| 105-109 | \$0069-\$006D | - | . |
-| 110 | \$006E | - | . |
-| 111-112 | \$006F-\$0070 | - | . |
-| 113-114 | \$0071-\$0072 | - | . |
-| 115-138 | \$0073-\$008A | - | . |
-| 139-143 | \$008B-\$008F | - | . |
-| 144 | \$0090 | - | . |
-| 145 | \$0091 | - | . |
-| 146 | \$0092 | - | . |
-| 147 | \$0093 | - | . |
-| 148 | \$0094 | - | . |
-| 149 | \$0095 | - | . |
-| 150 | \$0096 | - | . |
-| 151 | \$0097 | - | . |
-| 152 | \$0098 | - | . |
-| 153 | \$0099 | - | . |
-| 154 | \$009A | - | . |
-| 155 | \$009B | - | . |
-| 156 | \$009C | - | . |
+| 83 | \$0053 | - | Tamaño del incremento en la recolección de basura. |
+| 84-86 | \$0054-\$0056 | - | Instrucción JMP ABS para saltar a la función BASIC actual, cuya dirección está en \$0055-\$0056 . |
+| 87-91 | \$0057-\$005B | - | Registro aritmético 3 (5 bytes). |
+| 92-96 | \$005C-\$0060 | - | Registro aritmético 4 (5 bytes). |
+| 97-101 | \$0061-\$0065 | - | FAC: Registro aritmético 1 (5 bytes). |
+| 102 | \$0066 | - | Signo del FAC (**Bit 7:** **0** = Positivo; **1** = Negativo). |
+| 103 | \$0067 | - | Número de grados durante una evaluación polinómica. |
+| 104 | \$0068 | - | Área temporal durante varias operaciones. |
+| 105-109 | \$0069-\$006D | - | ARG: Registro aritmético 2 (5 bytes). |
+| 110 | \$006E | - | Signo del ARG (**Bit 7:** **0** = Positivo; **1** = Negativo). |
+| 111-112 | \$006F-\$0070 | - | Puntero a la primera expresión de cadena durante una comparación de cadenas. |
+| 113-114 | \$0071-\$0072 | - | Usado por varias operaciones (arrays, `VAL`, evaluación polinómica). |
+| 115-138 | \$0073-\$008A | - | Usado por CHRGET para leer el siguiente byte de un programa BASIC o comando directo (24 bytes). Dirección \$0079: Usado por CHRGOT para leer el byte actual de un programa BASIC o comando directo. Dirección \$007A-\$007B: Puntero al byte actual de un programa BASIC o comando directo. |
+| 139-143 | \$008B-\$008F | - | Resultado anterior de `RND`. |
+| 144 | \$0090 | - | Valor de la variable `STATUS` para el estado del dispositivo para la E/S del *serial bus* y el *datasette*. Bits del *serial bus*:<br/>+ **Bit 0:** Dirección al presentarse un *timeout* **0** = Entrada; **1** = Salida.<br/>+ **Bit 1:** **1** = Error de *timeout*.<br/>+ **Bit 4:** **1** = Error en `VERIFY`.<br/>+ **Bit 6:** **1** = Final de fichero.<br/>+ **Bit 7:** **1** = Error de dispositivo no encontrado.<br/> Bits del *datasette*:<br/>+ **Bit 2:** **1** = Bloque demasiado corto (< 192 bytes).<br/>+ **Bit 3:** **1** = Bloque demasiado largo (> 192 bytes).<br/>+ **Bit 4:** **1** = Error en `VERIFY`.<br/>+ **Bit 5:** **1** = Error de *checksum* .<br/>+ **Bit 6:** **1** = Final de fichero (sólo mientras está leyendo) . |
+| 145 | \$0091 | - | Estado de la tecla `RUN/STOP` (**\$7F** = Pulsada; **\$FF** = No pulsada). |
+| 146 | \$0092 | - | Desconocido. (Constante de tiempo durante la entrada del *datasette*.) |
+| 147 | \$0093 | - | Flag `LOAD`/`VERIFY` (**\$00** = `LOAD`; **\$01**-**\$FF** = `VERIFY`). |
+| 148 | \$0094 | - | Estado de la cache de salida del *serial bus* (**Bit 7:** **1** = Cache de salida modificada, hay que transferir el contenido en la próxima salida del bus). |
+| 149 | \$0095 | - | Cache de salida del *serial bus*, byte previo para enviar al bus. |
+| 150 | \$0096 | - | Desconocido. (Indicador de final de cinta durante la E/S del *datasette*.) |
+| 151 | \$0097 | - | Área temporal para guardar el valor original del registro X durante la entrada del RS-232 o el registro Y durante la entrada del *datasette*. |
+| 152 | \$0098 | - | Número de ficheros actualmente abiertos (0-10). |
+| 153 | \$0099 | $00 | Número de dispositivo de entrada actual (teclado por defecto). |
+| 154 | \$009A | $03 | Número de dispositivo de salida actual (pantalla por defecto). |
+| 155 | \$009B | - | Desconocido. (Bit de paridad durante la E/S del *datasette*.) |
+| 156 | \$009C | - | Desconocido. (Indicador de byte preparado durante la E/S del *datasette*.) |
 | 157 | \$009D | - | . |
 | 158 | \$009E | - | . |
 | 159 | \$009F | - | . |
@@ -172,7 +172,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 659 | \$0293 | - | Registro de control del RS-232:<br/>+ **Bits 0-3:** Velocidad de transferencia en baudios. Valores:<br/>**0000** = Valor Usuario;<br/>**0001** = 50 bit/s;<br/>**0010** = 75 bit/s;<br/>**0011** = 110 bit/s;<br/>**0100** = 150 bit/s;<br/>**0101** = 300 bit/s;<br/>**0110** = 600 bit/s;<br/>**0111** = 1200 bit/s;<br/>**1000** = 2400 bit/s;<br/>**1001** = 1800 bit/s;<br/>**1010** = 2400 bit/s;<br/>**1011** = 3600 bit/s;<br/>**1100** = 4800 bit/s;<br/>**1101** = 7200 bit/s;<br/>**1110** = 9600 bit/s;<br/>**1111** = 19200 bit/s.<br/>+ **Bits 5-6:** Número de bits de datos por byte (**00** = 8; **01** = 7; **10** = 6; **11** = 5).<br/>+ **Bit 7:** Número de bits de parada (**0** = 1; **1** = 2). |
 | 660 | \$0294 | - | Registro de comandos del RS-232:<br/>+ **Bit 0:** Tipo de sincronización (**0** = 3 líneas; **1** = X líneas).<br/>+ **Bit 4:** Tipo de transmisión (**0** = Duplex; **1** = Half duplex).<br/>+ **Bits 5-7:** Modo de paridad. Valores:<br/>**xx0** = Sin comprobación de paridad, el bit 7 no existe;<br/>**001** = Paridad impar;<br/>**011** = Paridad par;<br/>**101** = Sin comprobación de paridad, el bit 7 es siempre 1;<br/>**111** = Sin comprobación de paridad, el bit 7 es siempre 0. |
 | 661-662 | \$0295-\$0296 | - | Valor por defecto del reloj de salida del RS-232, basado en la velocidad en baudios. (Debe ser configurado, antes de cualquier operación de E/S, si la velocidad en baudios es "Valor Usuario" en \$0293.) |
-| 663 | \$0297 | - | Valor de la variable `STATUS`, estado del dispositivo para la E/S del RS-232:<br/>+ **Bit 0:** **1** = Error de paridad.<br/>+ **Bit 1:** **1** = Error de marco (bit de stop con el valor 0).<br/>+ **Bit 2:** **1** = Desbordamiento del buffer de entrada (demasiada información ha llegado sin ser leída del buffer).<br/>+ **Bit 3:** **1** = Buffer de entrada vacío, nada que leer.<br/>+ **Bit 4:** **0** = *Sender* en CTS; **1** = *Sender* no preparado para enviar.<br/>+ **Bit 6:** **0** = *Receiver* en DSR; **1** = *Receiver* no preparado para recibir.<br/>+ **Bit 7:** **1** = Fallo de envío, un bit de parada y de datos ambos con el valor 0. |
+| 663 | \$0297 | - | Valor de la variable `STATUS` para el estado del dispositivo para la E/S del RS-232:<br/>+ **Bit 0:** **1** = Error de paridad.<br/>+ **Bit 1:** **1** = Error de marco (bit de stop con el valor 0).<br/>+ **Bit 2:** **1** = Desbordamiento del buffer de entrada (demasiada información ha llegado sin ser leída del buffer).<br/>+ **Bit 3:** **1** = Buffer de entrada vacío, nada que leer.<br/>+ **Bit 4:** **0** = *Sender* en CTS; **1** = *Sender* no preparado para enviar.<br/>+ **Bit 6:** **0** = *Receiver* en DSR; **1** = *Receiver* no preparado para recibir.<br/>+ **Bit 7:** **1** = Fallo de envío, un bit de parada y de datos ambos con el valor 0. |
 | 664 | \$0298 | - | Tamaño de byte del RS-232, número de bits de datos por byte de datos, valor por defecto del conteo de bits. |
 | 665-666 | \$0299-\$029A | - | Valor por defecto del reloj de entrada del RS-232, basado en la velocidad en baudios. (Calculado automáticamente con el valor en \$0295-\$0296.) |
 | 667 | \$029B | - | Desplazamiento del byte recibido en el búfer de entrada RS-232. |
@@ -202,7 +202,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 781 | \$030D | - | Registro X para `SYS`. |
 | 782 | \$030E | - | Registro Y para `SYS`. |
 | 783 | \$030F | - | Registro de estado para `SYS`. |
-| 784-786 | \$0310-\$0312 | - | Instrucción JMP ABS para saltar a la función `USR(X)`, cuya dirección está en \$0311-\$0312. |
+| 784-786 | \$0310-\$0312 | - | Instrucción JMP ABS para saltar a la función `USR`, cuya dirección está en \$0311-\$0312. |
 | 787 | \$0313 | - | Sin uso. |
 | 788-789 | \$0314-\$0315 | \$EA31 | Puntero a la rutina de servicio de interrupciones. |
 | 790-791 | \$0316-\$0317 | \$FE66 | Puntero a la rutina de servicio BRK. |
