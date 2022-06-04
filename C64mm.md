@@ -145,7 +145,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 256-317 | \$0100-\$013D | Punteros a los bytes de lectura con errores durante la lectura del *datasette* (62 bytes, 31 entradas). |
 | 256-511 | \$0100-\$01FF | Pila del procesador. También se utiliza para almacenar datos para gestionar los `FOR` y los `GOSUB`. |
 
-## Memoria del sistema
+## Gestión de Entrada/Salida
 
 | Dirección | Hexadecimal | Defecto | Descripción |
 |:---------:|:-----------:|:-------:|-------------|
@@ -162,31 +162,36 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 648 | \$0288 | \$04 | Byte alto del puntero a la memoria de pantalla para la entrada/salida de la terminal. |
 | 649 | \$0289 | - | Tamaño máximo del buffer de teclado (**\$00** = Sin buffer; **\$01-\$0F** = Tamaño). |
 | 650 | \$028A | - | Flag de repetición del teclado. **Bits 6-7:** **00** = `⇑CRSR⇓`, `⇐CRSR⇒`, `INST/DEL` y `SPACE`; **01** = Ninguna; **1x** = Todas. |
-| 651 | \$028B | - | . |
-| 652 | \$028C | - | . |
-| 653 | \$028D | - | . |
-| 654 | \$028E | - | . |
-| 655-656 | \$028F-\$0290 | - | . |
-| 657 | \$0291 | - | . |
-| 658 | \$0292 | - | . |
-| 659 | \$0293 | - | . |
-| 660 | \$0294 | - | . |
-| 661-662 | \$0295-\$0296 | - | . |
-| 663 | \$0297 | - | . |
-| 664 | \$0298 | - | . |
-| 665-666 | \$0299-\$029A | - | . |
-| 667 | \$029B | - | . |
-| 668 | \$029C | - | . |
-| 669 | \$029D | - | . |
-| 670 | \$029E | - | . |
-| 671-672 | \$029F-\$02A0 | - | . |
-| 673 | \$02A1 | - | . |
-| 674 | \$02A2 | - | . |
-| 675 | \$02A3 | - | . |
-| 676 | \$02A4 | - | . |
-| 677 | \$02A5 | - | . |
-| 678 | \$02A6 | - | . |
+| 651 | \$028B | - | Retardo durante la repetición, entre sucesivas repeticiones (**\$00** = Sin retardo; **\$01-\$04** = Con retardo). |
+| 652 | \$028C | - | Retardo durante la repetición, para retardar antes de la primera repetición (**\$00** = Sin retardo; **\$01-\$04** = Con retardo). |
+| 653 | \$028D | - | Indicador de teclas modificadoras:<br/>+ **Bit 0:** **1** = Alguna tecla `SHIFT` está pulsada.<br/>+ **Bit 1:** **1** = La tecla `C=` está pulsada.<br/>+ **Bit 2:** **1** = La tecla `CTRL` está pulsada. |
+| 654 | \$028E | - | Indicador previo de teclas modificadoras en el anterior escaneo:<br/>+ **Bit 0:** **1** = Alguna tecla `SHIFT` estuvo pulsada.<br/>+ **Bit 1:** **1** = La tecla `C=` estuvo pulsada.<br/>+ **Bit 2:** **1** = La tecla `CTRL` estuvo pulsada. |
+| 655-656 | \$028F-\$0290 | \$EB48 | Puntero a la rutina, que basada en el estado de las teclas modificadoras, modifica el puntero en la dirección \$00F5-\$00F6 a la tabla de conversión pertinente que traduce códigos de teclado a PETSCII. |
+| 657 | \$0291 | - | Flag `C=`+`SHIFT` para cambiar entre los modos de fuente de la terminal (**Bit 7:** **0** = Activado; **1** = Desactivado). |
+| 658 | \$0292 | - | Flag de dirección del desplazamiento en la terminal (**\$00** = Insertar líneas desplazando hacia abajo; **\$01-\$FF** = Insertar líneas desplazando hacia arriba). |
+| 659 | \$0293 | - | Registro de control del RS-232:<br/>+ **Bits 0-3:** Velocidad de transferencia en baudios. Valores:<br/>**0000** = Valor Usuario;<br/>**0001** = 50 bit/s;<br/>**0010** = 75 bit/s;<br/>**0011** = 110 bit/s;<br/>**0100** = 150 bit/s;<br/>**0101** = 300 bit/s;<br/>**0110** = 600 bit/s;<br/>**0111** = 1200 bit/s;<br/>**1000** = 2400 bit/s;<br/>**1001** = 1800 bit/s;<br/>**1010** = 2400 bit/s;<br/>**1011** = 3600 bit/s;<br/>**1100** = 4800 bit/s;<br/>**1101** = 7200 bit/s;<br/>**1110** = 9600 bit/s;<br/>**1111** = 19200 bit/s.<br/>+ **Bits 5-6:** Número de bits de datos por byte (**00** = 8; **01** = 7; **10** = 6; **11** = 5).<br/>+ **Bit 7:** Número de bits de parada (**0** = 1; **1** = 2). |
+| 660 | \$0294 | - | Registro de comandos del RS-232:<br/>+ **Bit 0:** Tipo de sincronización (**0** = 3 líneas; **1** = X líneas).<br/>+ **Bit 4:** Tipo de transmisión (**0** = Duplex; **1** = Half duplex).<br/>+ **Bits 5-7:** Modo de paridad. Valores:<br/>**xx0** = Sin comprobación de paridad, el bit 7 no existe;<br/>**001** = Paridad impar;<br/>**011** = Paridad par;<br/>**101** = Sin comprobación de paridad, el bit 7 es siempre 1;<br/>**111** = Sin comprobación de paridad, el bit 7 es siempre 0. |
+| 661-662 | \$0295-\$0296 | - | Valor por defecto del reloj de salida del RS-232, basado en la velocidad en baudios. (Debe ser configurado, antes de cualquier operación de E/S, si la velocidad en baudios es "Valor Usuario" en \$0293.) |
+| 663 | \$0297 | - | Valor de la variable `STATUS`, estado del dispositivo para la E/S del RS-232:<br/>+ **Bit 0:** **1** = Error de paridad.<br/>+ **Bit 1:** **1** = Error de marco (bit de stop con el valor 0).<br/>+ **Bit 2:** **1** = Desbordamiento del buffer de entrada (demasiada información ha llegado sin ser leída del buffer).<br/>+ **Bit 3:** **1** = Buffer de entrada vacío, nada que leer.<br/>+ **Bit 4:** **0** = *Sender* en CTS; **1** = *Sender* no preparado para enviar.<br/>+ **Bit 6:** **0** = *Receiver* en DSR; **1** = *Receiver* no preparado para recibir.<br/>+ **Bit 7:** **1** = Fallo de envío, un bit de parada y de datos ambos con el valor 0. |
+| 664 | \$0298 | - | Tamaño de byte del RS-232, número de bits de datos por byte de datos, valor por defecto del conteo de bits. |
+| 665-666 | \$0299-\$029A | - | Valor por defecto del reloj de entrada del RS-232, basado en la velocidad en baudios. (Calculado automáticamente con el valor en \$0295-\$0296.) |
+| 667 | \$029B | - | Desplazamiento del byte recibido en el búfer de entrada RS-232. |
+| 668 | \$029C | - | Desplazamiento del byte actual en el búfer de entrada RS-232. |
+| 669 | \$029D | - | Desplazamiento del byte recibido en el búfer de salida RS-232. |
+| 670 | \$029E | - | Desplazamiento del byte actual en el búfer de salida RS-232. |
+| 671-672 | \$029F-\$02A0 | - | Área temporal para guardar el puntero original a la rutina de servicio de interrupción durante la E/S del *datasette*:<br/>+ **\$0000-\$00FF** = Ninguna E/S del *datasette* ha ocurrido o el puntero original ya ha sido restaurado.<br/>+ **\$0100-\$FFFF** = El puntero original, E/S del *datasette* actualmente en progreso. |
+| 673 | \$02A1 | - | Área temporal para guardar el estado original del registro de control de interrupciones de la CIA2 (\$DD0D) durante la E/S del RS-232. |
+| 674 | \$02A2 | - | Área temporal para guardar el estado original del registro de control de la cuenta atrás B de la CIA2 (\$DC0F) durante la E/S del *datasette*. |
+| 675 | \$02A3 | - | Área temporal para guardar el estado original del registro de control de interrupciones de la CIA1 (\$DC0D) durante la E/S del *datasette*. |
+| 676 | \$02A4 | - | Área temporal para guardar el estado original del registro de control de la cuenta atrás A de la CIA2 (\$DC0E) durante la E/S del *datasette*. |
+| 677 | \$02A5 | - | Número de línea siendo desplazada durante el desplazamiento de la pantalla. |
+| 678 | \$02A6 | - | Flag PAL/NTSC, para seleccionar la velocidad adecuada en baudios para el RS-232 (**\$00** = NTSC; **\$01** = PAL). |
 | 679-767 | \$02A7-\$02FF | - | Sin uso (89 bytes). |
+
+## Memoria del Sistema
+
+| Dirección | Hexadecimal | Defecto | Descripción |
+|:---------:|:-----------:|:-------:|-------------|
 | 768-769 | \$0300-\$0301 | - | . |
 | 770-771 | \$0302-\$0303 | - | . |
 | 772-773 | \$0304-\$0305 | - | . |
