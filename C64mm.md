@@ -149,19 +149,19 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 
 | Dirección | Hexadecimal | Defecto | Descripción |
 |:---------:|:-----------:|:-------:|-------------|
-| 512-600 | \$0200-\$0258 | - | . |
-| 601-610 | \$0259-\$0262 | - | . |
-| 611-620 | \$0263-\$026C | - | . |
-| 621-630 | \$026D-\$0276 | - | . |
-| 631-640 | \$0277-\$0280 | - | . |
-| 641-642 | \$0281-\$0282 | - | . |
-| 643-644 | \$0283-\$0284 | - | . |
-| 645 | \$0285 | - | Sin uso (serial bus timeout). |
-| 646 | \$0286 | - | . |
-| 647 | \$0287 | - | . |
-| 648 | \$0288 | - | . |
-| 649 | \$0289 | - | . |
-| 650 | \$028A | - | . |
+| 512-600 | \$0200-\$0258 | - | Buffer de entrada, para leer datos de la pantalla (89 bytes). |
+| 601-610 | \$0259-\$0262 | - | Identificadores de ficheros abiertos (10 bytes, 10 entradas). |
+| 611-620 | \$0263-\$026C | - | Dispositivos de los ficheros abiertos (10 bytes, 10 entradas). |
+| 621-630 | \$026D-\$0276 | - | Modo o valor secundario de los ficheros abiertos (10 bytes, 10 entradas). |
+| 631-640 | \$0277-\$0280 | - | Buffer de teclado (10 bytes, 10 entradas). |
+| 641-642 | \$0281-\$0282 | \$0800 | Puntero al inicio de la memoria para BASIC después del test de memoria. |
+| 643-644 | \$0283-\$0284 | \$A000 | Puntero al final de la memoria para BASIC después del test de memoria. |
+| 645 | \$0285 | - | Sin uso (*serial bus timeout*). |
+| 646 | \$0286 | - | Color del cursor (**\$00**-**\$0F**). |
+| 647 | \$0287 | - | Color del carácter bajo el cursor (**\$00**-**\$0F**). |
+| 648 | \$0288 | \$04 | Byte alto del puntero a la memoria de pantalla para la entrada/salida de la terminal. |
+| 649 | \$0289 | - | Tamaño máximo del buffer de teclado (**\$00** = Sin buffer; **\$01-\$0F** = Tamaño). |
+| 650 | \$028A | - | Flag de repetición del teclado. **Bits 6-7:** **00** = `⇑CRSR⇓`, `⇐CRSR⇒`, `INST/DEL` y `SPACE`; **01** = Ninguna; **1x** = Todas. |
 | 651 | \$028B | - | . |
 | 652 | \$028C | - | . |
 | 653 | \$028D | - | . |
@@ -216,7 +216,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 816-817 | \$0330-\$0331 | - | . |
 | 818-819 | \$0332-\$0333 | - | . |
 | 820-827 | \$0334-\$033B | - | Sin uso (8 bytes). |
-| 828-1019 | \$033C-\$03FB | - | . |
+| 828-1019 | \$033C-\$03FB | - | Buffer del *datasette* (192 bytes). |
 | 1020-1023 | \$03FC-\$03FF | - | Sin uso (4 bytes). |
 
 ## Buffer de pantalla inicial
@@ -386,7 +386,7 @@ Tabla de valores para los niveles del ADSR:
 
 | Dirección | Hexadecimal | Descripción |
 |:---------:|:-----------:|-------------|
-| 56576 | \$DD00 | Puerto A: Serial Bus.<br/> + **Bits 0-1:** Banco del VIC-II. **00** = Banco 3 \$C000-\$FFFF (49152-65535); **01** = Banco 2 \$8000-\$BFFF (32768-49151); **10** = Banco 1 \$4000-\$7FFF (16384-32767); **11** = Banco 0 \$0000-\$3FFF (0-16383).<br/>+ **Bit 2:** TXD del RS-232 (bit de salida).<br/>+ **Bit 3:** ATN OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 4:** CLOCK OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 5:** DATA OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 6:** CLOCK IN del Serial Bus. **0** = Bajo; **1** = Alto.<br/>+ **Bit 7:** DATA IN del Serial Bus. **0** = Bajo; **1** = Alto. |
+| 56576 | \$DD00 | Puerto A: *Serial Bus*.<br/> + **Bits 0-1:** Banco del VIC-II. **00** = Banco 3 \$C000-\$FFFF (49152-65535); **01** = Banco 2 \$8000-\$BFFF (32768-49151); **10** = Banco 1 \$4000-\$7FFF (16384-32767); **11** = Banco 0 \$0000-\$3FFF (0-16383).<br/>+ **Bit 2:** TXD del RS-232 (bit de salida).<br/>+ **Bit 3:** ATN OUT del *Serial Bus*. **0** = Alto; **1** = Bajo.<br/>+ **Bit 4:** CLOCK OUT del *Serial Bus*. **0** = Alto; **1** = Bajo.<br/>+ **Bit 5:** DATA OUT del *Serial Bus*. **0** = Alto; **1** = Bajo.<br/>+ **Bit 6:** CLOCK IN del *Serial Bus*. **0** = Bajo; **1** = Alto.<br/>+ **Bit 7:** DATA IN del *Serial Bus*. **0** = Bajo; **1** = Alto. |
 | 56577 | \$DD01 | Puerto B: RS-232. Bits de lectura:<br/>+ **Bit 0:** RXD del RS-232 (bit de entrada).<br/>+ **Bit 3:** RI del RS-232.<br/>+ **Bit 4:** DCD del RS-232.<br/>+ **Bit 5:** Pin H del puerto de usuario.<br/>+ **Bit 6:** CTS del RS-232. 1 = *Sender* preparado para enviar.<br/>+ **Bit 7:** DSR del RS-232. 1 = *Receiver* preparado para recibir.<br/>Bits de escritura:<br/>+ **Bit 1:** RTS del RS-232. 1 = *Sender* preparado para enviar.<br/>+ **Bit 2:** DTR del RS-232. 1 = *Receiver* preparado para recibir.<br/>+ **Bit 3:** RI del RS-232.<br/>+ **Bit 4:** DCD del RS-232.<br/>+ **Bit 5:** Pin H del puerto de usuario. |
 | 56578 | \$DD02 | Configuración del puerto A. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
 | 56579 | \$DD03 | Configuración del puerto B. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
