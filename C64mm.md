@@ -254,53 +254,53 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 
 | Dirección | Hexadecimal | Defecto | Descripción |
 |:---------:|:-----------:|:-------:|-------------|
-| 53248 | \$D000 | - | . |
-| 53249 | \$D001 | - | . |
-| 53250 | \$D002 | - | . |
-| 53251 | \$D003 | - | . |
-| 53252 | \$D004 | - | . |
-| 53253 | \$D005 | - | . |
-| 53254 | \$D006 | - | . |
-| 53255 | \$D007 | - | . |
-| 53256 | \$D008 | - | . |
-| 53257 | \$D009 | - | . |
-| 53258 | \$D00A | - | . |
-| 53259 | \$D00B | - | . |
-| 53260 | \$D00C | - | . |
-| 53261 | \$D00D | - | . |
-| 53262 | \$D00E | - | . |
-| 53263 | \$D00F | - | . |
-| 53264 | \$D010 | - | . |
-| 53265 | \$D011 | - | . |
-| 53266 | \$D012 | - | . |
-| 53267 | \$D013 | - | . |
-| 53268 | \$D014 | - | . |
-| 53269 | \$D015 | - | . |
-| 53270 | \$D016 | - | . |
-| 53271 | \$D017 | - | . |
-| 53272 | \$D018 | - | . |
-| 53273 | \$D019 | - | . |
-| 53274 | \$D01A | - | . |
-| 53275 | \$D01B | - | . |
-| 53276 | \$D01C | - | . |
-| 53277 | \$D01D | - | . |
-| 53278 | \$D01E | - | . |
-| 53279 | \$D01F | - | . |
-| 53280 | \$D020 | - | . |
-| 53281 | \$D021 | - | . |
-| 53282 | \$D022 | - | . |
-| 53283 | \$D023 | - | . |
-| 53284 | \$D024 | - | . |
-| 53285 | \$D025 | - | . |
-| 53286 | \$D026 | - | . |
-| 53287 | \$D027 | - | . |
-| 53288 | \$D028 | - | . |
-| 53289 | \$D029 | - | . |
-| 53290 | \$D02A | - | . |
-| 53291 | \$D02B | - | . |
-| 53292 | \$D02C | - | . |
-| 53293 | \$D02D | - | . |
-| 53294 | \$D02E | - | . |
+| 53248 | \$D000 | - | Coordenada X del *sprite* 0 (bits del 0-7). |
+| 53249 | \$D001 | - | Coordenada Y del *sprite* 0. |
+| 53250 | \$D002 | - | Coordenada X del *sprite* 1 (bits del 0-7). |
+| 53251 | \$D003 | - | Coordenada Y del *sprite* 1. |
+| 53252 | \$D004 | - | Coordenada X del *sprite* 2 (bits del 0-7). |
+| 53253 | \$D005 | - | Coordenada Y del *sprite* 2. |
+| 53254 | \$D006 | - | Coordenada X del *sprite* 3 (bits del 0-7). |
+| 53255 | \$D007 | - | Coordenada Y del *sprite* 3. |
+| 53256 | \$D008 | - | Coordenada X del *sprite* 4 (bits del 0-7). |
+| 53257 | \$D009 | - | Coordenada Y del *sprite* 4. |
+| 53258 | \$D00A | - | Coordenada X del *sprite* 5 (bits del 0-7). |
+| 53259 | \$D00B | - | Coordenada Y del *sprite* 5. |
+| 53260 | \$D00C | - | Coordenada X del *sprite* 6 (bits del 0-7). |
+| 53261 | \$D00D | - | Coordenada Y del *sprite* 6. |
+| 53262 | \$D00E | - | Coordenada X del *sprite* 7 (bits del 0-7). |
+| 53263 | \$D00F | - | Coordenada Y del *sprite* 7. |
+| 53264 | \$D010 | - | Bit 8 de la coordenada X de los *sprites* 0-7. |
+| 53265 | \$D011 | \$1B (00011011) | Registro de control de la pantalla:<br/>+ **Bits 0-2:** Desplazamiento del *raster* vertical (*scroll raster*).<br/>+ **Bit 3:** Altura de pantalla. **0** = 24 filas; **1** = 25 filas.<br/>+ **Bit 4:** **0** = Pantalla apagada; **1** = Pantalla encendida.<br/>+ **Bit 5:** **0** = Modo texto; **1** = Modo bitmap.<br/>+ **Bit 6:** **1** = Modo fondo extendido activado.<br/>+ **Bit 7:** Lectura: Línea actual del *raster* (bit 8); Escritura: Línea del *raster* en la que generar una interrupción (bit 8). |
+| 53266 | \$D012 | - | Lectura: Línea actual del *raster* (bits 0-7); Escritura: Línea del *raster* en la que generar una interrupción (bits 0-7). |
+| 53267 | \$D013 | - | Coordenada X del lápiz de luz (bits 1-8). |
+| 53268 | \$D014 | - | Coordenada Y del lápiz de luz. |
+| 53269 | \$D015 | - | Registro de activación de *sprites*. **Bits 0-7:** *Sprite* 0-7 activado para dibujarlo en pantalla. |
+| 53270 | \$D016 | \$C8 (11001000) | Registro 2 de control de la pantalla:<br/>+ **Bits 0-2:** Desplazamiento del *raster* horizontal (*scroll raster*).<br/>+ **Bit 3:** Ancho de pantalla. **0** = 38 filas; **1** = 40 filas.<br/>+ **Bit 4:** **1** = Modo multicolor activado. |
+| 53271 | \$D017 | - | Registro de doble altura de *sprites*. **Bits 0-7:** Doble altura del *sprite* 0-7 activada. |
+| 53272 | \$D018 | - | Registro de configuración de la memoria:<br/>+ **Bits 1-3:** Puntero a la memoria de caracteres en el modo texto (bits 11-13), relativo al banco seleccionado para el VIC con \$DD00. Valores:<br/>**000** = \$0000-\$07FF (0-2047);<br/>**001** = \$0800-\$0FFF (2048-4095);<br/>**010** = \$1000-\$17FF (4096-6143);<br/>**011** = \$1800-\$1FFF (6144-8191);<br/>**100** = \$2000-\$27FF (8192-10239);<br/>**101** = \$2800-\$2FFF (10240-12287);<br/>**110** = \$3000-\$37FF (12288-14335);<br/>**111** = \$3800-\$3FFF (14336-16383).<br/>(Los valores 010 y 011 con el banco 0 y 2 del VIC selecciona la ROM de caracteres en lugar de la RAM.)<br/>+ **Bits 1-3:** Puntero a la memoria de bitmap en el modo bitmap (bit 13), relativo al banco seleccionado para el VIC con \$DD00. Valores:<br/>**0xx** = \$0000-\$1FFF (0-8191);<br/>**1xx** = \$2000-\$3FFF (8192-16383).<br/>+ **Bits 4-7:** Puntero a la memoria de pantalla (bits 10-13), relativo al banco seleccionado para el VIC con \$DD00. Valores:<br/>**0000** = \$0000-\$03FF (0-1023);<br/>**0001** = \$0400-\$07FF (1024-2047);<br/>**0010** = \$0800-\$0BFF (2048-3071);<br/>**0011** = \$0C00-\$0FFF (3072-4095);<br/>**0100** = \$1000-\$13FF (4096-5119);<br/>**0101** = \$1400-\$17FF (5120-6143);<br/>**0110** = \$1800-\$1BFF (6144-7167);<br/>**0111** = \$1C00-\$1FFF (7168-8191);<br/>**1000** = \$2000-\$23FF (8192-9215);<br/>**1001** = \$2400-\$27FF (9216-10239);<br/>**1010** = \$2800-\$2BFF (10240-11263);<br/>**1011** = \$2C00-\$2FFF (11264-12287);<br/>**1100** = \$3000-\$33FF (12288-13311);<br/>**1101** = \$3400-\$37FF (13312-14335);<br/>**1110** = \$3800-\$3BFF (14336-15359);<br/>**1111** = \$3C00-\$3FFF (15360-16383). |
+| 53273 | \$D019 | - | Registro de estado de interrupciones. Bits de lectura:<br/>+ **Bit 0:** **1** = La línea actual de *raster* es igual a la que genera una interrupción.<br/>+ **Bit 1:** **1** = Colisión *sprite*-fondo.<br/>+ **Bit 2:** **1** = Colisión *sprite*-*sprite*.<br/>+ **Bit 3:** **1** = Señal recibida del lápiz de luz.<br/>+ **Bit 7:** **1** = Se ha generado una interrupción, por un evento o varios, y esta no ha sido admitida.<br/>Bits de escritura:<br/>+ **Bit 0:** **1** = Admitida una interrupción de *raster*.<br/>+ **Bit 1:** **1** = Admitida una interrupción de colisión *sprite*-fondo.<br/>+ **Bit 2:** **1** = Admitida una interrupción de colisión *sprite*-*sprite*.<br/>+ **Bit 3:** **1** = Admitida una interrupción de lápiz de luz. |
+| 53274 | \$D01A | - | Registro de control de interrupciones:<br/>+ **Bit 0:** **1** = Activa las interrupciones de *raster*.<br/>+ **Bit 1:** **1** = Activa las interrupciones de colisión *sprite*-fondo.<br/>+ **Bit 2:** **1** = Activa las interrupciones de colisión *sprite*-*sprite*.<br/>+ **Bit 3:** **1** = Activa las interrupciones de lápiz de luz. |
+| 53275 | \$D01B | - | Registro de prioridad de *sprites*. **Bits 0-7:** **0** = Pintar *sprite* 0-7 delante de la pantalla; **1** = Pintar *sprite* 0-7 detrás de la pantalla. |
+| 53276 | \$D01C | - | Registro de modo multicolor de *sprites*. **Bits 0-7:** **0** = *Sprite* 0-7 monocolor; **1** = *Sprite* 0-7 multicolor. |
+| 53277 | \$D01D | - | Registro de doble anchura de *sprites*. **Bits 0-7:** Doble anchura del *sprite* 0-7 activada. |
+| 53278 | \$D01E | - | Registro de colisión *sprite*-*sprite*. Lectura de bits: **Bits 0-7:** **1** = El *sprite* 0-7 ha colisionado con otro *sprite*. Escritura de bits: Activa la detección de las colisiones *sprite*-*sprite*. |
+| 53279 | \$D01F | - | Registro de colisión *sprite*-fondo. Lectura de bits: **Bits 0-7:** **1** = El *sprite* 0-7 ha colisionado con el fondo. Escritura de bits: Activa la detección de las colisiones *sprite*-fondo. |
+| 53280 | \$D020 | - | Color del borde. **Bits 0-3:** 0-15. |
+| 53281 | \$D021 | - | Color del fondo. **Bits 0-3:** 0-15. |
+| 53282 | \$D022 | - | Color extra 1 del fondo. **Bits 0-3:** 0-15. |
+| 53283 | \$D023 | - | Color extra 2 del fondo. **Bits 0-3:** 0-15. |
+| 53284 | \$D024 | - | Color extra 3 del fondo. **Bits 0-3:** 0-15. |
+| 53285 | \$D025 | - | Color extra 1 de *sprites*. **Bits 0-3:** 0-15. |
+| 53286 | \$D026 | - | Color extra 2 de *sprites*. **Bits 0-3:** 0-15. |
+| 53287 | \$D027 | - | Color del *sprite* 0. **Bits 0-3:** 0-15. |
+| 53288 | \$D028 | - | Color del *sprite* 1. **Bits 0-3:** 0-15. |
+| 53289 | \$D029 | - | Color del *sprite* 2. **Bits 0-3:** 0-15. |
+| 53290 | \$D02A | - | Color del *sprite* 3. **Bits 0-3:** 0-15. |
+| 53291 | \$D02B | - | Color del *sprite* 4. **Bits 0-3:** 0-15. |
+| 53292 | \$D02C | - | Color del *sprite* 5. **Bits 0-3:** 0-15. |
+| 53293 | \$D02D | - | Color del *sprite* 6. **Bits 0-3:** 0-15. |
+| 53294 | \$D02E | - | Color del *sprite* 7. **Bits 0-3:** 0-15. |
 | 53295-53311 | \$D02F-\$D03F | - | Sin uso (17 bytes). |
 | 53312-54271 | \$D040-\$D3FF | - | Duplicados del VIC-II (segmentos de 64 bytes). |
 
@@ -359,7 +359,7 @@ Tabla de valores para los niveles del ADSR:
 
 | Dirección | Hexadecimal | Descripción |
 |:---------:|:-----------:|-------------|
-| 55296-56295 | \$D800-\$DBE7 |Buffer de color de la pantalla (1000 bytes)<br/>**Bits 0-3:** Color del 0 al 15. |
+| 55296-56295 | \$D800-\$DBE7 |Buffer de color de la pantalla (1000 bytes).<br/>**Bits 0-3:** Color del 0 al 15. |
 | 56296-56319 | \$DBE8-\$DBFF | Sin uso (24 bytes). |
 
 ## CIA1: Entrada, Datasette, IRQ
@@ -386,7 +386,7 @@ Tabla de valores para los niveles del ADSR:
 
 | Dirección | Hexadecimal | Descripción |
 |:---------:|:-----------:|-------------|
-| 56576 | \$DD00 | Puerto A: Serial Bus.<br/> + **Bits 0-1:** Banco del VIC-II. **00** = \$C000-\$FFFF (49152-65535); **01** = \$8000-\$BFFF (32768-49151); **10** = \$4000-\$7FFF (16384-32767); **11** = \$0000-\$3FFF (0-16383).<br/>+ **Bit 2:** TXD del RS-232 (bit de salida).<br/>+ **Bit 3:** ATN OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 4:** CLOCK OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 5:** DATA OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 6:** CLOCK IN del Serial Bus. **0** = Bajo; **1** = Alto.<br/>+ **Bit 7:** DATA IN del Serial Bus. **0** = Bajo; **1** = Alto. |
+| 56576 | \$DD00 | Puerto A: Serial Bus.<br/> + **Bits 0-1:** Banco del VIC-II. **00** = Banco 3 \$C000-\$FFFF (49152-65535); **01** = Banco 2 \$8000-\$BFFF (32768-49151); **10** = Banco 1 \$4000-\$7FFF (16384-32767); **11** = Banco 0 \$0000-\$3FFF (0-16383).<br/>+ **Bit 2:** TXD del RS-232 (bit de salida).<br/>+ **Bit 3:** ATN OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 4:** CLOCK OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 5:** DATA OUT del Serial Bus. **0** = Alto; **1** = Bajo.<br/>+ **Bit 6:** CLOCK IN del Serial Bus. **0** = Bajo; **1** = Alto.<br/>+ **Bit 7:** DATA IN del Serial Bus. **0** = Bajo; **1** = Alto. |
 | 56577 | \$DD01 | Puerto B: RS-232. Bits de lectura:<br/>+ **Bit 0:** RXD del RS-232 (bit de entrada).<br/>+ **Bit 3:** RI del RS-232.<br/>+ **Bit 4:** DCD del RS-232.<br/>+ **Bit 5:** Pin H del puerto de usuario.<br/>+ **Bit 6:** CTS del RS-232. 1 = *Sender* preparado para enviar.<br/>+ **Bit 7:** DSR del RS-232. 1 = *Receiver* preparado para recibir.<br/>Bits de escritura:<br/>+ **Bit 1:** RTS del RS-232. 1 = *Sender* preparado para enviar.<br/>+ **Bit 2:** DTR del RS-232. 1 = *Receiver* preparado para recibir.<br/>+ **Bit 3:** RI del RS-232.<br/>+ **Bit 4:** DCD del RS-232.<br/>+ **Bit 5:** Pin H del puerto de usuario. |
 | 56578 | \$DD02 | Configuración del puerto A. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
 | 56579 | \$DD03 | Configuración del puerto B. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
@@ -408,8 +408,8 @@ Tabla de valores para los niveles del ADSR:
 |:---------:|:-----------:|:-------:|-------------|
 | 56832-57087 | \$DE00-\$DEFF | - | Área E/S Nº 1 (256 bytes): Registros y/o subrutinas de dispositivos externos opcionales. |
 | 57088-57343 | \$DF00-\$DFFF | - | Área E/S Nº 2 (256 bytes): Registros y/o subrutinas de dispositivos externos opcionales. |
-| 57344-65535 | \$E000-\$FFFF | - | ROM del KERNAL |
-| 65530-65531 | \$FFFA-\$FFFB | \$FE43 | .Execution address of non-maskable interrupt service routine. |
-| 65532-65533 | \$FFFC-\$FFFD | \$FCE2 | .Execution address of cold reset. |
-| 65534-65535 | \$FFFE-\$FFFF | \$FF48 | .Execution address of interrupt service routine. |
+| 57344-65535 | \$E000-\$FFFF | - | ROM del KERNAL. |
+| 65530-65531 | \$FFFA-\$FFFB | \$FE43 | Puntero a la rutina de servicio de interrupciones no-enmascarables. |
+| 65532-65533 | \$FFFC-\$FFFD | \$FCE2 | Puntero al reinicio frío. |
+| 65534-65535 | \$FFFE-\$FFFF | \$FF48 | Puntero a la rutina de servicio de interrupciones. |
 
