@@ -179,7 +179,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 668 | \$029C | - | Desplazamiento del byte actual en el búfer de entrada RS-232. |
 | 669 | \$029D | - | Desplazamiento del byte recibido en el búfer de salida RS-232. |
 | 670 | \$029E | - | Desplazamiento del byte actual en el búfer de salida RS-232. |
-| 671-672 | \$029F-\$02A0 | - | Área temporal para guardar el puntero original a la rutina de servicio de interrupción durante la E/S del *datasette*:<br/>+ **\$0000-\$00FF** = Ninguna E/S del *datasette* ha ocurrido o el puntero original ya ha sido restaurado.<br/>+ **\$0100-\$FFFF** = El puntero original, E/S del *datasette* actualmente en progreso. |
+| 671-672 | \$029F-\$02A0 | - | Área temporal para guardar el puntero original a la rutina de servicio de interrupciones durante la E/S del *datasette*:<br/>+ **\$0000-\$00FF** = Ninguna E/S del *datasette* ha ocurrido o el puntero original ya ha sido restaurado.<br/>+ **\$0100-\$FFFF** = El puntero original, E/S del *datasette* actualmente en progreso. |
 | 673 | \$02A1 | - | Área temporal para guardar el estado original del registro de control de interrupciones de la CIA2 (\$DD0D) durante la E/S del RS-232. |
 | 674 | \$02A2 | - | Área temporal para guardar el estado original del registro de control de la cuenta atrás B de la CIA2 (\$DC0F) durante la E/S del *datasette*. |
 | 675 | \$02A3 | - | Área temporal para guardar el estado original del registro de control de interrupciones de la CIA1 (\$DC0D) durante la E/S del *datasette*. |
@@ -192,34 +192,34 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 
 | Dirección | Hexadecimal | Defecto | Descripción |
 |:---------:|:-----------:|:-------:|-------------|
-| 768-769 | \$0300-\$0301 | - | . |
-| 770-771 | \$0302-\$0303 | - | . |
-| 772-773 | \$0304-\$0305 | - | . |
-| 774-775 | \$0306-\$0307 | - | . |
-| 776-777 | \$0308-\$0309 | - | . |
-| 778-779 | \$030A-\$030B | - | . |
-| 780 | \$030C | - | . |
-| 781 | \$030D | - | . |
-| 782 | \$030E | - | . |
-| 783 | \$030F | - | . |
-| 784-786 | \$0310-\$0312 | - | . |
+| 768-769 | \$0300-\$0301 | \$E38B | Puntero a la rutina de reinicio suave, mostrando si hay algún mensaje de error y entrando en el bucle de inactividad de BASIC. |
+| 770-771 | \$0302-\$0303 | \$A483 | Puntero a la rutina del bucle de inactividad de BASIC. |
+| 772-773 | \$0304-\$0305 | \$A57C | Puntero a la rutina del *tokenizer* de BASIC. |
+| 774-775 | \$0306-\$0307 | \$A71A | Puntero a la rutina de descodificación de tokens de BASIC. |
+| 776-777 | \$0308-\$0309 | \$A7E4 | Puntero a la rutina de ejecución de instrucciones BASIC. |
+| 778-779 | \$030A-\$030B | \$AE86 | Puntero a la rutina que lee el siguiente elemento en una expresión BASIC. |
+| 780 | \$030C | - | Registro A para `SYS`. |
+| 781 | \$030D | - | Registro X para `SYS`. |
+| 782 | \$030E | - | Registro Y para `SYS`. |
+| 783 | \$030F | - | Registro de estado para `SYS`. |
+| 784-786 | \$0310-\$0312 | - | Instrucción JMP ABS para saltar a la función `USR(X)`, cuya dirección está en \$0311-\$0312. |
 | 787 | \$0313 | - | Sin uso. |
-| 788-789 | \$0314-\$0315 | - | . |
-| 790-791 | \$0316-\$0317 | - | . |
-| 792-793 | \$0318-\$0319 | - | . |
-| 794-795 | \$031A-\$031B | - | . |
-| 796-797 | \$031C-\$031D | - | . |
-| 798-799 | \$031E-\$031F | - | . |
-| 800-801 | \$0320-\$0321 | - | . |
-| 802-803 | \$0322-\$0323 | - | . |
-| 804-805 | \$0324-\$0325 | - | . |
-| 806-807 | \$0326-\$0327 | - | . |
-| 808-809 | \$0328-\$0329 | - | . |
-| 810-811 | \$032A-\$032B | - | . |
-| 812-813 | \$032C-\$032D | - | . |
+| 788-789 | \$0314-\$0315 | \$EA31 | Puntero a la rutina de servicio de interrupciones. |
+| 790-791 | \$0316-\$0317 | \$FE66 | Puntero a la rutina de servicio BRK. |
+| 792-793 | \$0318-\$0319 | \$FE47 | Puntero a la rutina de servicio de interrupciones no-enmascarables. |
+| 794-795 | \$031A-\$031B | \$F34A | Puntero a OPEN, rutina para abrir ficheros. |
+| 796-797 | \$031C-\$031D | \$F291 | Puntero a CLOSE, rutina para cerrar ficheros. |
+| 798-799 | \$031E-\$031F | \$F20E | Puntero a CHKIN, rutina para definir un fichero como entrada por defecto. |
+| 800-801 | \$0320-\$0321 | \$F250 | Puntero a CHKOUT, rutina para definir un fichero como salida por defecto. |
+| 802-803 | \$0322-\$0323 | \$F333 | Puntero a CLRCHN, rutina de inicialización de la E/S. |
+| 804-805 | \$0324-\$0325 | \$F157 | Puntero a CHRIN, rutina de entrada de datos, salvo para el teclado y RS-232. |
+| 806-807 | \$0326-\$0327 | \$F1CA | Puntero a CHROUT, rutina de salida de datos de propósito general. |
+| 808-809 | \$0328-\$0329 | \$F6ED | Puntero a STOP, rutina para comprobar el estado del indicador de la tecla `RUN/STOP`, en la dirección \$0091. |
+| 810-811 | \$032A-\$032B | \$F13E | Puntero a GETIN, rutina de entrada de datos de propósito general. |
+| 812-813 | \$032C-\$032D | \$F32F | Puntero a CLALL, rutina para inicializar la E/S y limpiar la tablas de asignación de ficheros. |
 | 814-815 | \$032E-\$032F | \$FE66 | Sin uso. |
-| 816-817 | \$0330-\$0331 | - | . |
-| 818-819 | \$0332-\$0333 | - | . |
+| 816-817 | \$0330-\$0331 | \$F4A5 | Puntero a LOAD, rutina de cargar ficheros. |
+| 818-819 | \$0332-\$0333 | \$F5ED | Puntero a SAVE, rutina de guardar fichero. |
 | 820-827 | \$0334-\$033B | - | Sin uso (8 bytes). |
 | 828-1019 | \$033C-\$03FB | - | Buffer del *datasette* (192 bytes). |
 | 1020-1023 | \$03FC-\$03FF | - | Sin uso (4 bytes). |
