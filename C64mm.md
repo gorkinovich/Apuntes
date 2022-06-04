@@ -75,66 +75,66 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 150 | \$0096 | - | Desconocido. (Indicador de final de cinta durante la E/S del *datasette*.) |
 | 151 | \$0097 | - | Área temporal para guardar el valor original del registro X durante la entrada del RS-232 o el registro Y durante la entrada del *datasette*. |
 | 152 | \$0098 | - | Número de ficheros actualmente abiertos (0-10). |
-| 153 | \$0099 | $00 | Número de dispositivo de entrada actual (teclado por defecto). |
-| 154 | \$009A | $03 | Número de dispositivo de salida actual (pantalla por defecto). |
+| 153 | \$0099 | \$00 | Número de dispositivo de entrada actual (teclado por defecto). |
+| 154 | \$009A | \$03 | Número de dispositivo de salida actual (pantalla por defecto). |
 | 155 | \$009B | - | Desconocido. (Bit de paridad durante la E/S del *datasette*.) |
 | 156 | \$009C | - | Desconocido. (Indicador de byte preparado durante la E/S del *datasette*.) |
-| 157 | \$009D | - | . |
-| 158 | \$009E | - | . |
-| 159 | \$009F | - | . |
-| 160-162 | \$00A0-\$00A2 | - | . |
-| 163 | \$00A3 | - | . |
-| 164 | \$00A4 | - | . |
-| 165 | \$00A5 | - | . |
-| 166 | \$00A6 | - | . |
-| 167 | \$00A7 | - | . |
-| 168 | \$00A8 | - | . |
-| 169 | \$00A9 | - | . |
-| 170 | \$00AA | - | . |
-| 171 | \$00AB | - | . |
-| 172-173 | \$00AC-\$00AD | - | . |
-| 174-175 | \$00AE-\$00AF | - | . |
-| 176-177 | \$00B0-\$00B1 | - | . |
-| 178-179 | \$00B2-\$00B3 | - | . |
-| 180 | \$00B4 | - | . |
-| 181 | \$00B5 | - | . |
-| 182 | \$00B6 | - | . |
-| 183 | \$00B7 | - | . |
-| 184 | \$00B8 | - | . |
-| 185 | \$00B9 | - | . |
-| 186 | \$00BA | - | . |
-| 187-188 | \$00BB-\$00BC | - | . |
-| 189 | \$00BD | - | . |
-| 190 | \$00BE | - | . |
-| 191 | \$00BF | - | . |
-| 192 | \$00C0 | - | . |
-| 193-194 | \$00C1-\$00C2 | - | . |
-| 195-196 | \$00C3-\$00C4 | - | . |
-| 197 | \$00C5 | - | . |
-| 198 | \$00C6 | - | . |
-| 199 | \$00C7 | - | . |
-| 200 | \$00C8 | - | . |
-| 201 | \$00C9 | - | . |
-| 202 | \$00CA | - | . |
-| 203 | \$00CB | - | . |
-| 204 | \$00CC | - | . |
-| 205 | \$00CD | - | . |
-| 206 | \$00CE | - | . |
-| 207 | \$00CF | - | . |
-| 208 | \$00D0 | - | . |
-| 209-210 | \$00D1-\$00D2 | - | . |
-| 211 | \$00D3 | - | . |
-| 212 | \$00D4 | - | . |
-| 213 | \$00D5 | - | . |
-| 214 | \$00D6 | - | . |
-| 215 | \$00D7 | - | . |
-| 216 | \$00D8 | - | . |
-| 217-241 | \$00D9-\$00F1 | - | . |
-| 242 | \$00F2 | - | . |
-| 243-244 | \$00F3-\$00F4 | - | . |
-| 245-246 | \$00F5-\$00F6 | - | . |
-| 247-248 | \$00F7-\$00F8 | - | . |
-| 249-250 | \$00F9-\$00FA | - | . |
+| 157 | \$009D | - | Flag de mostrar errores del sistema:<br/>+ **Bit 6:** **0** = Eliminar mensajes de errores de E/S; **1** = Mostrarlos.<br/>+ **Bit 7:** **0** = Eliminar mensajes de errores de sistema; **1** = Mostrarlos. |
+| 158 | \$009E | - | Usado por varias operaciones (E/S del RS-232 y del *datasette*, `LOAD`). |
+| 159 | \$009F | - | Usado por varias operaciones (E/S del *datasette*, `LOAD`). |
+| 160-162 | \$00A0-\$00A2 | - | Variable `TIME` (hora del día), incrementada en una unidad cada 60 Hz. |
+| 163 | \$00A3 | - | Flag EOI durante la salida del *serial bus* (**Bit 7:** **0** = Enviar byte después del *handshake*; **1** = Realizar retardo EOI primero).<br/>Contador de bits durante la salida del *datasette*. |
+| 164 | \$00A4 | - | Buffer de bytes durante la entrada del *serial bus*.<br/>Paridad durante la E/S del *datasette*. |
+| 165 | \$00A5 | - | Contador de bits durante la E/S del *serial bus*.<br/>Contador de la marca de sincronización durante la salida del *datasette*. |
+| 166 | \$00A6 | - | Desplazamiento del byte actual en el buffer del *datasette*. |
+| 167 | \$00A7 | - | Buffer de bits durante la entrada del RS-232. |
+| 168 | \$00A8 | - | Contador de bits durante la entrada del RS-232. |
+| 169 | \$00A9 | - | Flag de parada de bit durante la entrada del RS-232 (**\$00** = Bit de datos; **\$01-\$FF** = Bit de parada). |
+| 170 | \$00AA | - | Buffer de bytes durante la entrada del RS-232. |
+| 171 | \$00AB | - | Paridad durante la entrada del RS-232.<br/>*Checksum* de bloque durante la entrada del *datasette*. |
+| 172-173 | \$00AC-\$00AD | - | Usado por varias operaciones (`SAVE`, desplazamiento de pantalla). |
+| 174-175 | \$00AE-\$00AF | - | Usado por varias operaciones (`LOAD`, `VERIFY`, `SAVE`, desplazamiento del color de pantalla). |
+| 176-177 | \$00B0-\$00B1 | - | Desconocido. |
+| 178-179 | \$00B2-\$00B3 | \$033C | Puntero al buffer del *datasette*. |
+| 180 | \$00B4 | - | Flag de contador de bits y bits de parada durante la salida del RS-232 (**Bits 0-6:** Contador de bits; **Bit 7:** **0** = Bit de datos; **1** = Bit de parada).<br/>Contador de bits durante la E/S del *datasette*. |
+| 181 | \$00B5 | - | Buffer de bits durante la salida del RS-232. |
+| 182 | \$00B6 | - | Buffer de bytes durante la salida del RS-232. |
+| 183 | \$00B7 | - | Tamaño del nombre de fichero o comando de discos (**\$00** = Sin parámetro; **\$01-\$FF** = Tamaño). Usado por `LOAD`, `SAVE`, `VERIFY` y `OPEN`. |
+| 184 | \$00B8 | - | Identificador del fichero actual. |
+| 185 | \$00B9 | - | Modo secundario del fichero actual. |
+| 186 | \$00BA | - | Número de dispositivo del fichero actual. |
+| 187-188 | \$00BB-\$00BC | - | Puntero al nombre de fichero o comando de discos actual. Usado por `LOAD`, `SAVE`, `VERIFY` y `OPEN`. |
+| 189 | \$00BD | - | Paridad durante la salida del RS-232.<br/>Buffer de bytes durante la E/S del *datasette*. |
+| 190 | \$00BE | - | Bloqueo del contador durante la E/S del *datasette*. |
+| 191 | \$00BF | - | Desconocido. |
+| 192 | \$00C0 | - | Flag del motor del *datasette*:<br/>+ **\$00** = Ningún botón pulsado, motor desactivado. Si se pulsa algún botón se activará el motor.<br/>+ **\$01-\$FF** = Motor activado. |
+| 193-194 | \$00C1-\$00C2 | - | Usado por varias operaciones (`LOAD`, `VERIFY`, `SAVE`, test de memoria). |
+| 195-196 | \$00C3-\$00C4 | - | Usado por varias operaciones (`LOAD`, `VERIFY`, vectores de E/S). |
+| 197 | \$00C5 | - | Código matriz de tecla previamente pulsado (**\$00-\$3F** = Tecla; **\$40** = Nada pulsado). |
+| 198 | \$00C6 | - | Tamaño del buffer de teclado (**\$00** = Vacío; **\$01-\$0A** = Tamaño). |
+| 199 | \$00C7 | - | Flag modo inverso (**\$00** = Normal; **\$12** = Invertido). |
+| 200 | \$00C8 | - | Tamaño de línea menos 1 durante la entrada de pantalla (39, 79). |
+| 201 | \$00C9 | - | Fila del cursor durante la entrada de pantalla (0-24). |
+| 202 | \$00CA | - | Columna del cursor durante la entrada de pantalla (0-39). |
+| 203 | \$00CB | - | Código matriz de tecla actualmente pulsado (**\$00-\$3F** = Tecla; **\$40** = Nada pulsado). |
+| 204 | \$00CC | - | Flag de visibilidad del cursor (**\$00** = Encendido; **\$01-\$FF** = Apagado). |
+| 205 | \$00CD | - | Retardo del cambio de fase del cursor (**\$00** = Debe cambiar de fase; **\$01-\$14** = Retardo). |
+| 206 | \$00CE | - | Código de pantalla del carácter bajo el cursor. |
+| 207 | \$00CF | - | Flag de fase del cursor (**\$00** = Fase apagada, carácter original visible; **\$01** = Fase encendida, carácter invertido visible). |
+| 208 | \$00D0 | - | Flag de fin de línea durante la entrada de pantalla (**\$00** = Carácter de retorno alcanzado, fin de línea (EOL); **\$01-\$FF** = Seguir leyendo caracteres de la línea). |
+| 209-210 | \$00D1-\$00D2 | - | Puntero a la línea actual de la memoria de pantalla. |
+| 211 | \$00D3 | - | Columna actual del cursor (0-39). |
+| 212 | \$00D4 | - | Flag modo comillas dobles (**\$00** = Modo normal; **\$01** = Modo comillas dobles). |
+| 213 | \$00D5 | - | Tamaño de línea actual de pantalla menos 1 (39, 79). |
+| 214 | \$00D6 | - | Fila actual del cursor (0-24). |
+| 215 | \$00D7 | - | Usado por varias operaciones (E/S de pantalla, *datasette*). |
+| 216 | \$00D8 | - | Número de inserciones (**\$00** = Ninguna; **\$01-\$FF** = Inserciones). Cuando se insertan huecos en una línea, la entrada de la pantalla actuará de forma similar al modo comillas dobles para esas posiciones. |
+| 217-241 | \$00D9-\$00F1 | - | Byte alto de punteros a cada línea en la memoria de pantalla (25 bytes; **\$00-\$7F** = Byte alto del puntero; **\$80-\$FF** = Sin puntero, la línea es una extensión de la anterior). |
+| 242 | \$00F2 | - | Área temporal durante el desplazamiento de la pantalla. |
+| 243-244 | \$00F3-\$00F4 | - | Puntero a la línea actual en la RAM de color. |
+| 245-246 | \$00F5-\$00F6 | - | Puntero a la tabla de conversión durante la traducción de códigos de matriz de teclado a PETSCII. |
+| 247-248 | \$00F7-\$00F8 | - | Puntero al buffer de entrada del RS-232 (**\$0000-\$00FF** = Buffer no definido; **\$0100-\$FFFF** = Puntero al buffer). |
+| 249-250 | \$00F9-\$00FA | - | Puntero al buffer de salida del RS-232 (**\$0000-\$00FF** = Buffer no definido; **\$0100-\$FFFF** = Puntero al buffer). |
 | 251-254 | \$00FB-\$00FE | - | Sin uso (4 bytes). |
 | 255-266 | \$00FF-\$010A | - | Buffer para convertir número flotantes a cadena (12 bytes).<br/>**NOTA:** Invade el espacio final de la pila de programa. |
 
@@ -152,7 +152,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 512-600 | \$0200-\$0258 | - | Buffer de entrada, para leer datos de la pantalla (89 bytes). |
 | 601-610 | \$0259-\$0262 | - | Identificadores de ficheros abiertos (10 bytes, 10 entradas). |
 | 611-620 | \$0263-\$026C | - | Dispositivos de los ficheros abiertos (10 bytes, 10 entradas). |
-| 621-630 | \$026D-\$0276 | - | Modo o valor secundario de los ficheros abiertos (10 bytes, 10 entradas). |
+| 621-630 | \$026D-\$0276 | - | Modo secundario de los ficheros abiertos (10 bytes, 10 entradas). |
 | 631-640 | \$0277-\$0280 | - | Buffer de teclado (10 bytes, 10 entradas). |
 | 641-642 | \$0281-\$0282 | \$0800 | Puntero al inicio de la memoria para BASIC después del test de memoria. |
 | 643-644 | \$0283-\$0284 | \$A000 | Puntero al final de la memoria para BASIC después del test de memoria. |
