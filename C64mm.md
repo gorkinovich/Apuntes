@@ -66,12 +66,12 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 113-114 | \$0071-\$0072 | - | Usado por varias operaciones (arrays, `VAL`, evaluación polinómica). |
 | 115-138 | \$0073-\$008A | - | Usado por CHRGET para leer el siguiente byte de un programa BASIC o comando directo (24 bytes). Dirección \$0079: Usado por CHRGOT para leer el byte actual de un programa BASIC o comando directo. Dirección \$007A-\$007B: Puntero al byte actual de un programa BASIC o comando directo. |
 | 139-143 | \$008B-\$008F | - | Resultado anterior de `RND`. |
-| 144 | \$0090 | - | Valor de la variable `STATUS` para el estado del dispositivo para la E/S del *serial bus* y el *datasette*. Bits del *serial bus*:<br/>+ **Bit 0:** Dirección al presentarse un *timeout* **0** = Entrada; **1** = Salida.<br/>+ **Bit 1:** **1** = Error de *timeout*.<br/>+ **Bit 4:** **1** = Error en `VERIFY`.<br/>+ **Bit 6:** **1** = Final de fichero.<br/>+ **Bit 7:** **1** = Error de dispositivo no encontrado.<br/> Bits del *datasette*:<br/>+ **Bit 2:** **1** = Bloque demasiado corto (< 192 bytes).<br/>+ **Bit 3:** **1** = Bloque demasiado largo (> 192 bytes).<br/>+ **Bit 4:** **1** = Error en `VERIFY`.<br/>+ **Bit 5:** **1** = Error de *checksum* .<br/>+ **Bit 6:** **1** = Final de fichero (sólo mientras está leyendo) . |
+| 144 | \$0090 | - | Valor de la variable `STATUS` para el estado del dispositivo para la E/S del puerto serie y el *datasette*. Bits del puerto serie:<br/>+ **Bit 0:** Dirección al presentarse un *timeout* **0** = Entrada; **1** = Salida.<br/>+ **Bit 1:** **1** = Error de *timeout*.<br/>+ **Bit 4:** **1** = Error en `VERIFY`.<br/>+ **Bit 6:** **1** = Final de fichero.<br/>+ **Bit 7:** **1** = Error de dispositivo no encontrado.<br/> Bits del *datasette*:<br/>+ **Bit 2:** **1** = Bloque demasiado corto (< 192 bytes).<br/>+ **Bit 3:** **1** = Bloque demasiado largo (> 192 bytes).<br/>+ **Bit 4:** **1** = Error en `VERIFY`.<br/>+ **Bit 5:** **1** = Error de *checksum* .<br/>+ **Bit 6:** **1** = Final de fichero (sólo mientras está leyendo) . |
 | 145 | \$0091 | - | Estado de la tecla `RUN/STOP` (**\$7F** = Pulsada; **\$FF** = No pulsada). |
 | 146 | \$0092 | - | Desconocido. (Constante de tiempo durante la entrada del *datasette*.) |
 | 147 | \$0093 | - | Flag `LOAD`/`VERIFY` (**\$00** = `LOAD`; **\$01**-**\$FF** = `VERIFY`). |
-| 148 | \$0094 | - | Estado de la cache de salida del *serial bus* (**Bit 7:** **1** = Cache de salida modificada, hay que transferir el contenido en la próxima salida del bus). |
-| 149 | \$0095 | - | Cache de salida del *serial bus*, byte previo para enviar al bus. |
+| 148 | \$0094 | - | Estado de la cache de salida del puerto serie (**Bit 7:** **1** = Cache de salida modificada, hay que transferir el contenido en la próxima salida del bus). |
+| 149 | \$0095 | - | Cache de salida del puerto serie, byte previo para enviar al bus. |
 | 150 | \$0096 | - | Desconocido. (Indicador de final de cinta durante la E/S del *datasette*.) |
 | 151 | \$0097 | - | Área temporal para guardar el valor original del registro X durante la entrada del RS-232 o el registro Y durante la entrada del *datasette*. |
 | 152 | \$0098 | - | Número de ficheros actualmente abiertos (0-10). |
@@ -83,9 +83,9 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 158 | \$009E | - | Usado por varias operaciones (E/S del RS-232 y del *datasette*, `LOAD`). |
 | 159 | \$009F | - | Usado por varias operaciones (E/S del *datasette*, `LOAD`). |
 | 160-162 | \$00A0-\$00A2 | - | Variable `TIME` (hora del día), incrementada en una unidad cada 60 Hz. |
-| 163 | \$00A3 | - | Flag EOI durante la salida del *serial bus* (**Bit 7:** **0** = Enviar byte después del *handshake*; **1** = Realizar retardo EOI primero).<br/>Contador de bits durante la salida del *datasette*. |
-| 164 | \$00A4 | - | Buffer de bytes durante la entrada del *serial bus*.<br/>Paridad durante la E/S del *datasette*. |
-| 165 | \$00A5 | - | Contador de bits durante la E/S del *serial bus*.<br/>Contador de la marca de sincronización durante la salida del *datasette*. |
+| 163 | \$00A3 | - | Flag EOI durante la salida del puerto serie (**Bit 7:** **0** = Enviar byte después del *handshake*; **1** = Realizar retardo EOI primero).<br/>Contador de bits durante la salida del *datasette*. |
+| 164 | \$00A4 | - | Buffer de bytes durante la entrada del puerto serie.<br/>Paridad durante la E/S del *datasette*. |
+| 165 | \$00A5 | - | Contador de bits durante la E/S del puerto serie.<br/>Contador de la marca de sincronización durante la salida del *datasette*. |
 | 166 | \$00A6 | - | Desplazamiento del byte actual en el buffer del *datasette*. |
 | 167 | \$00A7 | - | Buffer de bits durante la entrada del RS-232. |
 | 168 | \$00A8 | - | Contador de bits durante la entrada del RS-232. |
@@ -156,7 +156,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 631-640 | \$0277-\$0280 | - | Buffer de teclado (10 bytes, 10 entradas). |
 | 641-642 | \$0281-\$0282 | \$0800 | Puntero al inicio de la memoria para BASIC después del test de memoria. |
 | 643-644 | \$0283-\$0284 | \$A000 | Puntero al final de la memoria para BASIC después del test de memoria. |
-| 645 | \$0285 | - | Sin uso (*serial bus timeout*). |
+| 645 | \$0285 | - | Sin uso (*timeout* del puerto serie). |
 | 646 | \$0286 | - | Color del cursor (**\$00**-**\$0F**). |
 | 647 | \$0287 | - | Color del carácter bajo el cursor (**\$00**-**\$0F**). |
 | 648 | \$0288 | \$04 | Byte alto del puntero a la memoria de pantalla para la entrada/salida de la terminal. |
@@ -387,11 +387,11 @@ Tabla de valores para los niveles del ADSR:
 | 56335 | \$DC0F | Registro de control de la cuenta atrás B:<br>+ **Bit 0:** **0** = Parar; **1** = Iniciar.<br>+ **Bit 1:** **1** = Indica desbordamiento inferior del temporizador en el bit 7 del puerto B.<br>+ **Bit 2:** **0** = Invertir el bit 7 del puerto B con el desbordamiento inferior; **1** = Generar con el desbordamiento inferior un salto positivo en el bit 7 del puerto B durante un ciclo de la CPU.<br>+ **Bit 3:** Acción de la cuenta atrás cuando hay un desbordamiento inferior. **0** = Reiniciar; **1** = Parar.<br>+ **Bit 4:** **1** = Carga el valor de inicio de la cuenta atrás.<br>+ **Bit 5-6:** Acciones de la cuenta atrás. **00** = Contar ciclos de la CPU; **01** = Contar saltos positivos del pin CNT; **10** = Contar desbordamientos inferiores de la cuenta atrás A; **11** = Contar desbordamientos inferiores de la cuenta atrás A que ocurren cuando hay un salto positivo en el pin CNT.<br>+ **Bit 7:** Acción cuando se escribe el RDS. **0** = Configurar el RDS; **1** = Configurar la alarma. |
 | 56336-56575 | \$DC10-\$DCFF | Duplicados de la CIA1 (segmentos de 16 bytes). |
 
-## CIA2: Serial Bus, RS-232, NMI
+## CIA2: Puerto Serie, RS-232, NMI
 
 | Dirección | Hexadecimal | Descripción |
 |:---------:|:-----------:|-------------|
-| 56576 | \$DD00 | Puerto A: *Serial Bus*.<br/> + **Bits 0-1:** Banco del VIC-II. **00** = Banco 3 \$C000-\$FFFF (49152-65535); **01** = Banco 2 \$8000-\$BFFF (32768-49151); **10** = Banco 1 \$4000-\$7FFF (16384-32767); **11** = Banco 0 \$0000-\$3FFF (0-16383).<br/>+ **Bit 2:** TXD del RS-232 (bit de salida).<br/>+ **Bit 3:** ATN OUT del *Serial Bus*. **0** = Alto; **1** = Bajo.<br/>+ **Bit 4:** CLOCK OUT del *Serial Bus*. **0** = Alto; **1** = Bajo.<br/>+ **Bit 5:** DATA OUT del *Serial Bus*. **0** = Alto; **1** = Bajo.<br/>+ **Bit 6:** CLOCK IN del *Serial Bus*. **0** = Bajo; **1** = Alto.<br/>+ **Bit 7:** DATA IN del *Serial Bus*. **0** = Bajo; **1** = Alto. |
+| 56576 | \$DD00 | Puerto A: Puerto Serie.<br/> + **Bits 0-1:** Banco del VIC-II. **00** = Banco 3 \$C000-\$FFFF (49152-65535); **01** = Banco 2 \$8000-\$BFFF (32768-49151); **10** = Banco 1 \$4000-\$7FFF (16384-32767); **11** = Banco 0 \$0000-\$3FFF (0-16383).<br/>+ **Bit 2:** TXD del RS-232 (bit de salida).<br/>+ **Bit 3:** ATN OUT del Puerto Serie. **0** = Alto; **1** = Bajo.<br/>+ **Bit 4:** CLOCK OUT del Puerto Serie. **0** = Alto; **1** = Bajo.<br/>+ **Bit 5:** DATA OUT del Puerto Serie. **0** = Alto; **1** = Bajo.<br/>+ **Bit 6:** CLOCK IN del Puerto Serie. **0** = Bajo; **1** = Alto.<br/>+ **Bit 7:** DATA IN del Puerto Serie. **0** = Bajo; **1** = Alto. |
 | 56577 | \$DD01 | Puerto B: RS-232. Bits de lectura:<br/>+ **Bit 0:** RXD del RS-232 (bit de entrada).<br/>+ **Bit 3:** RI del RS-232.<br/>+ **Bit 4:** DCD del RS-232.<br/>+ **Bit 5:** Pin H del puerto de usuario.<br/>+ **Bit 6:** CTS del RS-232. 1 = *Sender* preparado para enviar.<br/>+ **Bit 7:** DSR del RS-232. 1 = *Receiver* preparado para recibir.<br/>Bits de escritura:<br/>+ **Bit 1:** RTS del RS-232. 1 = *Sender* preparado para enviar.<br/>+ **Bit 2:** DTR del RS-232. 1 = *Receiver* preparado para recibir.<br/>+ **Bit 3:** RI del RS-232.<br/>+ **Bit 4:** DCD del RS-232.<br/>+ **Bit 5:** Pin H del puerto de usuario. |
 | 56578 | \$DD02 | Configuración del puerto A. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
 | 56579 | \$DD03 | Configuración del puerto B. **Bits 0-7:** **0** = Lectura; **1** = Escritura/Lectura. |
