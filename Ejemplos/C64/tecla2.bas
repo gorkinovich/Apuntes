@@ -1,0 +1,8 @@
+10 PRINT "{clear}";
+20 GET K$
+30 IF K$="" THEN 20
+40 GOSUB 70
+50 IF K$<>"{return}" THEN 20
+60 END
+70 PRINT "PULSASTE: ";K$
+80 RETURN

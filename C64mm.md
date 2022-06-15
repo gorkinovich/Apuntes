@@ -251,7 +251,7 @@ Este es un resumen y traducción parcial del siguiente [mapa de memoria](https:/
 | 53248-55295 | \$D000-\$D7FF | Fuente del modo mayúsculas (2048 bytes, 256 caracteres). |
 | 55295-57343 | \$D800-\$DFFF | Fuente del modo minúsculas (2048 bytes, 256 caracteres). |
 
-<p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d8/Fonts-C64.png" alt="Fuentes del C64"></p>
+<p align="center"><img src="https://gorkinovich.github.io/learn/C64-Fonts.png" alt="Fuentes del C64"></p>
 
 **NOTA:** Por defecto esta ROM no es accesible, porque la memoria está configurada para acceder a los registros en memoria del VIC-II, SID, CIA1 y CIA2, para realizar operaciones de entrada y salida.
 

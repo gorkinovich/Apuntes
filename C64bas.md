@@ -228,7 +228,7 @@ Definimos la terminal o consola como aquel dispositivo que utilizamos para inter
 
 En el C64 hay dos modos de fuente que usa la terminal de base. En el modo mayúsculas sólo tenemos las letras mayúsculas y en el modo minúsculas tendremos minúsculas al escribir y con la tecla `SHIFT` (`MAYUS` en VICE) podemos usar las letras mayúsculas. Para alternar entre los dos tipos se utiliza la combinación `SHIFT`+`C=` (`MAYUS`+`TAB` en VICE). En la siguiente imagen se ven las diferencias entre las dos fuentes:
 
-<p align="center"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d8/Fonts-C64.png" alt="Fuentes del C64"></p>
+<p align="center"><img src="https://gorkinovich.github.io/learn/C64-Fonts.png" alt="Fuentes del C64"></p>
 
 Aunque ya lo hemos usado en varios de los ejemplos, para mostrar un mensaje por pantalla utilizamos el comando `PRINT`, que tiene la siguiente sintaxis:
 
