@@ -320,9 +320,9 @@ El ejemplo llama primero con `GOSUB` a una subrutina ubicada en la línea `30`. 
 
 Ahora que conocemos los comandos de salto, vamos a ver una variante del comando `IF`:
 
-$$\texttt{IF}\ \mathit{condición}\ \textcolor{red}{ \{ }\texttt{THEN}\textcolor{red}{|}\texttt{GOSUB}\textcolor{red}{|}\texttt{GOTO}\textcolor{red}{ \} }\ \mathit{l\acute{\imath}nea}$$
+$$\texttt{IF}\ \mathit{condición}\ \textcolor{red}{ \{ }\texttt{THEN}\textcolor{red}{|}\texttt{GOTO}\textcolor{red}{ \} }\ \mathit{l\acute{\imath}nea}$$
 
-Con este comando aplicaremos un salto si se cumple la condición, con `THEN` y `GOTO` será un salto directo, pero con `GOSUB` será un salto de subrutina. Por ejemplo:
+Con este comando aplicaremos un salto directo si se cumple la condición. Por ejemplo:
 
 ```BASIC
 10 PRINT "PULSA UNA TECLA"
