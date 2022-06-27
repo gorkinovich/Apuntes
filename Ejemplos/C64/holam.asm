@@ -8,11 +8,11 @@
 ; Programa
 ;---------------------------------------------------------------------------
 *=$0810
-        jsr $E544
+main    jsr $E544 ; KERNAL: Limpiar terminal
         ldx #$00
 @loop   lda Message,x
         beq @end
-        jsr $E716
+        jsr $E716 ; KERNAL: Poner carácter
         inx
         jmp @loop
 @end    rts
@@ -20,5 +20,5 @@
 ;---------------------------------------------------------------------------
 ; Datos
 ;---------------------------------------------------------------------------
-Message  TEXT "hello, world!"
+Message  TEXT "hola mundo"
          BYTE 13,0
