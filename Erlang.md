@@ -87,13 +87,13 @@ La sintaxis para definir **números enteros** es la siguiente:
 
 $$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \textcolor{red}{[}\mathit{base}\texttt{\char35}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}$$
 
-La base puede ser un valor dentro del intervalo $[2,36]$ y por defecto es `10`. Ejemplos: `4`, `8`, `15`, `2#10000`, `8#27`, `16#2A`.
+La base puede ser un valor dentro del intervalo $[2,36]$ y por defecto es `10`. Por ejemplo: `4`, `8`, `15`, `2#10000`, `8#27`, `16#2A`.
 
 También podemos definir **números reales** o de **coma flotante**:
 
 $$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}\textcolor{red}{[}\texttt{.}\mathit{d\acute{\imath}gitos}\textcolor{red}{]} \textcolor{red}{[}\texttt{E}\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}\textcolor{red}{]}$$
 
-Ejemplos: `0.64341054629`, `2.718281828459045`, `3.141592653589793`.
+Por ejemplo: `0.64341054629`, `2.718281828459045`, `3.141592653589793`.
 
 Enteros y reales tienen una representación interna en Erlang distinta, por ello a la hora de realizar una operación matemática, si fuera necesario, la máquina virtual transforma un valor entero en uno real automáticamente.
 
@@ -101,22 +101,44 @@ Enteros y reales tienen una representación interna en Erlang distinta, por ello
 
 ### Átomos
 
-Los átomos son **valores** constantes con un **nombre** asignado. Para definirlos hay dos maneras. La primera es aquellas cadenas compuestas por letras, números, el guion bajo (`_`) y la arroba (`@`), que empiezan por una letra minúscula. La segunda es aquellas cadenas delimitadas por comillas simples (`'`), que contienen cualquier cadena de texto. Por motivos obvios, la segunda forma no puede contener una comilla simple, salvo que vaya precedida que la barra invertida, es decir: `\'`. Ejemplos:
+Los átomos son **valores** literales representados por un **nombre**. Para definirlos hay dos maneras. La primera es aquellas cadenas compuestas por letras, números, el guion bajo (`_`) y la arroba (`@`), que empiezan por una letra minúscula. La segunda es aquellas cadenas delimitadas por comillas simples (`'`), que contienen cualquier cadena de texto. Por motivos obvios, la segunda forma no puede contener una comilla simple, salvo que vaya precedida que la barra invertida, es decir: `\'`. Por ejemplo:
 
 ```Erlang
-plastic_love
-'Mariya Takeuchi'
+plastic_love,
+'Mariya Takeuchi'.
 ```
 
 Como curiosidad, para representar valores **booleanos** se utilizan los átomos `true` y `false`.
 
+> Existen algunas palabras claves reservadas del lenguaje que no pueden ser utilizadas como átomos: `after`, `and`, `andalso`, `band`, `begin`, `bnot`, `bor`, `bsl`, `bsr`, `bxor`, `case`, `catch`, `cond`, `div`, `end`, `fun`, `if`, `let`, `not`, `of`, `or`, `orelse`, `query`, `receive`, `rem`, `try`, `when`, `xor`.
+
 ### Texto
 
-..
+Se puede utilizar caracteres y cadenas de texto en Erlang como valores literales. Para los **caracteres** hay que utilizar el símbolo `$` seguido de la letra en cuestión. Para las **cadenas** hay que delimitarlas con las comillas dobles (`"`). Por ejemplo:
+
+```Erlang
+$ñ,
+"La letra eñe.".
+```
+
+Realmente, como pasa en tantos otros lenguajes, la representación de cada letra es un valor numérico y por extensión el de una cadena es una lista de números. Es decir, que esta sintaxis es azúcar sintáctico, pero no por ello deja de ser útil su uso.
+
+> Se puede dividir la definición de una cadena en varios segmentos si es necesario, sin que ello altere el resultado final. Por lo tanto, es lo mismo la cadena `"abcdefgh"` que la cadena `"abcd" "efgh"`.
 
 ## Variables inmutables
 
-..
+Las variables son **valores asociados** a un **nombre identificador**. Para definir un nombre de variable, se necesita una cadena compuesta por una serie de letras, números, guiones bajos (`_`) y/o arrobas (`@`), que empieza por una letra mayúscula o un guion bajo. A diferencia de los átomos, que son valores por sí mismos, las variables necesitan ser inicializadas. Una de las formas posibles es utilizar el operador de asignación (`=`) de la siguiente manera:
+
+```Erlang
+Year = 1984,
+Name = george_orwell.
+```
+
+La otra forma, en que se asignan valores a una variable, es al invocar una función con una serie de valores utilizados como argumentos de la aplicación de dicha función. Al invocarla, se pasan los valores de los argumentos y se asignan a las variables que representan los parámetros de la función.
+
+Hay que tener en cuenta, que una vez que se asigna un valor a cualquier variable, no se puede volver a asignar otro valor nuevo a la misma, ya que estas son **inmutables**. Al principio esto puede parecer un escollo insalvable, pero ya iremos viendo cómo superar esta aparente dificultad.
+
+> El guion bajo a solas (`_`) es una variable especial que se utiliza en el lenguaje para cuando no nos interesa el valor que tiene asignado. Internamente, al compilarlo, genera una variable fresca para evitar la colisión de nombres entre las diferentes apariciones de esta variable comodín.
 
 ## Estructuras de datos
 
