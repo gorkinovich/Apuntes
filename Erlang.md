@@ -87,9 +87,13 @@ La sintaxis para definir **números enteros** es la siguiente:
 
 $$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \textcolor{red}{[}\mathit{base}\texttt{\char35}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}$$
 
-La base puede ser un valor dentro del intervalo $[2,36]$ y por defecto es `10`. Ejemplos: `4`, `8`, `15`, `2#10000`, `8#27`, `16#2A`. También podemos definir **números reales** o de **coma flotante**:
+La base puede ser un valor dentro del intervalo $[2,36]$ y por defecto es `10`. Ejemplos: `4`, `8`, `15`, `2#10000`, `8#27`, `16#2A`.
+
+También podemos definir **números reales** o de **coma flotante**:
 
 $$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}\textcolor{red}{[}\texttt{.}\mathit{d\acute{\imath}gitos}\textcolor{red}{]} \textcolor{red}{[}\texttt{E}\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}\textcolor{red}{]}$$
+
+Ejemplos: `0.64341054629`, `2.718281828459045`, `3.141592653589793`.
 
 Enteros y reales tienen una representación interna en Erlang distinta, por ello a la hora de realizar una operación matemática, si fuera necesario, la máquina virtual transforma un valor entero en uno real automáticamente.
 
@@ -97,7 +101,14 @@ Enteros y reales tienen una representación interna en Erlang distinta, por ello
 
 ### Átomos
 
-..
+Los átomos son **valores** constantes con un **nombre** asignado. Para definirlos hay dos maneras. La primera es aquellas cadenas compuestas por letras, números, el guion bajo (`_`) y la arroba (`@`), que empiezan por una letra minúscula. La segunda es aquellas cadenas delimitadas por comillas simples (`'`), que contienen cualquier cadena de texto. Por motivos obvios, la segunda forma no puede contener una comilla simple, salvo que vaya precedida que la barra invertida, es decir: `\'`. Ejemplos:
+
+```Erlang
+plastic_love
+'Mariya Takeuchi'
+```
+
+Como curiosidad, para representar valores **booleanos** se utilizan los átomos `true` y `false`.
 
 ### Texto
 
