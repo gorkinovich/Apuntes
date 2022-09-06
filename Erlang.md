@@ -85,7 +85,7 @@ Este escenario presupone que tenemos un directorio `Release` para el resultado d
 
 La sintaxis para definir **números enteros** es la siguiente:
 
-$$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \textcolor{red}{[}\mathit{base}\texttt{\#}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}$$
+$$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \textcolor{red}{[}\mathit{base}\texttt{\char"0023}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}$$
 
 La base puede ser un valor dentro del intervalo $[2,36]$ y por defecto es `10`. Ejemplos: `4`, `8`, `15`, `2#10000`, `8#27`, `16#2A`. También podemos definir **números reales** o de **coma flotante**:
 
