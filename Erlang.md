@@ -79,19 +79,57 @@ erl.exe -pa Release -eval hello:world(). -s init stop -noshell
 
 Este escenario presupone que tenemos un directorio `Release` para el resultado de la compilación y `Source` para el código fuente del programa. Entonces, tras compilar `hello.erl`, se genera `hello.beam` en el directorio `Release` y es ejecutado con gracias a que hemos indicado a la máquina virtual un directorio adicional en el que buscar ficheros `.beam`.
 
-## Literales
+## Constantes
+
+### Números
+
+La sintaxis para definir **números enteros** es la siguiente:
+
+$$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \textcolor{red}{[}\mathit{base}\texttt{\#}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}$$
+
+La base puede ser un valor dentro del intervalo $[2,36]$ y por defecto es `10`. Ejemplos: `4`, `8`, `15`, `2#10000`, `8#27`, `16#2A`. También podemos definir **números reales** o de **coma flotante**:
+
+$$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}\textcolor{red}{[}\texttt{.}\mathit{d\acute{\imath}gitos}\textcolor{red}{]} \textcolor{red}{[}\texttt{E}\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}\textcolor{red}{]}$$
+
+Enteros y reales tienen una representación interna en Erlang distinta, por ello a la hora de realizar una operación matemática, si fuera necesario, la máquina virtual transforma un valor entero en uno real automáticamente.
+
+> La sintaxis de Erlang permite usar el símbolo `_` como separador visual entre los dígitos de un número, de modo que se puede usar como separador de millares. Por ejemplo: `1_234` o `1_2_3`. Al ser un elemento meramente estético, son eliminados a la hora de evaluar la expresión numérica.
+
+### Átomos
 
 ..
 
-## Variables
+### Texto
 
 ..
 
-## Operadores
+## Variables inmutables
 
 ..
 
 ## Estructuras de datos
+
+### Tuplas
+
+..
+
+### Listas
+
+..
+
+### Diccionarios
+
+..
+
+### Binarios
+
+..
+
+### Encaje de patrones
+
+..
+
+## Operadores
 
 ..
 
