@@ -127,16 +127,25 @@ Realmente, como pasa en tantos otros lenguajes, la representación de cada letra
 
 ## Variables inmutables
 
-Las variables son **valores asociados** a un **nombre identificador**. Para definir un nombre de variable, se necesita una cadena compuesta por una serie de letras, números, guiones bajos (`_`) y/o arrobas (`@`), que empieza por una letra mayúscula o un guion bajo. A diferencia de los átomos, que son valores por sí mismos, las variables necesitan ser inicializadas. Una de las formas posibles es utilizar el operador de asignación (`=`) de la siguiente manera:
+Las variables son **valores asociados** a un **nombre identificador**. Para definir un nombre de variable, se necesita una cadena compuesta por una serie de letras, números, guiones bajos (`_`) y/o arrobas (`@`), que empieza por una letra mayúscula o un guion bajo. A diferencia de los átomos, que son valores por sí mismos, las variables necesitan ser inicializadas. Una de las formas posibles es utilizar el operador igual (`=`) de la siguiente manera:
 
 ```Erlang
 Year = 1984,
 Name = george_orwell.
 ```
 
-La otra forma, en que se asignan valores a una variable, es al invocar una función con una serie de valores utilizados como argumentos de la aplicación de dicha función. Al invocarla, se pasan los valores de los argumentos y se asignan a las variables que representan los parámetros de la función.
+Otra de las formas, para asignar valores a una variable, es invocar una función con una serie de valores utilizados como argumentos de la aplicación de dicha función. Al invocarla, los valores de los argumentos son asignados a las variables que conforman los parámetros de la función.
 
-Hay que tener en cuenta, que una vez que se asigna un valor a cualquier variable, no se puede volver a asignar otro valor nuevo a la misma, ya que estas son **inmutables**. Al principio esto puede parecer un escollo insalvable, pero ya iremos viendo cómo superar esta aparente dificultad.
+Hay que tener en cuenta, que una vez que se asigna un valor a cualquier variable, no se puede volver a asignar otro valor nuevo a la misma, ya que estas son **inmutables**. De modo que lo siguiente daría un fallo en ejecución:
+
+```Erlang
+N = 1,
+N = 2.
+```
+
+Es común en lenguajes funcionales que el operador igual no es un operador de asignación, sino de igualdad matemática. Al evaluar el primer uso, `N = 1`, al no estar inicializada la variable `N` se asume que su valor ha de ser `1`. Pero al evaluar el segundo uso, `N = 2`, la variable ya está inicializada y es falsa la igualdad, por lo tanto nuestro programa fallará.
+
+Manejar variables inmutables puede parecer al principio un escollo insalvable, pero ya iremos viendo cómo superar esta aparente dificultad, con el uso de funciones recursivas.
 
 > El guion bajo a solas (`_`) es una variable especial que se utiliza en el lenguaje para cuando no nos interesa el valor que tiene asignado. Internamente, al compilarlo, genera una variable fresca para evitar la colisión de nombres entre las diferentes apariciones de esta variable comodín.
 
