@@ -522,11 +522,11 @@ La función `VAL` recibe una cadena y la intenta convertir en un número entero 
 
 Otro grupo importante son las funciones que nos permiten extraer un fragmento del interior de una cadena:
 
-$$\texttt{LEFT\$(} \mathit{cadena}\texttt{,}\ \mathit{tamaño} \texttt{)}$$
+$$\texttt{LEFT\\$(} \mathit{cadena}\texttt{,}\ \mathit{tamaño} \texttt{)}$$
 
-$$\texttt{RIGHT\$(} \mathit{cadena}\texttt{,}\ \mathit{tamaño} \texttt{)}$$
+$$\texttt{RIGHT\\$(} \mathit{cadena}\texttt{,}\ \mathit{tamaño} \texttt{)}$$
 
-$$\texttt{MID\$(} \mathit{cadena} \texttt{,}\ \mathit{inicio} \textcolor{red}{[}\texttt{,}\ \mathit{tamaño} \textcolor{red}{]} \texttt{)}$$
+$$\texttt{MID\\$(} \mathit{cadena} \texttt{,}\ \mathit{inicio} \textcolor{red}{[}\texttt{,}\ \mathit{tamaño} \textcolor{red}{]} \texttt{)}$$
 
 Donde *cadena* es la expresión que devuelve la cadena que vamos a pasar como parámetro de la función y *tamaño* es el número de caracteres que queremos extraer, que puede ser un tamaño desde `0` hasta `255`. ¿Qué pasa si queremos extraer más caracteres de los que hay en la cadena? Cuando llega al final de la cadena el algoritmo para de copiar caracteres y nos devuelve la cadena que ha extraído sin provocar un error de ejecución. Luego hay otro parámetro más en el caso de `MID$`, que es *inicio*, y este consiste en indicar a partir de qué posición vamos a empezar a extraer caracteres. A diferencia de los arrays, la primera posición de una cadena es el `1` y no el cero, lo cual hay que tener en cuenta porque si intentamos extraer la posición `0` se lanzará un error de ejecución.
 
