@@ -1,6 +1,6 @@
 ﻿# Erlang
 
-[Erlang](https://www.erlang.org/) es un lenguaje de programación diseñado para desarrollar sistemas de comunicación grandes en tiempo real con alta disponibilidad, que sean escalables y tolerantes a fallos. Es un lenguaje de [programación funcional](https://es.wikipedia.org/wiki/Programaci%C3%B3n_funcional), cuya característica principal es disponer de [concurrencia](https://es.wikipedia.org/wiki/Concurrencia_%28inform%C3%A1tica%29).
+[Erlang](https://www.erlang.org/) es un lenguaje de programación diseñado para desarrollar sistemas de comunicación grandes en tiempo real con alta disponibilidad, que sean escalables y tolerantes a fallos. Es un lenguaje de [programación funcional](https://es.wikipedia.org/wiki/Programaci%C3%B3n_funcional), cuya característica principal es disponer de [concurrencia](https://es.wikipedia.org/wiki/Concurrencia_%28inform%C3%A1tica%29). Otras propiedades del lenguaje son la [inmutabilidad](https://es.wikipedia.org/wiki/Objeto_inmutable) de los datos, el [encaje de patrones](https://es.wikipedia.org/wiki/B%C3%BAsqueda_de_patrones), la evaluación impaciente, el [tipado dinámico](https://es.wikipedia.org/wiki/Sistema_de_tipos), la [computación distribuida](https://es.wikipedia.org/wiki/Computaci%C3%B3n_distribuida) o el [cambio en caliente](https://es.wikipedia.org/wiki/Cambio_en_caliente), entre muchas otras.
 
 Recomiendo leer el libro [Learn You Some Erlang](https://learnyousomeerlang.com/), que recoge con bastante acierto las principales herramientas de las que dispone el lenguaje. El IDE que recomiendo es el [IntelliJ IDEA](https://www.jetbrains.com/es-es/idea/), que tiene la versión *Community* que es gratuita y permite instalar un plugin para trabajar con Erlang. Por último, estos apuntes han sido probados en la versión 23 de Erlang/OTP, aunque deberían funcionar la mayoría de los ejemplos con las versiones posteriores.
 
@@ -79,6 +79,27 @@ erl.exe -pa Release -eval hello:world(). -s init stop -noshell
 
 Este escenario presupone que tenemos un directorio `Release` para el resultado de la compilación y `Source` para el código fuente del programa. Entonces, tras compilar `hello.erl`, se genera `hello.beam` en el directorio `Release` y es ejecutado con gracias a que hemos indicado a la máquina virtual un directorio adicional en el que buscar ficheros `.beam`.
 
+En Erlang podemos tener secuencias de expresiones separadas por **comas**, que terminarán en un **punto** para cerrar la definición dentro del módulo. Por ejemplo, la siguiente función:
+
+```Erlang
+hi_bye() ->
+   io:format("Hello~n"),
+   io:format("Goodbye~n").
+```
+
+También dentro de la terminal se puede introducir una secuencia de expresiones, como hemos visto antes para compilar y cargar un módulo. Tomando el último ejemplo:
+
+```
+1> io:format("Hello~n"), io:format("Goodbye~n").
+Hello
+Goodbye
+ok
+```
+
+Para este ejemplo mostramos la salida por pantalla de la terminal, viendo que nos muestra el texto que queremos enviar a la salida de la consola, y podemos observar que termina con un `ok`, que es el valor que devuelve la función `io:format` al terminar.
+
+> La notación que utiliza la biblioteca estándar de Erlang/OTP para los nombres de módulos y funciones es de tipo [snake case](https://en.wikipedia.org/wiki/Snake_case), es decir, que las palabras se separan con un guion bajo para que sea el nombre más legible.
+
 ## Constantes
 
 ### Números
@@ -101,12 +122,7 @@ Enteros y reales tienen una representación interna en Erlang distinta, por ello
 
 ### Átomos
 
-Los átomos son **valores** literales representados por un **nombre**. Para definirlos hay dos maneras. La primera es aquellas cadenas compuestas por letras, números, el guion bajo (`_`) y la arroba (`@`), que empiezan por una letra minúscula. La segunda es aquellas cadenas delimitadas por comillas simples (`'`), que contienen cualquier cadena de texto. Por motivos obvios, la segunda forma no puede contener una comilla simple, salvo que vaya precedida que la barra invertida, es decir: `\'`. Por ejemplo:
-
-```Erlang
-plastic_love,
-'Mariya Takeuchi'.
-```
+Los átomos son **valores** literales representados por un **nombre**. Para definirlos hay dos maneras. La primera es aquellas cadenas compuestas por letras, números, el guion bajo (`_`) y la arroba (`@`), que empiezan por una letra minúscula. La segunda es aquellas cadenas delimitadas por comillas simples (`'`), que contienen cualquier cadena de texto. Por motivos obvios, la segunda forma no puede contener una comilla simple, salvo que vaya precedida que la barra invertida, es decir: `\'`. Por ejemplo: `plastic_love`, `'Mariya Takeuchi'`.
 
 Como curiosidad, para representar valores **booleanos** se utilizan los átomos `true` y `false`.
 
@@ -114,12 +130,7 @@ Como curiosidad, para representar valores **booleanos** se utilizan los átomos 
 
 ### Texto
 
-Se puede utilizar caracteres y cadenas de texto en Erlang como valores literales. Para los **caracteres** hay que utilizar el símbolo `$` seguido de la letra en cuestión. Para las **cadenas** hay que delimitarlas con las comillas dobles (`"`). Por ejemplo:
-
-```Erlang
-$ñ,
-"La letra eñe.".
-```
+Se puede utilizar caracteres y cadenas de texto en Erlang como valores literales. Para los **caracteres** hay que utilizar el símbolo `$` seguido de la letra en cuestión. Para las **cadenas** hay que delimitarlas con las comillas dobles (`"`). Por ejemplo: `$ñ`, `"La letra eñe."`.
 
 Realmente, como pasa en tantos otros lenguajes, la representación de cada letra es un valor numérico y por extensión el de una cadena es una lista de números. Es decir, que esta sintaxis es azúcar sintáctico, pero no por ello deja de ser útil su uso.
 
@@ -153,25 +164,186 @@ Manejar variables inmutables puede parecer al principio un escollo insalvable, p
 
 ### Tuplas
 
-..
+Las tuplas son estructuras de datos que agrupan información de forma ordenada con un tamaño fijo. Siguen la siguiente sintaxis:
+
+$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+
+Por ejemplo: `{}`, `{0, a}`, `{{data, 3.14}, Foo, {}, 8}`.
 
 ### Listas
 
-..
+Las listas son estructuras de datos que agrupan información de forma ordenada con un tamaño variable. Su sintaxis es la siguiente:
+
+$$\texttt{\char91} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1}  \texttt{\char124} \mathit{expresi\acute{o}n}_{2} \textcolor{red}{]} \texttt{\char93}$$
+
+Este es el constructor de listas, que podemos hacer una lista vacía con `[]`, o podemos hacer una lista no vacía donde la primera expresión es el valor en la **cabecera** de dicha lista y la segunda la **continuación**. Por ejemplo: `[1, [2 | []]]`, que es la lista con los valores `1` y `2` en orden. La continuación, también denominada **cola** de la lista, puede ser cualquier valor posible, por lo que podemos tener una lista tal que: `[z | 80]`.
+
+> Que la cola pueda ser cualquier valor puede provocar que la terminación de la lista no sea una lista vacía, en cuyo caso se le denomina como **lista impropia**, frente a las **listas propias**. Esta distinción es importante a la hora de analizar el tipo de una expresión, pues hay funciones que sólo funcionan con listas propias, por lo que fallarían al recibir una impropia ya que nunca llegarían a la condición final de parar con la lista vacía.
+
+A diferencia de los lenguajes fuertemente tipados, como es el caso de [Haskell](https://www.haskell.org/), las listas en Erlang pueden ser heterogéneas en relación a los tipos de los valores que contiene, gracias a su naturaleza de lenguaje con tipado dinámico.
+
+Como definir listas más complejas, con el constructor de listas, puede llegar a ser costoso y confuso, existe una sintaxis alternativa para definir listas:
+
+$$\texttt{\char91} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char93}$$
+
+De este modo, la lista `[1, [2 | []]]` se puede definir como `[1, 2]`, siendo más legible para el programador. Internamente, para la máquina virtual, son la misma cosa porque esta forma de sintaxis es azúcar sintáctico.
+
 
 ### Diccionarios
 
 ..
 
-### Binarios
-
-..
-
-### Encaje de patrones
+### Secuencias binarias
 
 ..
 
 ## Operadores
+
+### Comparaciones
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `==`  | Igualdad |
+| `/=`  | Desigualdad |
+| `=<`  | Menor o igual que |
+| `<`   | Menor que |
+| `>=`  | Mayor o igual que |
+| `>`   | Mayor que |
+| `=:=` | Igualdad estricta |
+| `=/=` | Desigualdad estricta |
+
+El resultado de las operaciones de comparación son los valores booleanos `true` y `false`, que pertenecen al conjunto de los átomos. La única particularidad, frente a otros lenguajes, es la distinción entre las versiones de la igualdad y la desigualdad. La igualdad estándar, como la desigualdad estándar, realizan una conversión de tipos cuando se comparan enteros y reales entre sí, de modo que el número entero será convertido a formato de coma flotante. En las versiones estrictas de estos dos operadores no se realiza la conversión, por lo que nunca un entero será igual a un real dentro del lenguaje Erlang. Por ejemplo:
+
+```Erlang
+1 ==  1.0, % true
+1 =:= 1.0. % false
+```
+
+Según la documentación de Erlang, la relación entre los diferentes tipos del lenguaje es la siguiente:
+
+```
+number < atom < reference < fun < port < pid
+       < tuple < map < nil < list < bit string
+```
+
+Si bien no es necesario conocer esta relación para programar, es importante que un lenguaje esté bien definido y mantenga un orden fijo para la coherencia de las operaciones.
+
+### Aritméticos
+
+| Operador | Descripción | Tipo |
+|:--------:|:-----------:|:----:|
+| `+` | Positivo | Número |
+| `-` | Negativo | Número |
+| `+` | Suma | Número |
+| `-` | Resta | Número |
+| `*` | Multiplicación | Número |
+| `/` | División | Número |
+| `div` | División entera | Entero |
+| `rem` | Resto de la división | Entero |
+
+Estos operadores funcionan con números y devuelven números como resultado. Salvo en el caso del resto y la división entera, que sólo admiten números enteros, el resto de operadores devolverá como resultado un número entero, salvo que alguno de los operandos sea de coma flotante y por lo tanto se devolverá como resultado un número real.
+
+### Lógica booleana
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `not` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) |
+| `and` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) |
+| `or`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) |
+| `xor` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) |
+
+El resultado de estos operadores son valores booleanos, que son los átomos `true` y `false`. También hay que tener en cuenta que sólo admiten como operandos valores booleanos. Para poder entender mejor estas operaciones, veamos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
+
+| `A` | `B` | `not A` | `not B` | `A and B` | `A or B` | `A xor B` |
+|:---:|:---:|:-------:|:-------:|:---------:|:--------:|:---------:|
+| `true`  | `true`  | `false` | `false` | `true`  | `true`  | `false` |
+| `false` | `true`  | `true`  | `false` | `false` | `true`  | `true`  |
+| `true`  | `false` | `false` | `true`  | `false` | `true`  | `true`  |
+| `false` | `false` | `true`  | `true`  | `false` | `false` | `false` |
+
+Estos operadores evalúan toda la expresión, aunque se alcance el resultado final tras terminar de evaluar el operando izquierdo. Por ello el lenguaje dispone de `orelse` y `andalso`, que son versiones de la conjunción y la disyunción con **cortocircuito**. Es decir, si el operando izquierdo en la conjunción es `false`, se devolverá `false` sin evaluar el operando derecho. De modo similar, si el operando izquierdo en la disyunción es `true`, se devolverá `true` sin evaluar el operando derecho.
+
+### Lógica a nivel de bit
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `bnot` | Negación |
+| `band` | Conjunción |
+| `bor`  | Disyunción |
+| `bxor` | Disyunción exclusiva |
+| `bsl`  | Desplazamiento de bits a la izquierda |
+| `bsr`  | Desplazamiento de bits a la derecha |
+
+Todos estos operadores trabajan con números enteros exclusivamente. Los cuatro primeros operadores funcionan igual que los operadores lógicos booleanos, la diferencia es que, en lugar de usar `true` y `false`, usan los valores binarios `1` y `0` respectivamente. En cuanto a los operadores de desplazamiento de bits, el operando izquierdo es desplazado tantas posiciones como indique el operando derecho:
+
+```
+1> 1024 bsr 5.
+32
+2> 2 bsl 10.
+2048
+```
+
+> La representación de los enteros en Erlang no se limita a un tamaño fijo como en otros lenguajes. Para enteros pequeños se utilizan 28 bits en arquitecturas de 32 bits y 60 bits en las de 64 bits. Pero para enteros largos se reservan bloques de memoria divisibles por el ancho de palabra de la arquitectura donde se esté ejecutando. De esta manera se pueden representar números enteros extraordinariamente largos, al punto que la expresión `1 bsl (1 bsl 24)` es ejecutable en arquitecturas de 64 bits.
+
+### Listas
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `++` | Concatenación |
+| `--` | Eliminación |
+
+Estos dos operadores sólo permiten listas como operandos y devuelven listas. Con `++` se obtiene una nueva lista que concatena dos listas. Con `--` se obtiene una nueva lista en la que se ha ido eliminando los elementos de la lista en el operando derecho. Por ejemplo:
+
+```
+1> [1,2,3] ++ [4,5].
+[1,2,3,4,5]
+2> [1,2,3,2,1,2] -- [2,1,4,2].
+[3,1,2]
+```
+
+Como se puede ver, para la eliminación, no salta ningún error si el elemento que se busca eliminar no existe. Con este operador tenemos una forma básica de filtrar valores.
+
+### Otros operadores
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `:` | Acceso a módulos |
+| `#` | Modificación de estructuras |
+| `=` | Encaje de patrones |
+| `!` | Envío de mensajes |
+| `catch` | Captura de excepciones |
+
+Estos operadores se pueden ver en más detalle en otras secciones, para explicar mejor los conceptos que manejan.
+
+### Precedencia y asociatividad
+
+La precedencia de los operadores es la siguiente:
+
+| Operadores | Asociatividad |
+|:----------:|:-------------:|
+| `:` |  |
+| `#` |  |
+| Unarios: `+`, `-`, `bnot`, `not` |  |
+| `/`, `*`, `div`, `rem`, `band`, `and` | Izquierda |
+| `+`, `-`, `bor`, `bxor`, `bsl`, `bsr`, `or`, `xor` | Izquierda |
+| `++`, `--` | Derecha |
+| `==`, `/=`, `=<`, `<`, `>=`, `>`, `=:=`, `=/=` |  |
+| `andalso` |  |
+| `orelse` |  |
+| `=`, `!` | Derecha |
+| `catch` |  |
+
+> La [asociatividad](https://es.wikipedia.org/wiki/Orden_de_evaluaci%C3%B3n) de un operador indica cómo se va evaluando las expresiones, si es de izquierda a derecha o al revés. Los operadores aritméticos se evalúan de izquierda a derecha, por lo que primero se resuelven aquellas operaciones que están a la izquierda de otra operación con el mismo nivel de prioridad.
+
+## Encaje de patrones
+
+..
+
+## Secuencias intensionales
+
+..
+
+$$\texttt{\char91} \mathit{expresi\acute{o}n}\  \texttt{\char124\char124}\ \textcolor{red}{[} \mathit{generador}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{generador}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char93}$$
 
 ..
 
@@ -194,4 +366,8 @@ Manejar variables inmutables puede parecer al principio un escollo insalvable, p
 ## Comportamientos
 
 ..
+
+```Erlang
+.
+```
 
