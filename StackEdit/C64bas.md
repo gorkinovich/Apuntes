@@ -320,7 +320,7 @@ El ejemplo llama primero con `GOSUB` a una subrutina ubicada en la línea `30`. 
 
 Ahora que conocemos los comandos de salto, vamos a ver una variante del comando `IF`:
 
-$$\texttt{IF}\ \mathit{condición}\ \textcolor{red}{ \{ }\texttt{THEN}\textcolor{red}{|}\texttt{GOTO}\textcolor{red}{ \} }\ \mathit{l\acute{\imath}nea}$$
+$$\texttt{IF}\ \mathit{condición}\ \textcolor{red}{ \char123 }\texttt{THEN}\textcolor{red}{|}\texttt{GOTO}\textcolor{red}{ \char125 }\ \mathit{l\acute{\imath}nea}$$
 
 Con este comando aplicaremos un salto directo si se cumple la condición. Por ejemplo:
 
@@ -376,7 +376,7 @@ Podemos anidar unos nueve bucles `FOR` entre sí y BASIC nos permite usar un ún
 
 El comando `ON` nos permite saltar en la ejecución del programa mediante un índice:
 
-$$\texttt{ON}\ \mathit{expresión}\ \textcolor{red}{ \{ }\texttt{GOSUB}\textcolor{red}{|}\texttt{GOTO}\textcolor{red}{ \} }\ \mathit{l\acute{\imath}nea} \textcolor{red}{[} \texttt{,}\ \mathit{l\acute{\imath}nea}\ \textcolor{red}{\dots]}$$
+$$\texttt{ON}\ \mathit{expresión}\ \textcolor{red}{ \char123 }\texttt{GOSUB}\textcolor{red}{|}\texttt{GOTO}\textcolor{red}{ \char125 }\ \mathit{l\acute{\imath}nea} \textcolor{red}{[} \texttt{,}\ \mathit{l\acute{\imath}nea}\ \textcolor{red}{\dots]}$$
 
 Esta sentencia de control requiere de una *expresión* numérica que de como resultado un valor desde `1` hasta *N*, siendo *N* el número de *líneas* que hayamos indicado en el comando. Siendo más precisos, *expresión* debe ser un valor desde `0` hasta  `255` o nos dará un error en ejecución. Si metemos un número con decimales, este será redondeado, si metemos una opción que está fuera del la cantidad de líneas que tenemos, no se realizará salto alguno y continuará la ejecución con la siguiente línea al comando `ON`. Esta sentencia nos vendrá bien para hacer menús de forma sencilla, por ejemplo:
 
@@ -511,9 +511,9 @@ $$\begin{array}{ccc}
 & \qquad &
 \texttt{VAL(} \mathit{cadena} \texttt{)}
 \\[0.2cm]
-\texttt{CHR\$(} \mathit{número} \texttt{)}
+\texttt{CHR\char36(} \mathit{número} \texttt{)}
 & \qquad &
-\texttt{STR\$(} \mathit{número} \texttt{)}
+\texttt{STR\char36(} \mathit{número} \texttt{)}
 \end{array}$$
 
 La función `ASC` recibe una cadena y convierte el carácter al inicio en el número entero que corresponde con su código PETSCII. Si le pasamos una cadena vacía lanzará un error en tiempo de ejecución. La función inversa a `ASC` es `CHR$`, que toma un código PETSCII y devuelve una cadena de un carácter que representa a dicho código. Los códigos PETSCII son números enteros desde `0` hasta `255`.
@@ -522,11 +522,11 @@ La función `VAL` recibe una cadena y la intenta convertir en un número entero 
 
 Otro grupo importante son las funciones que nos permiten extraer un fragmento del interior de una cadena:
 
-$$\texttt{LEFT\$(} \mathit{cadena}\texttt{,}\ \mathit{tamaño} \texttt{)}$$
+$$\texttt{LEFT\char36(} \mathit{cadena}\texttt{,}\ \mathit{tamaño} \texttt{)}$$
 
-$$\texttt{RIGHT\$(} \mathit{cadena}\texttt{,}\ \mathit{tamaño} \texttt{)}$$
+$$\texttt{RIGHT\char36(} \mathit{cadena}\texttt{,}\ \mathit{tamaño} \texttt{)}$$
 
-$$\texttt{MID\$(} \mathit{cadena} \texttt{,}\ \mathit{inicio} \textcolor{red}{[}\texttt{,}\ \mathit{tamaño} \textcolor{red}{]} \texttt{)}$$
+$$\texttt{MID\char36(} \mathit{cadena} \texttt{,}\ \mathit{inicio} \textcolor{red}{[}\texttt{,}\ \mathit{tamaño} \textcolor{red}{]} \texttt{)}$$
 
 Donde *cadena* es la expresión que devuelve la cadena que vamos a pasar como parámetro de la función y *tamaño* es el número de caracteres que queremos extraer, que puede ser un tamaño desde `0` hasta `255`. ¿Qué pasa si queremos extraer más caracteres de los que hay en la cadena? Cuando llega al final de la cadena el algoritmo para de copiar caracteres y nos devuelve la cadena que ha extraído sin provocar un error de ejecución. Luego hay otro parámetro más en el caso de `MID$`, que es *inicio*, y este consiste en indicar a partir de qué posición vamos a empezar a extraer caracteres. A diferencia de los arrays, la primera posición de una cadena es el `1` y no el cero, lo cual hay que tener en cuenta porque si intentamos extraer la posición `0` se lanzará un error de ejecución.
 
@@ -600,7 +600,7 @@ El parámetro *nid* es un número identificador con valor desde `1` hasta `255`,
 
 Por último el parámetro *fichero* indica la ruta del fichero con el que trabajar:
 
-$$\mathit{fichero} = \texttt{"} \mathit{nombre} \textcolor{red}{[} \texttt{,} \textcolor{red}{\{} \texttt{SEQ} \textcolor{red}{|} \texttt{REL} \textcolor{red}{|} \texttt{USR} \textcolor{red}{\}} \textcolor{red}{[} \texttt{,} \textcolor{red}{\{} \texttt{R} \textcolor{red}{|} \texttt{W} \textcolor{red}{\}} \textcolor{red}{]]}\texttt{"}$$
+$$\mathit{fichero} = \texttt{"} \mathit{nombre} \textcolor{red}{[} \texttt{,} \textcolor{red}{ \char123 } \texttt{SEQ} \textcolor{red}{|} \texttt{REL} \textcolor{red}{|} \texttt{USR} \textcolor{red}{ \char125 } \textcolor{red}{[} \texttt{,} \textcolor{red}{ \char123 } \texttt{R} \textcolor{red}{|} \texttt{W} \textcolor{red}{ \char125 } \textcolor{red}{]]}\texttt{"}$$
 
 Para indicar la ruta primero necesitamos el *nombre* del fichero, seguido del tipo de fichero y finalmente si es para leer (`R`) o escribir (`W`). Los tipos de fichero que tenemos son secuenciales (`SEQ`), de acceso aleatorio con registros (`REL`) o de usuario (`USR`). Lo habitual es trabajar con ficheros secuenciales desde BASIC.
 
