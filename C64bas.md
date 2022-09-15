@@ -506,7 +506,7 @@ Donde *cadena* es una expresión que devuelve un valor de cadena de texto y este
 
 El siguiente grupo de funciones nos permite convertir valores numéricos a cadenas y viceversa:
 
-$$\begin{array}{ccc}
+$$\\begin{array}{ccc}
 \texttt{ASC(} \mathit{cadena} \texttt{)}
 & \qquad &
 \texttt{VAL(} \mathit{cadena} \texttt{)}
@@ -514,7 +514,7 @@ $$\begin{array}{ccc}
 \texttt{CHR\$(} \mathit{número} \texttt{)}
 & \qquad &
 \texttt{STR\$(} \mathit{número} \texttt{)}
-\end{array}$$
+\\end{array}$$
 
 La función `ASC` recibe una cadena y convierte el carácter al inicio en el número entero que corresponde con su código PETSCII. Si le pasamos una cadena vacía lanzará un error en tiempo de ejecución. La función inversa a `ASC` es `CHR$`, que toma un código PETSCII y devuelve una cadena de un carácter que representa a dicho código. Los códigos PETSCII son números enteros desde `0` hasta `255`.
 
