@@ -623,11 +623,11 @@ Si tratamos de cerrar un identificador, que no esté abierto, no se producirá n
 
 El siguiente bloque de comandos nos resultará familiar:
 
-$$\texttt{PRINT\#}\ \mathit{nid} \texttt{,}\  \mathit{expresión} \textcolor{red}{[[} \texttt{;} \textcolor{red}{|} \texttt{,} \textcolor{red}{]}\ \mathit{expresión}\ \textcolor{red}{\dots]}$$
+$$\texttt{PRINT\\#}\ \mathit{nid} \texttt{,}\  \mathit{expresión} \textcolor{red}{[[} \texttt{;} \textcolor{red}{|} \texttt{,} \textcolor{red}{]}\ \mathit{expresión}\ \textcolor{red}{\dots]}$$
 
-$$\texttt{INPUT\#}\ \mathit{nid} \texttt{,}\ \mathit{variable} \textcolor{red}{[} \texttt{,}\ \mathit{variable}\ \textcolor{red}{\dots]}$$
+$$\texttt{INPUT\\#}\ \mathit{nid} \texttt{,}\ \mathit{variable} \textcolor{red}{[} \texttt{,}\ \mathit{variable}\ \textcolor{red}{\dots]}$$
 
-$$\texttt{GET\#}\ \mathit{nid} \texttt{,}\ \mathit{variable} \textcolor{red}{[} \texttt{,}\ \mathit{variable}\ \textcolor{red}{\dots]}$$
+$$\texttt{GET\\#}\ \mathit{nid} \texttt{,}\ \mathit{variable} \textcolor{red}{[} \texttt{,}\ \mathit{variable}\ \textcolor{red}{\dots]}$$
 
 Estos comandos son muy similares a `PRINT`, `INPUT` y `GET`, con algunas diferencias. Con `PRINT#` podemos escribir información en un fichero. Con `INPUT#` podemos leer información de un fichero, pero no podemos leer cadenas mayores de 80 caracteres sin provocar un error en ejecución. El comando `INPUT#` no muestra por pantalla ningún mensaje para trabajar. Con `GET#` podemos leer un carácter de un fichero, lo cual nos permitirá leer cadenas de más de 80 caracteres. Cuando `GET#` se encuentra con `CHR$(0)` devuelve la cadena vacía. Al llegar al final de fichero, el comando `GET#` devolverá por defecto `CHR$(199)`, para poder distinguir que efectivamente hemos llegado al final usaremos la variable `STATUS`. Esta variable representa el byte de memoria en la dirección `144` (`$0090`) y es sólo de lectura:
 
