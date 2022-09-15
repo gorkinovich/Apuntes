@@ -600,7 +600,7 @@ El parámetro *nid* es un número identificador con valor desde `1` hasta `255`,
 
 Por último el parámetro *fichero* indica la ruta del fichero con el que trabajar:
 
-$$\mathit{fichero} = \texttt{"} \mathit{nombre} \textcolor{red}{[} \texttt{,} \textcolor{red}{\\{} \texttt{SEQ} \textcolor{red}{|} \texttt{REL} \textcolor{red}{|} \texttt{USR} \textcolor{red}{\\}} \textcolor{red}{[} \texttt{,} \textcolor{red}{\{} \texttt{R} \textcolor{red}{|} \texttt{W} \textcolor{red}{\}} \textcolor{red}{]]}\texttt{"}$$
+$$\mathit{fichero} = \texttt{"} \mathit{nombre} \textcolor{red}{[} \texttt{,} \textcolor{red}{\\{} \texttt{SEQ} \textcolor{red}{|} \texttt{REL} \textcolor{red}{|} \texttt{USR} \textcolor{red}{\\}} \textcolor{red}{[} \texttt{,} \textcolor{red}{\\{} \texttt{R} \textcolor{red}{|} \texttt{W} \textcolor{red}{\\}} \textcolor{red}{]]}\texttt{"}$$
 
 Para indicar la ruta primero necesitamos el *nombre* del fichero, seguido del tipo de fichero y finalmente si es para leer (`R`) o escribir (`W`). Los tipos de fichero que tenemos son secuenciales (`SEQ`), de acceso aleatorio con registros (`REL`) o de usuario (`USR`). Lo habitual es trabajar con ficheros secuenciales desde BASIC.
 
