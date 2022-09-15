@@ -166,7 +166,7 @@ Manejar variables inmutables puede parecer al principio un escollo insalvable, p
 
 Las tuplas son estructuras de datos que agrupan información de forma ordenada con un tamaño fijo. Siguen la siguiente sintaxis:
 
-$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Por ejemplo: `{}`, `{0, a}`, `{{data, 3.14}, Foo, {}, 8}`.
 
@@ -184,20 +184,38 @@ A diferencia de los lenguajes fuertemente tipados, como es el caso de [Haskell](
 
 Como definir listas más complejas, con el constructor de listas, puede llegar a ser costoso y confuso, existe una sintaxis alternativa para definir listas:
 
-$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
 De este modo, la lista `[1, [2 | []]]` se puede definir como `[1, 2]`, siendo más legible para el programador. Internamente, para la máquina virtual, son la misma cosa porque esta forma de sintaxis es azúcar sintáctico.
 
+Dentro de la biblioteca estándar existe el módulo [`lists`](https://www.erlang.org/doc/man/lists.html), con una buena colección de funciones que permiten consultar y transformar listas, algunas de ellas bastante avanzadas.
 
-### Diccionarios
 
-..
+### Mapas
+
+Los mapas son estructuras de datos que relacionan una clave con un valor. Aunque también se le conoce como diccionarios en otros lenguajes, la [biblioteca estándar](https://www.erlang.org/doc/man/stdlib_app) de Erlang tiene otro tipo de estructura nativa que se llama diccionario, por lo que usaremos el término mapa para evitar confusiones innecesarias.
+
+La sintaxis para crear un mapa es la siguiente:
+
+$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave}_{1}\ \texttt{=>}\ \mathit{valor}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{clave}_{n}\ \texttt{=>}\ \mathit{valor}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+
+Tanto las claves, como los valores, pueden ser de cualquier tipo. Para actualizar un mapa previo, usaremos esta sintaxis:
+
+$$\mathit{mapa}\texttt{\char35\char123} \mathit{clave}\ \texttt{=>}\ \mathit{valor} \texttt{\char125}$$
+
+De este modo se devuelve un nuevo mapa, donde se asigna un valor a la clave indicada, existiera esta previamente o no. Existe otra variante para actualizar un mapa previo con:
+
+$$\mathit{mapa}\texttt{\char35\char123} \mathit{clave}\ \texttt{:=}\ \mathit{valor} \texttt{\char125}$$
+
+Con esta versión, si la clave no existe previamente, no se actualizará el contenido del nuevo mapa creado y será simplemente una copia idéntica del mapa que hemos intentado modificar.
+
+El módulo [`maps`](https://www.erlang.org/doc/man/maps.html) contiene una serie de funciones que permite trabajar con mapas, para poder consultar su contenido o realizar transformaciones avanzadas.
 
 ### Bloques binarios
 
 Debido a que Erlang fue diseñado para construir sistemas de telecomunicaciones, existía la necesidad de tener las herramientas para poder procesar protocolos e información a nivel de bytes e incluso de bits. Para ello se tiene en Erlang la siguiente sintaxis:
 
-$$\texttt{<<} \textcolor{red}{[} \mathit{segmento}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{segmento}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
+$$\texttt{<<} \textcolor{red}{[} \mathit{segmento}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{segmento}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
 
 Los *segmentos* tienen la siguiente sintaxis:
 
@@ -401,15 +419,63 @@ La primera expresión asigna el valor `5` a la variable `A`. La segunda expresi�
 
 Este mismo comportamiento, que ocurre con el operador `=`, veremos que también se aplica con las cláusulas al llamar una función o al utilizar las expresiones `case`, `receive` y `try`.
 
+### Cláusulas, patrones y guardas
+
+Las **cláusulas** en Erlang son una construcción que permite ajustar un valor a un **patrón** determinado, siempre que se cumplan una serie de condiciones que denominaremos **guardas**. De modo que su sintaxis sería algo tal que:
+
+$$\mathit{patr\acute{o}n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones}$$
+
+Para la declaración de funciones, la sintaxis varía ligeramente porque el ajuste se realiza sobre cero o más parámetros, recibidos en la invocación de dicha función.
+
+Para ser más precisos, un **patrón** es una expresión que define una estructura de datos y que contiene variables y valores literales. Si las variables están ya ligadas a un valor, se comprobará que se ajusten los valores con lo que se intenta encajar, si no están ligadas se asignará el valor que se está encajando. Por ejemplo, cuando se utiliza el operador `=`, el lado izquierdo ha de ser un patrón, mientras que el derecho es la expresión que nos da el valor que se va a intentar encajar.
+
+En cuanto a las **guardas**, estas son expresiones booleanas. Si no se indica ninguna guarda, por defecto se utiliza el valor `true` internamente. Una condición que debe cumplir las guardas, es que no debe tener ningún efecto colateral al evaluarse. Para ello, están limitados los elementos que pueden formar parte de una guarda a los siguientes:
+
+- Variables
+- Constantes
+- Constructores de átomos, números, listas, tuplas, registros, bloques binarios y mapas.
+- Expresiones para actualizar mapas.
+- Expresiones con registros como: `Expresión#Nombre.Campo` y `#Nombre.Campo`.
+- Operaciones de comparación, aritméticas, lógicas booleanas y a nivel de bit, así como los operadores lógicos `andalso` y `orelse`.
+- Las siguientes funciones nativas del lenguaje:
+	- Comprobación de tipos: `is_atom/1`, `is_binary/1`, `is_bitstring/1`, `is_boolean/1`, `is_float/1`, `is_function/1`, `is_function/2`, `is_integer/1`, `is_list/1`, `is_map/1`, `is_number/1`, `is_pid/1`, `is_port/1`, `is_record/2`, `is_record/3`, `is_reference/1`, `is_tuple/1`.
+	- Operaciones varias: `abs/1`, `bit_size/1`, `byte_size/1`, `element/2`, `float/1`, `hd/1`, `is_map_key/2`, `length/1`, `map_get/2`, `map_size/1`, `node/0`, `node/1`, `round/1`, `self/0`, `size/1`, `tl/1`, `trunc/1`, `tuple_size/1`.
+
+En la sección sobre las funciones, se habla en más detalle sobre las [funciones nativas](https://www.erlang.org/doc/man/erlang.html) que hay en el lenguaje Erlang. Volviendo a las guardas, podemos tener una secuencia de ellas utilizando una de estas dos formas:
+
+$$\mathit{guarda}_{1} \texttt{,} \dots \texttt{,} \mathit{guarda}_{n}$$
+
+$$\mathit{guarda}_{1} \texttt{;} \dots \texttt{;} \mathit{guarda}_{n}$$
+
+Usando la coma (`,`) es requisito que todas las guardas den como resultado `true`, mientras que con el punto y coma (`;`) sólo es necesario que una de las guardas sea cierta. Esta sintaxis vendría a ser un equivalente de usar `andalso` para el caso de la coma y `orelse` para el caso del punto y coma.
+
+### Encaje con mapas
+
+Podemos usar la siguiente sintaxis como patrón de encaje con mapas:
+
+$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave}_{1}\ \texttt{:=}\ \mathit{patr\acute{o}n}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{clave}_{n}\ \texttt{:=}\ \mathit{patr\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+
+Como requisito, para que funcione correctamente, las claves tienen que cumplir los mismos requisitos que cumplen las guardas de las cláusulas, lo cual implica que todas las variables internas han de estar previamente ligadas. Si las claves son encontradas, los valores de estas son ajustados a los patrones definidos.
+
+En caso de no encontrar alguna de las claves indicadas, se lanzará una excepción de tipo `badmatch` si el encaje se realiza mediante el operador `=`. Si el encaje se está realizando en el patrón de una cláusula, en caso de fallar el ajuste se pasará a la siguiente cláusula.
+
 ## Secuencias intensionales
 
 ..
 
-$$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{generador}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+
+..
+
+$$\texttt{<<} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
 
 ..
 
 ## Funciones
+
+..
+
+$$\texttt{(} \textcolor{red}{[} \mathit{patr\acute{o}n}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{patr\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones}$$
 
 ..
 
