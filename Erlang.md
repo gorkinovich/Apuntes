@@ -193,9 +193,55 @@ De este modo, la lista `[1, [2 | []]]` se puede definir como `[1, 2]`, siendo m�
 
 ..
 
-### Secuencias binarias
+### Bloques binarios
 
-..
+Debido a que Erlang fue diseñado para construir sistemas de telecomunicaciones, existía la necesidad de tener las herramientas para poder procesar protocolos e información a nivel de bytes e incluso de bits. Para ello se tiene en Erlang la siguiente sintaxis:
+
+$$\texttt{<<} \textcolor{red}{[} \mathit{segmento}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{segmento}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
+
+Los *segmentos* tienen la siguiente sintaxis:
+
+$$\mathit{dato} \textcolor{red}{[} \texttt{:} \mathit{tamaño} \textcolor{red}{]} \textcolor{red}{[} \texttt{/} \mathit{descriptores} \textcolor{red}{]}$$
+
+Los *descriptores* es una lista de propiedades que definen al *dato* y que se separan con guiones (`-`). Los *descriptores* disponibles son:
+
+| Categoría | Valores | Defecto | Descripción |
+|:---------:|:-------:|:-------:|:------------|
+| Tipo | `integer`, `float`, `binary`, `bytes`, `bitstring`, `bits`, `utf8`, `utf16`, `utf32` | `integer` | Tipo del dato del segmento. El valor `bytes` equivale a `binary` y el valor `bits` a `bitstring`. |
+| Signo | `signed`, `unsigned` | `unsigned` | Esta propiedad sólo importa cuando el tipo es `integer`, para indicar si tiene signo o no su formato. |
+| Orden | `big`, `little`, `native` | `big` | Indica cómo están [orientados los bytes](https://es.wikipedia.org/wiki/Endianness), si se trata de una arquitectura *big-endian* o *little-endian*. Esta propiedad solamente es relevante para los tipos `integer`, `float`, `utf16` y `utf32`. |
+| Unidad | `unit:Literal` (Literal = `1`.\.`256`) | `1` (`integer`, `float`,`bitstring`)<br/>`8` (`binary`) | Indica el número de bits que se va a usar como unidad al definir el *tamaño* del segmento. Con los tipos `utf8`, `utf16` y `utf32` no se indica unidad alguna. |
+
+El *dato* dependerá del tipo indicado en el *descriptor* y podremos usar números, cadenas de texto o bloques binarios, siempre y cuando se indique el tipo adecuado, de lo contrario obtendremos un error.
+
+El *tamaño*, dentro del *segmento*, indica en número de unidades el espacio que ocupa. Por ejemplo, si se trata de un *dato* de tipo `integer` y el tamaño es `16`, como por defecto la unidad de 1 bit, el tamaño final del segmento son 16 bits. Si no se indica el *tamaño*, por defecto será de `8` unidades cuando sea un `integer`, de `64` unidades para `float`, y en el caso de `binary` y `bitstring` se tomará el resto del bloque como tamaño.
+
+> La única diferencia relevante entre el tipo `binary` y `bitstring`, es que el primero por defecto maneja unidades de 8 bits, mientras que el segundo maneja unidades de 1 bit, por ello con `binary` es requisito que la información que se vaya a definir o encajar sea múltiplo de 8.
+
+Veamos algunos ejemplos:
+
+```
+1> <<_,A/binary>> = <<1, 2, 257:16>>.
+<<1,2,1,1>>
+2> A.
+<<2,1,1>>
+3> <<_,B/bitstring>> = <<1, 2, 257:12>>.
+<<1,2,16,1:4>>
+4> B.
+<<2,16,1:4>>
+5> <<C,D>> = <<256:16/big>>, {C,D}.
+{1,0}
+6> <<E,F>> = <<256:16/little>>, {E,F}.
+{0,1}
+7> <<1024:32, 3.14/float, <<"abc">>/bytes>>.
+<<0,0,4,0,64,9,30,184,81,235,133,31,97,98,99>>
+8> io:format("~w~n", [<<"Año"/utf8>>]).
+<<65,195,177,111>>
+9> io:format("~w~n", [<<"Año"/utf16>>]).
+<<0,65,0,241,0,111>>
+10> io:format("~w~n", [<<"Año"/utf32>>]).
+<<0,0,0,65,0,0,0,241,0,0,0,111>>
+```
 
 ## Operadores
 
@@ -337,13 +383,29 @@ La precedencia de los operadores es la siguiente:
 
 ## Encaje de patrones
 
-..
+Una de las propiedades del lenguaje Erlang es el encaje de patrones, este se realiza en múltiples circunstancias, la más obvia de ellas es usando el operador `=`, que vimos en la sección sobre las variables. El encaje de patrones sirve para dos cometidos:
+
+1. Descomponer y seleccionar datos en una expresión.
+2. Comprobar el valor de una expresión.
+
+Veamos el siguiente ejemplo para entenderlo mejor:
+
+```Erlang
+A = 5,
+B = {A, A * 2},
+{_, C} = B,
+10 = C.
+```
+
+La primera expresión asigna el valor `5` a la variable `A`. La segunda expresión asigna a la variable `B` una tupla de dos componentes, la primera con el valor de `A` y la segunda con el valor de `A` multiplicado por `2`. En la tercera expresión, se realiza un ajuste de patrón, para asignar en la variable `C` el valor de la segunda componente de la tupla que está asignada a `B`. Como la primera componente no nos interesa, usamos la variable comodín `_` para descartar dicha información. Por último, comprobamos que el contenido de `C` es el valor `10` usando la expresión `10 = C` en el ejemplo, aunque también podríamos haber usado `C = 10` porque actúan de forma idéntica las dos.
+
+Este mismo comportamiento, que ocurre con el operador `=`, veremos que también se aplica con las cláusulas al llamar una función o al utilizar las expresiones `case`, `receive` y `try`.
 
 ## Secuencias intensionales
 
 ..
 
-$$\texttt{\char91} \mathit{expresi\acute{o}n}\  \texttt{\char124\char124}\ \textcolor{red}{[} \mathit{generador}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{generador}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char93}$$
+$$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{generador}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
 ..
 
