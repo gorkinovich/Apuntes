@@ -430,9 +430,9 @@ Primero hay que indicar el *nombre* identificador de la función y luego la *exp
 | `ABS(X)` | Calcula el **valor absoluto** de X (elimina su signo). |
 | `ATN(X)` | Calcula el **arcotangente** con radianes. |
 | `COS(X)` | Calcula el **coseno** con radianes. |
-| `EXP(X)` | Exponenciación de *e*^X^. |
+| `EXP(X)` | Exponenciación de *e*<sup>X</sup>. |
 | `INT(X)` | Redondea X hacia abajo. |
-| `LOG(X)` | Logaritmo neperiano de X: log~e~(X). |
+| `LOG(X)` | Logaritmo neperiano de X: log<sub>e</sub>(X). |
 | `RND(X)` | Genera un número real aleatorio entre `0` y `1` (incluyendo el 0 pero no el 1 en su rango). |
 | `SGN(X)` | Devuelve el signo de X (`-1` = Negativo, `0` = Cero, `+1` = Positivo). |
 | `SIN(X)` | Calcula el **seno** con radianes. |
@@ -441,7 +441,7 @@ Primero hay que indicar el *nombre* identificador de la función y luego la *exp
 
 Veamos algunas consideraciones sobre estas funciones. Las funciones trigonométricas funcionan con [radianes](https://es.wikipedia.org/wiki/Radi%C3%A1n) en lugar de [grados](https://es.wikipedia.org/wiki/Grado_sexagesimal), por lo que veremos luego cómo se hace la conversión entre ambas medidas. El número *e* es `2.71828183`, pero a diferencia de `π`, no existe un símbolo en el C64 para representar esta constante. La función `EXP` es el inverso de `LOG` y viceversa. Para calcular un logaritmo en otra base usaremos la siguiente fórmula:
 
-$$\mathit{log}_{y}(x) = \dfrac{\mathit{log}_{e}(x)}{\mathit{log}_{e}(y)}$$
+$$\mathit{log_y}(x) = \dfrac{\mathit{log_e}(x)}{\mathit{log_e}(y)}$$
 
 En cuanto a la función `RND(X)` hemos de tener en cuenta que:
 

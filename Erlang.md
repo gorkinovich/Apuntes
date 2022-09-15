@@ -166,7 +166,7 @@ Manejar variables inmutables puede parecer al principio un escollo insalvable, p
 
 Las tuplas son estructuras de datos que agrupan información de forma ordenada con un tamaño fijo. Siguen la siguiente sintaxis:
 
-$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Por ejemplo: `{}`, `{0, a}`, `{{data, 3.14}, Foo, {}, 8}`.
 
@@ -174,7 +174,7 @@ Por ejemplo: `{}`, `{0, a}`, `{{data, 3.14}, Foo, {}, 8}`.
 
 Las listas son estructuras de datos que agrupan información de forma ordenada con un tamaño variable. Su sintaxis es la siguiente:
 
-$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1}  \texttt{|} \mathit{expresi\acute{o}n}_{2} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n_1}  \texttt{|} \mathit{expresi\acute{o}n_2} \textcolor{red}{]} \texttt{]}$$
 
 Este es el constructor de listas, que podemos hacer una lista vacía con `[]`, o podemos hacer una lista no vacía donde la primera expresión es el valor en la **cabecera** de dicha lista y la segunda la **continuación**. Por ejemplo: `[1, [2 | []]]`, que es la lista con los valores `1` y `2` en orden. La continuación, también denominada **cola** de la lista, puede ser cualquier valor posible, por lo que podemos tener una lista tal que: `[z | 80]`.
 
@@ -184,7 +184,7 @@ A diferencia de los lenguajes fuertemente tipados, como es el caso de [Haskell](
 
 Como definir listas más complejas, con el constructor de listas, puede llegar a ser costoso y confuso, existe una sintaxis alternativa para definir listas:
 
-$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
 De este modo, la lista `[1, [2 | []]]` se puede definir como `[1, 2]`, siendo más legible para el programador. Internamente, para la máquina virtual, son la misma cosa porque esta forma de sintaxis es azúcar sintáctico.
 
@@ -197,7 +197,7 @@ Los mapas son estructuras de datos que relacionan una clave con un valor. Aunque
 
 La sintaxis para crear un mapa es la siguiente:
 
-$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave}_{1}\ \texttt{=>}\ \mathit{valor}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{clave}_{n}\ \texttt{=>}\ \mathit{valor}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave_1}\ \texttt{=>}\ \mathit{valor_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{clave_n}\ \texttt{=>}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Tanto las claves, como los valores, pueden ser de cualquier tipo. Para actualizar un mapa previo, usaremos esta sintaxis:
 
@@ -215,7 +215,7 @@ El módulo [`maps`](https://www.erlang.org/doc/man/maps.html) contiene una serie
 
 Debido a que Erlang fue diseñado para construir sistemas de telecomunicaciones, existía la necesidad de tener las herramientas para poder procesar protocolos e información a nivel de bytes e incluso de bits. Para ello se tiene en Erlang la siguiente sintaxis:
 
-$$\texttt{<<} \textcolor{red}{[} \mathit{segmento}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{segmento}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
+$$\texttt{<<} \textcolor{red}{[} \mathit{segmento_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{segmento_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
 
 Los *segmentos* tienen la siguiente sintaxis:
 
@@ -443,9 +443,9 @@ En cuanto a las **guardas**, estas son expresiones booleanas. Si no se indica ni
 
 En la sección sobre las funciones, se habla en más detalle sobre las [funciones nativas](https://www.erlang.org/doc/man/erlang.html) que hay en el lenguaje Erlang. Volviendo a las guardas, podemos tener una secuencia de ellas utilizando una de estas dos formas:
 
-$$\mathit{guarda}_{1} \texttt{,} \dots \texttt{,} \mathit{guarda}_{n}$$
+$$\mathit{guarda_1} \texttt{,} \dots \texttt{,} \mathit{guarda_n}$$
 
-$$\mathit{guarda}_{1} \texttt{;} \dots \texttt{;} \mathit{guarda}_{n}$$
+$$\mathit{guarda_1} \texttt{;} \dots \texttt{;} \mathit{guarda_n}$$
 
 Usando la coma (`,`) es requisito que todas las guardas den como resultado `true`, mientras que con el punto y coma (`;`) sólo es necesario que una de las guardas sea cierta. Esta sintaxis vendría a ser un equivalente de usar `andalso` para el caso de la coma y `orelse` para el caso del punto y coma.
 
@@ -453,7 +453,7 @@ Usando la coma (`,`) es requisito que todas las guardas den como resultado `true
 
 Podemos usar la siguiente sintaxis como patrón de encaje con mapas:
 
-$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave}_{1}\ \texttt{:=}\ \mathit{patr\acute{o}n}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{clave}_{n}\ \texttt{:=}\ \mathit{patr\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave_1}\ \texttt{:=}\ \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{clave_n}\ \texttt{:=}\ \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Como requisito, para que funcione correctamente, las claves tienen que cumplir los mismos requisitos que cumplen las guardas de las cláusulas, lo cual implica que todas las variables internas han de estar previamente ligadas. Si las claves son encontradas, los valores de estas son ajustados a los patrones definidos.
 
@@ -463,11 +463,11 @@ En caso de no encontrar alguna de las claves indicadas, se lanzará una excepci�
 
 ..
 
-$$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
 ..
 
-$$\texttt{<<} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
+$$\texttt{<<} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
 
 ..
 
@@ -475,7 +475,7 @@ $$\texttt{<<} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \math
 
 ..
 
-$$\texttt{(} \textcolor{red}{[} \mathit{patr\acute{o}n}_{1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{patr\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones}$$
+$$\texttt{(} \textcolor{red}{[} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones}$$
 
 ..
 
