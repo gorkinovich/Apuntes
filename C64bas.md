@@ -376,7 +376,7 @@ Podemos anidar unos nueve bucles `FOR` entre sí y BASIC nos permite usar un ún
 
 El comando `ON` nos permite saltar en la ejecución del programa mediante un índice:
 
-$$\texttt{ON}\ \mathit{expresión}\ \textcolor{red}{ \{ }\texttt{GOSUB}\textcolor{red}{|}\texttt{GOTO}\textcolor{red}{ \} }\ \mathit{l\acute{\imath}nea} \textcolor{red}{[} \texttt{,}\ \mathit{l\acute{\imath}nea}\ \textcolor{red}{\dots]}$$
+$$\texttt{ON}\ \mathit{expresión}\ \textcolor{red}{ \\{ }\texttt{GOSUB}\textcolor{red}{|}\texttt{GOTO}\textcolor{red}{ \\} }\ \mathit{l\acute{\imath}nea} \textcolor{red}{[} \texttt{,}\ \mathit{l\acute{\imath}nea}\ \textcolor{red}{\dots]}$$
 
 Esta sentencia de control requiere de una *expresión* numérica que de como resultado un valor desde `1` hasta *N*, siendo *N* el número de *líneas* que hayamos indicado en el comando. Siendo más precisos, *expresión* debe ser un valor desde `0` hasta  `255` o nos dará un error en ejecución. Si metemos un número con decimales, este será redondeado, si metemos una opción que está fuera del la cantidad de líneas que tenemos, no se realizará salto alguno y continuará la ejecución con la siguiente línea al comando `ON`. Esta sentencia nos vendrá bien para hacer menús de forma sencilla, por ejemplo:
 
