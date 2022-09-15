@@ -193,7 +193,7 @@ Dentro de la biblioteca estándar existe el módulo [`lists`](https://www.erlang
 
 ### Mapas
 
-Los mapas son estructuras de datos que relacionan una clave con un valor. Aunque también se le conoce como diccionarios en otros lenguajes, la [biblioteca estándar](https://www.erlang.org/doc/man/stdlib_app) de Erlang tiene otro tipo de estructura nativa que se llama diccionario, por lo que usaremos el término mapa para evitar confusiones innecesarias.
+Los mapas son estructuras de datos que relacionan una clave con un valor. Aunque también se le conoce como diccionarios en otros lenguajes, la [biblioteca estándar](https://www.erlang.org/doc/man/stdlib_app) de Erlang tiene otro tipo de estructura nativa que se llama diccionario (módulo `dict`), por lo que usaremos el término mapa para evitar confusiones innecesarias. Los mapas se añadieron como sustitución de los diccionarios implementados, para corregir algunas carencias que tenía el lenguaje.
 
 La sintaxis para crear un mapa es la siguiente:
 
