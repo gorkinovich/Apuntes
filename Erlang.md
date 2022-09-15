@@ -174,7 +174,7 @@ Por ejemplo: `{}`, `{0, a}`, `{{data, 3.14}, Foo, {}, 8}`.
 
 Las listas son estructuras de datos que agrupan información de forma ordenada con un tamaño variable. Su sintaxis es la siguiente:
 
-$$\texttt{\char91} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1}  \texttt{\char124} \mathit{expresi\acute{o}n}_{2} \textcolor{red}{]} \texttt{\char93}$$
+$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1}  \texttt{|} \mathit{expresi\acute{o}n}_{2} \textcolor{red}{]} \texttt{]}$$
 
 Este es el constructor de listas, que podemos hacer una lista vacía con `[]`, o podemos hacer una lista no vacía donde la primera expresión es el valor en la **cabecera** de dicha lista y la segunda la **continuación**. Por ejemplo: `[1, [2 | []]]`, que es la lista con los valores `1` y `2` en orden. La continuación, también denominada **cola** de la lista, puede ser cualquier valor posible, por lo que podemos tener una lista tal que: `[z | 80]`.
 
@@ -184,7 +184,7 @@ A diferencia de los lenguajes fuertemente tipados, como es el caso de [Haskell](
 
 Como definir listas más complejas, con el constructor de listas, puede llegar a ser costoso y confuso, existe una sintaxis alternativa para definir listas:
 
-$$\texttt{\char91} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char93}$$
+$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n}_{1} \textcolor{red}{[} , \dots \textcolor{red}{[} , \mathit{expresi\acute{o}n}_{n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
 De este modo, la lista `[1, [2 | []]]` se puede definir como `[1, 2]`, siendo más legible para el programador. Internamente, para la máquina virtual, son la misma cosa porque esta forma de sintaxis es azúcar sintáctico.
 
