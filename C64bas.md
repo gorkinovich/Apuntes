@@ -510,7 +510,7 @@ $$\begin{array}{ccc}
 \texttt{ASC(} \mathit{cadena} \texttt{)}
 & \qquad &
 \texttt{VAL(} \mathit{cadena} \texttt{)}
-\\[0.2cm]
+\\\\[0.2cm]
 \texttt{CHR\\$(} \mathit{número} \texttt{)}
 & \qquad &
 \texttt{STR\\$(} \mathit{número} \texttt{)}
