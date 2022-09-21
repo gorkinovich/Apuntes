@@ -441,13 +441,13 @@ En cuanto a las **guardas**, estas son expresiones booleanas. Si no se indica ni
 	- Comprobación de tipos: `is_atom/1`, `is_binary/1`, `is_bitstring/1`, `is_boolean/1`, `is_float/1`, `is_function/1`, `is_function/2`, `is_integer/1`, `is_list/1`, `is_map/1`, `is_number/1`, `is_pid/1`, `is_port/1`, `is_record/2`, `is_record/3`, `is_reference/1`, `is_tuple/1`.
 	- Operaciones varias: `abs/1`, `bit_size/1`, `byte_size/1`, `element/2`, `float/1`, `hd/1`, `is_map_key/2`, `length/1`, `map_get/2`, `map_size/1`, `node/0`, `node/1`, `round/1`, `self/0`, `size/1`, `tl/1`, `trunc/1`, `tuple_size/1`.
 
-En la sección sobre las funciones, se habla en más detalle sobre las [funciones nativas](https://www.erlang.org/doc/man/erlang.html) que hay en el lenguaje Erlang. Volviendo a las guardas, podemos tener una secuencia de ellas utilizando una de estas dos formas:
+En la sección sobre las funciones, se habla en más detalle sobre las [funciones nativas del lenguaje](https://www.erlang.org/doc/man/erlang.html) que hay en Erlang. Volviendo a las guardas, podemos tener una secuencia de ellas utilizando una de estas dos formas:
 
 $$\mathit{guarda_1} \texttt{,} \dots \texttt{,} \mathit{guarda_n}$$
 
 $$\mathit{guarda_1} \texttt{;} \dots \texttt{;} \mathit{guarda_n}$$
 
-Usando la coma (`,`) es requisito que todas las guardas den como resultado `true`, mientras que con el punto y coma (`;`) sólo es necesario que una de las guardas sea cierta. Esta sintaxis vendría a ser un equivalente de usar `andalso` para el caso de la coma y `orelse` para el caso del punto y coma.
+Usando la coma (`,`) es requisito que todas las guardas den como resultado `true`, mientras que con el punto y coma (`;`) sólo es necesario que una de las guardas sea cierta. Esta sintaxis vendría a ser un equivalente de usar `andalso` para el caso de la coma y `orelse` para el caso del punto y coma, la principal diferencia es que usando operadores no se capturan las excepciones cuando se producen, es decir, `hd(1) orelse true` fallaría, pero `hd(1); true` tendría éxito.
 
 ### Encaje con mapas
 
@@ -491,9 +491,92 @@ $$\texttt{(} \textcolor{red}{[} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \te
 
 ..
 
-## Comportamientos
+## Módulos
+
+Los módulos en Erlang son la unidad en la que se organiza el código de nuestros proyectos. Todo **módulo** se compone en una secuencia de **atributos** y declaración de **funciones**, terminadas con punto cada una de ellas.
+
+ Aunque Erlang es un lenguaje donde las variables obtienen su tipo de forma dinámica, el lenguaje nos permite definir tipos para documentar los módulos usando la [especificación de tipos](https://www.erlang.org/doc/reference_manual/typespec.html). Que un lenguaje no requiera indicar el tipo de sus variables, no quiere decir que este lenguaje no tenga un sistema de tipos, por ello también es importante conocer cuáles son los tipos con los que trabaja el lenguaje.
+
+### Atributos de un módulo
+
+Todo atributo en Erlang tiene la siguiente sintáxis:
+
+$$\texttt{-} \mathit{etiqueta} \texttt{(} \mathit{valor_1} \textcolor{red}{[} \texttt{,}\ \mathit{valor_2} \textcolor{red}{]} \texttt{)}$$
+
+Donde la *etiqueta* es un átomo y los *valores* son expresiones literales. Esta es la lista de atributos básicos que se puede definir para un módulo:
+
+| Etiqueta | Parámetros y Tipos | Descripción |
+|:--------:|:-------------------|:------------|
+| `module` | Nombre: `atom()` | Declara cuál es el nombre del módulo. Por requisitos técnicos, el nombre del fichero y del módulo han de ser el mismo, exceptuando por la extensión `.erl`. |
+| `export` | Funciones: `[atom()/integer()]` | Declara cuáles son las funciones públicas del módulo, aquellas que pueden ser accesibles desde otros módulos. El parámetro *funciones* es una lista con los identificadores de las funciones, que tienen la sintaxis `Nombre/Aridad`. |
+| `import` | Nombre: `atom()`<br/>Funciones: `[atom()/integer()]` | Importa una lista de funciones dentro del módulo actual, para no necesitar usar el operador `:` al invocar dichas funciones, usando únicamente el nombre de las mismas. |
+| `compile` | Opciones: `option() | [option()]` | Añade opciones de compilación extras al compilar el módulo. El parámetro *opciones* puede ser una sola opción o una lista de ellas, las cuales están descritas en la documentación del módulo [`compile`](https://www.erlang.org/doc/man/compile.html).  |
+| `vsn` | Versión: `any()` | Declara la versión del módulo. La versión es cualquier literal y se puede obtener con la función `version/1` del módulo [`beam_lib`](https://www.erlang.org/doc/reference_manual/typespec.html). |
+| `on_load` | Función: `atom()/integer()` | Indica qué función, dentro del módulo, ha de ser invocada al cargarse. |
+| `behaviour` | Nombre: `atom()` | Indica que el módulo implementa los *callbacks* que definen a un comportamiento. |
+
+### Las funciones: `module_info`
+
+Todo módulo contiene dos funciones generadas por el compilador que son `module_info/0` y `module_info/1`, que devuelven información relativa al módulo en cuestión. El resultado de `module_info/0` devuelve una lista de tuplas `{Clave,Valor}`, mientras que `module_info/1` recibe como parámetro la *clave* y te devuelve el *valor* asociado. Estas son las *claves* disponibles:
+
+| Clave | Tipo | Descripción |
+|:-----:|:-----:|:------------|
+| `module` | `atom()` | Devuelve el nombre del módulo. |
+| `attributes` | `[atom(),any()]` | Devuelve los atributos del módulo mediante una lista de tuplas `{Etiqueta, Valores}`. |
+| `compile` | `[option()]` | Devuelve una lista con las opciones usadas para compilar el módulo. |
+| `exports` | `[{atom(),integer()}]` | Devuelve una lista con las funciones públicas del módulo. |
+| `functions` | `[{atom(),integer()}]` | Devuelve una lista con todas las funciones del módulo. |
+| `md5` | `binary()` | Devuelve un bloque binario que representa la [suma de verificación](https://es.wikipedia.org/wiki/Suma_de_verificaci%C3%B3n) [MD5](https://es.wikipedia.org/wiki/MD5) del módulo. |
+| `native` | `boolean()` | Devuelve si el módulo contiene [funciones nativas](https://www.erlang.org/doc/tutorial/nif.html). |
+| `nifs` | `[{atom(),integer()}]` | Devuelve una lista con todas las [funciones nativas](https://www.erlang.org/doc/tutorial/nif.html) del módulo. |
+
+### Preprocesador
 
 ..
+
+## Comportamientos
+
+Lo *comportamientos* en Erlang es un tipo de interfaz que un módulo puede implementar. Esta interfaz tienen que tener una serie de funciones determinadas, para que el módulo, que define la interfaz de comportamiento, pueda operar con el módulo que la implementa. Estas funciones que ha de tener un módulo para implementar un *comportamiento* se llaman *callbacks*. Declaramos la implementación de un *comportamiento* con el siguiente atributo:
+
+$$\texttt{-behaviour(} \mathit{nombre} \texttt{)}$$
+
+El nombre es un átomo con el nombre del módulo que define el *comportamiento* en cuestión, ya sea uno definido por el usuario o uno de los siguientes de la biblioteca estándar de OTP: `gen_server`, `gen_statem`, `gen_event`, `supervisor`.
+
+Para crear una interfaz de comportamiento propia, dentro de nuestro módulo tendremos que indicar una lista de atributos que definan los *callbacks* a implementar, usando una sintaxis similar a la [especificación de tipos](https://www.erlang.org/doc/reference_manual/typespec.html):
+
+$$\texttt{-callback}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{var_1}\ \textcolor{red}{[} \mathtt{::}\ \mathit{tipo_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{var_n}\ \textcolor{red}{[} \mathtt{::}\ \mathit{tipo_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}\ \texttt{->}\ \mathit{tipo}$$
+
+Además tenemos el atributo de módulo `optional_callbacks`, que tiene como valor una lista de los *callbacks* (`Nombre/Aridad`) que son opcionales para implementar la interfaz de comportamiento.
+
+Por ejemplo, creamos la siguiente interfaz de comportamiento:
+
+```Erlang
+-module(foobeh).
+
+% Otros atributos
+
+-callback ping() -> boolean().
+-callback pong() -> boolean().
+
+% Otras funciones
+```
+
+Para implementarla tendremos que:
+
+```Erlang
+-module(foo).
+-behaviour(foobeh).
+-export([ping/0, pong/0]).
+
+% Otros atributos
+
+ping() -> true.
+pong() -> false.
+
+% Otras funciones
+```
+
+.. 
 
 ```Erlang
 .
