@@ -493,13 +493,13 @@ $$\texttt{(} \textcolor{red}{[} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \te
 
 ## Módulos
 
-Los módulos en Erlang son la unidad en la que se organiza el código de nuestros proyectos. Todo **módulo** se compone en una secuencia de **atributos** y declaración de **funciones**, terminadas con punto cada una de ellas.
+Los [módulos](https://www.erlang.org/doc/reference_manual/modules.html) en Erlang son la unidad en la que se organiza el código de nuestros proyectos. Todo **módulo** se compone en una secuencia de **atributos** y declaración de **funciones**, terminadas con punto cada una de ellas.
 
  Aunque Erlang es un lenguaje donde las variables obtienen su tipo de forma dinámica, el lenguaje nos permite definir tipos para documentar los módulos usando la [especificación de tipos](https://www.erlang.org/doc/reference_manual/typespec.html). Que un lenguaje no requiera indicar el tipo de sus variables, no quiere decir que este lenguaje no tenga un sistema de tipos, por ello también es importante conocer cuáles son los tipos con los que trabaja el lenguaje.
 
 ### Atributos de un módulo
 
-Todo atributo en Erlang tiene la siguiente sintáxis:
+Todo atributo en Erlang tiene la siguiente sintaxis:
 
 $$\texttt{-} \mathit{etiqueta} \texttt{(} \mathit{valor_1} \textcolor{red}{[} \texttt{,}\ \mathit{valor_2} \textcolor{red}{]} \texttt{)}$$
 
@@ -514,6 +514,8 @@ Donde la *etiqueta* es un átomo y los *valores* son expresiones literales. Esta
 | `vsn` | Versión: `any()` | Declara la versión del módulo. La versión es cualquier literal y se puede obtener con la función `version/1` del módulo [`beam_lib`](https://www.erlang.org/doc/reference_manual/typespec.html). |
 | `on_load` | Función: `atom()/integer()` | Indica qué función, dentro del módulo, ha de ser invocada al cargarse. |
 | `behaviour` | Nombre: `atom()` | Indica que el módulo implementa los *callbacks* que definen a un comportamiento. |
+
+> Cuando en Erlang se usa la forma `Nombre/Aridad`, el compilador lo traduce a la expresión `{Nombre,Aridad}`.
 
 ### Las funciones: `module_info`
 
@@ -532,6 +534,14 @@ Todo módulo contiene dos funciones generadas por el compilador que son `module_
 
 ### Preprocesador
 
+El [preprocesador](https://www.erlang.org/doc/reference_manual/macros.html) en Erlang nos permite realizar operaciones de sustitución durante la compilación de un módulo.
+
+..
+
+## Registros
+
+Los [registros](https://www.erlang.org/doc/reference_manual/records.html) es un mecanismo que Erlang tiene para definir estructuras de datos cuyas componentes tienen nombre. Para simplificarlo, sería equivalente a una tupla donde cada componente de la misma tiene un nombre propio con el que acceder a ella.
+
 ..
 
 ## Comportamientos
@@ -540,7 +550,7 @@ Lo *comportamientos* en Erlang es un tipo de interfaz que un módulo puede imple
 
 $$\texttt{-behaviour(} \mathit{nombre} \texttt{)}$$
 
-El nombre es un átomo con el nombre del módulo que define el *comportamiento* en cuestión, ya sea uno definido por el usuario o uno de los siguientes de la biblioteca estándar de OTP: `gen_server`, `gen_statem`, `gen_event`, `supervisor`.
+El nombre es un átomo con el nombre del módulo que define el *comportamiento* en cuestión, ya sea uno definido por el usuario o uno de los siguientes de la biblioteca estándar de OTP: `gen_server`, `gen_statem`, `gen_event`, `supervisor`. Erlang también permite usar `behavior` como etiqueta del atributo.
 
 Para crear una interfaz de comportamiento propia, dentro de nuestro módulo tendremos que indicar una lista de atributos que definan los *callbacks* a implementar, usando una sintaxis similar a la [especificación de tipos](https://www.erlang.org/doc/reference_manual/typespec.html):
 
@@ -576,7 +586,21 @@ pong() -> false.
 % Otras funciones
 ```
 
-.. 
+### El comportamiento: `gen_server`
+
+..
+
+### El comportamiento: `gen_statem`
+
+..
+
+### El comportamiento: `gen_event`
+
+..
+
+### El comportamiento: `supervisor`
+
+..
 
 ```Erlang
 .
