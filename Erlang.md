@@ -461,23 +461,103 @@ En caso de no encontrar alguna de las claves indicadas, se lanzará una excepci�
 
 ## Secuencias intensionales
 
-..
+Además de poder crear listas mediante literales y con el uso de operadores, podemos utilizar las listas intensionales para crear nuevas listas a partir de otra, realizando filtrados y transformaciones. Para ello existe la siguiente sintaxis:
 
 $$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
-..
+Donde la expresión generadora puede ser una de las siguientes:
+
+$$\textcolor{red}{\char123} \mathit{patr\acute{o}n}\ \texttt{<-}\ \mathit{lista}\ \textcolor{red}{|}\ \mathit{patr\acute{o}n}\ \texttt{<=}\ \mathit{binario}
+\ \textcolor{red}{|}\ \mathit{guarda} \textcolor{red}{\char125}$$
+
+El primer tipo de generador ajusta un patrón con cada elemento de la lista. El segundo hace lo mismo que el primero pero con cada elemento dentro de un bloque binario. Finalmente, podemos usar guardas como predicados para filtrar los elementos de la lista de entrada, de modo que se usarán aquellos elementos que den como resultado `true` con el predicado, y aquellos que den `false` serán descartados. Por ejemplo:
+
+```
+1> L=[3,e,4.5,f,{1,2},7].
+[3,e,4.5,f,{1,2},7]
+2> [X || X <- L, is_integer(X)].
+[3,7]
+```
+
+La lista intensional `[X || X <- L, is_integer(X)]` nos devuelve sólo los números enteros de `L`. Obviamente `4.5`, aunque es un número, no es un entero y por ello queda descartado.
+
+De forma análoga a las listas, con los bloques binarios podemos también crear bloques binarios intensionales con la siguiente sintaxis:
 
 $$\texttt{<<} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
 
-..
+Los generadores que se usan son los mismos que usamos con las listas.
 
 ## Funciones
 
-..
+Para definir funciones se utiliza la siguiente sintaxis:
 
-$$\texttt{(} \textcolor{red}{[} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones}$$
+$$\mathit{nombre} \texttt{(} \mathit{patrones_1} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
 
-..
+$$\vdots$$
+
+$$\mathit{nombre} \texttt{(} \mathit{patrones_n} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}\texttt{.}$$
+
+Como podemos ver, lo que tenemos aquí es una **secuencia de cláusulas** que componen la función. Los **patrones** y **expresiones** son secuencias separadas por comas de patrones y expresiones respectivamente. Cada patrón representa los **argumentos** de la función y las expresiones son el **cuerpo** de la función, es decir:
+
+$$\textcolor{red}{[} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]}$$
+
+$$\mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n_m} \textcolor{red}{]} \textcolor{red}{]}$$
+
+La diferencia es que, mientras que podemos tener una función sin argumentos, el cuerpo de la función requiere al menos una expresión. El caso de que no se indique la guarda para la cláusula funcional, se asume por defecto como guarda el valor `true`. Por ejemplo:
+
+```Erlang
+fact(N) when N > 0 ->
+    N * fact(N - 1);
+fact(0) ->
+    1.
+```
+
+La función `fact` calcula el factorial, para ello tiene la cláusula recursiva primero y segundo el caso base. Hay que entender que el **orden** de las **cláusulas** es importante, porque para evaluar cual hay que seleccionar se hace en orden de definición, escogiendo la primera que permita ajustar los parámetros de entrada con sus patrones y su guarda sea cierta. Por ejemplo:
+
+```Erlang
+foo(X) when X >= 0 -> up;
+foo(X) when X =< 0 -> down.
+
+bar(X) when X =< 0 -> down;
+bar(X) when X >= 0 -> up.
+
+test() -> foo(0) =:= bar(0).
+```
+
+El resultado de `test()` es el valor `false`, ya que aplicar el valor `0` a `foo` y `bar` da resultados distintos aunque el código parezca el mismo. Esto es porque hay superposición de casos entre las cláusulas y se escogerá la primera que se pueda usar con éxito. Por ello, cuando usemos la variable comodín `_`, como patrón de ajuste, es importante usarla en una cláusula que no bloquee el acceso a las siguientes salvo que haya una muy buena razón.
+
+Otro aspecto importante al diseñar funciones, es la **recursión de cola**.  En programación funcional la recursión es esencial, porque la iteración se realiza mediante la recursión. Si el resultado de la llamada recursiva se tiene que utilizar para realizar más cálculos, se tiene que almacenar en la pila de llamadas la información que contiene la llamada actual, para que no se pierda al evaluar las siguientes iteraciones recursivas. Aunque dispongamos de muchos recursos en cuanto a memoria, en determinadas circunstancias se puede provocar un desbordamiento de pila por realizarse una cantidad grande de llamadas a función anidadas. La recursión de cola se produce cuando la expresión final a devolver es la llamada recursiva a la función, por lo que todos los parámetros de la llamada se evalúan antes de la llamada y no hace falta guardar en la pila ninguna información. La ventaja es que este tipo de recursión no puede desbordar la pila y nos sirve, por ejemplo, para hacer bucles infinitos cuando necesitamos un servidor que recibe y envía mensajes. Para entenderlo mejor, vamos a ver el ejemplo del factorial con recursión de cola:
+
+```Erlang  
+fact(N) ->
+    ifact(N,1).
+
+ifact(N, R) when N > 0 ->
+    ifact(N - 1, R * N);
+ifact(0, R) ->
+    R.
+```
+
+Por último, se pueden definir funciones anónimas, también conocidas como [funciones lambda](https://es.wikipedia.org/wiki/Expresi%C3%B3n_lambda). Para ello se utiliza la siguiente sintaxis:
+
+$$\texttt{fun}\ \textcolor{red}{[} \mathit{Variable} \textcolor{red}{]} \texttt{(} \mathit{patrones_1} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
+
+$$\vdots$$
+
+$$\textcolor{red}{[} \mathit{Variable} \textcolor{red}{]} \texttt{(} \mathit{patrones_n} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}\ \texttt{end}$$
+
+La sintaxis es muy similar a la declaración de funciones normales, pero las lambdas no tienen nombre propio, por ello para poder realizar lambdas recursivas se puede utilizar una variable para invocar a la función anónima desde dentro. Por ejemplo:
+
+```Erlang
+foo()  ->
+    fun Fact(N) when N > 0 ->
+		    N * Fact(N - 1);
+		Fact(0) ->
+		    1
+	end.
+```
+
+La función `foo` nos devuelve una función que contiene la función factorial. Hay que tener en cuenta que las funciones son valores para el lenguaje, por lo que podemos usarlas como parámetros de otras funciones y devolverlas. Por lo tanto, Erlang es un lenguaje con [funciones de orden superior](https://es.wikipedia.org/wiki/Funci%C3%B3n_de_orden_superior).
 
 ## Ramificación
 
@@ -510,7 +590,7 @@ Donde la *etiqueta* es un átomo y los *valores* son expresiones literales. Esta
 | `module` | Nombre: `atom()` | Declara cuál es el nombre del módulo. Por requisitos técnicos, el nombre del fichero y del módulo han de ser el mismo, exceptuando por la extensión `.erl`. |
 | `export` | Funciones: `[atom()/integer()]` | Declara cuáles son las funciones públicas del módulo, aquellas que pueden ser accesibles desde otros módulos. El parámetro *funciones* es una lista con los identificadores de las funciones, que tienen la sintaxis `Nombre/Aridad`. |
 | `import` | Nombre: `atom()`<br/>Funciones: `[atom()/integer()]` | Importa una lista de funciones dentro del módulo actual, para no necesitar usar el operador `:` al invocar dichas funciones, usando únicamente el nombre de las mismas. |
-| `compile` | Opciones: `option() | [option()]` | Añade opciones de compilación extras al compilar el módulo. El parámetro *opciones* puede ser una sola opción o una lista de ellas, las cuales están descritas en la documentación del módulo [`compile`](https://www.erlang.org/doc/man/compile.html).  |
+| `compile` | Opciones: `option()` o `[option()]` | Añade opciones de compilación extras al compilar el módulo. El parámetro *opciones* puede ser una sola opción o una lista de ellas, las cuales están descritas en la documentación del módulo [`compile`](https://www.erlang.org/doc/man/compile.html).  |
 | `vsn` | Versión: `any()` | Declara la versión del módulo. La versión es cualquier literal y se puede obtener con la función `version/1` del módulo [`beam_lib`](https://www.erlang.org/doc/reference_manual/typespec.html). |
 | `on_load` | Función: `atom()/integer()` | Indica qué función, dentro del módulo, ha de ser invocada al cargarse. |
 | `behaviour` | Nombre: `atom()` | Indica que el módulo implementa los *callbacks* que definen a un comportamiento. |
