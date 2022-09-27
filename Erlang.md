@@ -607,7 +607,7 @@ ifact(0, R) ->
 
 La primera expresión de control es el `case` que tiene la siguiente sintaxis:
 
-$$\texttt{fun}\ \mathit{expresi\acute{o}n}\ \texttt{of} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+$$\texttt{case}\ \mathit{expresi\acute{o}n}\ \texttt{of} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
 
 $$\mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
 
@@ -615,9 +615,49 @@ $$\vdots$$
 
 $$\mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}$$
 
-$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\quad$$
+$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
 
-..
+Las expresiones `case` sirven para ramificar la ejecución en base al resultado de una *expresión* dada como discriminante. Una vez evaluada la *expresión*, se toma el valor final y se intenta ajustar con las cláusulas definidas. Como pasaba con las funciones, las cláusulas van siendo probadas en el orden en el que están definidas y la primera que logre ajustar el valor, y pasar su guarda, será la que se ejecute finalmente. Por ejemplo:
+
+```Erlang
+fact(N) ->
+    case N of
+	    (N) when N > 0 ->
+		    N * fact(N - 1);
+		(0) ->
+		    1
+    end.
+```
+
+Aquí vemos la implementación del factorial usando un `case`. Erlang, internamente, convierte las cláusulas funcionales en expresiones `case` al compilar los módulos, pero por comodidad y limpieza es mejor usar cláusulas funcionales.
+
+La expresión `if` tiene la siguiente sintaxis:
+
+$$\texttt{if} \qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+$$\mathit{guardas_1}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
+
+$$\vdots$$
+
+$$\mathit{guardas_n}\ \texttt{->}\ \mathit{expresiones_n}$$
+
+$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+Las expresiones `if` también sirven para ramificar la ejecución, pero esta ramificación se hace en base al cumplimiento de una serie de condiciones descritas en las *guardas* de cada rama. Hay que señalar que las *guardas* en la expresión `if` no son tan restrictivas como las guardas originales, en estas sí podemos usar funciones de propias. Esto es posible porque internamente al compilar el módulo se transforma en una expresión `case`.
+
+Podemos tener bloques de expresiones usando la siguiente sintaxis:
+
+$$\texttt{begin} \qquad\qquad\qquad\qquad$$
+
+$$\mathit{expresi\acute{o}n_1}\texttt{,}$$
+
+$$\vdots$$
+
+$$\mathit{expresi\acute{o}n_n}$$
+
+$$\texttt{end} \qquad\qquad\qquad\qquad$$
+
+El resultado de la expresión, igual que ocurre con el cuerpo de una cláusula, es el valor de evaluar la expresión final del bloque. Esto puede ser útil si uno quiere anidar una secuencia de expresiones en una posición de la sintaxis que sólo permite una única expresión (por ejemplo, las componentes de una tupla).
 
 ## Procesos y comunicación
 
