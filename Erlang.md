@@ -1,4 +1,5 @@
-﻿# Erlang
+﻿
+# Erlang
 
 [Erlang](https://www.erlang.org/) es un lenguaje de programación diseñado para desarrollar sistemas de comunicación grandes en tiempo real con alta disponibilidad, que sean escalables y tolerantes a fallos. Es un lenguaje de [programación funcional](https://es.wikipedia.org/wiki/Programaci%C3%B3n_funcional), cuya característica principal es disponer de [concurrencia](https://es.wikipedia.org/wiki/Concurrencia_%28inform%C3%A1tica%29). Otras propiedades del lenguaje son la [inmutabilidad](https://es.wikipedia.org/wiki/Objeto_inmutable) de los datos, el [encaje de patrones](https://es.wikipedia.org/wiki/B%C3%BAsqueda_de_patrones), la evaluación impaciente, el [tipado dinámico](https://es.wikipedia.org/wiki/Sistema_de_tipos), la [computación distribuida](https://es.wikipedia.org/wiki/Computaci%C3%B3n_distribuida) o el [cambio en caliente](https://es.wikipedia.org/wiki/Cambio_en_caliente), entre muchas otras.
 
@@ -399,6 +400,8 @@ La precedencia de los operadores es la siguiente:
 
 > La [asociatividad](https://es.wikipedia.org/wiki/Orden_de_evaluaci%C3%B3n) de un operador indica cómo se va evaluando las expresiones, si es de izquierda a derecha o al revés. Los operadores aritméticos se evalúan de izquierda a derecha, por lo que primero se resuelven aquellas operaciones que están a la izquierda de otra operación con el mismo nivel de prioridad.
 
+Si necesitamos indicar de forma explícita la precedencia de una operación sobre otra, podemos usar el operador de paréntesis `(` `)` de forma idéntica al uso que le damos al operar en matemáticas.
+
 ## Encaje de patrones
 
 Una de las propiedades del lenguaje Erlang es el encaje de patrones, este se realiza en múltiples circunstancias, la más obvia de ellas es usando el operador `=`, que vimos en la sección sobre las variables. El encaje de patrones sirve para dos cometidos:
@@ -489,7 +492,36 @@ Los generadores que se usan son los mismos que usamos con las listas.
 
 ## Funciones
 
-Para definir funciones se utiliza la siguiente sintaxis:
+Las funciones son bloques de código que realizan diferentes tareas. Para realizar programas y algoritmos necesitamos descomponer el problema en diferentes funciones.
+
+### Invocar funciones
+
+Para poder **ejecutar una función** tenemos que invocarla usando la siguiente sintaxis:
+
+$$\textcolor{red}{[} \mathit{m\acute{o}dulo} \textcolor{red}{]} \texttt{:} \mathit{funci\acute{o}n} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metro_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{par\acute{a}metro_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
+
+Indicando el módulo podemos llamar a funciones que están en otros módulos. Si se omite el módulo, se asume que estamos usando funciones del módulo actual.
+
+### Funciones como valores
+
+Hay que tener en cuenta que las **funciones son valores** para el lenguaje, por lo que podemos usarlas como parámetros de otras funciones y devolverlas. Por lo tanto, Erlang es un lenguaje con [funciones de orden superior](https://es.wikipedia.org/wiki/Funci%C3%B3n_de_orden_superior). Entonces, si queremos referenciar a una función con nombre como un valor, usaremos la siguiente sintaxis:
+
+$$\texttt{fun}\ \textcolor{red}{[} \mathit{m\acute{o}dulo} \textcolor{red}{]} \texttt{:} \mathit{funci\acute{o}n} \texttt{/} \mathit{aridad}$$
+
+De este modo, con `fun hello:world/0` tendríamos el valor que representa a la función `world` dentro del módulo `hello`. Si no indicamos el módulo, se asume que se trata del módulo actual que estemos codificando. Una vez está una variable ligada a una función, podemos usar la variable para invocar la función, pasando entre paréntesis los parámetros que necesita. Por ejemplo:
+
+```
+1> l(hello).
+{module,hello}
+2> Hi = fun hello:world/0.
+fun hello:world/0
+3> Hi().
+Hello, world!
+```
+
+### Definir funciones
+
+Para poder **definir funciones** se utiliza la siguiente sintaxis:
 
 $$\mathit{nombre} \texttt{(} \mathit{patrones_1} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
 
@@ -526,25 +558,19 @@ test() -> foo(0) =:= bar(0).
 
 El resultado de `test()` es el valor `false`, ya que aplicar el valor `0` a `foo` y `bar` da resultados distintos aunque el código parezca el mismo. Esto es porque hay superposición de casos entre las cláusulas y se escogerá la primera que se pueda usar con éxito. Por ello, cuando usemos la variable comodín `_`, como patrón de ajuste, es importante usarla en una cláusula que no bloquee el acceso a las siguientes salvo que haya una muy buena razón.
 
-Otro aspecto importante al diseñar funciones, es la **recursión de cola**.  En programación funcional la recursión es esencial, porque la iteración se realiza mediante la recursión. Si el resultado de la llamada recursiva se tiene que utilizar para realizar más cálculos, se tiene que almacenar en la pila de llamadas la información que contiene la llamada actual, para que no se pierda al evaluar las siguientes iteraciones recursivas. Aunque dispongamos de muchos recursos en cuanto a memoria, en determinadas circunstancias se puede provocar un desbordamiento de pila por realizarse una cantidad grande de llamadas a función anidadas. La recursión de cola se produce cuando la expresión final a devolver es la llamada recursiva a la función, por lo que todos los parámetros de la llamada se evalúan antes de la llamada y no hace falta guardar en la pila ninguna información. La ventaja es que este tipo de recursión no puede desbordar la pila y nos sirve, por ejemplo, para hacer bucles infinitos cuando necesitamos un servidor que recibe y envía mensajes. Para entenderlo mejor, vamos a ver el ejemplo del factorial con recursión de cola:
-
-```Erlang  
-fact(N) ->
-    ifact(N,1).
-
-ifact(N, R) when N > 0 ->
-    ifact(N - 1, R * N);
-ifact(0, R) ->
-    R.
-```
+### Funciones lambda
 
 También se pueden definir funciones anónimas, también conocidas como [funciones lambda](https://es.wikipedia.org/wiki/Expresi%C3%B3n_lambda). Para ello se utiliza la siguiente sintaxis:
 
-$$\texttt{fun}\ \textcolor{red}{[} \mathit{Variable} \textcolor{red}{]} \texttt{(} \mathit{patrones_1} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
+$$\texttt{fun} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+$$\textcolor{red}{[} \mathit{Variable} \textcolor{red}{]} \texttt{(} \mathit{patrones_1} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
 
 $$\vdots$$
 
-$$\textcolor{red}{[} \mathit{Variable} \textcolor{red}{]} \texttt{(} \mathit{patrones_n} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}\ \texttt{end}$$
+$$\textcolor{red}{[} \mathit{Variable} \textcolor{red}{]} \texttt{(} \mathit{patrones_n} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}$$
+
+$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
 
 La sintaxis es muy similar a la declaración de funciones normales, pero las lambdas no tienen nombre propio, por ello para poder realizar lambdas recursivas se puede utilizar una variable para invocar a la función anónima desde dentro. Por ejemplo:
 
@@ -559,17 +585,41 @@ foo()  ->
 
 La función `foo` nos devuelve una función que contiene la función factorial.
 
-Hay que tener en cuenta que las funciones son valores para el lenguaje, por lo que podemos usarlas como parámetros de otras funciones y devolverlas. Por lo tanto, Erlang es un lenguaje con [funciones de orden superior](https://es.wikipedia.org/wiki/Funci%C3%B3n_de_orden_superior). Entonces, si queremos referenciar a una función con nombre como un valor, usaremos la siguiente sintaxis:
+### Recursión de cola
 
-$$\texttt{fun}\ \textcolor{red}{[} \mathit{m\acute{o}dulo} \textcolor{red}{]} \texttt{:} \mathit{funci\acute{o}n} \texttt{/} \mathit{aridad}$$
+Otro aspecto importante al diseñar funciones, es la **recursión de cola**.  En programación funcional la recursión es esencial, porque la iteración se realiza mediante la recursión.
 
-De este modo, con `fun hello:world/0` tendríamos el valor que representa a la función `world` dentro del módulo `hello`. Si no indicamos el módulo, se asume que se trata del módulo actual que estemos codificando.
+Si el resultado de la llamada recursiva se tiene que utilizar para realizar más cálculos, se tiene que almacenar en la pila de llamadas la información que contiene la llamada actual, para que no se pierda al evaluar las siguientes iteraciones recursivas. Aunque dispongamos de muchos recursos en cuanto a memoria, en determinadas circunstancias se puede provocar un desbordamiento de pila por realizarse una cantidad grande de llamadas a función anidadas.
 
-## Ramificación
+La recursión de cola se produce cuando la expresión final a devolver es la llamada recursiva a la función, por lo que todos los parámetros de la llamada se evalúan antes de la llamada y no hace falta guardar en la pila ninguna información. La ventaja es que este tipo de recursión no puede desbordar la pila y nos sirve, por ejemplo, para hacer bucles infinitos cuando necesitamos un servidor que recibe y envía mensajes. Para entenderlo mejor, vamos a ver el ejemplo del factorial con recursión de cola:
+
+```Erlang
+fact(N) ->
+    ifact(N,1).
+
+ifact(N, R) when N > 0 ->
+    ifact(N - 1, R * N);
+ifact(0, R) ->
+    R.
+```
+
+## Control de la ejecución
+
+La primera expresión de control es el `case` que tiene la siguiente sintaxis:
+
+$$\texttt{fun}\ \mathit{expresi\acute{o}n}\ \texttt{of} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+$$\mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
+
+$$\vdots$$
+
+$$\mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}$$
+
+$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\quad$$
 
 ..
 
-## Concurrencia
+## Procesos y comunicación
 
 ..
 
