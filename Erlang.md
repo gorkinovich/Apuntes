@@ -84,8 +84,8 @@ En Erlang podemos tener secuencias de expresiones separadas por **comas**, que t
 
 ```Erlang
 hi_bye() ->
-   io:format("Hello~n"),
-   io:format("Goodbye~n").
+	io:format("Hello~n"),
+	io:format("Goodbye~n").
 ```
 
 También dentro de la terminal se puede introducir una secuencia de expresiones, como hemos visto antes para compilar y cargar un módulo. Tomando el último ejemplo:
@@ -539,9 +539,9 @@ La diferencia es que, mientras que podemos tener una función sin argumentos, el
 
 ```Erlang
 fact(N) when N > 0 ->
-    N * fact(N - 1);
+	N * fact(N - 1);
 fact(0) ->
-    1.
+	1.
 ```
 
 La función `fact` calcula el factorial, para ello tiene la cláusula recursiva primero y segundo el caso base. Hay que entender que el **orden** de las **cláusulas** es importante, porque para evaluar cual hay que seleccionar se hace en orden de definición, escogiendo la primera que permita ajustar los parámetros de entrada con sus patrones y su guarda sea cierta. Por ejemplo:
@@ -576,10 +576,10 @@ La sintaxis es muy similar a la declaración de funciones normales, pero las lam
 
 ```Erlang
 foo()  ->
-    fun Fact(N) when N > 0 ->
-		    N * Fact(N - 1);
+	fun Fact(N) when N > 0 ->
+			N * Fact(N - 1);
 		Fact(0) ->
-		    1
+			1
 	end.
 ```
 
@@ -595,12 +595,12 @@ La recursión de cola se produce cuando la expresión final a devolver es la lla
 
 ```Erlang
 fact(N) ->
-    ifact(N,1).
+	ifact(N,1).
 
 ifact(N, R) when N > 0 ->
-    ifact(N - 1, R * N);
+	ifact(N - 1, R * N);
 ifact(0, R) ->
-    R.
+	R.
 ```
 
 ## Control de la ejecución
@@ -621,12 +621,12 @@ Las expresiones `case` sirven para ramificar la ejecución en base al resultado 
 
 ```Erlang
 fact(N) ->
-    case N of
-	    (N) when N > 0 ->
-		    N * fact(N - 1);
+	case N of
+		(N) when N > 0 ->
+			N * fact(N - 1);
 		(0) ->
-		    1
-    end.
+			1
+	end.
 ```
 
 Aquí vemos la implementación del factorial usando un `case`. Erlang, internamente, convierte las cláusulas funcionales en expresiones `case` al compilar los módulos, pero por comodidad y limpieza es mejor usar cláusulas funcionales.
