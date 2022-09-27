@@ -667,6 +667,12 @@ El resultado de la expresión, igual que ocurre con el cuerpo de una cláusula, 
 
 ..
 
+## Registros
+
+Los [registros](https://www.erlang.org/doc/reference_manual/records.html) es un mecanismo que Erlang tiene para definir estructuras de datos cuyas componentes tienen nombre. Para simplificarlo, sería equivalente a una tupla donde cada componente de la misma tiene un nombre propio con el que acceder a ella.
+
+..
+
 ## Módulos
 
 Los [módulos](https://www.erlang.org/doc/reference_manual/modules.html) en Erlang son la unidad en la que se organiza el código de nuestros proyectos. Todo **módulo** se compone en una secuencia de **atributos** y declaración de **funciones**, terminadas con punto cada una de ellas.
@@ -710,15 +716,67 @@ Todo módulo contiene dos funciones generadas por el compilador que son `module_
 
 ### Preprocesador
 
-El [preprocesador](https://www.erlang.org/doc/reference_manual/macros.html) en Erlang nos permite realizar operaciones de sustitución durante la compilación de un módulo.
+El [preprocesador](https://www.erlang.org/doc/reference_manual/macros.html) en Erlang nos permite realizar operaciones de sustitución durante la compilación de un módulo. Una de las operaciones es el **incluir ficheros** externos dentro del módulo actual, para insertar definiciones que necesitemos. Para ello usaremos:
 
-..
+$$\texttt{-include(}\mathit{fichero}\texttt{)}$$
 
-## Registros
+Habitualmente los ficheros que se insertan son ficheros `.hrl`, que son ficheros de cabecera con macros y definiciones de registros de uso compartido entre varios módulos de nuestro proyecto.
 
-Los [registros](https://www.erlang.org/doc/reference_manual/records.html) es un mecanismo que Erlang tiene para definir estructuras de datos cuyas componentes tienen nombre. Para simplificarlo, sería equivalente a una tupla donde cada componente de la misma tiene un nombre propio con el que acceder a ella.
+La otra operación importante del preprocesador son las **macros**, que realizan sustituciones dentro del módulo. Para definir macros la sintaxis es la siguiente:
 
-..
+$$\texttt{-define(} \mathit{ID} \textcolor{red}{[} \texttt{(} \mathit{Var_1} \textcolor{red}{[} \texttt{,}\ \dots \textcolor{red}{[} \texttt{,}\ \mathit{Var_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)} \textcolor{red}{]} \texttt{,} \mathit{expresi\acute{o}n} \texttt{)}$$
+
+Lo primero es indicar el *nombre identificador* de la macro, que por convención se suele usar un nombre en mayúsculas. Después, dependiendo de si queremos parametrizar o no la macro, podemos poner una secuencia de *variables* como argumentos de entrada para la marco. Finalmente, tendremos una *expresión* que será usada como resultado final, después de sustituir las variables definidas como parámetros de entrada.
+
+Para invocar una macro se usa la siguiente sintaxis:
+
+$$\texttt{?} \mathit{ID} \textcolor{red}{[} \texttt{(} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,}\ \dots \textcolor{red}{[} \texttt{,}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)} \textcolor{red}{]}$$
+
+Por ejemplo:
+
+```Erlang
+-define(VERSION, "1.0").
+-define(PRINTLN(V), io:format("~s := ~p~n", [??V, V])).
+
+foo() ->
+	Victim = ?VERSION,
+	?PRINTLN(Victim).
+```
+
+Si invocamos `foo` obtendremos como salida `Victim := "1.0"`. Esto es porque hemos asignado a la variable `Victim` el valor que representa la macro `?VERSION` y luego hemos invocado una macro con parámetros para mostrar una información por pantalla.
+
+Nótese que dentro de la macro `PRINTLN` se utiliza `??V` con la variable de entrada `V` de la macro. Este mecanismo, de poner `??` delante de una variable de entrada, hace que se tome la expresión de entrada usada con la macro y se convierta a una cadena de texto. De ese modo, como la expresión de entrada de `PRINTLN` era la variable `Victim`, el resultado nos muestra eso mismo al aplicar la función `io:format/2`.
+
+> Se puede sobrecargar un mismo identificador de macro, a excepción de las macros predefinidas del lenguaje, para poder tener diferentes macro parametrizadas con distinto número de argumentos de entrada.
+
+Estas son algunas de las macros predefinidas por el lenguaje:
+
+| Nombre | Descripción |
+|:------:|:------------|
+| `?MODULE` | Nombre del módulo actual. |
+| `?MODULE_STRING` | Nombre del módulo actual como cadena. |
+| `?FILE` | Nombre del fichero del módulo actual. |
+| `?LINE` | Número de línea actual. |
+| `?MACHINE` | Nombre de la máquina: `'BEAM'`. |
+| `?FUNCTION_NAME` | Nombre de la función actual. |
+| `?FUNCTION_ARITY` | Número de argumentos de la función actual. |
+| `?OTP_RELEASE` | Versión actual de Erlang/OTP. |
+
+También podemos controlar parte del flujo del preprocesador con:
+
+| Comando | Descripción |
+|:-------:|:------------|
+| `-undef(Macro).` | Borra la definición de la macro para el módulo actual a partir de esa posición dentro del fichero. |
+| `-ifdef(Macro).` | Permite acceder a las líneas siguientes si la macro indicada ha sido definida. |
+| `-ifndef(Macro).` | Permite acceder a las líneas siguientes si la macro indicada no ha sido definida. |
+| `-if(Condición).` | Permite acceder a las líneas siguientes si la condición indicada se cumple, dando como resultado `true`. |
+| `-elif(Condición).` | Sólo se pueden usar después de un bloque `-if` o `-elif`. Permitirá acceder a las líneas siguientes si la condición se cumple y no se ha cumplido ninguna de las condiciones de los bloques anteriores. |
+| `-else.` | Sólo se pueden usar después de un bloque `-ifdef` o `-ifndef`. Si no se ha cumplido ninguna de las condiciones previas, permite acceder a las líneas siguientes. |
+| `-endif.` | Cierra el último bloque de control condicional del preprocesador. |
+
+Estos comandos no se pueden utilizar en el interior de la definición de una función. Normalmente se utilizan para tener diferentes versiones de código, dependiendo de alguna condición o de la existencia de una definición de macro previa.
+
+Existen dos comandos adicionales para interactuar con la compilación de un módulo. Con `-error(Expresión)` podemos emitir un mensaje de error y con `-warning(Expresión)` podemos emitir un mensaje de aviso. Ambos comandos mostrarán dichos mensajes en tiempo de compilación.
 
 ## Comportamientos
 
@@ -775,6 +833,14 @@ pong() -> false.
 ..
 
 ### El comportamiento: `supervisor`
+
+..
+
+## La biblioteca estándar
+
+..
+
+### Funciones nativas del lenguaje
 
 ..
 
