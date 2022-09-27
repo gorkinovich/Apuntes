@@ -538,7 +538,7 @@ ifact(0, R) ->
     R.
 ```
 
-Por último, se pueden definir funciones anónimas, también conocidas como [funciones lambda](https://es.wikipedia.org/wiki/Expresi%C3%B3n_lambda). Para ello se utiliza la siguiente sintaxis:
+También se pueden definir funciones anónimas, también conocidas como [funciones lambda](https://es.wikipedia.org/wiki/Expresi%C3%B3n_lambda). Para ello se utiliza la siguiente sintaxis:
 
 $$\texttt{fun}\ \textcolor{red}{[} \mathit{Variable} \textcolor{red}{]} \texttt{(} \mathit{patrones_1} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
 
@@ -557,7 +557,13 @@ foo()  ->
 	end.
 ```
 
-La función `foo` nos devuelve una función que contiene la función factorial. Hay que tener en cuenta que las funciones son valores para el lenguaje, por lo que podemos usarlas como parámetros de otras funciones y devolverlas. Por lo tanto, Erlang es un lenguaje con [funciones de orden superior](https://es.wikipedia.org/wiki/Funci%C3%B3n_de_orden_superior).
+La función `foo` nos devuelve una función que contiene la función factorial.
+
+Hay que tener en cuenta que las funciones son valores para el lenguaje, por lo que podemos usarlas como parámetros de otras funciones y devolverlas. Por lo tanto, Erlang es un lenguaje con [funciones de orden superior](https://es.wikipedia.org/wiki/Funci%C3%B3n_de_orden_superior). Entonces, si queremos referenciar a una función con nombre como un valor, usaremos la siguiente sintaxis:
+
+$$\texttt{fun}\ \textcolor{red}{[} \mathit{m\acute{o}dulo} \textcolor{red}{]} \texttt{:} \mathit{funci\acute{o}n} \texttt{/} \mathit{aridad}$$
+
+De este modo, con `fun hello:world/0` tendríamos el valor que representa a la función `world` dentro del módulo `hello`. Si no indicamos el módulo, se asume que se trata del módulo actual que estemos codificando.
 
 ## Ramificación
 
