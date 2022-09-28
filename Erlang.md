@@ -659,13 +659,94 @@ $$\texttt{end} \qquad\qquad\qquad\qquad$$
 
 El resultado de la expresión, igual que ocurre con el cuerpo de una cláusula, es el valor de evaluar la expresión final del bloque. Esto puede ser útil si uno quiere anidar una secuencia de expresiones en una posición de la sintaxis que sólo permite una única expresión (por ejemplo, las componentes de una tupla).
 
-## Procesos y comunicación
-
-..
-
 ## Errores y excepciones
 
+Erlang dispone de mecanismos para [gestionar errores](https://www.erlang.org/doc/reference_manual/errors.html) durante la ejecución, como ocurre con otros lenguajes modernos. Sin embargo, los creadores del lenguaje recomiendan la filosofía del *"let it crash"*, basada en dejar morir un proceso si falla y crear uno nuevo en su lugar. Dicho lo cual, en algunas ocasiones puede ser útil lanzar y gestionar excepciones.
+
+La sintaxis para capturar excepciones es la siguiente:
+
+$$\texttt{try}\ \mathit{expresiones}\ \textcolor{red}{[} \texttt{of} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+$$\mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;} \qquad\qquad\qquad$$
+
+$$\vdots$$
+
+$$\mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n} \textcolor{red}{]} \qquad\qquad\qquad$$
+
+$$\textcolor{red}{[} \texttt{catch} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\quad$$
+
+$$\textcolor{red}{[} \mathit{clase_1} \texttt{:} \textcolor{red}{]} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{:} \mathit{pila_1} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
+
+$$\vdots$$
+
+$$\textcolor{red}{[} \mathit{clase_m} \texttt{:} \textcolor{red}{]} \mathit{patr\acute{o}n_m} \textcolor{red}{[} \texttt{:} \mathit{pila_m} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_m} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_m} \textcolor{red}{]}$$
+
+$$\textcolor{red}{[} \texttt{after} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\quad$$
+
+$$\mathit{expresiones_n} \textcolor{red}{]} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\quad$$
+
+$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+Aunque son opcionales, las secciones `of`, `catch` y `after`, es necesario que exista al menos una sección `catch` o `after`. La sección `of` funciona como una expresión `case`. La sección `catch` trata de ajustar las excepciones a unos patrones y ejecutará una serie de expresiones siempre que encaje el valor y la guarda se cumpla. La sección `after` es un bloque de código que se ejecutará independientemente de si se ha producido una excepción o no en tiempo de ejecución. Si la excepción no es gestionada, por ninguna cláusula de la sección `catch`, se lanzará fuera de la expresión `try`.
+
+Para ajustar una excepción, tenemos que hacer el encaje con tres elementos: la *clase*, un *patrón* y  la información de *pila*. En Erlang hay tres *clases* de excepciones:
+
+- `error`: Producidas por las funciones `error/1` o  `error/2`.
+- `exit`: Producidas por la función `exit/1`.
+- `throw`: Producidas por la función `throw/1`.
+
+Estas son funciones nativas del lenguaje del módulo [`erlang`](https://www.erlang.org/doc/man/erlang.html). El primer argumento en todas es el valor que representa cuál es el motivo de la excepción, este valor es el que tiene que encajar con el *patrón* en la cláusula del `catch`. El valor que tiene que encajar con *pila* en la cláusula es la información de pila para la depuración que acompaña a las excepciones de clase `error`.
+
+La primera sección de la cláusula de captura de excepciones `Clase:Patrón:Pila` tiene partes opcionales. Si no es de clase `error`, podemos prescindir de `:Pila`. Si se omite `Clase:` se asume por defecto el valor `throw` y, por lo tanto, sólo podremos usar `Patrón` para el ajuste.
+
+> También existe la función `erlang:raise/3` para lanzar excepciones, donde el primer parámetro es la clase, el segundo el motivo y el tercero la información de pila para la depuración.
+
+Otro mecanismo para capturar excepciones es:
+
+$$\texttt{catch}\ \mathit{expresi\acute{o}n}$$
+
+Esta expresión es azúcar sintáctico de la anterior y lo que hace es capturar toda excepción y devolverla como un valor, en caso de producirse un fallo. Si no hay error alguno, devuelve el valor al que se evalúa la expresión. Usar `catch` sería lo mismo que usar el siguiente código:
+
+```Erlang
+try
+    expresión
+catch
+    throw:Motivo ->
+        Motivo;
+    exit:Motivo ->
+        {'EXIT', Motivo};
+    error:Motivo:Pila ->
+        {'EXIT', {Motivo, Pila}}
+end
+```
+
+## Procesos y comunicación
+
+La concurrencia es una de las características principales del lenguaje Erlang, para ello podemos crear [procesos](https://www.erlang.org/doc/reference_manual/processes.html) que sean ejecutados en paralelo a otros procesos. La arquitectura de Erlang permite que estos procesos sean ligeros y se puedan crear y destruir rápido.
+
+### Crear procesos
+
 ..
+
+### Comunicación entre procesos
+
+..
+
+$$\mathit{nodo}\ \texttt{!}\ \mathit{expresi\acute{o}n}$$
+
+..
+
+$$\texttt{receive} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+$$\mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
+
+$$\vdots$$
+
+$$\mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}$$
+
+$$\textcolor{red}{[} \texttt{after}\ \mathit{tiempo}\ \texttt{->}\ \mathit{expresiones}\textcolor{red}{]} \qquad\qquad\quad$$
+
+$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
 
 ## Registros
 
