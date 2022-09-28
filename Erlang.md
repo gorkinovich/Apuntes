@@ -585,6 +585,8 @@ foo()  ->
 
 La función `foo` nos devuelve una función que contiene la función factorial.
 
+> Las expresiones lambda crean un ámbito nuevo para las variables, por lo tanto, si definimos una variable `X` como parámetro de entrada y existe la misma variable fuera de la lambda, la variable interna ocultará el acceso a la exterior.
+
 ### Recursión de cola
 
 Otro aspecto importante al diseñar funciones, es la **recursión de cola**.  En programación funcional la recursión es esencial, porque la iteración se realiza mediante la recursión.
