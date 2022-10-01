@@ -1,4 +1,5 @@
 ﻿
+
 # Erlang
 
 [Erlang](https://www.erlang.org/) es un lenguaje de programación diseñado para desarrollar sistemas de comunicación grandes en tiempo real con alta disponibilidad, que sean escalables y tolerantes a fallos. Es un lenguaje de [programación funcional](https://es.wikipedia.org/wiki/Programaci%C3%B3n_funcional), cuya característica principal es disponer de [concurrencia](https://es.wikipedia.org/wiki/Concurrencia_%28inform%C3%A1tica%29). Otras propiedades del lenguaje son la [inmutabilidad](https://es.wikipedia.org/wiki/Objeto_inmutable) de los datos, el [encaje de patrones](https://es.wikipedia.org/wiki/B%C3%BAsqueda_de_patrones), la evaluación impaciente, el [tipado dinámico](https://es.wikipedia.org/wiki/Sistema_de_tipos), la [computación distribuida](https://es.wikipedia.org/wiki/Computaci%C3%B3n_distribuida) o el [cambio en caliente](https://es.wikipedia.org/wiki/Cambio_en_caliente), entre muchas otras.
@@ -167,7 +168,7 @@ Manejar variables inmutables puede parecer al principio un escollo insalvable, p
 
 Las tuplas son estructuras de datos que agrupan información de forma ordenada con un tamaño fijo. Siguen la siguiente sintaxis:
 
-$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Por ejemplo: `{}`, `{0, a}`, `{{data, 3.14}, Foo, {}, 8}`.
 
@@ -185,7 +186,7 @@ A diferencia de los lenguajes fuertemente tipados, como es el caso de [Haskell](
 
 Como definir listas más complejas, con el constructor de listas, puede llegar a ser costoso y confuso, existe una sintaxis alternativa para definir listas:
 
-$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
 De este modo, la lista `[1, [2 | []]]` se puede definir como `[1, 2]`, siendo más legible para el programador. Internamente, para la máquina virtual, son la misma cosa porque esta forma de sintaxis es azúcar sintáctico.
 
@@ -198,7 +199,7 @@ Los mapas son estructuras de datos que relacionan una clave con un valor. Aunque
 
 La sintaxis para crear un mapa es la siguiente:
 
-$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave_1}\ \texttt{=>}\ \mathit{valor_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{clave_n}\ \texttt{=>}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave_1}\ \texttt{=>}\ \mathit{valor_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{clave_n}\ \texttt{=>}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Tanto las claves, como los valores, pueden ser de cualquier tipo. Para actualizar un mapa previo, usaremos esta sintaxis:
 
@@ -216,7 +217,7 @@ El módulo [`maps`](https://www.erlang.org/doc/man/maps.html) contiene una serie
 
 Debido a que Erlang fue diseñado para construir sistemas de telecomunicaciones, existía la necesidad de tener las herramientas para poder procesar protocolos e información a nivel de bytes e incluso de bits. Para ello se tiene en Erlang la siguiente sintaxis:
 
-$$\texttt{<<} \textcolor{red}{[} \mathit{segmento_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{segmento_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
+$$\texttt{<<} \textcolor{red}{[} \mathit{segmento_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{segmento_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
 
 Los *segmentos* tienen la siguiente sintaxis:
 
@@ -261,6 +262,68 @@ Veamos algunos ejemplos:
 10> io:format("~w~n", [<<"Año"/utf32>>]).
 <<0,0,0,65,0,0,0,241,0,0,0,111>>
 ```
+
+### Registros
+
+Los [registros](https://www.erlang.org/doc/reference_manual/records.html) es un mecanismo que Erlang tiene para definir estructuras de datos cuyas componentes tienen nombre. Para simplificarlo, sería equivalente a una tupla donde cada componente de la misma tiene un nombre propio con el que acceder a ella.
+
+> La ventaja principal, frente a las tuplas, es su mayor flexibilidad a la hora de modificar el tamaño de definiciones previas. Modificar de tamaño una tupla implica tener que revisar todo el código, para actualizar todas las tuplas que deben encajar con la modificada. Sin embargo, con registros se puede aumentar el número de componentes sin romper el código anterior. Además, el uso de registros añade una mayor claridad para entender el acceso a los datos.
+
+Para definir un registro usamos la siguiente sintaxis:
+
+$$\texttt{-record(} \mathit{nombre} \texttt{,} \texttt{\char123} \mathit{campo_1} \textcolor{red}{[} \texttt{=} \mathit{valor_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \textcolor{red}{[} \texttt{=} \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125} \texttt{)}$$
+
+Esto crea un registro con el *nombre* indicado para el módulo donde ha sido definido. De forma opcional se puede indicar valores por defecto de inicialización cuando se crea un valor. La sintaxis para crear un valor es el siguiente:
+
+$$\texttt{\char35} \mathit{nombre} \texttt{\char123} \textcolor{red}{[} \mathit{campo_1} \texttt{=} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125} \texttt{)}$$
+
+En caso de dejar campos sin definir en el constructor, se les asignará el valor `undefined`. También se puede usar como *campo* la variable comodín `_` para inicializar todos aquellos que no hayan sido explícitamente indicados en el constructor. Para modificar un valor de registro previo se usa la siguiente sintaxis:
+
+$$\mathit{variable} \texttt{\char35} \mathit{nombre} \texttt{\char123} \mathit{campo_1} \texttt{=} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{\char125} \texttt{)}$$
+
+Esto devuelve un nuevo calor con la información modificada. Para pode acceder a un campo se usa la sintaxis:
+
+$$\mathit{variable} \texttt{\char35} \mathit{nombre} \texttt{.} \mathit{campo}$$
+
+Esto devuelve el valor asociado al *campo*. Es perfectamente posible anidar registros dentro de otros registros. Para acceder al contenido simplemente hay que usar la sintaxis anterior aplicada al campo en cuestión.
+
+> En versiones anteriores a la `R14`, para acceder al contenido de un registro anidado en otro registro, era necesario usar paréntesis para ayudar al compilador con el análisis. Por suerte, se eliminó esa limitación.
+
+Si necesitamos saber cuál es la posición del campo dentro de la tupla usaremos:
+
+$$\texttt{\char35} \mathit{nombre} \texttt{.} \mathit{campo}$$
+
+Por ejemplo:
+
+```Erlang
+-record(state,{first=1, second=2, third=3}).
+
+foo() ->
+    S1 = #state{},
+    S2 = #state{first="ichi", _=null},
+    S3 = S2#state{second="ni", third="san"},
+    io:format("S1 = ~p~n", [S1]),
+    io:format("S2 = ~p~n", [S2]),
+    io:format("S3 = ~p~n", [S3]),
+    io:format("first = ~p~n", [#state.first]),
+    io:format("second = ~p~n", [#state.second]),
+    io:format("third = ~p~n", [#state.third]),
+    io:format("S2.first = ~p~n", [S2#state.first]).
+```
+
+Obtenemos por consola el siguiente resultado:
+
+```
+S1 = {state,1,2,3}
+S2 = {state,"ichi",null,null}
+S3 = {state,"ichi","ni","san"}
+first = 2
+second = 3
+third = 4
+S2.first = "ichi"
+```
+
+Como se puede observar, internamente es una tupla la estructura. Es el compilador el que se encarga de analizar el código y traducirlo, sin tener que cambiar la implementación interna de Erlang.
 
 ## Operadores
 
@@ -456,17 +519,25 @@ Usando la coma (`,`) es requisito que todas las guardas den como resultado `true
 
 Podemos usar la siguiente sintaxis como patrón de encaje con mapas:
 
-$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave_1}\ \texttt{:=}\ \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{clave_n}\ \texttt{:=}\ \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave_1}\ \texttt{:=}\ \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{clave_n}\ \texttt{:=}\ \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Como requisito, para que funcione correctamente, las claves tienen que cumplir los mismos requisitos que cumplen las guardas de las cláusulas, lo cual implica que todas las variables internas han de estar previamente ligadas. Si las claves son encontradas, los valores de estas son ajustados a los patrones definidos.
 
 En caso de no encontrar alguna de las claves indicadas, se lanzará una excepción de tipo `badmatch` si el encaje se realiza mediante el operador `=`. Si el encaje se está realizando en el patrón de una cláusula, en caso de fallar el ajuste se pasará a la siguiente cláusula.
 
+### Encaje con registros
+
+Podemos usar la siguiente sintaxis como patrón de encaje con registros:
+
+$$\texttt{\char35} \mathit{nombre} \texttt{\char123} \textcolor{red}{[} \mathit{campo_1} \texttt{=} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125} \texttt{)}$$
+
+Funciona parecido a las tuplas, a la hora de hacer un ajuste de patrones, pero con algo más de flexibilidad en cuanto a la posición de los componentes.
+
 ## Secuencias intensionales
 
 Además de poder crear listas mediante literales y con el uso de operadores, podemos utilizar las listas intensionales para crear nuevas listas a partir de otra, realizando filtrados y transformaciones. Para ello existe la siguiente sintaxis:
 
-$$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \mathit{generador_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{generador_n} \textcolor{red}{]} \texttt{]}$$
 
 Donde la expresión generadora puede ser una de las siguientes:
 
@@ -486,7 +557,7 @@ La lista intensional `[X || X <- L, is_integer(X)]` nos devuelve sólo los núme
 
 De forma análoga a las listas, con los bloques binarios podemos también crear bloques binarios intensionales con la siguiente sintaxis:
 
-$$\texttt{<<} \mathit{expresi\acute{o}n}\  \texttt{||}\ \textcolor{red}{[} \mathit{generador_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{generador_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{>>}$$
+$$\texttt{<<} \mathit{expresi\acute{o}n}\  \texttt{||}\ \mathit{generador_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{generador_n} \textcolor{red}{]} \texttt{>>}$$
 
 Los generadores que se usan son los mismos que usamos con las listas.
 
@@ -498,7 +569,7 @@ Las funciones son bloques de código que realizan diferentes tareas. Para realiz
 
 Para poder **ejecutar una función** tenemos que invocarla usando la siguiente sintaxis:
 
-$$\textcolor{red}{[} \mathit{m\acute{o}dulo} \textcolor{red}{]} \texttt{:} \mathit{funci\acute{o}n} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metro_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{par\acute{a}metro_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
+$$\textcolor{red}{[} \mathit{m\acute{o}dulo} \textcolor{red}{]} \texttt{:} \mathit{funci\acute{o}n} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metro_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{par\acute{a}metro_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
 
 Indicando el módulo podemos llamar a funciones que están en otros módulos. Si se omite el módulo, se asume que estamos usando funciones del módulo actual.
 
@@ -531,9 +602,9 @@ $$\mathit{nombre} \texttt{(} \mathit{patrones_n} \texttt{)}\ \textcolor{red}{[} 
 
 Como podemos ver, lo que tenemos aquí es una **secuencia de cláusulas** que componen la función. Los **patrones** y **expresiones** son secuencias separadas por comas de patrones y expresiones respectivamente. Cada patrón representa los **argumentos** de la función y las expresiones son el **cuerpo** de la función, es decir:
 
-$$\textcolor{red}{[} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]}$$
+$$\textcolor{red}{[} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]}$$
 
-$$\mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{expresi\acute{o}n_m} \textcolor{red}{]} \textcolor{red}{]}$$
+$$\mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{expresi\acute{o}n_m} \textcolor{red}{]}$$
 
 La diferencia es que, mientras que podemos tener una función sin argumentos, el cuerpo de la función requiere al menos una expresión. El caso de que no se indique la guarda para la cláusula funcional, se asume por defecto como guarda el valor `true`. Por ejemplo:
 
@@ -722,40 +793,6 @@ catch
 end
 ```
 
-## Procesos y comunicación
-
-La concurrencia es una de las características principales del lenguaje Erlang, para ello podemos crear [procesos](https://www.erlang.org/doc/reference_manual/processes.html) que sean ejecutados en paralelo a otros procesos. La arquitectura de Erlang permite que estos procesos sean ligeros y se puedan crear y destruir rápido.
-
-### Crear procesos
-
-..
-
-### Comunicación entre procesos
-
-..
-
-$$\mathit{nodo}\ \texttt{!}\ \mathit{expresi\acute{o}n}$$
-
-..
-
-$$\texttt{receive} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
-
-$$\mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
-
-$$\vdots$$
-
-$$\mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}$$
-
-$$\textcolor{red}{[} \texttt{after}\ \mathit{tiempo}\ \texttt{->}\ \mathit{expresiones}\textcolor{red}{]} \qquad\qquad\quad$$
-
-$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
-
-## Registros
-
-Los [registros](https://www.erlang.org/doc/reference_manual/records.html) es un mecanismo que Erlang tiene para definir estructuras de datos cuyas componentes tienen nombre. Para simplificarlo, sería equivalente a una tupla donde cada componente de la misma tiene un nombre propio con el que acceder a ella.
-
-..
-
 ## Módulos
 
 Los [módulos](https://www.erlang.org/doc/reference_manual/modules.html) en Erlang son la unidad en la que se organiza el código de nuestros proyectos. Todo **módulo** se compone en una secuencia de **atributos** y declaración de **funciones**, terminadas con punto cada una de ellas.
@@ -807,13 +844,13 @@ Habitualmente los ficheros que se insertan son ficheros `.hrl`, que son ficheros
 
 La otra operación importante del preprocesador son las **macros**, que realizan sustituciones dentro del módulo. Para definir macros la sintaxis es la siguiente:
 
-$$\texttt{-define(} \mathit{ID} \textcolor{red}{[} \texttt{(} \mathit{Var_1} \textcolor{red}{[} \texttt{,}\ \dots \textcolor{red}{[} \texttt{,}\ \mathit{Var_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)} \textcolor{red}{]} \texttt{,} \mathit{expresi\acute{o}n} \texttt{)}$$
+$$\texttt{-define(} \mathit{ID} \textcolor{red}{[} \texttt{(} \mathit{Var_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{Var_n} \textcolor{red}{]} \texttt{)} \textcolor{red}{]} \texttt{,} \mathit{expresi\acute{o}n} \texttt{)}$$
 
 Lo primero es indicar el *nombre identificador* de la macro, que por convención se suele usar un nombre en mayúsculas. Después, dependiendo de si queremos parametrizar o no la macro, podemos poner una secuencia de *variables* como argumentos de entrada para la marco. Finalmente, tendremos una *expresión* que será usada como resultado final, después de sustituir las variables definidas como parámetros de entrada.
 
 Para invocar una macro se usa la siguiente sintaxis:
 
-$$\texttt{?} \mathit{ID} \textcolor{red}{[} \texttt{(} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,}\ \dots \textcolor{red}{[} \texttt{,}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)} \textcolor{red}{]}$$
+$$\texttt{?} \mathit{ID} \textcolor{red}{[} \texttt{(} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{)} \textcolor{red}{]}$$
 
 Por ejemplo:
 
@@ -861,6 +898,34 @@ Estos comandos no se pueden utilizar en el interior de la definición de una fun
 
 Existen dos comandos adicionales para interactuar con la compilación de un módulo. Con `-error(Expresión)` podemos emitir un mensaje de error y con `-warning(Expresión)` podemos emitir un mensaje de aviso. Ambos comandos mostrarán dichos mensajes en tiempo de compilación.
 
+## Procesos y comunicación
+
+La concurrencia es una de las características principales del lenguaje Erlang, para ello podemos crear [procesos](https://www.erlang.org/doc/reference_manual/processes.html) que sean ejecutados en paralelo a otros procesos. La arquitectura de Erlang permite que estos procesos sean ligeros y se puedan crear y destruir rápido.
+
+### Crear procesos
+
+..
+
+### Comunicación entre procesos
+
+..
+
+$$\mathit{nodo}\ \texttt{!}\ \mathit{expresi\acute{o}n}$$
+
+..
+
+$$\texttt{receive} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+$$\mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_1} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_1}\texttt{;}$$
+
+$$\vdots$$
+
+$$\mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n} \textcolor{red}{]}\ \texttt{->}\ \mathit{expresiones_n}$$
+
+$$\textcolor{red}{[} \texttt{after}\ \mathit{tiempo}\ \texttt{->}\ \mathit{expresiones}\textcolor{red}{]} \qquad\qquad\quad$$
+
+$$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
 ## Comportamientos
 
 Lo *comportamientos* en Erlang es un tipo de interfaz que un módulo puede implementar. Esta interfaz tienen que tener una serie de funciones determinadas, para que el módulo, que define la interfaz de comportamiento, pueda operar con el módulo que la implementa. Estas funciones que ha de tener un módulo para implementar un *comportamiento* se llaman *callbacks*. Declaramos la implementación de un *comportamiento* con el siguiente atributo:
@@ -871,7 +936,7 @@ El nombre es un átomo con el nombre del módulo que define el *comportamiento* 
 
 Para crear una interfaz de comportamiento propia, dentro de nuestro módulo tendremos que indicar una lista de atributos que definan los *callbacks* a implementar, usando una sintaxis similar a la [especificación de tipos](https://www.erlang.org/doc/reference_manual/typespec.html):
 
-$$\texttt{-callback}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{var_1}\ \textcolor{red}{[} \mathtt{::}\ \mathit{tipo_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \dots \textcolor{red}{[} \texttt{,} \mathit{var_n}\ \textcolor{red}{[} \mathtt{::}\ \mathit{tipo_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}\ \texttt{->}\ \mathit{tipo}$$
+$$\texttt{-callback}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{var_1}\ \textcolor{red}{[} \mathtt{::}\ \mathit{tipo_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{var_n}\ \textcolor{red}{[} \mathtt{::}\ \mathit{tipo_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}\ \texttt{->}\ \mathit{tipo}$$
 
 Además tenemos el atributo de módulo `optional_callbacks`, que tiene como valor una lista de los *callbacks* (`Nombre/Aridad`) que son opcionales para implementar la interfaz de comportamiento.
 
