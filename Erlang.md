@@ -929,11 +929,15 @@ Vemos varias formas de crear un proceso con la función `erlang:system_time/0`, 
 
 ### Comunicación entre procesos
 
-..
+La comunicación entre procesos se realiza mediante el paso de mensajes. Para **enviar** uno se usa la siguiente sintaxis:
 
 $$\mathit{proceso}\ \texttt{!}\ \mathit{expresi\acute{o}n}$$
 
-..
+Mientras que el mensaje puede ser cualquier *expresión*, el *proceso* puede ser identificado mediante un PID (`pid()`), una referencia (`reference()`), un puerto de comunicación (`port()`), un nombre registrado (`atom()`), o una tupla `{Nombre, Nodo}`, en la que ambas componentes son nombres que identifican al proceso y al nodo donde se encuentra. El resultado, de la expresión de envío, es la propia *expresión* enviada.
+
+> La expresión `!` es azúcar sintáctico de la función `erlang:send/2`, siendo esta la función primitiva que realmente se usa al ejecutar el programa.
+
+Para **recibir** mensajes necesitamos la sintaxis siguiente:
 
 $$\texttt{receive} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
 
@@ -946,6 +950,39 @@ $$\mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n
 $$\textcolor{red}{[} \texttt{after}\ \mathit{tiempo}\ \texttt{->}\ \mathit{expresiones}\textcolor{red}{]} \qquad\qquad\quad$$
 
 $$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+Esencialmente `receive` es como `case` aplicado a los valores de la cola de mensajes del proceso. Se comportan igual en cuanto al funcionamiento de las cláusulas, la diferencia es que `receive` dispone de una cláusula `after`, que requiere de un valor que representa el máximo tiempo de espera en milisegundos para recibir un mensaje. Si el tiempo de espera se ha agotado, se ejecuta el cuerpo de expresiones y se sale de la expresión `receive`. Los valores que admite son enteros entre `0` y `4294967295`. Si se omite la cláusula `after`, por defecto se asigna al *tiempo* el átomo `infinity`, indicando así que se ha de esperar indefinidamente hasta recibir un mensaje.
+
+```Erlang
+foo() ->
+    PID = spawn(
+        fun Loop() ->
+            receive
+                stop ->
+                    stop;
+                X ->
+                    io:format("~p~n", [X]),
+                    Loop()
+            end
+        end
+    ),
+    PID ! "Hello",
+    PID ! {data, [a,b,c]},
+    PID ! stop,
+    PID ! "Bye".
+```
+
+Al ejecutar esta función veremos los mensajes `"Hello"`  y `{data, [a,b,c]}`, pero no veremos `"Bye"` porque el proceso ya finalizó.
+
+### ..
+
+..
+
+### ..
+
+..
+
+### ..
 
 ..
 
