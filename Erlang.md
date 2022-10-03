@@ -900,17 +900,38 @@ Existen dos comandos adicionales para interactuar con la compilación de un mód
 
 ## Procesos y comunicación
 
-La concurrencia es una de las características principales del lenguaje Erlang, para ello podemos crear [procesos](https://www.erlang.org/doc/reference_manual/processes.html) que sean ejecutados en paralelo a otros procesos. La arquitectura de Erlang permite que estos procesos sean ligeros y se puedan crear y destruir rápido.
+La concurrencia es una de las características principales del lenguaje Erlang, para ello podemos crear [**procesos**](https://www.erlang.org/doc/reference_manual/processes.html) que sean ejecutados aparentemente a la vez que otros. La arquitectura de Erlang permite que estos procesos sean ligeros y se puedan crear y destruir rápido.
 
-### Crear procesos
+Dentro de cada instancia iniciada de la máquina virtual, hay una serie de **planificadores** (*scheduler*) que tienen una **cola de ejecución** (*run queue*), para organizar qué procesos gestiona y su orden de ejecución. Por cada núcleo del procesador se tiene un planificador (salvo que se desactive el *SMP*), que organiza la ejecución de los procesos a su cargo de forma [**concurrente**](https://es.wikipedia.org/wiki/Computaci%C3%B3n_concurrente) pero no [**paralela**](https://es.wikipedia.org/wiki/Computaci%C3%B3n_paralela).
 
-..
+También es posible hacer **aplicaciones distribuidas**, para ello hay que configurar una red de instancias de la máquina virtual como [**nodos**](https://www.erlang.org/doc/reference_manual/distributed.html). Cada nodo tendrá sus propios planificadores y además cualquier nodo puede encargar la ejecución de un proceso a otro nodo.
+
+### Creación simple de procesos
+
+Para crear procesos tenemos la función `spawn`:
+
+$$\texttt{spawn(} \mathit{funci\acute{o}n} \texttt{)}$$
+
+$$\texttt{spawn(} \mathit{m\acute{o}dulo} \texttt{,} \mathit{funci\acute{o}n} \texttt{,} \mathit{argumentos} \texttt{)}$$
+
+Ambas funciones devuelven como resultado un **identificador de proceso** o *PID*, cuyo tipo es `pid()`. El PID obtenido nos permitirá poder comunicarnos con el proceso creado. El parámetro *función* de `spawn/1` tiene que ser un valor funcional, mientras que en `spawn/3` los dos primeros parámetros han de ser un átomo y a continuación una lista con los argumentos necesarios para invocar la función. Por ejemplo:
+
+```
+1> spawn(fun() -> erlang:system_time() end).
+<0.81.0>
+2> spawn(fun erlang:system_time/0).
+<0.86.0>
+3> spawn(erlang, system_time, []).
+<0.88.0>
+```
+
+Vemos varias formas de crear un proceso con la función `erlang:system_time/0`, que también podría haber incluido usar una variable que esté ligada a un valor funcional. Los resultados que vemos en la consola de Erlang, al usar `spawn`, es el PID devuelto que representa al proceso creado.
 
 ### Comunicación entre procesos
 
 ..
 
-$$\mathit{nodo}\ \texttt{!}\ \mathit{expresi\acute{o}n}$$
+$$\mathit{proceso}\ \texttt{!}\ \mathit{expresi\acute{o}n}$$
 
 ..
 
@@ -925,6 +946,8 @@ $$\mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{guardas_n
 $$\textcolor{red}{[} \texttt{after}\ \mathit{tiempo}\ \texttt{->}\ \mathit{expresiones}\textcolor{red}{]} \qquad\qquad\quad$$
 
 $$\texttt{end} \qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$$
+
+..
 
 ## Comportamientos
 
