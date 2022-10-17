@@ -840,7 +840,11 @@ El [preprocesador](https://www.erlang.org/doc/reference_manual/macros.html) en E
 
 $$\texttt{-include(}\mathit{fichero}\texttt{)}$$
 
-Habitualmente los ficheros que se insertan son ficheros `.hrl`, que son ficheros de cabecera con macros y definiciones de registros de uso compartido entre varios módulos de nuestro proyecto.
+Habitualmente los ficheros que se insertan son ficheros `.hrl`, que son ficheros de cabecera con macros y definiciones de registros de uso compartido entre varios módulos de nuestro proyecto. Existe una variante que es `-include_lib(fichero)`, que sirve para incluir cabeceras de la biblioteca estándar de Erlang. Por ejemplo:
+
+```Erlang
+-include_lib("kernel/include/file.hrl").
+```
 
 La otra operación importante del preprocesador son las **macros**, que realizan sustituciones dentro del módulo. Para definir macros la sintaxis es la siguiente:
 
@@ -974,15 +978,68 @@ foo() ->
 
 Al ejecutar esta función veremos los mensajes `"Hello"`  y `{data, [a,b,c]}`, pero no veremos `"Bye"` porque el proceso ya finalizó.
 
-### ..
+### Poniendo nombres y alias
 
-..
+Erlang permite poner asociar a un PID un átomo como nombre. Para gestionarlo tenemos las siguientes funciones nativas:
 
-### ..
+| Función | Descripción |
+|:-------:|:------------|
+| `register(Nombre, PID)` | Asocia un átomo como nombre para un PID. |
+| `registered()` | Da la lista de todos los nombres registrados. |
+| `whereis(Nombre)` | Da el PID asociado a un nombre registrado o `undefined` si no está registrado. |
 
-..
+Además podemos crear un alias para un proceso con la función `alias()`, que devuelve una referencia asociada al proceso que invoca la función.  Con `unalias(Referencia)` se desactiva el alias registrado.
 
-### ..
+### Controlando procesos
+
+Erlang permite dos modos de controlar la muerte prematura de procesos. El primero es con **enlaces**, que conecta dos procesos entre sí y cuando uno muere el otro también lo hace recibiendo una *excepción*. Podemos crear un proceso enlazado al actual con:
+
+$$\texttt{spawn\char95link(} \mathit{funci\acute{o}n} \texttt{)}$$
+
+$$\texttt{spawn\char95link(} \mathit{m\acute{o}dulo} \texttt{,} \mathit{funci\acute{o}n} \texttt{,} \mathit{argumentos} \texttt{)}$$
+
+Si queremos enlazar un proceso ya creado al actual usaremos `link(PID)`, pudiendo revertir el enlace con `unlink(PID)`. También se puede cambiar el comportamiento por defecto, para capturar la excepción como si fuera un mensaje recibido con `process_flag(trap_exit, true)`, mensajes que tendrían la forma:
+
+$$\texttt{\char123'EXIT', } \mathit{pid} \texttt{, } \mathit{motivo} \texttt{\char125}$$
+
+El *pid* es el identificador de proceso que ha muerto y el *motivo* es la información relativa a la excepción, que dependiendo del tipo tendrá la siguiente forma:
+
+| Tipo | Forma |
+|:----:|:-----:|
+| `exit(Valor)` | `Valor` |
+| `error(Valor)` | `{Valor, Pila}` |
+| `throw(Valor)` | `{{nocatch, Valor}, Pila}` |
+
+> Al activar el *flag* `trap_exit`, cuando termine un proceso de forma normal se recibirá un mensaje con la forma `{'EXIT', PID, normal}`, siendo *PID* el identificador del proceso que acaba de terminar. Esto es importante, porque `exit(normal)` es considerada una terminación normal del proceso, por lo que usarlo no finalizará al proceso enlazado si no tiene el *flag* `trap_exit` activado.
+
+El segundo modo es con **monitores**, que conecta dos procesos entre sí, donde uno es el monitor y el otro el monitorizado. Cuando el proceso monitorizado muere, el proceso monitor recibe un mensaje con la forma:
+
+$$\texttt{\char123'DOWN', } \mathit{referencia} \texttt{, process, } \mathit{pid} \texttt{, } \mathit{motivo} \texttt{\char125}$$
+
+Podemos crear un proceso monitorizado por el actual con:
+
+$$\texttt{spawn\char95monitor(} \mathit{funci\acute{o}n} \texttt{)}$$
+
+$$\texttt{spawn\char95monitor(} \mathit{m\acute{o}dulo} \texttt{,} \mathit{funci\acute{o}n} \texttt{,} \mathit{argumentos} \texttt{)}$$
+
+El otro método, para monitorizar un proceso, es usando la función `monitor(process, PID)` para activarlo, que nos devuelve una referencia para identificar la relación, y `demonitor(Referencia)` para desactivarlo.
+
+Es posible finalizar la ejecución de un proceso con la función `exit(PID, Motivo)`. Al usar el átomo `kill`, se asume que se está matando al proceso de forma abrupta, obteniendo `killed` como motivo de la excepción al capturarla con un mensaje. Se pueden usar otros valores para terminar un proceso, pero intentarlo con `normal` no funcionará. Si un proceso termina desde dentro con `exit(kill)`, el motivo que se capturará como mensaje es `kill` en lugar de `killed`.
+
+### Diccionario del proceso
+
+Todo proceso tiene asociado al mismo un diccionario interno. Lo podemos manejar con las siguientes funciones:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `put(Clave, Valor)` | Asigna un valor a una clave. |
+| `get(Clave)` | Obtiene el valor de una clave. Si no existe se devuelve `undefined`. |
+| `get()` | Devuelve el contenido como una lista `{Clave, Valor}`. |
+| `get_keys(Valor)` | Obtiene una lista con las claves que tienen el valor indicado. |
+| `erase(Clave)` | Borra una clave del diccionario. Si la clave existe devuelve el valor asociado y si no `undefined`. |
+| `erase()` | Borra el contenido del diccionario, devolviéndolo como una lista `{Clave, Valor}`. |
+
+### Procesos distribuidos
 
 ..
 
@@ -1049,6 +1106,8 @@ pong() -> false.
 ..
 
 ### Funciones nativas del lenguaje
+
+El módulo [`erlang`](https://www.erlang.org/doc/man/erlang.html) contiene la mayor parte de las funciones nativas que hay en el lenguaje. Algunas de estas funciones no requieren indicar su módulo para invocarlas.
 
 ..
 
