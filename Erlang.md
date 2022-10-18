@@ -1041,7 +1041,42 @@ Todo proceso tiene asociado al mismo un diccionario interno. Lo podemos manejar 
 
 ### Procesos distribuidos
 
-..
+Para crear un nodo hace falta iniciar la máquina virtual de Erlang dándole un nombre de nodo. Las opciones para configurar un nodo con el comando con `erl` son:
+
+| Opción | Descripción |
+|:------:|:------------|
+| `-sname Nombre` | Activa el nodo con un nombre corto. |
+| `-name Nombre` | Activa el nodo con un nombre largo. |
+| `-setcookie Cookie` | Configura la cookie del nodo. |
+| `-setcookie Nodo Cookie` | Configura la cookie del nodo. |
+| `-hidden` | El nodo será invisible al resto de la red de nodos. |
+| `-connect_all false` | Sólo se permiten las conexiones explícitas. |
+
+Un nombre de nodo suele ser un átomo con la forma `Nombre@Máquina`, donde *máquina* varía dependiendo de si se elige un nombre corto o largo. La red de nodos de Erlang no está preparada para temas de seguridad, pues el sistema fue diseñado en los años 80, cuando el acceso a las redes era más rudimentario. Para separar las redes de nodos se puede usar una *cookie*, que es un átomo, para que sólo puedan conectarse aquellos nodos que comparten la misma *cookie*.
+
+Algunas funciones nativas para gestionar los nodos son:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `node()` | Da el nombre del nodo actual. |
+| `node(Valor)` | Da el nombre del nodo que encaja con el *valor* indicado, que puede ser un PID, una referencia o un puerto. |
+| `nodes()` | Da la lista de nodos actual. |
+| `nodes(Valor)` | Da la lista de nodos actual en base a la opción indicada como *valor*. |
+| `is_alive()` | Devuelve si el nodo actual puede conectarse al resto de nodos. |
+| `monitor_node(Nodo, Bool)` | Monitoriza el estado de un nodo, recibiendo `{nodedown, Nodo}` como mensaje si se pierde la conexión. |
+| `erlang:get_cookie()` | Da la *cookie* actual del nodo. |
+| `erlang:get_cookie(Nodo)` | Da la *cookie* actual de un nodo. |
+| `erlang:set_cookie(Cookie)` | Cambia la *cookie* actual del nodo. |
+| `erlang:set_cookie(Nodo, Cookie)` | Cambia la *cookie* actual de un nodo. |
+| `erlang:disconnect_node(Nodo)` | Desconecta un nodo de la red. |
+
+Además podemos crear un proceso en un nodo que queramos con:
+
+$$\texttt{spawn(} \mathit{nodo} \texttt{,} \mathit{funci\acute{o}n} \texttt{)}$$
+
+$$\texttt{spawn(} \mathit{nodo} \texttt{,} \mathit{m\acute{o}dulo} \texttt{,} \mathit{funci\acute{o}n} \texttt{,} \mathit{argumentos} \texttt{)}$$
+
+También se puede aplicar esto para el caso de `spawn_link` y `spawn_monitor`.
 
 ## Comportamientos
 
