@@ -1160,9 +1160,19 @@ Este comportamiento se utiliza para crear [máquinas de estados](https://www.erl
 
 ### El comportamiento: `gen_event`
 
+Este comportamiento se utiliza para la [gestión de eventos](https://www.erlang.org/doc/design_principles/events.html) en un programa.
+
 ..
 
 ### El comportamiento: `supervisor`
+
+Este comportamiento se utiliza para [supervisar](https://www.erlang.org/doc/design_principles/sup_princ.html) la ejecución de procesos.
+
+..
+
+### El comportamiento: `application`
+
+Este comportamiento se utiliza para [controlar aplicaciones](https://www.erlang.org/doc/design_principles/applications.html) de Erlang.
 
 ..
 
@@ -1176,7 +1186,45 @@ El módulo [`erlang`](https://www.erlang.org/doc/man/erlang.html) contiene la ma
 
 ..
 
+## Herramientas varias
+
+..
+
+### EUnit
+
+..
+
+### Emakefile
+
+Podemos incluir en nuestros proyectos un fichero llamado `Emakefile`, que nos permitirá automatizar la compilación. El contenido del fichero es una secuencia de definiciones con la forma `{Módulos, Opciones}.`, donde *módulos* son átomos que indican la ubicación relativa de los módulos a compilar y las *opciones* determinan cómo se va a compilar cada módulo. Por ejemplo:
+
 ```Erlang
-.
+{'sources/*', [debug_info,
+               {i, "sources"},
+               {i, "include"},
+               {outdir, "ebin"}]}.
+```
+
+El fichero indica que nuestros módulos están en el directorio `sources` y luego una serie de opciones para la compilación. Entre las [opciones de compilación](https://www.erlang.org/doc/man/compile.html) que existen tenemos:
+
+| Opción | Descripción |
+|:------:|:------------|
+| `debug_info` | Incluye información útil para la depuración. |
+| `{i,Dir}` | Añade un directorio a la lista de búsqueda cuando se quiere incluir una cabecera con el preprocesador. |
+| `{outdir,Dir}` | Establece el directorio de salida donde se guardará el resultado de la compilación. |
+| `export_all` | Hace que todas las funciones del módulo sean exportadas y por lo tanto públicas al exterior. |
+| `{d,Macro}` | Define una macro. |
+| `{d,Macro,Valor}` | Define una macro con un valor asignado. |
+
+Una vez configurado el fichero, para compilar el proyecto podemos usar el comando:
+
+```
+erl -make
+```
+
+O también desde la consola de Erlang invocar a:
+
+```Erlang
+make:all().
 ```
 
