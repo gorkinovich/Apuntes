@@ -1154,25 +1154,74 @@ El parámetro *nombre*, cuando se inicia un servidor, sirve para registrar el pr
 
 ### El comportamiento: `gen_statem`
 
-Este comportamiento se utiliza para crear [máquinas de estados](https://www.erlang.org/doc/design_principles/statem.html) y sustituye al módulo [`gen_fsm`](https://www.erlang.org/doc/man/gen_fsm.html).
+Este comportamiento se utiliza para crear [máquinas de estados](https://www.erlang.org/doc/design_principles/statem.html) y sustituye al módulo [`gen_fsm`](https://www.erlang.org/doc/man/gen_fsm.html). Los eventos que se han de implementar son:
 
-..
+| Función | Parámetros | Resultados | Descripción |
+|:-------:|:----------:|:----------:|:------------|
+| `init` | `(Argumentos)` | `{ok,Estado,Datos}`<br/>`{ok,Estado,Datos,Acciones}`<br/>`{stop,Motivo}`<br/>`ignore` | Inicialización de la máquina de estados. |
+| `callback_mode` | `()` | `state_functions`<br/>`handle_event_function`<br/>`[state_functions,state_enter]`<br/>`[handle_event_function,state_enter]` | Configuración del modo de la máquina de estados. |
+| `Estado` | `(enter, EstAnt, Datos)`<br/>`(Evento, Mensaje, Datos)` | `{next_state,Estado,Datos}`<br/>`{next_state,Estado,Datos,Acciones}`<br/>`{keep_state,Datos}`<br/>`{keep_state,Datos,Acciones}`<br/>`keep_state_and_data`<br/>`{keep_state_and_data,Acciones}`<br/>`{repeat_state,Datos}`<br/>`{repeat_state,Datos,Acciones}`<br/>`repeat_state_and_data`<br/>`{repeat_state_and_data,Acciones}`<br/>`stop`<br/>`{stop,Motivo}`<br/>`{stop,Motivo,Datos}`<br/>`{stop_and_reply,Motivo,Respuestas}`<br/>`{stop_and_reply,Motivo,Respuestas,Datos}` | Gestión del estado `Estado`. |
+| `handle_event` | `(enter, EstAnt, Estado, Datos)`<br/>`(Evento, Mensaje, Estado, Datos)` | `{next_state,Estado,Datos}`<br/>`{next_state,Estado,Datos,Acciones}`<br/>`{keep_state,Datos}`<br/>`{keep_state,Datos,Acciones}`<br/>`keep_state_and_data`<br/>`{keep_state_and_data,Acciones}`<br/>`{repeat_state,Datos}`<br/>`{repeat_state,Datos,Acciones}`<br/>`repeat_state_and_data`<br/>`{repeat_state_and_data,Acciones}`<br/>`stop`<br/>`{stop,Motivo}`<br/>`{stop,Motivo,Datos}`<br/>`{stop_and_reply,Motivo,Respuestas}`<br/>`{stop_and_reply,Motivo,Respuestas,Datos}` | Gestión de los estados. |
+| `code_change` | `()` | `{ok,Estado,Datos}`<br/>`Motivo` | Cambio en caliente. |
+| `terminate` | `()` | - | Terminación de la máquina de estados. |
+
+A diferencia del anterior comportamiento, el estado aquí se refiere al nombre del estado que se está ejecutando dentro de la máquina virtual, por lo que los datos es la información interna que equivale al estado de un servidor genérico.
+
+Sólo son obligatorias `init` y `callback_mode`, más las funciones `Estado` o `handle_event`, dependiendo de la configuración. El resto de funciones son opcionales en las últimas versiones.
+
+Una vez se ha inicializado la máquina, se invoca el evento para configurar el modo de funcionamiento con `callback_mode`, que tiene que devolver como mínimo una de las dos siguientes opciones:
++ `state_functions`: Los eventos se gestionan con las funciones `Estado/3`, requiriendo una función particular para cada estado de la máquina.
++ `handle_event_function`: Los eventos se gestionan con la función `handle_event/4`.
+
+De añadir el valor `state_enter`, se indicará que además habrá un evento de entrada para cada estado de la máquina.
+
+Al gestionar los eventos que reciben los estados tenemos dos situaciones:
++ Si el primer parámetro es `enter`, es que tenemos activada la configuración de entrada a los estados, por lo que `EstAnt` será el estado anterior del que viene la máquina, salvo en el primer estado que entrará, que al no haber habido uno previo el valor será el propio estado.
++ Si el primer parámetro es un *evento*, tendremos como eventos las siguientes posibilidades: `{call,Origen}`, `cast`, `info`, `timeout`, `{timeout,Nombre}`, `state_timeout` o `internal`. El parámetro *mensaje* es la información que acompaña al evento generado para el estado.
+
+Luego, al devolver la respuesta al comportamiento, `Respuestas` puede ser la tupla `{reply,Origen,Respuesta}` o una lista de varias de ellas. Algo similar ocurre con `Acciones` que puede ser uno de los siguientes elementos, así como una lista de varios de ellos:
+
+| Acciones | Descripción |
+|:--------:|:------------|
+| `hibernate`<br/>`{hibernate,Bool}` | Manda a hibernar al proceso. |
+| `postpone`<br/>`{postpone,Bool}` | Pospone el evento actual. |
+| `{state_timeout,Timeout,Mensaje}`<br/>`{state_timeout,Timeout,Mensaje,Opciones}`<br/>`{state_timeout,update,Mensaje}`<br/>`{state_timeout,cancel}` | Inicia, actualiza o cancela el *timeout* de un estado. |
+| `{{timeout,Nombre},Timeout,Mensaje}`<br/>`{{timeout,Nombre},Timeout,Mensaje, Opciones}`<br/>`{{timeout,Nombre},update,Mensaje}`<br/>`{{timeout,Nombre},cancel}` | Inicia, actualiza o cancela el *timeout* genérico. |
+| `{timeout,Timeout,Mensaje}`<br/>`{timeout,Timeout,Mensaje,Opciones}`<br/>`Timeout` | Inicia un evento de tipo *timeout*. |
+| `{reply,Origen,Respuesta}` | Responde al proceso que activó el evento. |
+| `{next_event,Evento,Mensaje}` | Genera un evento. |
+| `{change_callback_module,Módulo}` | Cambia el módulo encargado de gestionar los estados. |
+| `{push_callback_module,Módulo}` | Añade un módulo a la pila de módulos que gestionan los estados. |
+| `pop_callback_module` | Saca un módulo a la pila de módulos que gestionan los estados. |
+
+Las operaciones que gestionan el comportamiento están en el módulo [`gen_statem`](https://www.erlang.org/doc/man/gen_statem.html), entre las que tenemos las siguientes funciones:
+
+| Función | Parámetros | Descripción | Evento |
+|:-------:|:----------:|:------------|:------:|
+| `start` | `(Módulo, Argumentos, Opciones)`<br/>`(Nombre, Módulo, Argumentos, Opciones)` | Crea un proceso que ejecuta la máquina. | `init` |
+| `start_link` | `(Módulo, Argumentos, Opciones)`<br/>`(Nombre, Módulo, Argumentos, Opciones)` | Crea un proceso enlazado que ejecuta la máquina. | `init` |
+| `start_monitor` | `(Módulo, Argumentos, Opciones)`<br/>`(Nombre, Módulo, Argumentos, Opciones)` | Crea un proceso monitorizado que ejecuta la máquina. | `init` |
+| `stop` | `(Identificador)`<br/>`(Identificador, Motivo, Timeout)` | Detiene una máquina creada. | `terminate` |
+| `call` | `(Identificador, Mensaje)`<br/>`(Identificador, Mensaje, Timeout)` | Envía un mensaje que espera una respuesta de forma síncrona. | `Estado`<br/>`handle_event` |
+| `cast` | `(Identificador, Mensaje)` | Envía un mensaje que no espera una respuesta de forma asíncrona. | `Estado`<br/>`handle_event` |
+
+El parámetro *nombre*, cuando se inicia un servidor, sirve para registrar el proceso con un átomo, para ello se puede usar `{local,Nombre}` o `{global,Nombre}`, entre otras opciones. Al indicar `local` se registra el proceso sólo en el nodo actual, mientras que con `global` se registra en la red de nodos.
 
 ### El comportamiento: `gen_event`
 
-Este comportamiento se utiliza para la [gestión de eventos](https://www.erlang.org/doc/design_principles/events.html) en un programa.
+Este comportamiento se utiliza para la [gestión de eventos](https://www.erlang.org/doc/design_principles/events.html) en un programa. Los eventos que se han de implementar son:
 
 ..
 
 ### El comportamiento: `supervisor`
 
-Este comportamiento se utiliza para [supervisar](https://www.erlang.org/doc/design_principles/sup_princ.html) la ejecución de procesos.
+Este comportamiento se utiliza para [supervisar](https://www.erlang.org/doc/design_principles/sup_princ.html) la ejecución de procesos. Los eventos que se han de implementar son:
 
 ..
 
 ### El comportamiento: `application`
 
-Este comportamiento se utiliza para [controlar aplicaciones](https://www.erlang.org/doc/design_principles/applications.html) de Erlang.
+Este comportamiento se utiliza para [controlar aplicaciones](https://www.erlang.org/doc/design_principles/applications.html) de Erlang. Los eventos que se han de implementar son:
 
 ..
 
