@@ -1122,9 +1122,39 @@ pong() -> false.
 
 ### El comportamiento: `gen_server`
 
-..
+Este comportamiento se utiliza para crear [servidores genéricos](https://www.erlang.org/doc/design_principles/gen_server_concepts.html) que ofrecen una serie de servicios mediante peticiones. Los eventos que se han de implementar son:
+
+| Función | Parámetros | Resultados | Descripción |
+|:-------:|:----------:|:----------:|:------------|
+| `init` | `(Argumentos)` | `{ok,Estado}`<br/>`{ok,Estado,Extra}`<br/>`{stop,Motivo}`<br/>`ignore` | Inicialización del servidor. |
+| `handle_call` | `(Petición, Origen, Estado)` | `{reply,Resultado,Estado}`<br/>`{reply,Resultado,Estado,Extra}`<br/>`{noreply,Estado}`<br/>`{noreply,Estado,Extra}`<br/>`{stop,Motivo,Estado}`<br/>`{stop,Motivo,Resultado,Estado}` | Peticiones con respuesta. |
+| `handle_cast` | `(Petición, Estado)` | `{noreply,Estado}`<br/>`{noreply,Estado,Extra}`<br/>`{stop,Motivo,Estado}` | Peticiones sin respuesta. |
+| `handle_info` | `(Mensaje, Estado)` | `{noreply,Estado}`<br/>`{noreply,Estado,Extra}`<br/>`{stop,Motivo,Estado}` | Mensajes recibidos que no son peticiones para el servidor. |
+| `code_change` | `(Versión, Estado, Extra)` | `{ok,Estado}`<br/>`{error,Motivo}` | Cambio en caliente. |
+| `terminate` | `(Motivo, Estado)` | - | Terminación del servidor. |
+
+Sólo son obligatorias `init`, `handle_call` y `handle_cast`, el resto son opcionales en las últimas versiones. En el caso de `terminate` podemos devolver cualquier valor que necesitemos. En el caso de `handle_info`, uno de sus usos es gestionar los mensajes que recibe cuando está enlazado o monitoriza otro proceso. 
+
+Las opciones *extra* en la respuesta pueden ser `Timeout` e `hibernate`. El primero es un número entero de tiempo de espera en milisegundos o el átomo `infinity`, que es el valor por defecto como opción. El segundo envía al servidor a un estado de hibernación, a la espera de recibir un mensaje para reactivarse.
+
+> El cambio en caliente (*hot swapping*) se refiere a cuando se carga en la máquina virtual otra versión de un módulo ya cargado. Comportamientos como el `gen_server` reaccionan ante esta eventualidad invocando a `code_change`, donde la *versión* puede ser o bien un átomo que identifica la nueva versión, o tener la forma `{down, Versión}` cuando se trata de cargar una versión anterior. Con este evento podemos transformar la información de estado del servidor, para adaptarla a la siguiente versión cargada.
+
+Las operaciones que gestionan el comportamiento están en el módulo [`gen_server`](https://www.erlang.org/doc/man/gen_server.html), entre las que tenemos las siguientes funciones:
+
+| Función | Parámetros | Descripción | Evento |
+|:-------:|:----------:|:------------|:------:|
+| `start` | `(Módulo, Argumentos, Opciones)`<br/>`(Nombre, Módulo, Argumentos, Opciones)` | Crea un proceso que ejecuta el servidor. | `init` |
+| `start_link` | `(Módulo, Argumentos, Opciones)`<br/>`(Nombre, Módulo, Argumentos, Opciones)` | Crea un proceso enlazado que ejecuta el servidor. | `init` |
+| `start_monitor` | `(Módulo, Argumentos, Opciones)`<br/>`(Nombre, Módulo, Argumentos, Opciones)` | Crea un proceso monitorizado que ejecuta el servidor. | `init` |
+| `stop` | `(Identificador)`<br/>`(Identificador, Motivo, Timeout)` | Detiene un servidor creado. | `terminate` |
+| `call` | `(Identificador, Petición)`<br/>`(Identificador, Petición, Timeout)` | Envía una petición que espera una respuesta de forma síncrona. | `handle_call` |
+| `cast` | `(Identificador, Petición)` | Envía una petición que no espera una respuesta de forma asíncrona. | `handle_cast` |
+
+El parámetro *nombre*, cuando se inicia un servidor, sirve para registrar el proceso con un átomo, para ello se puede usar `{local,Nombre}` o `{global,Nombre}`, entre otras opciones. Al indicar `local` se registra el proceso sólo en el nodo actual, mientras que con `global` se registra en la red de nodos.
 
 ### El comportamiento: `gen_statem`
+
+Este comportamiento se utiliza para crear [máquinas de estados](https://www.erlang.org/doc/design_principles/statem.html) y sustituye al módulo [`gen_fsm`](https://www.erlang.org/doc/man/gen_fsm.html).
 
 ..
 
