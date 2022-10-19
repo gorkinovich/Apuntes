@@ -1133,7 +1133,7 @@ Este comportamiento se utiliza para crear [servidores genéricos](https://www.er
 | `code_change` | `(Versión, Estado, Extra)` | `{ok,Estado}`<br/>`{error,Motivo}` | Cambio en caliente. |
 | `terminate` | `(Motivo, Estado)` | - | Terminación del servidor. |
 
-Sólo son obligatorias `init`, `handle_call` y `handle_cast`, el resto son opcionales en las últimas versiones. En el caso de `terminate` podemos devolver cualquier valor que necesitemos. En el caso de `handle_info`, uno de sus usos es gestionar los mensajes que recibe cuando está enlazado o monitoriza otro proceso. 
+Sólo son obligatorias `init`, `handle_call` y `handle_cast`, el resto son opcionales. En el caso de `terminate` podemos devolver cualquier valor que necesitemos. En el caso de `handle_info`, uno de sus usos es gestionar los mensajes que recibe cuando está enlazado o monitoriza otro proceso. 
 
 Las opciones *extra* en la respuesta pueden ser `Timeout` e `hibernate`. El primero es un número entero de tiempo de espera en milisegundos o el átomo `infinity`, que es el valor por defecto como opción. El segundo envía al servidor a un estado de hibernación, a la espera de recibir un mensaje para reactivarse.
 
@@ -1167,7 +1167,7 @@ Este comportamiento se utiliza para crear [máquinas de estados](https://www.erl
 
 A diferencia del anterior comportamiento, el estado aquí se refiere al nombre del estado que se está ejecutando dentro de la máquina virtual, por lo que los datos es la información interna que equivale al estado de un servidor genérico.
 
-Sólo son obligatorias `init` y `callback_mode`, más las funciones `Estado` o `handle_event`, dependiendo de la configuración. El resto de funciones son opcionales en las últimas versiones.
+Sólo son obligatorias `init` y `callback_mode`, más las funciones `Estado` o `handle_event`, dependiendo de la configuración. El resto de funciones son opcionales.
 
 Una vez se ha inicializado la máquina, se invoca el evento para configurar el modo de funcionamiento con `callback_mode`, que tiene que devolver como mínimo una de las dos siguientes opciones:
 + `state_functions`: Los eventos se gestionan con las funciones `Estado/3`, requiriendo una función particular para cada estado de la máquina.
@@ -1211,7 +1211,37 @@ El parámetro *nombre*, cuando se inicia un servidor, sirve para registrar el pr
 
 Este comportamiento se utiliza para la [gestión de eventos](https://www.erlang.org/doc/design_principles/events.html) en un programa. Los eventos que se han de implementar son:
 
-..
+| Función | Parámetros | Resultados | Descripción |
+|:-------:|:----------:|:----------:|:------------|
+| `init` | `(Argumentos)` | `{ok,Estado}`<br/>`{ok,Estado,hibernate}`<br/>`{error,Motivo}` | Inicialización del gestor de eventos. |
+| `handle_call` | `(Petición, Estado)` | `{ok,Resultado,Estado}`<br/>`{ok,Resultado,Estado,hibernate}`<br/>`{swap_handler,Result,Args1,Estado,Gest2,Args2}`<br/>`{remove_handler,Resultado}` | Peticiones con respuesta. |
+| `handle_event` | `(Evento, Estado)` | `{ok,Estado}`<br/>`{ok,Estado,hibernate}`<br/>`{swap_handler,Args1,Estado,Gest2,Args2}`<br/>`remove_handler` | Peticiones sin respuesta. |
+| `handle_info` | `(Mensaje, Estado)` | `{ok,Estado}`<br/>`{ok,Estado,hibernate}`<br/>`{swap_handler,Args1,Estado,Gest2,Args2}`<br/>`remove_handler` | Mensajes recibidos que no son peticiones. |
+| `code_change` | `(Versión, Estado, Extra)` | `{ok,Estado}` | Cambio en caliente. |
+| `terminate` | `(Motivo, Estado)` | - | Terminación del gestor. |
+
+Sólo son obligatorias `init`, `handle_call` y `handle_event`, el resto son opcionales. Los valores de `Gest2` son indicar un módulo con un átomo o la tupla `{Módulo,Id}`.
+
+Las operaciones que gestionan el comportamiento están en el módulo [`gen_event`](https://www.erlang.org/doc/man/gen_event.html), entre las que tenemos las siguientes funciones:
+
+| Función | Parámetros | Descripción | Evento |
+|:-------:|:----------:|:------------|:------:|
+| `start` | `(Opciones)`<br/>`(Nombre, Opciones)` | Crea un proceso que procesa eventos. | - |
+| `start_link` | `()`<br/>`(Opciones)`<br/>`(Nombre, Opciones)` | Crea un proceso enlazado que procesa eventos. | - |
+| `start_monitor` | `()`<br/>`(Opciones)`<br/>`(Nombre, Opciones)` | Crea un proceso monitorizado que procesa eventos. | - |
+| `add_handler` | `(Identificador, Gestor, Argumentos)` | Añade un gestor de eventos al proceso. | `init` |
+| `add_sup_handler` | `(Identificador, Gestor, Argumentos)` | Añade un gestor de eventos al proceso, cuyas peticiones estarán supervisadas mediante enlace. | `init` |
+| `swap_handler` | `(Identificador, {Gestor1, Args1}, {Gestor2, Args2})` | Intercambia un gestor de eventos en el proceso. | `terminate`<br/>`init` |
+| `swap_sup_handler` | `(Identificador, {Gestor1, Args1}, {Gestor2, Args2})` | Intercambia un gestor de eventos en el proceso, por uno nuevo supervisado. | `terminate`<br/>`init` |
+| `delete_handler` | `(Identificador, Gestor, Argumentos)` | Elimina un gestor de eventos del proceso. | `terminate` |
+| `stop` | `(Identificador)`<br/>`(Identificador, Motivo, Timeout)` | Detiene un gestor creado. | `terminate` |
+| `call` | `(Identificador, Gestor, Petición)`<br/>`(Identificador, Gestor, Petición, Timeout)` | Envía una petición síncrona que espera una respuesta. | `handle_call` |
+| `notify` | `(Identificador, Evento)` | Envía un evento asíncrono. | `handle_event` |
+| `sync_notify` | `(Identificador, Evento)` | Envía un evento síncrono. | `handle_event` |
+
+El parámetro *nombre*, cuando se inicia un servidor, sirve para registrar el proceso con un átomo, para ello se puede usar `{local,Nombre}` o `{global,Nombre}`, entre otras opciones. Al indicar `local` se registra el proceso sólo en el nodo actual, mientras que con `global` se registra en la red de nodos. El *nombre* se puede usar como una opción con las funciones `start/1`. El parámetro *gestor* de nuevo es el nombre del módulo que gestiona los eventos o una tupla `{Módulo,Id}`.
+
+El funcionamiento del gestor de eventos consiste en crear un proceso, que va a administrar los gestores encargados de procesar los eventos que se produzcan, esto se hace con las funciones `start`. Una vez creado, se irán añadiendo gestores con `add_handler`. Configurado ya los gestores, se procederá a notificar los eventos con `notify`. El uso de `sync_notify` se reserva para cuando necesitamos que nuestro programa espere a que se termine de procesar el evento notificado. Si necesitamos hacer una petición con respuesta, usaremos la función `call`, para obtener información interna del gestor, por ejemplo.
 
 ### El comportamiento: `supervisor`
 
