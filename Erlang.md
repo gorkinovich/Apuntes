@@ -1308,6 +1308,7 @@ Este comportamiento se utiliza para [controlar aplicaciones](https://www.erlang.
 | Función | Parámetros | Resultados | Descripción |
 |:-------:|:----------:|:----------:|:------------|
 | `start` | `(Tipo, Argumentos)` | `{ok,PID}`<br/>`{ok,PID,Estado}`<br/>`{error,Motivo}` | Inicio de la aplicación. |
+| `prep_stop` | `(Estado)` | `Estado` | La aplicación va a finalizar pero todavía no lo ha hecho. |
 | `stop` | `(Estado)` | - | Fin de la aplicación. |
 
 El *tipo* en la inicialización habitualmente es `normal`, pero en aplicaciones distribuidas nos podemos encontrar con `{takeover,Nodo}` y `{failover,Nodo}`. Los *argumentos* corresponden con los valores definidos en la clave `mod` del fichero de configuración de la aplicación.
