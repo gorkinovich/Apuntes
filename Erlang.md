@@ -1247,7 +1247,57 @@ El funcionamiento del gestor de eventos consiste en crear un proceso, que va a a
 
 Este comportamiento se utiliza para [supervisar](https://www.erlang.org/doc/design_principles/sup_princ.html) la ejecución de procesos. Los eventos que se han de implementar son:
 
-..
+| Función | Parámetros | Resultados | Descripción |
+|:-------:|:----------:|:----------:|:------------|
+| `init` | `(Argumentos)` | `{ok,{Config,[Hijo]}}`<br/>`ignore` | Inicialización del supervisor. |
+
+La inicialización debe devolver una *configuración* del modo de funcionamiento del supervisor, así como una especificación de cada *hijo*, cuyas estructuras son:
+
+| Variable | Valores |
+|:--------:|:--------|
+| `Config` | `{Estrategia, Intensidad, Periodo}` |
+| `Config` | `#{strategy => Estrategia, intensity => Intensidad, period => Periodo, auto_shutdown => Apagado}` |
+| `Hijo` | `{Identificador, Llamada, Reinicio, Apagado, Tipo, Módulos}` |
+| `Hijo` | `#{id => Identificador, start => Llamada, restart => Reinicio, significant => Significativo, shutdown => Apagado, type => Tipo, modules => Módulos}` |
+
+Los valores que para la *configuración* son:
+
+| Variable | Defecto | Descripción |
+|:--------:|:-------:|:--------|
+| `Estrategia` | `one_for_one` | Estrategia de reinicio ante la terminación de los hijos:<br/>- `one_for_one` = Sólo el proceso terminado.<br/>- `one_for_all` = Todos los procesos.<br/>- `rest_for_one` = El proceso terminado y los siguientes.<br/>- `simple_one_for_one` = Sólo el proceso terminado. |
+| `Intensidad` | `1` | Número de reinicios máximos durante el periodo configurado. Superar la cifra aquí configurada finalizará la ejecución del supervisor y la de sus hijos. El valor será un entero mayor o igual que cero. |
+| `Periodo` | `5` | Tiempo en segundos máximos para el límite de reinicios máximos. El valor será un entero mayor que cero. |
+| `Apagado` | `never` | Estrategia de finalización ante la finalización de los hijos significativos del supervisor:<br/>- `never` = Nunca.<br/>- `any_significant` = Al morir alguno.<br/>- `all_significant` = Al morir todos. |
+
+Los valores que para la *especificación de un hijo* son:
+
+| Variable | Defecto | Valores |
+|:--------:|:-------:|:--------|
+| `Identificador` | - | Nombre identificador del proceso. |
+| `Llamada` | - | Función de llamada para crear el proceso:<br/>`{Módulo, Función, Argumentos}` |
+| `Reinicio` | `permanent` | Estrategia ante la terminación del proceso:<br/>- `permanent` = Reiniciar siempre.<br/>- `transient` = Reiniciar cuando falla.<br/>- `temporary` = Reiniciar nunca. |
+| `Significativo` | `false` | Indica si el proceso es un hijo significativo con un `true` o `false`. |
+| `Apagado` | `infinity` | Estrategia para terminar el proceso:<br/>- `brutal_kill` = Muerte inmediata.<br/>- `Timeout` = Muerte después de un tiempo.<br/>- `infinity` = Esperar a que termine. |
+| `Tipo` | `worker` | Tipo de proceso:<br/>- `worker` = Trabajador.<br/>- `supervisor` = Supervisor. |
+| `Módulos` | `[Módulo]` | Si el proceso implementa un comportamiento como `supervisor`, `gen_server` o `gen_statem`, con `[Módulo]` se indica cuál es el módulo con los *callbacks*, mientras que el valor `dynamic` se usa para los procesos de `gen_event`. Si no se indica su valor, es tomado del *módulo* indicado en la *llamada*. |
+
+Las operaciones que gestionan el comportamiento están en el módulo [`supervisor`](https://www.erlang.org/doc/man/supervisor.html), entre las que tenemos las siguientes funciones:
+
+| Función | Parámetros | Descripción |
+|:-------:|:----------:|:------------|
+| `start_link` | `(Módulo, Argumentos)`<br/>`(Nombre, Módulo, Argumentos)` | Crea un proceso enlazado de un supervisor. |
+| `start_child` | `(IdSup, Hijo)` | Añade una especificación de un hijo del supervisor e inicia su proceso. |
+| `terminate_child` | `(IdSup, IdHijo)` | Termina un proceso hijo del supervisor. |
+| `restart_child` | `(IdSup, IdHijo)` | Reinicia un proceso hijo del supervisor. |
+| `delete_child` | `(IdSup, IdHijo)` | Borra una especificación de un hijo del supervisor. |
+| `get_childspec` | `(IdSup, IdHijo)` | Devuelve la especificación de un hijo del supervisor. |
+| `count_children` | `(IdSup)` | Devuelve el estado actual de los hijos del supervisor. |
+| `which_children` | `(IdSup)` | Devuelve una lista de todos los hijos del supervisor. |
+| `check_childspecs` | `(Hijos)`<br/>`(Hijos, Apagado)` | Comprueba si una lista de especificaciones es correcta. |
+
+Con `start_link` se inicia el proceso de supervisión, que invoca la función `init`. Se pueden gestionar hijos de forma dinámica usando `start_child`, `terminate_child`, `restart_child` y `delete_child`.
+
+Cuando el supervisor está configurado como `simple_one_for_one`, sólo se podrá tener una única especificación de hijo para supervisar, porque todos los hijos que se supervisen van a ser instancias dinámicas de esta especificación. Por ello, el parámetro *hijo* de `start_child`, en lugar de ser una especificación, es una lista de argumentos que se concatena a la llamada indicada en la especificación única del supervisor.
 
 ### El comportamiento: `application`
 
@@ -1256,6 +1306,10 @@ Este comportamiento se utiliza para [controlar aplicaciones](https://www.erlang.
 ..
 
 ## La biblioteca estándar
+
+### Aplicaciones de la plataforma
+
+Estas son las [aplicaciones](https://www.erlang.org/doc/applications.html) que conforma la plataforma Erlang/OTP:
 
 ..
 
