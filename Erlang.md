@@ -1305,7 +1305,122 @@ Cuando el supervisor está configurado como `simple_one_for_one`, sólo se podr�
 
 Este comportamiento se utiliza para [controlar aplicaciones](https://www.erlang.org/doc/design_principles/applications.html) de Erlang. Los eventos que se han de implementar son:
 
-..
+| Función | Parámetros | Resultados | Descripción |
+|:-------:|:----------:|:----------:|:------------|
+| `start` | `(Tipo, Argumentos)` | `{ok,PID}`<br/>`{ok,PID,Estado}`<br/>`{error,Motivo}` | Inicio de la aplicación. |
+| `stop` | `(Estado)` | - | Fin de la aplicación. |
+
+El *tipo* en la inicialización habitualmente es `normal`, pero en aplicaciones distribuidas nos podemos encontrar con `{takeover,Nodo}` y `{failover,Nodo}`. Los *argumentos* corresponden con los valores definidos en la clave `mod` del fichero de configuración de la aplicación.
+
+Las operaciones que gestionan el comportamiento están en el módulo [`application`](https://www.erlang.org/doc/man/application.html), entre las que tenemos las siguientes funciones:
+
+| Función | Parámetros | Descripción |
+|:-------:|:----------:|:------------|
+| `start` | `(Aplicación)`<br/>`(Aplicación, Modo)` | Inicia una aplicación. |
+| `stop` | `(Application)` | Detiene una aplicación. |
+| `unload` | `(Aplicación)` | Quita una aplicación cargada. |
+| `loaded_applications` | `()` | Devuelve las aplicaciones cargadas. |
+| `which_applications` | `()`<br/>`(Timeout)` | Devuelve las aplicaciones que están ejecutándose. |
+| `get_all_env` | `()`<br/>`(Aplicación)` | Devuelve los valores definidos en el entorno de la aplicación. |
+| `get_env` | `(Clave)`<br/>`(Aplicación, Clave)`<br/>`(Aplicación, Clave, Defecto)` | Devuelve un valor definido en el entorno de la aplicación. |
+| `set_env` | `(Configuración)`<br/>`(Configuración, Opciones)`<br/>`(Aplicación, Clave, Valor)`<br/>`(Aplicación, Clave, Valor, Opciones)` | Modifica un valor definido en el entorno de la aplicación. |
+| `get_all_key` | `()`<br/>`(Aplicación)` | Devuelve las claves usadas en la configuración de la aplicación. |
+| `get_key` | `(Clave)`<br/>`(Aplicación, Clave)` | Devuelve un valor de la configuración de la aplicación. |
+
+Para poder aplicar este comportamiento es necesario que el proyecto siga la siguiente estructura durante el desarrollo:
+
+```
+my_app
+├── doc
+│   ├── internal
+│   ├── examples
+│   └── src
+├── include
+├── priv
+├── src
+│   └── my_app.app.src
+└── test
+```
+
+El directorio `src` es obligatorio. Son opcionales `priv` e `include`. Son recomendados `doc` y `test`. Para la versión de lanzamiento esta es la estructura necesaria:
+
+```
+my_app-version
+├── bin
+├── doc
+│   ├── examples
+│   ├── html
+│   ├── internal
+│   ├── man [1-9]
+│   └── pdf
+├── ebin
+│   └── my_app.app
+├── include
+├── priv
+│   ├── bin
+│   └── lib
+└── src
+```
+
+El directorio `ebin` es obligatorio. Son opcionales `src`, `priv`, `include`, `bin` y `doc`. Son recomendados `priv/lib` y `priv/bin`. Pero sobre todo es importante tener el fichero [`.app`](https://www.erlang.org/doc/man/app.html) que configura la aplicación y que tiene la siguiente forma:
+
+```
+{application, Nombre,
+  [{description,           Descripción},
+   {id,                    Identificador},
+   {vsn,                   Versión},
+   {modules,               Módulos},
+   {maxP,                  Procesos},
+   {maxT,                  Tiempo},
+   {registered,            Nombres},
+   {included_applications, Aplicaciones},
+   {optional_applications, Aplicaciones},
+   {applications,          Aplicaciones},
+   {env,                   Entorno},
+   {mod,                   {Módulo, Argumentos}},
+   {start_phases,          Fases},
+   {runtime_dependencies,  Dependencias}]}.
+```
+
+Cuyos tipos y valores son:
+
+| Elemento | Tipo | Defecto | Descripción |
+|:--------:|:----:|:-------:|:------------|
+| `Nombre` | `atom()` | - | Nombre de la aplicación. |
+| `description` | `string()` | `""` | Identificador del producto. |
+| `id` | `string()` | `""` | Identificador del producto. |
+| `vsn` | `string()` | `""` | Versión de la aplicación. |
+| `modules` | `[atom()]` | `[]` | Módulos que introduce la aplicación. |
+| `maxP` | `int()` | `infinity` | Número máximo de procesos. |
+| `maxT` | `int()` | `infinity` | Tiempo máximo de ejecución. |
+| `registered` | `[atom()]` | `[]` | Nombres registrados por la aplicación. |
+| `included_applications` | `[atom()]` | `[]` | Aplicaciones incluidas que serán cargadas pero no iniciadas automáticamente. |
+| `optional_applications` | `[atom()]` | `[]` | Aplicaciones opcionales de las que depende la aplicación. |
+| `applications` | `[atom()]` | `[]` | Aplicaciones de las que depende y que serán cargadas e iniciadas. |
+| `env` | `[{atom(), term()}]` | `[]` | Entorno con información necesaria para la aplicación. |
+| `mod` | `{atom(), list()}` | `[]` | Llamada inicial para arrancar la aplicación. |
+| `start_phases` | `{atom(), list()}` | `undefined` | Fases para arrancar la aplicación. |
+| `runtime_dependencies` | `[string()]` | `[]` | Dependencias que tiene la aplicación para ser ejecutada. |
+
+Por ejemplo:
+
+```Erlang
+{application, my_app,
+ [{description, "My App"},
+  {vsn, "1.0"},
+  {modules, [my_app, my_sup, my_worker]},
+  {registered, [my_worker]},
+  {applications, [kernel, stdlib]},
+  {mod, {my_app, []}}
+ ]}.
+```
+
+Tenemos una aplicación con tres módulos, un nombre que se va a registrar y unas dependencias. Con esto llamaríamos a la función `start` de `application`, indicando que la aplicación es `my_app` y eligiendo uno de los siguientes modos:
++ `permanent`: Si termina normal se cierran las otras aplicaciones y se apaga la máquina virtual. Si termina abruptamente ocurre lo mismo que al terminar normal.
++ `transient`: Si termina normal no ocurre nada. Si termina abruptamente se informa del fallo, se cierran las otras aplicaciones y se apagar la máquina virtual.
++ `temporary`: Este es el valor por defecto. Si termina normal no ocurre nada. Si termina abruptamente se informa del fallo, y la aplicación termina sin reiniciarse.
+
+Cuando queramos acceder a función del entorno definido en la configuración se puede usar la función `get_env`, que salvo que le hayamos indicado un valor de retorno por *defecto*, si no se encuentra la clave nos devolverá `undefined`, en caso contrario nos devuelve `{ok,Valor}`. Y para apagar la aplicación se utiliza la función `stop`.
 
 ## La biblioteca estándar
 
@@ -1313,7 +1428,195 @@ Este comportamiento se utiliza para [controlar aplicaciones](https://www.erlang.
 
 Estas son las [aplicaciones](https://www.erlang.org/doc/applications.html) que conforma la plataforma Erlang/OTP:
 
-..
+| Categoría | Aplicación | Descripción |
+|:---------:|:----------:|:------------|
+| Básico | [`compiler`](https://www.erlang.org/doc/apps/compiler/index.html) | Compilador de Erlang. |
+| Básico | [`erts`](https://www.erlang.org/doc/apps/erts/index.html) | Entorno de ejecución de Erlang. |
+| Básico | [`kernel`](https://www.erlang.org/doc/apps/kernel/index.html) | Núcleo de ejecución de Erlang. |
+| Básico | [`sasl`](https://www.erlang.org/doc/apps/sasl/index.html) | Sistema para soporte de bibliotecas. |
+| Básico | [`stdlib`](https://www.erlang.org/doc/apps/stdlib/index.html) | Bibliotecas básicas de Erlang. |
+| Datos | [`mnesia`](https://www.erlang.org/doc/apps/mnesia/index.html) | Base de datos distribuida [NoSQL](https://es.wikipedia.org/wiki/NoSQL). |
+| Datos | [`odbc`](https://www.erlang.org/doc/apps/odbc/index.html) | Interfaz para bases de datos [SQL](https://es.wikipedia.org/wiki/SQL). |
+| Interfaces | [`asn1`](https://www.erlang.org/doc/apps/asn1/index.html) | Soporte para [ASN.1](https://es.wikipedia.org/wiki/ASN.1) (notación de sintaxis abstracta). |
+| Interfaces | [`crypto`](https://www.erlang.org/doc/apps/crypto/index.html) | Soporte para criptografía. |
+| Interfaces | [`diameter`](https://www.erlang.org/doc/apps/diameter/index.html) | Soporte para el protocolo [Diameter](https://es.wikipedia.org/wiki/Diameter_%28protocolo%29). |
+| Interfaces | [`eldap`](https://www.erlang.org/doc/apps/eldap/index.html) | Soporte para el protocolo [LDAP](https://es.wikipedia.org/wiki/Protocolo_ligero_de_acceso_a_directorios). |
+| Interfaces | [`erl_interface`](https://www.erlang.org/doc/apps/erl_interface/index.html) | Interfaz de bajo nivel con [C](https://es.wikipedia.org/wiki/C_%28lenguaje_de_programaci%C3%B3n%29). |
+| Interfaces | [`ftp`](https://www.erlang.org/doc/apps/ftp/index.html) | Soporte para el protocolo [FTP](https://es.wikipedia.org/wiki/Protocolo_de_transferencia_de_archivos). |
+| Interfaces | [`inets`](https://www.erlang.org/doc/apps/inets/index.html) | Soporte para servidores [HTTP](https://es.wikipedia.org/wiki/Protocolo_de_transferencia_de_hipertexto). |
+| Interfaces | [`jinterface`](https://www.erlang.org/doc/apps/jinterface/index.html) | Interfaz de bajo nivel con [Java](https://es.wikipedia.org/wiki/Java_%28lenguaje_de_programaci%C3%B3n%29). |
+| Interfaces | [`megaco`](https://www.erlang.org/doc/apps/megaco/index.html) | Soporte para el protocolo [Megaco/H.248](https://es.wikipedia.org/wiki/Megaco). |
+| Interfaces | [`public_key`](https://www.erlang.org/doc/apps/public_key/index.html) | Soporte para [claves públicas](https://es.wikipedia.org/wiki/Criptograf%C3%ADa_asim%C3%A9trica). |
+| Interfaces | [`ssh`](https://www.erlang.org/doc/apps/ssh/index.html) | Soporte para el protocolo [SSH](https://es.wikipedia.org/wiki/Secure_Shell). |
+| Interfaces | [`ssl`](https://www.erlang.org/doc/apps/ssl/index.html) | Soporte para el protocolo [SSL](https://es.wikipedia.org/wiki/Seguridad_de_la_capa_de_transporte). |
+| Interfaces | [`tftp`](https://www.erlang.org/doc/apps/tftp/index.html) | Soporte para el protocolo [TFTP](https://es.wikipedia.org/wiki/TFTP). |
+| Interfaces | [`wx`](https://www.erlang.org/doc/apps/wx/index.html) | Soporte para [wxWidgets](https://es.wikipedia.org/wiki/WxWidgets). |
+| Interfaces | [`xmerl`](https://www.erlang.org/doc/apps/xmerl/index.html) | Soporte para el formato [XML 1.0](https://es.wikipedia.org/wiki/Extensible_Markup_Language). |
+| Herramientas | [`debugger`](https://www.erlang.org/doc/apps/debugger/index.html) | Depurador de Erlang. |
+| Herramientas | [`dialyzer`](https://www.erlang.org/doc/apps/dialyzer/index.html) | Analizador de tipos. |
+| Herramientas | [`et`](https://www.erlang.org/doc/apps/et/index.html) | Trazador de eventos. |
+| Herramientas | [`observer`](https://www.erlang.org/doc/apps/observer/index.html) | Inspector de sistemas distribuidos. |
+| Herramientas | [`parsetools`](https://www.erlang.org/doc/apps/parsetools/index.html) | Parser y análisis léxico de código. |
+| Herramientas | [`reltool`](https://www.erlang.org/doc/apps/reltool/index.html) | Gestor de aplicaciones para su lanzamiento final. |
+| Herramientas | [`runtime_tools`](https://www.erlang.org/doc/apps/runtime_tools/index.html) | Herramientas para la ejecución. |
+| Herramientas | [`syntax_tools`](https://www.erlang.org/doc/apps/syntax_tools/index.html) | Soporte para [árboles sintácticos abstractos](https://es.wikipedia.org/wiki/%C3%81rbol_de_sintaxis_abstracta) de Erlang. |
+| Herramientas | [`tools`](https://www.erlang.org/doc/apps/tools/index.html) | Herramientas auxiliares del sistema. |
+| Tests | [`common_test`](https://www.erlang.org/doc/apps/common_test/index.html) | Testing automático para aplicaciones. |
+| Tests | [`eunit`](https://www.erlang.org/doc/apps/eunit/index.html) | Test unitarios para módulos. |
+| Documentación | [`edoc`](https://www.erlang.org/doc/apps/edoc/index.html) | Genera documentación tomando las etiquetas en los comentarios de un módulo. |
+| Documentación | [`erl_docgen`](https://www.erlang.org/doc/apps/erl_docgen/index.html) | Genera documentación para la OTP. |
+| Mantenimiento | [`os_mon`](https://www.erlang.org/doc/apps/os_mon/index.html) | Monitor de recursos del sistema operativo. |
+| Mantenimiento | [`snmp`](https://www.erlang.org/doc/apps/snmp/index.html) | Gestiona el protocolo SNMP. |
+
+### Módulos de `erts`
+
+Los módulos principales son:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| `atomics` | Soporte para operaciones atómicas. |
+| `counters` | Soporte para operaciones de conteo. |
+| `erlang` | Funciones nativas del lenguaje. |
+| `erl_driver` | Interfaz para drivers de Erlang. |
+| `erl_nif` | Interfaz para funciones nativas de usuario. |
+| `erl_prim_loader` | Cargador de bajo nivel de Erlang. |
+| `erl_tracer` | Comportamiento de trazado en Erlang. |
+| `init` | Gestor del arranque del sistema Erlang. |
+| `persistent_term` | Persistencia de datos. |
+| `zlib` | Interfaz para ficheros `.zip`. |
+
+### Módulos de `kernel`
+
+Los módulos generales del sistema son:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| `application` | Soporte para aplicaciones OTP genéricas. |
+| `code` | Servidor de código Erlang. |
+| `erl_boot_server` | Servidor de arranque para otras máquinas Erlang. |
+| `erl_ddll` | Carga y enlace dinámica de drivers en Erlang. |
+| `erl_epmd` | Interfaz para el [`epmd`](https://www.erlang.org/doc/man/epmd.html). |
+| `error_handler` | Gestor por defecto de errores del sistema. |
+| `file` | Operaciones con ficheros. |
+| `global` | Sistema para registrar nombres globales. |
+| `global_group` | Grupos de nodos para los grupos de registro de nombres globales. |
+| `heart` | Sistema para monitorizar el proceso `heart`, que controla qué nodos Erlang de la red siguen vivos. |
+| `os` | Operaciones del sistema operativo. |
+| `pg` | Grupos de procesos con nombre distribuidos. |
+| `seq_trace` | Trazado secuencial de transferencias de información. |
+
+Los módulos de comunicaciones son:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| `erpc` | Llamadas a rutinas remotas ([RPC](https://es.wikipedia.org/wiki/Llamada_a_procedimiento_remoto)) mejoradas. |
+| `gen_sctp` | Comunicación con *sockets* usando [SCTP](https://es.wikipedia.org/wiki/Stream_Control_Transmission_Protocol). |
+| `gen_tcp` | Comunicación con *sockets* usando [TCP](https://es.wikipedia.org/wiki/Protocolo_de_control_de_transmisi%C3%B3n). |
+| `gen_udp` | Comunicación con *sockets* usando [UDP](https://es.wikipedia.org/wiki/Protocolo_de_datagramas_de_usuario). |
+| `inet` | Soporte para el protocolo [TCP/IP](https://es.wikipedia.org/wiki/Protocolo_de_control_de_transmisi%C3%B3n). |
+| `inet_res` | Cliente [DNS](https://es.wikipedia.org/wiki/Sistema_de_nombres_de_dominio) básico. |
+| `net` | Soporte para la interfaz de red. |
+| `net_adm` | Rutinas para administrar la red de nodos Erlang. |
+| `net_kernel` | Núcleo de la red de nodos Erlang. |
+| `rpc` | Llamadas a rutinas remotas ([RPC](https://es.wikipedia.org/wiki/Llamada_a_procedimiento_remoto)). |
+| `socket` | Interfaz para manejar *sockets*. |
+
+Los módulos de registro de eventos son:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| `disk_log` | Sistema de registro de eventos (*logs*) con ficheros. |
+| `logger` | Interfaz para el registro de eventos (*logs*). |
+| `logger_filters` | Filtrado del registro de eventos (*logs*). |
+| `logger_formatter` | Formato para el registro de eventos (*logs*). |
+| `logger_std_h` | Gestor estándar del registro de eventos (*logs*). |
+| `logger_disk_log_h` | Registro de eventos (*logs*) con ficheros. |
+| `wrap_log_reader` | Servicio para leer registros de disco de tipo *wrap* formateados internamente. |
+
+### Módulos de `stdlib`
+
+Los módulos generales son:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| `base64` | Codificación y decodificación con [Base64](https://es.wikipedia.org/wiki/Base64) ([RFC 2045](https://www.ietf.org/rfc/rfc2045.txt)). |
+| `c` | Interfaz de la consola Erlang. |
+| `calendar` | Manejo de fechas y horas. |
+| `erl_error` | Utilidades para informar de errores. |
+| `erl_tar` | Manejo de ficheros `.tar`. |
+| `file_sorter` | Ordena el contenido de ficheros. |
+| `filelib` | Utilidades para manejar ficheros. |
+| `filename` | Manipulación de nombres de ficheros. |
+| `gen_event` | Gestor de eventos genérico. |
+| `gen_server` | Servidor genérico. |
+| `gen_statem` | Máquina de estados genérica. |
+| `io` | Interfaz estándar de entrada y salida. |
+| `io_lib` | Funciones de entrada y salida. |
+| `log_mf_h` | Gestor de eventos que registra eventos en ficheros. |
+| `math` | Funciones matemáticas. |
+| `peer` | Inicia y controla nodos enlazados. |
+| `pool` | Gestor de distribución de carga con procesos. |
+| `proc_lib` | Funciones para la creación de procesos. |
+| `rand` | Generación de números pseudo-aleatorios. |
+| `re` | Manejo de expresiones regulares para Erlang. |
+| `shell` | Consola de comandos de Erlang. |
+| `shell_docs` | Visualización de la documentación en la consola de Erlang. |
+| `slave` | Inicia y controla nodos esclavos. |
+| `supervisor` | Supervisor genérico de procesos. |
+| `supervisor_bridge` | Puente supervisor genérico de procesos. |
+| `sys` | Interfaz para mensajes de sistema. |
+| `timer` | Manejo de temporizadores. |
+| `unicode` | Conversión de caracteres Unicode. |
+| `uri_string` | Procesado de [URIs](https://es.wikipedia.org/wiki/Identificador_de_recursos_uniforme). |
+| `win32reg` | Manejo del registro de Windows. |
+| `zip` | Manejo de ficheros `.zip`. |
+
+Los módulos de estructuras de datos son:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| `array` | Manejo de arrays. |
+| `binary` | Manejo de binarios. |
+| `dict` | Manejo de diccionarios clave-valor. Las claves se comparan con `=:=`. |
+| `digraph` | Manejo de grafos dirigidos. |
+| `digraph_utils` | Algoritmos para grafos dirigidos. |
+| `gb_sets` | Manejo de conjuntos implementados con árboles balanceados. Los elementos se comparan con `==`. |
+| `gb_trees` | Manejo de árboles balanceados. Los elementos se comparan con `==`. |
+| `lists` | Manejo de listas. |
+| `maps` | Manejo de mapas clave-valor. |
+| `orddict` | Manejo de diccionarios clave-valor implementados con listas ordenadas. Las claves se comparan con `==`. |
+| `ordsets` | Manejo de conjuntos implementados con listas ordenadas. Los elementos se comparan con `==`. |
+| `proplists` | Manejo de listas de propiedades clave-valor. Las claves se comparan con `=:=`. |
+| `queue` | Manejo de colas. |
+| `sets` | Manejo de conjuntos. Los elementos se comparan con `=:=`. |
+| `sofs` | Manejo de conjuntos de conjuntos. Los elementos se comparan con `==`. |
+| `string` | Manejo de cadenas de texto. |
+
+Los módulos de bases de datos son:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| `dets` | Base de datos [NoSQL](https://es.wikipedia.org/wiki/NoSQL) en ficheros. |
+| `ets` | Base de datos [NoSQL](https://es.wikipedia.org/wiki/NoSQL) en memoria. |
+| `ms_transform` | Transformación de sintaxis para crear especificaciones de ajuste de patrones. |
+| `qlc` | Interfaz de consultas a Mnesia, ETS, DETS y demás. |
+
+Los módulos de gestión del lenguaje son:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| `beam_lib` | Interfaz del formato de ficheros BEAM. |
+| `epp` | Preprocesador de código Erlang. |
+| `erl_anno` | Tipo de datos abstracto para las anotaciones del compilador de Erlang. |
+| `erl_eval` | Meta-interprete de Erlang. |
+| `erl_expand_records` | Transforma formas abstractas de código Erlang. |
+| `erl_features` | Manejo de características del lenguaje. |
+| `erl_id_trans` | Transformación de parseado identidad. |
+| `erl_internal` | Definiciones internas de Erlang. |
+| `erl_lint` | *Linter* para el lenguaje Erlang. |
+| `erl_parse` | Parser del lenguaje Erlang. |
+| `erl_pp` | Representación legible de Erlang. |
+| `erl_scan` | Generador de tokens del lenguaje Erlang. |
 
 ### Funciones nativas del lenguaje
 
@@ -1321,7 +1624,11 @@ El módulo [`erlang`](https://www.erlang.org/doc/man/erlang.html) contiene la ma
 
 ..
 
-## Herramientas varias
+### Manejo de estructuras de datos
+
+..
+
+### ETS, DETS y Mnesia
 
 ..
 
