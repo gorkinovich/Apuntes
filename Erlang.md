@@ -1205,7 +1205,7 @@ Las operaciones que gestionan el comportamiento están en el módulo [`gen_state
 | `call` | `(Identificador, Mensaje)`<br/>`(Identificador, Mensaje, Timeout)` | Envía un mensaje que espera una respuesta de forma síncrona. | `Estado`<br/>`handle_event` |
 | `cast` | `(Identificador, Mensaje)` | Envía un mensaje que no espera una respuesta de forma asíncrona. | `Estado`<br/>`handle_event` |
 
-El parámetro *nombre*, cuando se inicia un servidor, sirve para registrar el proceso con un átomo, para ello se puede usar `{local,Nombre}` o `{global,Nombre}`, entre otras opciones. Al indicar `local` se registra el proceso sólo en el nodo actual, mientras que con `global` se registra en la red de nodos.
+El parámetro *nombre*, cuando se inicia una máquina de estados, sirve para registrar el proceso con un átomo, para ello se puede usar `{local,Nombre}` o `{global,Nombre}`, entre otras opciones. Al indicar `local` se registra el proceso sólo en el nodo actual, mientras que con `global` se registra en la red de nodos.
 
 ### El comportamiento: `gen_event`
 
@@ -1239,7 +1239,7 @@ Las operaciones que gestionan el comportamiento están en el módulo [`gen_event
 | `notify` | `(Identificador, Evento)` | Envía un evento asíncrono. | `handle_event` |
 | `sync_notify` | `(Identificador, Evento)` | Envía un evento síncrono. | `handle_event` |
 
-El parámetro *nombre*, cuando se inicia un servidor, sirve para registrar el proceso con un átomo, para ello se puede usar `{local,Nombre}` o `{global,Nombre}`, entre otras opciones. Al indicar `local` se registra el proceso sólo en el nodo actual, mientras que con `global` se registra en la red de nodos. El *nombre* se puede usar como una opción con las funciones `start/1`. El parámetro *gestor* de nuevo es el nombre del módulo que gestiona los eventos o una tupla `{Módulo,Id}`.
+El parámetro *nombre*, cuando se inicia un procesador de eventos, sirve para registrar el proceso con un átomo, para ello se puede usar `{local,Nombre}` o `{global,Nombre}`, entre otras opciones. Al indicar `local` se registra el proceso sólo en el nodo actual, mientras que con `global` se registra en la red de nodos. El *nombre* se puede usar como una opción con las funciones `start/1`. El parámetro *gestor* de nuevo es el nombre del módulo que gestiona los eventos o una tupla `{Módulo,Id}`.
 
 El funcionamiento del gestor de eventos consiste en crear un proceso, que va a administrar los gestores encargados de procesar los eventos que se produzcan, esto se hace con las funciones `start`. Una vez creado, se irán añadiendo gestores con `add_handler`. Configurado ya los gestores, se procederá a notificar los eventos con `notify`. El uso de `sync_notify` se reserva para cuando necesitamos que nuestro programa espere a que se termine de procesar el evento notificado. Si necesitamos hacer una petición con respuesta, usaremos la función `call`, para obtener información interna del gestor, por ejemplo.
 
@@ -1296,6 +1296,8 @@ Las operaciones que gestionan el comportamiento están en el módulo [`superviso
 | `check_childspecs` | `(Hijos)`<br/>`(Hijos, Apagado)` | Comprueba si una lista de especificaciones es correcta. |
 
 Con `start_link` se inicia el proceso de supervisión, que invoca la función `init`. Se pueden gestionar hijos de forma dinámica usando `start_child`, `terminate_child`, `restart_child` y `delete_child`.
+
+El parámetro *nombre*, cuando se inicia un supervisor, sirve para registrar el proceso con un átomo, para ello se puede usar `{local,Nombre}` o `{global,Nombre}`, entre otras opciones. Al indicar `local` se registra el proceso sólo en el nodo actual, mientras que con `global` se registra en la red de nodos.
 
 Cuando el supervisor está configurado como `simple_one_for_one`, sólo se podrá tener una única especificación de hijo para supervisar, porque todos los hijos que se supervisen van a ser instancias dinámicas de esta especificación. Por ello, el parámetro *hijo* de `start_child`, en lugar de ser una especificación, es una lista de argumentos que se concatena a la llamada indicada en la especificación única del supervisor.
 
