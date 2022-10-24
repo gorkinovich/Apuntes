@@ -1621,9 +1621,246 @@ Los módulos de gestión del lenguaje son:
 
 ### Funciones nativas del lenguaje
 
-El módulo [`erlang`](https://www.erlang.org/doc/man/erlang.html) contiene la mayor parte de las funciones nativas que hay en el lenguaje. Algunas de estas funciones no requieren indicar su módulo para invocarlas.
+El módulo [`erlang`](https://www.erlang.org/doc/man/erlang.html) contiene la mayor parte de las funciones nativas que hay en el lenguaje. Algunas de estas funciones no requieren indicar su módulo para invocarlas. Algunas de las funciones generales son:
 
-..
+| Función | Descripción |
+|:-------:|:------------|
+| `error` | Lanza un error de ejecución. |
+| `garbage_collect` | Invoca al recolector de basura. |
+| `halt` | Para el entorno de ejecución de Erlang. |
+| `make_ref` | Crea una referencia única. |
+| `memory` | Da información sobre la memoria usada por Erlang. |
+| `nif_error` | Lanza un error de ejecución. |
+| `raise` | Lanza una excepción en ejecución. |
+| `statistics` | Devuelve estadísticas sobre el sistema. |
+| `system_flag` | Modifica el comportamiento del sistema. |
+| `system_info` | Devuelve información sobre el sistema. |
+| `system_monitor` | Obtiene/modifica la configuración para monitorizar el sistema. |
+| `system_profile` | Obtiene/modifica la configuración del sistema. |
+| `throw` | Lanza una excepción en ejecución. |
+
+Estas son las funciones para comprobar tipos:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `is_atom` | Indica si es de tipo átomo. |
+| `is_binary` | Indica si es de tipo binario. |
+| `is_bitstring` | Indica si es de tipo binario. |
+| `is_boolean` | Indica si es de tipo booleano. |
+| `is_float` | Indica si es de tipo coma flotante. |
+| `is_function` | Indica si es de tipo función. |
+| `is_integer` | Indica si es de tipo entero. |
+| `is_list` | Indica si es de tipo lista. |
+| `is_map` | Indica si es de tipo mapa. |
+| `is_number` | Indica si es de tipo número. |
+| `is_pid` | Indica si es de tipo PID. |
+| `is_port` | Indica si es de tipo puerto. |
+| `is_record` | Indica si es de tipo registro. |
+| `is_reference` | Indica si es de tipo referencia. |
+| `is_tuple` | Indica si es de tipo tupla. |
+
+Estas son las funciones para convertir entre tipos:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `atom_to_binary` | De átomo a texto en binario. |
+| `atom_to_list` | De átomo a texto en lista. |
+| `binary_to_atom` | De texto en binario a átomo. |
+| `binary_to_existing_atom` | De texto en binario a átomo. |
+| `binary_to_float` | De texto en binario a coma flotante. |
+| `binary_to_integer` | De texto en binario a entero. |
+| `binary_to_list` | De binario a lista. |
+| `binary_to_term` | De binario a valor literal. |
+| `bitstring_to_list` | De binario a lista. |
+| `float_to_binary` | De coma flotante a texto en binario. |
+| `float_to_list` | De coma flotante a texto en lista. |
+| `fun_to_list` | De valor funcional a texto en lista. |
+| `integer_to_binary` | De entero a texto en binario. |
+| `integer_to_list` | De entero a texto en lista. |
+| `iolist_to_binary` | De lista de entrada a binario. |
+| `iolist_to_iovec` | De lista de entrada a vector de entrada. |
+| `list_to_atom` | De texto en lista a átomo. |
+| `list_to_binary` | De lista a binario. |
+| `list_to_bitstring` | De lista a binario. |
+| `list_to_existing_atom` | De texto en lista a átomo. |
+| `list_to_float` | De texto en lista a coma flotante. |
+| `list_to_integer` | De texto en lista a entero. |
+| `list_to_pid` | De texto en lista a PID. |
+| `list_to_port` | De texto en lista a puerto. |
+| `list_to_ref` | De texto en lista a referencia. |
+| `list_to_tuple` | De lista a tupla. |
+| `pid_to_list` | De PID a texto en lista. |
+| `port_to_list` | De puerto a texto en lista. |
+| `ref_to_list` | De referencia a texto en lista. |
+| `term_to_binary` | De valor literal a binario. |
+| `term_to_iovec` | De valor literal a vector de entrada. |
+| `tuple_to_list` | De tupla a lista. |
+
+Estas son las funciones para temas numéricos:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `abs` | Devuelve el valor absoluto de un número. |
+| `adler32` | Calcula un *checksum* [*Adler-32*](https://en.wikipedia.org/wiki/Adler-32). |
+| `adler32_combine` | Calcula un *checksum* [*Adler-32*](https://en.wikipedia.org/wiki/Adler-32). |
+| `ceil` | Devuelve el menor entero igual o mayor que el número actual. |
+| `crc32` | Calcula un *checksum* [*CRC-32*](https://es.wikipedia.org/wiki/Verificaci%C3%B3n_de_redundancia_c%C3%ADclica). |
+| `crc32_combine` | Calcula un *checksum* [*CRC-32*](https://es.wikipedia.org/wiki/Verificaci%C3%B3n_de_redundancia_c%C3%ADclica). |
+| `external_size` | Calcula el tamaño en bytes de un valor literal. |
+| `float` | Transforma un número en coma flotante. |
+| `floor` | Devuelve el mayor entero igual o menor que el número actual. |
+| `max` | Devuelve el valor mayor. |
+| `md5` | Calcula un [MD5](https://es.wikipedia.org/wiki/MD5). |
+| `md5_final` | Finaliza el cálculo de un [MD5](https://es.wikipedia.org/wiki/MD5). |
+| `md5_init` | Inicia el cálculo de un [MD5](https://es.wikipedia.org/wiki/MD5). |
+| `md5_update` | Actualiza el cálculo de un [MD5](https://es.wikipedia.org/wiki/MD5). |
+| `min` | Devuelve el valor menor. |
+| `phash2` | Devuelve un *hash* para un valor literal. |
+| `round` | Redondea un número. |
+| `trunc` | Trunca un número quitando los decimales. |
+| `unique_integer` | Genera un número entero único. |
+
+Estas son las funciones para manejar fechas y horas:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `convert_time_unit` | Transforma marcas de tiempo. |
+| `date` | Devuelve la fecha actual. |
+| `localtime` | Devuelve la fecha y hora actual. |
+| `localtime_to_universaltime` | Transforma a horario UTC. |
+| `monotonic_time` | Devuelve el tiempo actual de ejecución. |
+| `system_time` | Devuelve el tiempo actual del sistema. |
+| `time` | Devuelve la hora actual. |
+| `time_offset` | Devuelve la diferencia entre el tiempo monótono y el del sistema. |
+| `timestamp` | Devuelve una marca de tiempo. |
+| `universaltime` | Devuelve la fecha y hora actual en UTC. |
+| `universaltime_to_localtime` | Transforma a horario local. |
+
+Estas son las funciones para manejar temporizadores:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `cancel_timer` | Cancela un temporizador. |
+| `read_timer` | Consulta un temporizador. |
+| `start_timer` | Inicia un temporizador. |
+
+Estas son las funciones para manejar listas:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `hd` | Devuelve la cabeza de la lista. |
+| `length` | Devuelve el número de elementos de una lista. |
+| `tl` | Devuelve la cola de la lista. |
+
+Estas son las funciones para manejar tuplas:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `append_element` | Añade una componente adicional a una tupla. |
+| `delete_element` | Borra una componente en una tupla. |
+| `element` | Devuelve una componente en una tupla. |
+| `insert_element` | Inserta una componente adicional a una tupla. |
+| `make_tuple` | Crea una tupla con todas las componentes iguales. |
+| `setelement` | Modifica una componente en una tupla. |
+| `tuple_size` | Devuelve el número de componente de una tupla. |
+
+Estas son las funciones para manejar mapas:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `is_map_key` | Indica si la clave está en el mapa. |
+| `map_get` | Obtiene el valor para una clave en el mapa. |
+| `map_size` | Devuelve el número de elementos de un mapa. |
+
+Estas son las funciones para manejar funciones o módulos:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `apply` | Invoca una función con una serie de argumentos. |
+| `check_old_code` | Comprueba si se está ejecutando código viejo. |
+| `check_process_code` | Comprueba si se está ejecutando código viejo. |
+| `function_exported` | Comprueba si existe una función. |
+| `fun_info` | Devuelve información relativa a una función. |
+| `is_builtin` | Indica si es de una función nativa. |
+| `load_nif` | Carga código nativo para un módulo. |
+| `loaded` | Devuelve la lista de todos los módulos cargados. |
+| `pre_loaded` | Devuelve la lista de todos los módulos pre-cargados al iniciar el entorno de ejecución de Erlang. |
+
+Estas son las funciones para manejar otras estructuras de datos:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `binary_part` | Devuelve un fragmento de un binario. |
+| `bit_size` | Devuelve el tamaño en bits de un binario. |
+| `byte_size` | Devuelve el tamaño en bytes de un binario. |
+| `decode_packet` | Decodifica un paquete binario. |
+| `iolist_size` | Devuelve el tamaño en bytes de una lista de entrada. |
+| `match_spec_test` | Comprueba una especificación de encaje. |
+| `size` | Devuelve el número de elementos en un binario o tupla. |
+| `split_binary` | Parte un binario en dos fragmentos. |
+
+Estas son las funciones para manejar procesos:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `alias` | Devuelve una referencia como alias del proceso actual. |
+| `demonitor` | Elimina una relación de monitor. |
+| `erase` | Borra elementos del diccionario del proceso. |
+| `exit` | Termina la ejecución de un proceso. |
+| `get` | Consulta elementos del diccionario del proceso. |
+| `get_keys` | Devuelve las claves del diccionario del proceso. |
+| `group_leader` | Obtiene/modifica el líder de grupo. |
+| `hibernate` | Hiberna un proceso en ejecución. |
+| `is_process_alive` | Indica si el proceso está vivo. |
+| `link` | Enlaza el proceso actual con otro. |
+| `monitor` | Establece una relación de monitor. |
+| `process_display` | Muestra información sobre un proceso. |
+| `process_flag` | Modifica el comportamiento de un proceso. |
+| `process_info` | Devuelve información sobre un proceso. |
+| `processes` | Devuelve los procesos actuales del nodo. |
+| `put` | Modifica elementos del diccionario del proceso. |
+| `self` | Devuelve el PID del proceso actual. |
+| `send` | Envía un mensaje a un proceso o puerto. |
+| `send_after` | Envía un mensaje a un proceso o puerto. |
+| `send_nosuspend` | Envía un mensaje a un proceso o puerto. |
+| `spawn` | Crea un proceso. |
+| `spawn_link` | Crea un proceso enlazado. |
+| `spawn_monitor` | Crea un proceso monitorizado. |
+| `spawn_opt` | Crea un proceso avanzado. |
+| `spawn_request` | Pide crear un proceso. |
+| `spawn_request_abandon` | Descarta la petición de crear un proceso. |
+| `unalias` | Elimina una referencia como alias del proceso actual. |
+| `unlink` | Elimina un enlace de un proceso con otro. |
+| `yield` | Cede a otro proceso en espera la ejecución. |
+
+Estas son las funciones para manejar nodos:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `disconnect_node` | Fuerza la desconexión de un nodo. |
+| `get_cookie` | Devuelve la *cookie* de un nodo. |
+| `is_alive` | Indica si el nodo actual está vivo. |
+| `monitor_node` | Modifica una relación de monitor con un nodo. |
+| `node` | Devuelve el nombre de un nodo. |
+| `nodes` | Devuelve nombres de nodos. |
+| `register` | Registra un nombre en el nodo. |
+| `registered` | Devuelve los nombres registrados. |
+| `set_cookie` | Modifica la *cookie* de un nodo. |
+| `unregister` | Elimina un nombre registrado en el nodo. |
+| `whereis` | Devuelve el proceso o puerto asociado a un nombre. |
+
+Estas son las funciones para manejar puertos de comunicación:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `open_port` | Abre un puerto. |
+| `port_call` | Realiza una petición síncrona a un puerto. |
+| `port_close` | Cierra un puerto. |
+| `port_command` | Envía datos a un puerto. |
+| `port_connect` | Cambia el dueño de un puerto. |
+| `port_control` | Ejecuta una operación de control. |
+| `port_info` | Devuelve información sobre un puerto. |
+| `ports` | Devuelve los puertos usados por el nodo. |
 
 ### Manejo de estructuras de datos
 
