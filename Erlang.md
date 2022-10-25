@@ -1,6 +1,4 @@
-﻿
-
-# Erlang
+﻿# Erlang
 
 [Erlang](https://www.erlang.org/) es un lenguaje de programación diseñado para desarrollar sistemas de comunicación grandes en tiempo real con alta disponibilidad, que sean escalables y tolerantes a fallos. Es un lenguaje de [programación funcional](https://es.wikipedia.org/wiki/Programaci%C3%B3n_funcional), cuya característica principal es disponer de [concurrencia](https://es.wikipedia.org/wiki/Concurrencia_%28inform%C3%A1tica%29). Otras propiedades del lenguaje son la [inmutabilidad](https://es.wikipedia.org/wiki/Objeto_inmutable) de los datos, el [encaje de patrones](https://es.wikipedia.org/wiki/B%C3%BAsqueda_de_patrones), la evaluación impaciente, el [tipado dinámico](https://es.wikipedia.org/wiki/Sistema_de_tipos), la [computación distribuida](https://es.wikipedia.org/wiki/Computaci%C3%B3n_distribuida) o el [cambio en caliente](https://es.wikipedia.org/wiki/Cambio_en_caliente), entre muchas otras.
 
@@ -1862,6 +1860,39 @@ Estas son las funciones para manejar puertos de comunicación:
 | `port_info` | Devuelve información sobre un puerto. |
 | `ports` | Devuelve los puertos usados por el nodo. |
 
+### Entrada y salida por consola
+
+El módulo [`io`](https://www.erlang.org/doc/man/io.html) se encarga de la gestión de entrada y salida estándar. Para mostrar información en la terminal tenemos la función `format` y para leer una cadena de texto la función `get_line`, que siguen la siguiente sintaxis:
+
+$$\texttt{format(} \mathit{formato} \textcolor{red}{[} \texttt{,} \mathit{datos} \textcolor{red}{]} \texttt{)}$$
+
+$$\texttt{get\char95line(} \mathit{mensaje} \texttt{)}$$
+
+Tanto *formato* como *mensaje* son cadenas de texto que se van a mostrar. El parámetro *datos* es una lista con los valores que se van a insertar en la cadena de formato. Y por último, `format` devuelve siempre `ok`, mientras que `get_line` devuelve una cadena de texto, la tupla `{error, Motivo}` o el átomo `eof`.
+
+Hay que señalar que la cadena de formato de `format` tiene diferentes marcadores para representar información. Los marcadores siguen la forma `~A.P.RMC`, donde `A` es el ancho mínimo (alineado a la izquierda, salvo que sea un número negativo para alinearlo a la derecha), `P` es la precisión que se va a mostrar, `R` es el carácter de relleno, `M` es un modificador de cómo se interpretará el dato a representar, y `C` es el código de representación. Se puede usar un `*` para `A`, `P` y `R`, utilizando los siguientes elementos en la lista de datos que haya para definir estos valores. La mayoría de estos indicadores son opcionales, siendo obligatorio como mínimo la forma `~C`. Los códigos de representación son:
+
+| Código | Descripción |
+|:------:|:------------|
+| `~` | Muestra el carácter `~`. |
+| `c` | Muestra un código ASCII como un carácter. |
+| `f` | Muestra número de coma flotante con formato `[-]ddd.ddd`. |
+| `e` | Muestra número de coma flotante con formato `[-]d.ddde+-ddd`. |
+| `g` | Muestra número de coma flotante, usando `f` para valores entre `0.1` y `10000.0`, y usando `e` para el resto. |
+| `s` | Muestra una cadena de texto. |
+| `w` | Muestra un valor Erlang de forma simple. |
+| `p` | Muestra un valor Erlang de forma legible. |
+| `W` | Como `w` pero toma un dato adicional que indica el nivel de profundidad máximo para la representación. |
+| `P` | Como `p` pero toma un dato adicional que indica el nivel de profundidad máximo para la representación. |
+| `B` | Muestra números enteros en bases entre `2` y `36`, siendo `10` el valor por defecto. Por ejemplo, `~.16B` nos muestra enteros hexadecimales. |
+| `X` | Como `B` pero toma un dato adicional que indica el prefijo a usar para la representación. |
+| `#` | Como `B` pero usa la notación `#` de Erlang para representar los números enteros. |
+| `b` | Como `B` pero las letras son en minúsculas. |
+| `x` | Como `X` pero las letras son en minúsculas. |
+| `+` | Como `#` pero las letras son en minúsculas. |
+| `n` | Muestra una nueva línea. |
+| `i` | Ignora el siguiente dato en la lista. |
+
 ### Manejo de estructuras de datos
 
 ..
@@ -1872,7 +1903,135 @@ Estas son las funciones para manejar puertos de comunicación:
 
 ### EUnit
 
-..
+Erlang tiene dos sistemas para realizar pruebas: [EUnit](https://www.erlang.org/doc/apps/eunit/users_guide.html) y [Common Test](https://www.erlang.org/doc/apps/common_test/users_guide.html). El primero sirve para hacer pruebas unitarias sencillas y el segundo es para sistemas de pruebas más avanzadas. Para poder utilizar EUnit hay que incluir el siguiente fichero:
+
+```Erlang
+-include_lib("eunit/include/eunit.hrl").
+```
+ 
+ Se puede incluir dentro del módulo que queremos probar o en un fichero adicional cuyo nombre tenga la forma `nombre_tests.erl`, siendo *nombre* el del módulo que queremos probar. Dentro del módulo para pruebas tendremos una serie de funciones cuyos hombres terminen en `_test` o `_test_`, que serán usadas para la ejecución de las pruebas. Por ejemplo:
+
+```Erlang
+-module(foo).
+-export([op/2]).
+op(A, B) -> A / B.
+```
+ 
+```Erlang
+-module(foo_tests).
+-include_lib("eunit/include/eunit.hrl").
+ok_test() ->
+    2.0 = foo:op(4, 2),
+    1.5 = foo:op(3, 2).
+
+fail_test() ->
+    1.0 = foo:op(3, 1).
+```
+
+Para ejecutar las pruebas usaremos la siguiente función del módulo [`eunit`](https://www.erlang.org/doc/man/eunit.html):
+ 
+ $$\texttt{eunit:test(} \mathit{m\acute{o}dulo} \texttt{)}$$
+
+$$\texttt{eunit:test(} \mathit{m\acute{o}dulo} \texttt{,} \mathit{opciones} \texttt{)}$$
+
+Donde *módulo* es el nombre del mismo y *opciones* es una lista, en la que podemos tener `verbose` para mostrar más detalle sobre las pruebas. Una vez invocada la función `test`, ejecutará las pruebas y nos mostrará un informe con los fallos encontrados. Siguiendo con el ejemplo anterior:
+
+```
+1> eunit:test(foo).     
+foo_tests: fail_test...*failed*
+**error:{badmatch,3.0}
+  output:<<"">>
+
+=======================================================
+  Failed: 1.  Skipped: 0.  Passed: 1.
+
+error
+```
+
+Existe una serie de macros para ayudar a implementar las pruebas:
+
+| Macro | Descripción |
+|:-----:|:------------|
+| `?assert(E)` | La expresión `E` debe valer `true`. |
+| `?assertNot(E)` | La expresión `E` debe valer `false`. |
+| `?assertMatch(P, E)` | La expresión `E` debe encajar en el patrón `P`. |
+| `?assertNotMatch(P, E)` | La expresión `E` no debe encajar en el patrón `P`. |
+| `?assertEqual(E1, E2)` | El valor de las expresiones debe ser igual. |
+| `?assertNotEqual(E1, E2)` | El valor de las expresiones no debe ser igual. |
+| `?assertException(C, P, E)` | La expresión `E` produce una excepción `P` de la clase `C`. |
+| `?assertError(P, E)` | La expresión `E` produce un error `P`. |
+| `?assertExit(P, E)` | La expresión `E` produce una salida `P`. |
+| `?assertThrow(P, E)` | La expresión `E` produce una excepción `P`. |
+
+También hay macros para ejecutar comandos en la terminal del sistema operativo:
+
+| Macro | Descripción |
+|:-----:|:------------|
+| `?assertCmd(C)` | Ejecuta el comando `C` y comprueba que su valor de salida es `0`. |
+| `?assertCmdStatus(N, C)` | Ejecuta el comando `C` y comprueba que su valor de salida es `N`. |
+| `?assertCmdOutput(T, C)` | Ejecuta el comando `C` y comprueba que su salida es igual a `T`. |
+| `?cmd(C)` | Ejecuta el comando `C`. |
+
+Además tenemos una serie de macros para la salida estándar:
+
+| Macro | Descripción |
+|:-----:|:------------|
+| `?capturedOutput` | Devuelve el contenido de la salida estándar. |
+| `?debugHere` | Muestra por consola el fichero y el número de línea actual. |
+| `?debugMsg(T)` | Muestra por consola una cadena de texto. |
+| `?debugFmt(F, Args)` | Muestra por consola una cadena de texto. |
+| `?debugVal(E)` | Muestra por consola un valor. |
+| `?debugVal(E, N)` | Muestra por consola un valor con una profundidad máxima de `N`. |
+| `?debugTime(T, E)` | Muestra por consola una cadena de texto `T` y el tiempo que se ha tardado en evaluar `E`, devolviendo el valor obtenido como resultado de la macro. |
+
+Las funciones que terminan con `_test_` se denominan generadores de pruebas. Estas funciones han de devolver funciones o listas de funciones que serán tomadas para ejecutar la batería de pruebas. Para ello existe la macro `?_test(E)` que encapsula la expresión en una lambda. Las macros para realizar asertos, como `?assert(E)`, tienen su equivalente que empieza por guion bajo para la generación de funciones de pruebas, por ejemplo `?_assert(E)`, que equivale a `?_test(?assert(E))`. Tomando el ejemplo anterior:
+
+```Erlang
+all_test_() ->
+    [?_assertMatch(2.0, foo:op(4, 2)),
+     ?_assertMatch(1.5, foo:op(3, 2)),
+     ?_assertMatch(1.0, foo:op(3, 1))].
+```
+
+Cuyo resultado de la prueba sería:
+
+```
+1> eunit:test({generator, fun foo_tests:all_test_/0}).
+foo_tests:13: all_test_...*failed*
+**error:{assertMatch,[{module,foo_tests},
+              {line,13},
+              {expression,"foo : op ( 3 , 1 )"},
+              {pattern,"1.0"},
+              {value,3.0}]}
+  output:<<"">>
+
+=======================================================
+  Failed: 1.  Skipped: 0.  Passed: 2.
+error
+```
+
+Como se puede ver, podemos indicar con la tupla `{generator, Función}` la función concreta que queremos probar, si sólo queremos ejecutar una prueba en concreto.
+
+Dentro de las funciones generadoras de pruebas, se puede devolver lo que Erlang denomina *fixture*, que es una tupla con una configuración para realizar pruebas un poco más complejas con las pruebas unitarias. Para ello tenemos como opciones:
+
+$$\texttt{\char123} \texttt{setup} \texttt{,} \textcolor{red}{[} \mathit{d\acute{o}nde} \texttt{,} \textcolor{red}{]} \mathit{inicio} \texttt{,} \textcolor{red}{[} \mathit{final} \texttt{,} \textcolor{red}{]} \mathit{prueba} \texttt{\char125}$$
+
+$$\texttt{\char123} \texttt{foreach} \texttt{,} \textcolor{red}{[} \mathit{d\acute{o}nde} \texttt{,} \textcolor{red}{]} \mathit{inicio} \texttt{,} \textcolor{red}{[} \mathit{final} \texttt{,} \textcolor{red}{]} \mathit{pruebas} \texttt{\char125}$$
+
+El significado de cada componente es el siguiente:
++ *dónde*: Indica dónde se ha de ejecutar  las pruebas con los valores: `local`, `spawn` y `{spawn, Nodo}`.
++ *inicio*: Es una función sin argumentos, para inicializar el entorno de la prueba y cuyo resultado será usado para cada prueba realizada.
++ *final*: Es una función, que recibe como argumento el resultado de *inicio*, que se utiliza para hacer las operaciones de limpieza del proceso de pruebas.
++ *prueba*: Es una función, que recibe como argumento el resultado de *inicio*, que devolverá la lista de funciones de pruebas a ejecutar.
++ *pruebas*: Es una lista de funciones *prueba* para la configuración `foreach`. Para cada función de esta lista se ejecutará la función *inicio*, luego *prueba* y por último *final*.
+
+Se puede para la función *prueba* devolver una tupla en lugar de una lista, siguiendo las siguientes opciones:
++ `{spawn, Lista}`: Ejecuta las pruebas de la lista en un proceso aparte.
++ `{timeout, Segundos, Lista}`: Ejecuta las pruebas de la lista con un tiempo máximo de ejecución.
++ `{inorder, Lista}`: Ejecuta las pruebas de la lista en el orden que están.
++ `{inparallel, Lista}`: Ejecuta las pruebas de la lista en paralelo si es posible.
+
+Por último, se puede añadir una cadena de texto como comentario a una configuración de pruebas devolviendo como resultado `{Cadena, Configuración}`.
 
 ### Emakefile
 
