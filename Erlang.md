@@ -190,7 +190,6 @@ De este modo, la lista `[1, [2 | []]]` se puede definir como `[1, 2]`, siendo m�
 
 Dentro de la biblioteca estándar existe el módulo [`lists`](https://www.erlang.org/doc/man/lists.html), con una buena colección de funciones que permiten consultar y transformar listas, algunas de ellas bastante avanzadas.
 
-
 ### Mapas
 
 Los mapas son estructuras de datos que relacionan una clave con un valor. Aunque también se le conoce como diccionarios en otros lenguajes, la [biblioteca estándar](https://www.erlang.org/doc/man/stdlib_app) de Erlang tiene otro tipo de estructura nativa que se llama diccionario (módulo `dict`), por lo que usaremos el término mapa para evitar confusiones innecesarias. Los mapas se añadieron como sustitución de los diccionarios implementados, para corregir algunas carencias que tenía el lenguaje.
@@ -1898,6 +1897,76 @@ Hay que señalar que la cadena de formato de `format` tiene diferentes marcadore
 ..
 
 ### ETS, DETS y Mnesia
+
+La biblioteca de Erlang dispone de una serie de módulos que nos permite tener una base de datos NoSQL a nuestra disposición. Estos módulos son: [`ets`](https://www.erlang.org/doc/man/ets.html), [`dets`](https://www.erlang.org/doc/man/dets.html) y [`mnesia`](https://www.erlang.org/doc/man/mnesia.html). El primero gestiona la base de datos en memoria, el segundo en disco y el tercero es una versión extendida que engloba a las dos anteriores.
+
+El funcionamiento consiste en crear las tablas que necesitemos, para insertar, actualizar, borrar y consultar datos con forma de tupla. Dentro de la tupla, una de las componentes actuará como clave de la tabla. Internamente las tablas funcionan con cuatro tipos de estructuras:
++ `set`: No permiten claves duplicadas dentro de la tabla.
++ `ordered_set`: No permiten claves duplicadas dentro de la tabla y los elementos estarán ordenados a la hora de recorrer la tabla.
++ `bag`: Permite claves duplicadas dentro de la tabla, pero no permite dos tuplas exactamente iguales.
++ `duplicate_bag`: Permite incluso tuplas duplicadas dentro de la tabla.
+
+> El tipo `ordered_set` utiliza la igualdad simple `==` para la comparación, por lo que `1` es igual que `1.0`. El resto de tipos de tablas usan el operador `=:=`. Además, `ordered_set` no está disponible como tipo de tabla para `dets` y por ello tampoco lo estará para `mnesia` cuando se quiera trabajar sólo con el disco duro.
+
+Las funciones principales del módulo `ets` son:
+
+| Función | Parámetros | Descripción |
+|:-------:|:----------:|:------------|
+| `all` | `()` | Devuelve todas las tablas del nodo actual. |
+| `delete` | `(Tabla)`<br/>`(Tabla, Clave)` | Borra tuplas de una tabla. |
+| `delete_object` | `(Tabla, Tupla)` | Borra la misma tupla de una tabla. |
+| `file2tab` | `(Tabla, Fichero)`<br/>`(Tabla, Fichero, Opciones)` | Vuelca en una tabla el contenido de un fichero. |
+| `first` | `(Tabla)` | Devuelve la primera clave en una tabla de tipo `ordered_set`. |
+| `foldl` | `(Función, Accumulador, Tabla)` | Reduce el contenido de una tabla. |
+| `foldr` | `(Función, Accumulador, Tabla)` | Reduce el contenido de una tabla. |
+| `from_dets` | `(Tabla, TabDETS)` | Rellena una tabla ETS con los datos de una tabla DETS. |
+| `fun2ms` | `(Lambda)` | Toma una función lambda y la transforma en una *especificación de ajuste* para realizar operaciones de selección. |
+| `give_away` | `(Tabla, PID, Extra)` | Cambia el proceso que es dueño de una tabla. |
+| `info` | `(Tabla)`<br/>`(Tabla, Opción)` | Devuelve información sobre una tabla. |
+| `insert` | `(Tabla, Tuplas)` | Añade una o varias tuplas. En las tablas que no permiten duplicados de clave, si ya existe una tupla con la misma clave, se sustituye por la nueva tupla. |
+| `insert_new` | `(Tabla, Tuplas)` | Añade una o varias tuplas que no existieran previamente. |
+| `last` | `(Tabla)` | Devuelve la última clave en una tabla de tipo `ordered_set`. |
+| `lookup` | `(Tabla, Clave)` | Devuelve una tupla o varias con una clave. |
+| `lookup_element` | `(Tabla, Clave, Posición)` | Devuelve la componente de una tupla o varias con una clave. |
+| `match` | `(Tabla, Patrón)` | Devuelve los elementos indicados de aquellas tuplas que se ajustan a un patrón. |
+| `match_delete` | `(Tabla, Patrón)` | Borra aquellas tuplas que se ajustan a un patrón. |
+| `match_object` | `(Tabla, Patrón)` | Devuelve aquellas tuplas que se ajustan a un patrón. |
+| `member` | `(Table, Clave)` | Indica si la clave existe en una tabla. |
+| `new` | `(Nombre, Opciones)` | Crea una nueva tabla. |
+| `next` | `(Tabla, Clave)` | Devuelve la clave siguiente en una tabla de tipo `ordered_set`. |
+| `prev` | `(Tabla, Clave)` | Devuelve la clave anterior en una tabla de tipo `ordered_set`. |
+| `rename` | `(Tabla, Nombre)` | Renombra una tabla. |
+| `select` | `(Tabla, Ajuste)` | Devuelve una serie de tuplas, que se ajustan a una *especificación de ajuste*. |
+| `select_count` | `(Tabla, Ajuste)` | Cuenta cuantas tuplas se ajustan a una *especificación de ajuste* que devuelva `true`. |
+| `select_delete` | `(Tabla, Ajuste)` | Borra una serie de tuplas, que se ajustan a una *especificación de ajuste* que devuelva `true`. |
+| `select_replace` | `(Tabla, Ajuste)` | Reemplaza una serie de tuplas, que se ajustan a una *especificación de ajuste*, con el resultado de la especificación. |
+| `select_reverse` | `(Tabla, Ajuste)` | Devuelve una consulta en orden inverso cuando se usa una tabla de tipo `ordered_set`. |
+| `tab2file` | `(Tabla, Fichero)`<br/>`(Tabla, Fichero, Opciones)` | Vuelca en un fichero el contenido de una tabla. |
+| `tab2list` | `(Tabla)` | Devuelve en una lista el contenido de una tabla. |
+| `take` | `(Tabla, Clave)` | Devuelve y elimina las tuplas con una clave. |
+| `to_dets` | `(Tabla, TabDETS)` | Rellena una tabla DETS con los datos de una tabla ETS. |
+
+..
+
+```Erlang
+-include_lib("stdlib/include/ms_transform.hrl").
+```
+
+..
+
+Las funciones principales del módulo `dets` son:
+
+| Función | Parámetros | Descripción |
+|:-------:|:----------:|:------------|
+| ` ` | `()` | .. |
+
+..
+
+Las funciones principales del módulo `mnesia` son:
+
+| Función | Parámetros | Descripción |
+|:-------:|:----------:|:------------|
+| ` ` | `()` | .. |
 
 ..
 
