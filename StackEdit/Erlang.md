@@ -106,7 +106,7 @@ Para este ejemplo mostramos la salida por pantalla de la terminal, viendo que no
 
 La sintaxis para definir **números enteros** es la siguiente:
 
-$$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \textcolor{red}{[}\mathit{base}\texttt{\\#}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}$$
+$$\textcolor{red}{[}\texttt{+}\textcolor{red}{|}\texttt{-}\textcolor{red}{]} \textcolor{red}{[}\mathit{base}\texttt{\char35}\textcolor{red}{]} \mathit{d\acute{\imath}gitos}$$
 
 La base puede ser un valor dentro del intervalo $[2,36]$ y por defecto es `10`. Por ejemplo: `4`, `8`, `15`, `2#10000`, `8#27`, `16#2A`.
 
@@ -166,7 +166,7 @@ Manejar variables inmutables puede parecer al principio un escollo insalvable, p
 
 Las tuplas son estructuras de datos que agrupan información de forma ordenada con un tamaño fijo. Siguen la siguiente sintaxis:
 
-$$\texttt{\\{} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\\}}$$
+$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Por ejemplo: `{}`, `{0, a}`, `{{data, 3.14}, Foo, {}, 8}`.
 
@@ -196,15 +196,15 @@ Los mapas son estructuras de datos que relacionan una clave con un valor. Aunque
 
 La sintaxis para crear un mapa es la siguiente:
 
-$$\texttt{\\#\\{} \textcolor{red}{[} \mathit{clave_1}\ \texttt{=>}\ \mathit{valor_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{clave_n}\ \texttt{=>}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\\}}$$
+$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave_1}\ \texttt{=>}\ \mathit{valor_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{clave_n}\ \texttt{=>}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Tanto las claves, como los valores, pueden ser de cualquier tipo. Para actualizar un mapa previo, usaremos esta sintaxis:
 
-$$\mathit{mapa}\texttt{\\#\\{} \mathit{clave}\ \texttt{=>}\ \mathit{valor} \texttt{\\}}$$
+$$\mathit{mapa}\texttt{\char35\char123} \mathit{clave}\ \texttt{=>}\ \mathit{valor} \texttt{\char125}$$
 
 De este modo se devuelve un nuevo mapa, donde se asigna un valor a la clave indicada, existiera esta previamente o no. Existe otra variante para actualizar un mapa previo con:
 
-$$\mathit{mapa}\texttt{\\#\\{} \mathit{clave}\ \texttt{:=}\ \mathit{valor} \texttt{\\}}$$
+$$\mathit{mapa}\texttt{\char35\char123} \mathit{clave}\ \texttt{:=}\ \mathit{valor} \texttt{\char125}$$
 
 Con esta versión, si la clave no existe previamente, no se actualizará el contenido del nuevo mapa creado y será simplemente una copia idéntica del mapa que hemos intentado modificar.
 
@@ -268,19 +268,19 @@ Los [registros](https://www.erlang.org/doc/reference_manual/records.html) es un 
 
 Para definir un registro usamos la siguiente sintaxis:
 
-$$\texttt{-record(} \mathit{nombre} \texttt{,} \texttt{\\{} \mathit{campo_1} \textcolor{red}{[} \texttt{=} \mathit{valor_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \textcolor{red}{[} \texttt{=} \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\\}} \texttt{)}$$
+$$\texttt{-record(} \mathit{nombre} \texttt{,} \texttt{\char123} \mathit{campo_1} \textcolor{red}{[} \texttt{=} \mathit{valor_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \textcolor{red}{[} \texttt{=} \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125} \texttt{)}$$
 
 Esto crea un registro con el *nombre* indicado para el módulo donde ha sido definido. De forma opcional se puede indicar valores por defecto de inicialización cuando se crea un valor. La sintaxis para crear un valor es el siguiente:
 
-$$\texttt{\\#} \mathit{nombre} \texttt{\\{} \textcolor{red}{[} \mathit{campo_1} \texttt{=} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\\}} \texttt{)}$$
+$$\texttt{\char35} \mathit{nombre} \texttt{\char123} \textcolor{red}{[} \mathit{campo_1} \texttt{=} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125} \texttt{)}$$
 
 En caso de dejar campos sin definir en el constructor, se les asignará el valor `undefined`. También se puede usar como *campo* la variable comodín `_` para inicializar todos aquellos que no hayan sido explícitamente indicados en el constructor. Para modificar un valor de registro previo se usa la siguiente sintaxis:
 
-$$\mathit{variable} \texttt{\\#} \mathit{nombre} \texttt{\\{} \mathit{campo_1} \texttt{=} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{\\}} \texttt{)}$$
+$$\mathit{variable} \texttt{\char35} \mathit{nombre} \texttt{\char123} \mathit{campo_1} \texttt{=} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{\char125} \texttt{)}$$
 
 Esto devuelve un nuevo calor con la información modificada. Para pode acceder a un campo se usa la sintaxis:
 
-$$\mathit{variable} \texttt{\\#} \mathit{nombre} \texttt{.} \mathit{campo}$$
+$$\mathit{variable} \texttt{\char35} \mathit{nombre} \texttt{.} \mathit{campo}$$
 
 Esto devuelve el valor asociado al *campo*. Es perfectamente posible anidar registros dentro de otros registros. Para acceder al contenido simplemente hay que usar la sintaxis anterior aplicada al campo en cuestión.
 
@@ -288,7 +288,7 @@ Esto devuelve el valor asociado al *campo*. Es perfectamente posible anidar regi
 
 Si necesitamos saber cuál es la posición del campo dentro de la tupla usaremos:
 
-$$\texttt{\\#} \mathit{nombre} \texttt{.} \mathit{campo}$$
+$$\texttt{\char35} \mathit{nombre} \texttt{.} \mathit{campo}$$
 
 Por ejemplo:
 
@@ -516,7 +516,7 @@ Usando la coma (`,`) es requisito que todas las guardas den como resultado `true
 
 Podemos usar la siguiente sintaxis como patrón de encaje con mapas:
 
-$$\texttt{\\#\\{} \textcolor{red}{[} \mathit{clave_1}\ \texttt{:=}\ \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{clave_n}\ \texttt{:=}\ \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\\}}$$
+$$\texttt{\char35\char123} \textcolor{red}{[} \mathit{clave_1}\ \texttt{:=}\ \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{clave_n}\ \texttt{:=}\ \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
 Como requisito, para que funcione correctamente, las claves tienen que cumplir los mismos requisitos que cumplen las guardas de las cláusulas, lo cual implica que todas las variables internas han de estar previamente ligadas. Si las claves son encontradas, los valores de estas son ajustados a los patrones definidos.
 
@@ -526,7 +526,7 @@ En caso de no encontrar alguna de las claves indicadas, se lanzará una excepci�
 
 Podemos usar la siguiente sintaxis como patrón de encaje con registros:
 
-$$\texttt{\\#} \mathit{nombre} \texttt{\\{} \textcolor{red}{[} \mathit{campo_1} \texttt{=} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\\}} \texttt{)}$$
+$$\texttt{\char35} \mathit{nombre} \texttt{\char123} \textcolor{red}{[} \mathit{campo_1} \texttt{=} \mathit{patr\acute{o}n_1} \textcolor{red}{[} \texttt{,} \dots \texttt{,} \mathit{campo_n} \texttt{=} \mathit{patr\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125} \texttt{)}$$
 
 Funciona parecido a las tuplas, a la hora de hacer un ajuste de patrones, pero con algo más de flexibilidad en cuanto a la posición de los componentes.
 
@@ -538,8 +538,8 @@ $$\texttt{[} \mathit{expresi\acute{o}n}\  \texttt{||}\ \mathit{generador_1} \tex
 
 Donde la expresión generadora puede ser una de las siguientes:
 
-$$\textcolor{red}{\\{} \mathit{patr\acute{o}n}\ \texttt{<-}\ \mathit{lista}\ \textcolor{red}{|}\ \mathit{patr\acute{o}n}\ \texttt{<=}\ \mathit{binario}
-\ \textcolor{red}{|}\ \mathit{guarda} \textcolor{red}{\\}}$$
+$$\textcolor{red}{\char123} \mathit{patr\acute{o}n}\ \texttt{<-}\ \mathit{lista}\ \textcolor{red}{|}\ \mathit{patr\acute{o}n}\ \texttt{<=}\ \mathit{binario}
+\ \textcolor{red}{|}\ \mathit{guarda} \textcolor{red}{\char125}$$
 
 El primer tipo de generador ajusta un patrón con cada elemento de la lista. El segundo hace lo mismo que el primero pero con cada elemento dentro de un bloque binario. Finalmente, podemos usar guardas como predicados para filtrar los elementos de la lista de entrada, de modo que se usarán aquellos elementos que den como resultado `true` con el predicado, y aquellos que den `false` serán descartados. Por ejemplo:
 
@@ -991,13 +991,13 @@ Además podemos crear un alias para un proceso con la función `alias()`, que de
 
 Erlang permite dos modos de controlar la muerte prematura de procesos. El primero es con **enlaces**, que conecta dos procesos entre sí y cuando uno muere el otro también lo hace recibiendo una *excepción*. Podemos crear un proceso enlazado al actual con:
 
-$$\texttt{spawn\\_link(} \mathit{funci\acute{o}n} \texttt{)}$$
+$$\texttt{spawn\char95link(} \mathit{funci\acute{o}n} \texttt{)}$$
 
-$$\texttt{spawn\\_link(} \mathit{m\acute{o}dulo} \texttt{,} \mathit{funci\acute{o}n} \texttt{,} \mathit{argumentos} \texttt{)}$$
+$$\texttt{spawn\char95link(} \mathit{m\acute{o}dulo} \texttt{,} \mathit{funci\acute{o}n} \texttt{,} \mathit{argumentos} \texttt{)}$$
 
 Si queremos enlazar un proceso ya creado al actual usaremos `link(PID)`, pudiendo revertir el enlace con `unlink(PID)`. También se puede cambiar el comportamiento por defecto, para capturar la excepción como si fuera un mensaje recibido con `process_flag(trap_exit, true)`, mensajes que tendrían la forma:
 
-$$\texttt{\\{'EXIT', } \mathit{pid} \texttt{, } \mathit{motivo} \texttt{\\}}$$
+$$\texttt{\char123'EXIT', } \mathit{pid} \texttt{, } \mathit{motivo} \texttt{\char125}$$
 
 El *pid* es el identificador de proceso que ha muerto y el *motivo* es la información relativa a la excepción, que dependiendo del tipo tendrá la siguiente forma:
 
@@ -1011,13 +1011,13 @@ El *pid* es el identificador de proceso que ha muerto y el *motivo* es la inform
 
 El segundo modo es con **monitores**, que conecta dos procesos entre sí, donde uno es el monitor y el otro el monitorizado. Cuando el proceso monitorizado muere, el proceso monitor recibe un mensaje con la forma:
 
-$$\texttt{\\{'DOWN', } \mathit{referencia} \texttt{, process, } \mathit{pid} \texttt{, } \mathit{motivo} \texttt{\\}}$$
+$$\texttt{\char123'DOWN', } \mathit{referencia} \texttt{, process, } \mathit{pid} \texttt{, } \mathit{motivo} \texttt{\char125}$$
 
 Podemos crear un proceso monitorizado por el actual con:
 
-$$\texttt{spawn\\_monitor(} \mathit{funci\acute{o}n} \texttt{)}$$
+$$\texttt{spawn\char95monitor(} \mathit{funci\acute{o}n} \texttt{)}$$
 
-$$\texttt{spawn\\_monitor(} \mathit{m\acute{o}dulo} \texttt{,} \mathit{funci\acute{o}n} \texttt{,} \mathit{argumentos} \texttt{)}$$
+$$\texttt{spawn\char95monitor(} \mathit{m\acute{o}dulo} \texttt{,} \mathit{funci\acute{o}n} \texttt{,} \mathit{argumentos} \texttt{)}$$
 
 El otro método, para monitorizar un proceso, es usando la función `monitor(process, PID)` para activarlo, que nos devuelve una referencia para identificar la relación, y `demonitor(Referencia)` para desactivarlo.
 
@@ -1865,7 +1865,7 @@ El módulo [`io`](https://www.erlang.org/doc/man/io.html) se encarga de la gesti
 
 $$\texttt{format(} \mathit{formato} \textcolor{red}{[} \texttt{,} \mathit{datos} \textcolor{red}{]} \texttt{)}$$
 
-$$\texttt{get\\_line(} \mathit{mensaje} \texttt{)}$$
+$$\texttt{get\char95line(} \mathit{mensaje} \texttt{)}$$
 
 Tanto *formato* como *mensaje* son cadenas de texto que se van a mostrar. El parámetro *datos* es una lista con los valores que se van a insertar en la cadena de formato. Y por último, `format` devuelve siempre `ok`, mientras que `get_line` devuelve una cadena de texto, la tupla `{error, Motivo}` o el átomo `eof`.
 
@@ -2285,9 +2285,9 @@ Como se puede ver, podemos indicar con la tupla `{generator, Función}` la funci
 
 Dentro de las funciones generadoras de pruebas, se puede devolver lo que Erlang denomina *fixture*, que es una tupla con una configuración para realizar pruebas un poco más complejas con las pruebas unitarias. Para ello tenemos como opciones:
 
-$$\texttt{\\{} \texttt{setup} \texttt{,} \textcolor{red}{[} \mathit{d\acute{o}nde} \texttt{,} \textcolor{red}{]} \mathit{inicio} \texttt{,} \textcolor{red}{[} \mathit{final} \texttt{,} \textcolor{red}{]} \mathit{prueba} \texttt{\\}}$$
+$$\texttt{\char123} \texttt{setup} \texttt{,} \textcolor{red}{[} \mathit{d\acute{o}nde} \texttt{,} \textcolor{red}{]} \mathit{inicio} \texttt{,} \textcolor{red}{[} \mathit{final} \texttt{,} \textcolor{red}{]} \mathit{prueba} \texttt{\char125}$$
 
-$$\texttt{\\{} \texttt{foreach} \texttt{,} \textcolor{red}{[} \mathit{d\acute{o}nde} \texttt{,} \textcolor{red}{]} \mathit{inicio} \texttt{,} \textcolor{red}{[} \mathit{final} \texttt{,} \textcolor{red}{]} \mathit{pruebas} \texttt{\\}}$$
+$$\texttt{\char123} \texttt{foreach} \texttt{,} \textcolor{red}{[} \mathit{d\acute{o}nde} \texttt{,} \textcolor{red}{]} \mathit{inicio} \texttt{,} \textcolor{red}{[} \mathit{final} \texttt{,} \textcolor{red}{]} \mathit{pruebas} \texttt{\char125}$$
 
 El significado de cada componente es el siguiente:
 + *dónde*: Indica dónde se ha de ejecutar  las pruebas con los valores: `local`, `spawn` y `{spawn, Nodo}`.
