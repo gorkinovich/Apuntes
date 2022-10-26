@@ -1958,7 +1958,29 @@ Las funciones principales del módulo `dets` son:
 
 | Función | Parámetros | Descripción |
 |:-------:|:----------:|:------------|
-| ` ` | `()` | .. |
+| `all` | `()` | Devuelve todas las tablas del nodo actual. |
+| `close` | `(Tabla)` | Cierra una tabla previamente abierta. |
+| `delete` | `(Tabla, Clave)` | Borra una tupla de una tabla. |
+| `delete_object` | `(Tabla, Tupla)` | Borra la misma tupla de una tabla. |
+| `first` | `(Tabla)` | Devuelve la primera clave en una tabla. |
+| `foldl` | `(Función, Accumulador, Tabla)` | Reduce el contenido de una tabla. |
+| `foldr` | `(Función, Accumulador, Tabla)` | Reduce el contenido de una tabla. |
+| `from_ets` | `(Tabla, TabETS)` | Rellena una tabla DETS con los datos de una tabla ETS. |
+| `info` | `(Tabla)`<br/>`(Tabla, Opción)` | Devuelve información sobre una tabla. |
+| `insert` | `(Tabla, Tuplas)` | Añade una o varias tuplas. En las tablas que no permiten duplicados de clave, si ya existe una tupla con la misma clave, se sustituye por la nueva tupla. |
+| `insert_new` | `(Tabla, Tuplas)` | Añade una o varias tuplas que no existieran previamente. |
+| `lookup` | `(Tabla, Clave)` | Devuelve una tupla o varias con una clave. |
+| `match` | `(Tabla, Patrón)` | Devuelve los elementos indicados de aquellas tuplas que se ajustan a un patrón. |
+| `match_delete` | `(Tabla, Patrón)` | Borra aquellas tuplas que se ajustan a un patrón. |
+| `match_object` | `(Tabla, Patrón)` | Devuelve aquellas tuplas que se ajustan a un patrón. |
+| `member` | `(Table, Clave)` | Indica si la clave existe en una tabla. |
+| `next` | `(Tabla, Clave)` | Devuelve la clave siguiente en una tabla. |
+| `open_file` | `(Ruta)`<br/>`(Ruta, Opciones)` | .. |
+| `select` | `(Tabla, Ajuste)` | Devuelve una serie de tuplas, que se ajustan a una *especificación de ajuste*. |
+| `select_delete` | `(Tabla, Ajuste)` | Borra una serie de tuplas, que se ajustan a una *especificación de ajuste* que devuelva `true`. |
+| `sync` | `(Tabla)` | Actualiza cualquier cambio pendiente de realizar en el disco duro para una tabla. |
+| `to_ets` | `(Tabla, TabETS)` | Rellena una tabla ETS con los datos de una tabla DETS. |
+| `traverse` | `(Tabla, Función)` | Aplica una función a cada tupla de una tabla. |
 
 ..
 
