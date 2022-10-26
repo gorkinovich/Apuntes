@@ -1894,7 +1894,35 @@ Hay que señalar que la cadena de formato de `format` tiene diferentes marcadore
 
 ### Manejo de estructuras de datos
 
-..
+La biblioteca estándar tiene diferentes módulos para manejar algunos tipos de estructuras de datos. El módulo más completo disponible es [`lists`](https://www.erlang.org/doc/man/lists.html) que sirve para manipular listas. Dentro de todas las funciones que hay, vamos a centrarnos en las de [orden superior](https://es.wikipedia.org/wiki/Funci%C3%B3n_de_orden_superior), que son aquellas que aceptan como argumentos de entrada otras funciones:
+
+| Función | Tipo | Descripción |
+|:-------:|:----:|:------------|
+| `all(P,L)` | `((T) -> Bool, [T]) -> Bool` | Comprueba que todos los elementos de `L` cumplan `P`. |
+| `any(P,L)` | `((T) -> Bool, [T]) -> Bool` | Comprueba que algún elemento de `L` cumplan `P`. |
+| `dropwhile(P,L)` | `((T) -> Bool, [T]) -> [T]` | Elimina elementos de `L` mientras se cumpla `P`. |
+| `filter(P,L)` | `((T) -> Bool, [T]) -> [T]` | Mantiene aquellos elementos de `L` que cumplan `P`. |
+| `filtermap(F,L)` | `((T) -> BOT, [T]) -> [T]` | Mantiene y/o transforma elementos de `L` con `F`, donde `BOT` puede ser `{true, Valor}`, `true`, `false`. Con el primero se sustituye el elemento por `Valor`, con el segundo se mantiene el elemento y con el tercero se descarta. |
+| `flatmap(F,L)` | `((A) -> B, [A]) -> [B]` | Aplana la lista `L` y aplica `F` a cada elemento de la lista aplanada. |
+| `foldl(F,A,L)` | `((T,R) -> R, R, [T]) -> R` | Reduce la lista `L`, usando un valor acumulador inicial `A`, mediante la función `F`, cuyo primer parámetro es el elemento de la lista y el segundo el valor acumulado actual. Se recorre la lista de izquierda a derecha y por ello tiene recursión de cola, siendo más eficiente que `foldr`. |
+| `foldr(F,A,L)` | `((T,R) -> R, R, [T]) -> R` | Reduce la lista `L`, usando un valor acumulador inicial `A`, mediante la función `F`, cuyo primer parámetro es el elemento de la lista y el segundo el valor acumulado actual. Se recorre la lista de derecha a izquierda y por ello no tiene recursión de cola, siendo menos eficiente que `foldl`. |
+| `foreach(F,L)` | `((T) -> R, [T]) -> ok` | Aplica la función `F` a cada elemento de la lista `L` sin importar el resultado. |
+| `map(F,L)` | `((A) -> B, [A]) -> [B]` | Aplica la función `F` a cada elemento de la lista `L`. |
+| `mapfoldl(F,A,L)` | `((T,R) -> {U,R}, R, [T]) -> {[U],R}` | Realiza las funciones `map` y `foldl` en un recorrido. |
+| `mapfoldr(F,A,L)` | `((T,R) -> {U,R}, R, [T]) -> {[U],R}` | Realiza las funciones `map` y `foldr` en un recorrido. |
+| `merge(F,L1,L2)` | `((A,B) -> Bool, [A], [B]) -> [A+B]` | Fusiona dos listas usando `F` para determinar si `A <= B`. |
+| `partition(P,L)` | `((T) -> Bool, [T]) -> {[T],[T]}` | Devuelve una tupla donde la primera componente son los elementos de `L` que cumplen `P` y la segunda los que no. |
+| `search(P,L)` | `((T) -> Bool, [T]) -> R` | Busca un elemento en `L` que cumpla `P`, donde `R` puede ser `{value, Valor}` o `false`. |
+| `sort(F,L)` | `((A,B) -> Bool, [T]) -> [T]` | Devuelve una lista ordenada, con los elementos de `L`, usando `F` para determinar si `A <= B`. |
+| `splitwith(P,L)` | `((T) -> Bool, [T]) -> {[T],[T]}` | Devuelve una tupla con dos listas a partir de `L`, la primera son elementos que cumplen `P` hasta que deja de cumplirse, para devolver el resto de elementos en la segunda. |
+| `takewhile(P,L)` | `((T) -> Bool, [T]) -> [T]` | Devuelve elementos de `L` mientras se cumpla `P`. |
+| `umerge(F,L1,L2)` | `((A,B) -> Bool, [A], [B]) -> [A+B]` | Fusiona dos listas ordenadas usando `F` para determinar si `A <= B`, si `A == B` descarta el segundo elemento. |
+| `usort(F,L)` | `((A,B) -> Bool, [T]) -> [T]` | Devuelve una lista ordenada eliminando los duplicados, con los elementos de `L`, usando `F` para determinar si `A <= B`. |
+| `zipwith(F,L1,L2)` | `((X,Y) -> R, [X], [Y]) -> [R]` | Combina dos elementos en una sola lista usando `F`. |
+| `zipwith3(F,L1,L2,L3)` | `((X,Y,Z) -> R, [X], [Y], [Z]) -> [R]` | Combina tres elementos en una sola lista usando `F`. |
+| `uniq(F,L)` | `((T) -> Any, [T]) -> [T]` | Elimina los duplicados de `L` usando `F` para seleccionar el valor que representa a cada elemento. |
+
+Algunas de estas funciones se pueden encontrar en otros módulos como `array`, `gb_sets`, `gb_trees`, `maps`, `queue` o `sets`.
 
 ### ETS, DETS y Mnesia
 
