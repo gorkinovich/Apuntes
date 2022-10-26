@@ -1946,13 +1946,53 @@ Las funciones principales del módulo `ets` son:
 | `take` | `(Tabla, Clave)` | Devuelve y elimina las tuplas con una clave. |
 | `to_dets` | `(Tabla, TabDETS)` | Rellena una tabla DETS con los datos de una tabla ETS. |
 
-..
+Las *opciones* a la hora de crear una tabla nueva son las siguientes:
+
+| Opción | Descripción |
+|:------:|:------------|
+| `set`, `ordered_set`, `bag` o `duplicate_bag` | Tipo de la tabla. Por defecto es `set`. |
+| `private`, `protected` o `public` | Acceso de escritura y lectura a la tabla desde otros procesos. Por defecto es `protected`. Las tablas privadas sólo son accesibles al proceso que la creó, las protegidas permiten la lectura a otros procesos y las públicas además permiten la escritura. |
+| `named_table` | Utiliza el nombre pasado como argumento para dar nombre interno a la tabla. |
+| `{keypos, Posición}` | Posición de la clave dentro de las componentes de la tupla. Por defecto es la posición `1`. |
+| `{heir, PID, Extra}` o `{heir, none}` | Define un proceso supervisor para eliminar la tabla cuando este muera. Por defecto es `{heir, none}`. Esta opción se puede cambiar con la función `setopts/2`. |
+| `{read_concurrency, Bool}` | Con `true` optimiza las lecturas a la tabla a costa del rendimiento de las escrituras, con `false` pasa lo contrario. |
+| `{read_concurrency, Bool}` | Con `true` permite que se puedan realizar lecturas de forma concurrente a las escrituras, sin afectar a las propiedades [ACID](https://es.wikipedia.org/wiki/ACID) de la tabla. Con `false` se trabaja de forma secuencial. |
+| `compressed` | Permite que las componentes que no sean la clave sean comprimidas para ahorrar tamaño a costa del rendimiento. |
+
+Para hacer consultas a una tabla, con `lookup/2` buscamos los elementos de una *clave*. Con `match/2` definimos un *patrón* de ajuste que nos devuelva una selección de tuplas en una lista. El *patrón* será una tupla con una serie de valores, que se pueden combinar con una serie de átomos especiales que ejercen de variables, teniendo estos la forma: `'$0'`, `'$1'`, `'$2'`, etcétera. Adicionalmente, se usa `'_'` para indicar que nos es indiferente el valor de esa posición dentro del patrón. Por ejemplo:
+
+```
+1> ets:new(foo, [named_table]).
+foo
+2> ets:insert(foo, [{1,a,a}, {2,b,c}, {4,d,d}]).
+true
+3> ets:match(foo, {'_','$0','$0'}).
+[[a],[d]]
+4> ets:match_object(foo, {'_','$0','$0'}).
+[{1,a,a},{4,d,d}]
+```
+
+Sin embargo, este mecanismo no es todo lo flexible que gustaría y por ello existen las funciones `select/2` y compañía, para utilizar una [*especificación de ajuste*](https://www.erlang.org/doc/apps/erts/match_spec.html) que permita consultas más elaboradas. Por suerte, existe una función auxiliar que el compilador detecta para construir especificaciones usando expresiones escritas en Erlang. Para ello tenemos que incluir la siguiente cabecera:
 
 ```Erlang
 -include_lib("stdlib/include/ms_transform.hrl").
 ```
 
-..
+Esto permite al compilador detectar que vamos a usar la función `fun2ms/1`, que recibe como argumento una expresión lambda, que el compilador traducirá a una *especificación de ajuste*. Por ejemplo:
+
+```
+5> ets:fun2ms(fun({K,A,_}) when A > 3 -> K end).          
+[{{'$1','$2','_'},[{'>','$2',3}],['$1']}]
+```
+
+Que aplicado al ejemplo anterior de la tabla `foo`:
+
+```
+6> ets:select(foo, ets:fun2ms(fun({K,V,V}) -> {ok,K,V} end)).
+[{ok,1,a},{ok,4,d}]
+```
+
+Cuando una tabla ETS deja de ser necesaria, basta con llamar a `delete/1` para borrarla de la memoria por completo.
 
 Las funciones principales del módulo `dets` son:
 
@@ -1975,22 +2015,134 @@ Las funciones principales del módulo `dets` son:
 | `match_object` | `(Tabla, Patrón)` | Devuelve aquellas tuplas que se ajustan a un patrón. |
 | `member` | `(Table, Clave)` | Indica si la clave existe en una tabla. |
 | `next` | `(Tabla, Clave)` | Devuelve la clave siguiente en una tabla. |
-| `open_file` | `(Ruta)`<br/>`(Ruta, Opciones)` | .. |
+| `open_file` | `(Fichero)`<br/>`(Fichero, Opciones)` | Abre una tabla almacenada en un fichero. Si no existe el fichero, crea el fichero con una tabla vacía. |
 | `select` | `(Tabla, Ajuste)` | Devuelve una serie de tuplas, que se ajustan a una *especificación de ajuste*. |
 | `select_delete` | `(Tabla, Ajuste)` | Borra una serie de tuplas, que se ajustan a una *especificación de ajuste* que devuelva `true`. |
 | `sync` | `(Tabla)` | Actualiza cualquier cambio pendiente de realizar en el disco duro para una tabla. |
 | `to_ets` | `(Tabla, TabETS)` | Rellena una tabla ETS con los datos de una tabla DETS. |
 | `traverse` | `(Tabla, Función)` | Aplica una función a cada tupla de una tabla. |
 
-..
+Las *opciones* principales a la hora de abrir una tabla son las siguientes:
 
-Las funciones principales del módulo `mnesia` son:
+| Opción | Descripción |
+|:------:|:------------|
+| `{access, Tipo}` | Acceso de escritura y lectura a la tabla, donde `Tipo` puede ser `read` o `read_write`. Por defecto es `read_write`. |
+| `{auto_save, Intervalo}` | Intervalo de autoguardado de la tabla, donde `Intervalo` es un número entero de milisegundos o el átomo `infinity`. |
+| `{file, Fichero}` | Ruta del fichero con la tabla. |
+| `{keypos, Posición}` | Posición de la clave dentro de las componentes de la tupla. Por defecto es la posición `1`. |
+| `{ram_file, Bool}` | Con `true` se trabaja sobre la memoria RAM, guardando los cambios de esta en disco cuando se cierra la tabla. Con `false` se trabaja directamente sobre disco. |
+| `{repair, Valor}` | Se indica si se debe aplicar el algoritmo de reparación del fichero con la tabla, donde `Valor` es `true`, `false` o `force`. |
+| `{type, Tipo}` | Tipo de la tabla, donde `Tipo` puede ser `set`, `bag` o `duplicate_bag`. Por defecto es `set`. |
+
+Dejando a un lado funciones como `close/1` o `sync/1`, el resto de funcionalidad para tablas DETS es muy similar al de las tablas ETS.
+
+Mnesia es una base de datos distribuida, que por debajo utiliza ETS y DETS para gestionar la información en cada nodo. Como es una aplicación aparte, será necesario utilizar `application:start/1` y `application:stop/1` para cargar el sistema, pero antes de arrancar la aplicación es necesario invocar a la función `mnesia:create_schema/1`, pasando la lista de nodos que van a encargarse de la base de datos:
+
+```Erlang
+ok = mnesia:create_schema(nodes()),
+application:start(mnesia),
+% Operaciones con la base de datos...
+application:stop(mnesia).
+```
+
+Aquí configuramos la base de datos para que se ejecute en la lista de nodos visibles de la red actual, para iniciar la aplicación, hacer las operaciones que hagan falta y parar la aplicación.
+
+Hay que tener en cuenta que se usan registros, en lugar de tuplas, para trabajar en Mnesia. Además, el nombre del tipo de registro se utiliza como nombre de la tabla. Entonces, las funciones principales del módulo `mnesia` son:
 
 | Función | Parámetros | Descripción |
 |:-------:|:----------:|:------------|
-| ` ` | `()` | .. |
+| `activity` | `(Modo, Función)` | Realiza un bloque de operaciones encapsuladas en una función. |
+| `clear_table` | `(Tabla)` | Borra le contenido de una tabla. |
+| `create_table` | `(Nombre, Opciones)` | Crea una tabla en la base de datos. |
+| `delete` | `({Tabla, Clave})` | Borra entradas de una tabla con una clave. |
+| `delete_table` | `(Tabla)` | Borra una tabla de la base de datos. |
+| `match_object` | `(Patrón)` | Devuelve una lista de entradas que ajustan a un patrón de registro. |
+| `read` | `({Tabla, Clave})`<br/>`(Tabla, Clave)` | Devuelve entradas de una tabla con una clave. |
+| `select` | `(Tabla, Ajuste)` | Devuelve entradas que se ajustan a una *especificación de ajuste*. |
+| `table` | `(Tabla)` | Devuelve un manejador para consultas con el módulo [`qlc`](https://www.erlang.org/doc/man/qlc.html). |
+| `wait_for_tables` | `(Tablas, Timeout)` | Espera un tiempo a que estén disponibles una serie de tablas. |
+| `write` | `(Entrada)` | Escribe una entrada en una tabla. |
 
-..
+Las *opciones* principales a la hora de crear una tabla son las siguientes:
+
+| Opción | Descripción |
+|:------:|:------------|
+| `{access_mode, Modo}` | Acceso de escritura y lectura a la tabla, donde `Modo` puede ser `read_only` o `read_write`. Por defecto es `read_write`. |
+| `{attributes, Lista}` | Atributos de la tabla, donde `Lista` son los nombres de los campos del registro. Se puede usar la función `record_info(fields, Nombre)` para obtener dicha lista. |
+| `{disc_copies, Nodos}` | Indica los nodos que trabajan con tablas DETS (disco duro) y ETS (memoria). Por defecto es `[]`. |
+| `{disc_only_copies, Nodos}` | Indica los nodos que trabajan sólo con tablas DETS (disco duro). |
+| `{ram_copies, Nodos}` | Indica los nodos que trabajan sólo con tablas ETS (memoria). Por defecto es `[node()]`. |
+| `{index, Índices}` | Lista de índices de la tabla, ya se indicando el nombre de los campos o sus posiciones. |
+| `{record_name, Nombre}` | Modifica el nombre del registro a usar como elementos de la tabla, para permitir que el nombre de la tabla y del tipo de registro sea diferente. Por defecto se usa el valor usado como nombre de la tabla. |
+| `{type, Tipo}` | Tipo de la tabla, donde `Tipo` puede ser `set`, `ordered_set` o `bag`. Por defecto es `set`. No se puede usar `ordered_set` con `disc_only_copies`. |
+| `{local_content, Bool}` | Con `true` el contenido local de cada nodo no se compartirá, mientras que con `false` cada nodo tendrá la misma información para cada tabla. Por defecto es `false`. |
+
+Supongamos que tenemos el siguiente tipo de dato:
+
+```Erlang
+-record(contact, {name, phone, birthday}).
+```
+
+Para crear una tabla con Mnesia haríamos lo siguiente:
+
+```Erlang
+mnesia:create_table(contact, [
+    {attributes, record_info(fields, contact)},
+    {index, [#contact.name]},
+    {disc_copies, nodes()}
+])
+```
+
+Una vez creada las tablas, cuando se ejecuta nuestro programa y se inicia Mnesia, se puede utilizar `wait_for_tables/2` para que el sistema esté preparado para trabajar con las tablas previamente creadas. Entonces, para trabajar con las tablas, usaremos la función `activity/2`, que tiene los siguientes modos:
+
+| Modo | Descripción |
+|:----:|:------------|
+| `transaction` | Realiza una transacción sobre la base de datos, que consiste en ejecutar una serie de operaciones como un bloque funcional atómico. Esto nos garantiza que o se aplican todas las operaciones con éxito, o no se aplica ninguna en absoluto en caso de fallar alguna. |
+| `sync_transaction` | Realiza una transacción sobre la base de datos, pero la diferencia es que se sincroniza con todos los nodos, en lugar de hacerlo con el local únicamente. |
+| `async_dirty` | Realiza una serie de operaciones de forma no transaccional, sincronizándose sólo con el nodo local. |
+| `sync_dirty` | Realiza una serie de operaciones de forma no transaccional, sincronizándose con todos los nodos. |
+| `ets` | Realiza una serie de operaciones directamente sobre las tablas ETS de forma no transaccional. |
+| `{transaction, Intentos}` | Realiza una transacción, con un número de intentos máximos en caso de fallo. |
+| `{sync_transaction, Intentos}` | Realiza una transacción síncrona, con un número de intentos máximos en caso de fallo. |
+
+Lo recomendable es utilizar transacciones para realizar operaciones sobre la base de datos, para ello se usa habitualmente el modo `transaction`. Por ejemplo:
+
+```Erlang
+mnesia:activity(transaction,
+    fun() ->
+        mnesia:write(#contact{
+            name     = "Junko",
+            phone    = "56709",
+            birthday = "April 26"
+        }),
+        mnesia:read({contact, "Junko"})
+    end
+)
+```
+
+Insertamos un elemento en la base de datos y luego lo recuperamos, devolviéndolo dentro de una lista. Para hacer consultas se puede usar `match_object/1` y `select/2`, de la misma manera que se hacía con las tablas ETS. Otra forma de hacer consultas a las tablas es usando el módulo [`qlc`](https://www.erlang.org/doc/man/qlc.html) junto a la función `table/1`. Para poder realizar estas consultas, hay que incluir la siguiente cabecera:
+
+```Erlang
+-include_lib("stdlib/include/qlc.hrl")
+```
+
+Esto nos permite usar la función `qlc:q/1`, para que traduzca una expresión de lista intensional al formato interno del módulo, que podremos usar con `qlc:eval/1` para ejecutar la consulta. Por ejemplo:
+
+```Erlang
+mnesia:activity(transaction,
+    fun() ->
+        qlc:eval(qlc:q(
+            [{N,P,B} ||
+             #contact{name=N,
+                      phone=P,
+                      birthday=B} <- mnesia:table(contact),
+             string:slice(B,0,5) =:= "April"]
+        ))
+    end
+)
+```
+
+Con esto obtenemos una lista de tuplas, de aquellas entradas cuyo cumpleaños es en abril. El módulo `qlc` tiene funciones como `fold/3` o `sort/1` entre otras.
 
 ### EUnit
 
