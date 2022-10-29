@@ -65,7 +65,7 @@ Para representar números imaginarios tenemos:
 
 $$\mathit{n\acute{u}mero} \textcolor{red}{\char123} \texttt{j} \textcolor{red}{|} \texttt{J} \textcolor{red}{\char125}$$
 
-Basta con indicar un número y terminar con una `j` para representar los números imaginarios en Python. Para componer números complejos tenemos dos formas. La primera es con la función `complex(R,I)`, donde `R` es la parte real e `I` la imaginaria, siendo ambos parámetros números reales. La segunda consiste en sumar a un número, entero o real, un número imaginario, por ejemplo `1+2j`.
+Basta con indicar un número y terminar con una `j` para representar los números imaginarios en Python. Para componer números complejos tenemos dos formas. La primera es con la función `complex(R,I)`, donde `R` es la parte real e `I` la imaginaria, siendo ambos parámetros números enteros o reales. La segunda consiste en sumar a un número, entero o real, un número imaginario, por ejemplo `1+2j`.
 
 > Una curiosidad de las expresiones literales numéricas es que podemos intercalar el carácter `_` entre los dígitos del número, sin que se altere su significado semántico. Este mecanismo existe para poder separar secciones visualmente. Por ejemplo, si queremos en nuestro código tener un separador de millares, podemos usar el guion bajo para tal propósito y tener `1_984` en lugar de `1984` si es de nuestro interés.
 
