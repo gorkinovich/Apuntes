@@ -71,7 +71,43 @@ Basta con indicar un número y terminar con una `j` para representar los número
 
 ### Cadenas de texto
 
-..
+Las cadenas de texto se delimitan con comillas dobles (`"`) o comillas simples (`'`). Es lo mismo `"texto"` que `'texto'`. La expresión `"ho" "la"` equivale a `"hola"`. Hay diferentes tipos de cadenas en Python:
+
+| Tipo | Forma | Descripción |
+|:----:|:-----:|:------------|
+| `str` | `"..."`<br/>`'...'`<br/>`str(b,e)` | Cadena de texto Unicode (UTF-8) inmutable, donde `b` es una cadena de bytes y `e` es una cadena de texto con la codificación. |
+| `bytes` | `b"..."`<br/>`b'...'`<br/>`bytes(s,e)` | Cadena de bytes inmutable, donde `s` es una cadena de texto y `e` es una cadena de texto con la codificación. |
+| `bytearray` | `bytearray(b)`<br/>`bytearray(s,e)` | Cadena de bytes mutable, donde `b` es una cadena de bytes, `s` es una cadena de texto y `e` es una cadena de texto con la codificación. |
+
+El cada letra en Unicode, dependiendo de su representación, puede ocupar entre 1 y 3 bytes, mientras que en ASCII sólo puede ocupar 1 byte. Por ello, el tamaño en letras de una cadena `str` puede ser menor que en bytes y, por lo tanto, se requiere indicar la codificación a usar para transformar de texto a bytes y viceversa. Algunas de las codificaciones más conocidas son: `ascii`, `utf-8`, `utf-16`, `utf-32`, `latin`.
+
+Las cadenas de texto de tipo `str` y `bytes` son inmutables, esto quiere decir que no se puede modificar su contenido. Sin embargo, `bytearray` si permite que el contenido sea mutable y por lo tanto modificable.
+
+Las cadenas permiten contener secuencias de escape, que se transforman en ciertos valores. Las secuencias de escape permitidas en Python son:
+
+| Secuencia | Significado | Secuencia | Significado |
+|:---------:|:------------|:---------:|:------------|
+| `\` *(salto de línea)* | Ignorar continuación. | `\t` | Tabulación horizontal. |
+| `\\` | Carácter `\`. | `\v` | Tabulación vertical. |
+| `\'` | Carácter `'`. | `\ooo` | Carácter octal *ooo*. |
+| `\"` | Carácter `"`. | `\xhh` | Carácter hexadecimal *hh*. |
+| `\a` | Alarma. | `\N{n}` | Carácter con nombre en la base de datos Unicode. |
+| `\b` | Retroceso. | `\uhhhh` | Carácter Unicode 16-bit. |
+| `\f` | Alimentación. | `\Uhhhhhhhh` | Carácter Unicode 32-bit. |
+| `\n` | Nueva línea. | `\0` | Carácter nulo, distinto del fin de cadena de C/C++. |
+| `\r` | Retroceso de línea. | | |
+
+Se puede definir cadenas usando varias líneas con `"""` o `'''`, por ejemplo:
+
+```Python
+"Cadena normal"
+"""Cadena
+multi-línea"""
+```
+
+Las cadenas *multilínea* se usan también para documentar clases y funciones. 
+
+Por último, con el prefijo `r` se puede indicar que es una cadena *bruta* (*raw*), en la que las barras invertidas (`\`) no sean tomadas como secuencias de escape, sino como caracteres normales. La única salvedad, con este formato de cadenas, es que la barra invertida no puede ir al final de la cadena sin que de un error al interprete.
 
 ## Tipos básicos
 
