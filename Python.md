@@ -170,7 +170,7 @@ Te doy la bienvenida Arturo.
 
 Con la función `input` mostramos un mensaje por la consola y nos devuelve una cadena de texto, que luego es usada para construir el mensaje que mostramos con `print`.
 
-## Tipos básicos
+## Tipos y operadores básicos
 
 ### Nulo o vacío
 
@@ -184,19 +184,45 @@ Los valores booleanos vienen del [álgebra de Boole](https://es.wikipedia.org/wi
 
 > Por temas de implementación en el lenguaje, se considera como falso también el número cero (`0` o `0.0`), los contenedores de datos vacíos (`""`, `[]`, `{}`, etcétera) o el valor nulo (`None`). Todos los objetos tienen un valor booleano.
 
-..
+Tenemos diferentes operadores para construir expresiones booleanas. El primer bloque son los operadores de comparación:
 
-Para poder entender mejor estas operaciones, veamos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `X == Y`  | X es igual a Y. |
+| `X != Y`  | X no es igual a Y. |
+| `X <= Y`  | X es menor o igual que Y. |
+| `X < Y`   | X es menor que Y. |
+| `X >= Y`  | X es mayor o igual que Y. |
+| `X > Y`   | X es mayor que Y. |
+| `X is Y` | X e Y tienen la misma referencia. |
+| `X is not Y` | X e Y tienen diferentes referencias. |
+
+Donde X e Y son expresiones de Python, que se evalúan a un valor que va a ser comparado para determinar si es cierta o falsa la comparación. Nótese que no es lo mismo `==` que `is`, porque lo primero compara el valor final de la expresión y el segundo compara las direcciones de la memoria donde se almacenan dichos valores. Por implementación, las variables que almacenan objetos, que son instancias de una clase, lo que almacenan es un puntero a una dirección de memoria donde está almacenado el objeto de verdad. Estos punteros se les conoce en Python como referencias y es lo que se compara al usar los operadores `is` e `is not`, ya que con `==` lo que comparamos es el valor. Entonces, para lo que se usa, el operador `is`, es para comprobar si dos objetos representan la misma instancia.
+
+> Python permite concatenar comparaciones para comprobar si un valor está dentro de un rango. Por ejemplo, con `1 <= X <= 10` comprobaríamos si `X` está entre el `1` y el `10`. Sería lo mismo que poner `0 < X < 11`, `10 >= X >= 1`, `11 > X > 0`, etcétera.
+
+El segundo bloque son los operadores lógicos:
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de X. |
+| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de X con Y. |
+| `X or Y`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de X con Y. |
+
+De nuevo, X e Y son expresiones de Python. Estos operadores nos sirven para componer condiciones más complejas y para entenderlos mejor veamos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
 
 |   `X`   |   `Y`   | `not X` | `not Y` | `X and Y` | `X or Y` |
 |:-------:|:-------:|:-------:|:-------:|:---------:|:--------:|
-| `true`  | `true`  | `false` | `false` |  `true`   | `true`   |
-| `false` | `true`  | `true`  | `false` |  `false`  | `true`   |
-| `true`  | `false` | `false` | `true`  |  `false`  | `true`   |
-| `false` | `false` | `true`  | `true`  |  `false`  | `false`  |
+| `True`  | `True`  | `False` | `False` |  `True`   | `True`   |
+| `False` | `True`  | `True`  | `False` |  `False`  | `True`   |
+| `True`  | `False` | `False` | `True`  |  `False`  | `True`   |
+| `False` | `False` | `True`  | `True`  |  `False`  | `False`  |
 
-..
+El siguiente operador ternario, sirve para controlar la ejecución de expresiones en base a una condición booleana:
 
+$$\mathit{expresi\acute{o}n_{True}}\ \texttt{if}\ \mathit{condici\acute{o}n}\ \texttt{else}\ \mathit{expresi\acute{o}n_{False}}$$
+
+Si la *condición* es cierta, se ejecuta la primera *expresión*, si es falsa, se ejecuta la segunda. Aunque tengamos disponible este operador, no es recomendable su uso para evitar la ofuscación del código, en su lugar es mejor utilizar la sentencia `if`.
 
 ### Números
 
@@ -319,7 +345,7 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
 | `X == Y`<br/>`X != Y` | Igualdad y desigualdad de X con Y. |
 | `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de X con Y. |
-| `X is Y`<br/>`X is not Y` | Test de identidad de los objetos X e Y. |
+| `X is Y`<br/>`X is not Y` | Comparación de referencias con los objetos X e Y. |
 | `X in Y`<br/>`X not in Y` | Pertenencia o no de X al contenedor Y. |
 | `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) lógica de X. |
 | `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) lógica de X con Y, donde Y se evaluará si X es `True`. |
