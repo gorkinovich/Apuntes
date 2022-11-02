@@ -224,7 +224,7 @@ Basta con indicar un número y terminar con una `j` para representar los número
 
 ..
 
-| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X | Y` | `X ^ Y` |
+| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X \| Y` | `X ^ Y` |
 |:---:|:---:|:----:|:----:|:-------:|:-------:|:-------:|
 | `1` | `1` |  `0` |  `0` |   `1`   |   `1`   |   `0`   |
 | `0` | `1` |  `1` |  `0` |   `0`   |   `1`   |   `1`   |
@@ -316,7 +316,7 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha Y bits de X. |
 | `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
 | `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de X con Y. |
-| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
+| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
 | `X == Y`<br/>`X != Y` | Igualdad y desigualdad de X con Y. |
 | `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de X con Y. |
 | `X is Y`<br/>`X is not Y` | Test de identidad de los objetos X e Y. |
