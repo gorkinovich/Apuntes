@@ -81,7 +81,7 @@ Que al importarlo dará como resultado:
 
 Si ejecutamos el módulo `python.py` con el comando `python`, veremos que sigue funcionando como antes. Esto es posible porque `__name__` es una variable especial que se configura al importar o ejecutar un módulo. Cuando se ejecuta un módulo su valor es `"__main__"`.
 
-> La sentencia `if` nos permite comprobar que se cumpla una condición, que en este caso es que el contenido de `__name__` sea igual a `"__main__"`, y ejecutar el siguiente bloque de código si es cierto. Si no es cierta la condición, se ejecuta el bloque de código de la sentencia `else`. Los bloques de código dependen del número de espacios con el que se tabulan. Es recomendable evitar mezclar espacios y tabulaciones. La explicación completa de todo esto está en la sección de *sentencias de control*.
+> La sentencia `if` nos permite comprobar que se cumpla una condición, que en este caso es que el contenido de `__name__` sea igual a `"__main__"`, y ejecutar el siguiente bloque de código si es cierto. Si no es cierta la condición, se ejecuta el bloque de código de la sentencia `else`. Los bloques de código dependen del número de espacios con el que se tabulan. Es recomendable evitar mezclar espacios y tabulaciones. La explicación completa, sobre la sentencia `if` y los bloques, se puede encontrar en la sección de *sentencias de control*.
 
 Para que entendamos mejor la situación, supongamos que tenemos:
 
@@ -226,7 +226,7 @@ Si la *condición* es cierta, se ejecuta la primera *expresión*, si es falsa, s
 
 ### Números
 
-Python permite representar números [enteros](https://es.wikipedia.org/wiki/N%C3%BAmero_entero), [reales](https://es.wikipedia.org/wiki/N%C3%BAmero_real) e [imaginarios](https://es.wikipedia.org/wiki/N%C3%BAmero_imaginario) (para componer números [complejos](https://es.wikipedia.org/wiki/N%C3%BAmero_complejo)). Para representar números enteros tenemos:
+Python permite representar números [enteros](https://es.wikipedia.org/wiki/N%C3%BAmero_entero), [reales](https://es.wikipedia.org/wiki/N%C3%BAmero_real) e [imaginarios](https://es.wikipedia.org/wiki/N%C3%BAmero_imaginario) (para componer números [complejos](https://es.wikipedia.org/wiki/N%C3%BAmero_complejo)). Para representar números enteros, que pertenecen al tipo `int`, tenemos:
 
 $$\textcolor{red}{[} \texttt{0} \textcolor{red}{\char123} \texttt{b} \textcolor{red}{|} \texttt{o} \textcolor{red}{|} \texttt{x} \textcolor{red}{|} \texttt{B} \textcolor{red}{|} \texttt{O} \textcolor{red}{|} \texttt{X} \textcolor{red}{\char125} \textcolor{red}{]} \mathit{d\acute{\imath}gitos}$$
 
@@ -234,7 +234,7 @@ Con `b` o `B` expresamos números binarios, con `0` y `1` como dígitos. Con `o`
 
 > Podemos expresar `-1` en Python, pero sólo `1` será parte de la expresión literal, el símbolo menos cuenta como un operador unario. Lo mismo ocurre para el caso de `+1`. Esto se aplica para todos los tipos de literales numéricos.
 
-Para representar números reales o de coma flotante tenemos:
+Para representar números reales o de coma flotante, que pertenecen al tipo `float`, tenemos:
 
 $$\mathit{d\acute{\imath}gitos} \texttt{.} \textcolor{red}{[} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \textcolor{red}{\char123} \texttt{e} \textcolor{red}{|} \texttt{E} \textcolor{red}{\char125} \textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{]}$$
 
@@ -244,11 +244,36 @@ Para representar números imaginarios tenemos:
 
 $$\mathit{n\acute{u}mero} \textcolor{red}{\char123} \texttt{j} \textcolor{red}{|} \texttt{J} \textcolor{red}{\char125}$$
 
-Basta con indicar un número y terminar con una `j` para representar los números imaginarios en Python. Para componer números complejos tenemos dos formas. La primera es con la función `complex(R,I)`, donde `R` es la parte real e `I` la imaginaria, siendo ambos parámetros números enteros o reales. La segunda consiste en sumar a un número, entero o real, un número imaginario, por ejemplo `1+2j`.
+Basta con indicar un número y terminar con una `j` para representar los números imaginarios en Python. Para componer números complejos, que pertenecen al tipo `complex`, tenemos dos formas. La primera es con la función `complex(R,I)`, donde `R` es la parte real e `I` la imaginaria, siendo ambos parámetros números enteros o reales. La segunda consiste en sumar a un número, entero o real, un número imaginario, por ejemplo `1+2j`. Hay que tener en cuenta que Python no tiene como tipo el conjunto de los números imaginarios, por lo que `1j` es interpretado como `0+1j` y pertenecerá al tipo `complex`.
 
 > Una curiosidad de las expresiones literales numéricas es que podemos intercalar el carácter `_` entre los dígitos del número, sin que se altere su significado semántico. Este mecanismo existe para poder separar secciones visualmente. Por ejemplo, si queremos en nuestro código tener un separador de millares, podemos usar el guion bajo para tal propósito y tener `1_984` en lugar de `1984` si es de nuestro interés.
 
-..
+En cuanto a las operaciones que podemos realizar con números, el primer bloque de operadores es el de los aritméticos:
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `+X` | Signo positivo. |
+| `-X` | Signo negativo. |
+| `X + Y` | Suma: X más Y. |
+| `X - Y` | Resta: X menos Y. |
+| `X * Y` | Multiplicación: X por Y. |
+| `X / Y` | División: X entre Y. |
+| `X // Y` | División entera: X entre Y. |
+| `X % Y` | Resto de dividir X entre Y. |
+| `X ** Y` | X elevado a Y. |
+
+El segundo bloque son los operadores a nivel de bits:
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de X. |
+| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de X con Y. |
+| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de X con Y. |
+| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de X con Y. |
+| `X << Y` | Desplazamiento a la izquierda Y bits de X. |
+| `X >> Y` | Desplazamiento a la derecha Y bits de X. |
+
+De modo similar a los operadores lógicos, aquí están las [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad) de los operadores lógicos aplicados a nivel de bits:
 
 | `X` | `Y` | `~X` | `~Y` | `X & Y` | `X \| Y` | `X ^ Y` |
 |:---:|:---:|:----:|:----:|:-------:|:-------:|:-------:|
@@ -257,7 +282,7 @@ Basta con indicar un número y terminar con una `j` para representar los número
 | `1` | `0` |  `0` |  `1` |   `0`   |   `1`   |   `1`   |
 | `0` | `0` |  `1` |  `1` |   `0`   |   `0`   |   `0`   |
 
-..
+Además de estos operadores, existen las funciones nativas `abs`, `divmod` y `pow`, así como los módulo `math`, `cmath`, `numbers`, `decimal`, `fractions`, `random` y `statistics`, para trabajar con números. Estas funciones y módulos se verán en futuras secciones.
 
 ### Cadenas de texto
 
@@ -295,17 +320,25 @@ Se puede definir cadenas usando varias líneas con `"""` o `'''`, por ejemplo:
 multi-línea"""
 ```
 
-Las cadenas *multilínea* se usan también para documentar clases y funciones. 
+> Las cadenas *multilínea* se usan también para generar la [documentación](https://peps.python.org/pep-0257/) de clases y funciones en Python.
 
-Por último, con el prefijo `r` se puede indicar que es una cadena *bruta* (*raw*), en la que las barras invertidas (`\`) no sean tomadas como secuencias de escape, sino como caracteres normales. La única salvedad, con este formato de cadenas, es que la barra invertida no puede ir al final de la cadena sin que de un error al interprete.
+Con el prefijo `r` se puede indicar que es una cadena *bruta* (*raw*), en la que las barras invertidas (`\`) no sean tomadas como secuencias de escape, sino como caracteres normales. La única salvedad, con este formato de cadenas, es que la barra invertida no puede ir al final de la cadena sin que de un error al interprete.
 
-..
+En cuanto a las operaciones que podemos realizar con cadenas, están explicadas en la sección sobre *operaciones con secuencias*.
 
 ### Tuplas
 
 ..
 
+En cuanto a las operaciones que podemos realizar con tuplas, están explicadas en la sección sobre *operaciones con secuencias*.
+
 ### Listas
+
+..
+
+En cuanto a las operaciones que podemos realizar con listas, están explicadas en la sección sobre *operaciones con secuencias*.
+
+### Operaciones con secuencias
 
 ..
 
@@ -335,7 +368,7 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `X[i:j:k]` | Selección del contenedor X (*slicing*). |
 | `X[i]` | Indexado del contenedor X. |
 | `X ** Y` | X elevado a Y. |
-| `~X` | Negación a nivel de bits de X. |
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) a nivel de bits de X. |
 | `-X`<br/>`+X` | Negación e identidad de X. |
 | `X * Y`<br/>`X % Y`<br/>`X / Y`<br/>`X // Y` | Multiplicación/repetición, módulo/formato, división y división entera de X con Y. |
 | `X + Y`<br/>`X - Y` | Suma/concatenación y resta/diferencia de X con Y. |
