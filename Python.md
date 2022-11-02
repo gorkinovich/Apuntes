@@ -186,6 +186,18 @@ Los valores booleanos vienen del [álgebra de Boole](https://es.wikipedia.org/wi
 
 ..
 
+Para poder entender mejor estas operaciones, veamos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
+
+|   `X`   |   `Y`   | `not X` | `not Y` | `X and Y` | `X or Y` |
+|:-------:|:-------:|:-------:|:-------:|:---------:|:--------:|
+| `true`  | `true`  | `false` | `false` |  `true`   | `true`   |
+| `false` | `true`  | `true`  | `false` |  `false`  | `true`   |
+| `true`  | `false` | `false` | `true`  |  `false`  | `true`   |
+| `false` | `false` | `true`  | `true`  |  `false`  | `false`  |
+
+..
+
+
 ### Números
 
 Python permite representar números [enteros](https://es.wikipedia.org/wiki/N%C3%BAmero_entero), [reales](https://es.wikipedia.org/wiki/N%C3%BAmero_real) e [imaginarios](https://es.wikipedia.org/wiki/N%C3%BAmero_imaginario) (para componer números [complejos](https://es.wikipedia.org/wiki/N%C3%BAmero_complejo)). Para representar números enteros tenemos:
@@ -209,6 +221,15 @@ $$\mathit{n\acute{u}mero} \textcolor{red}{\char123} \texttt{j} \textcolor{red}{|
 Basta con indicar un número y terminar con una `j` para representar los números imaginarios en Python. Para componer números complejos tenemos dos formas. La primera es con la función `complex(R,I)`, donde `R` es la parte real e `I` la imaginaria, siendo ambos parámetros números enteros o reales. La segunda consiste en sumar a un número, entero o real, un número imaginario, por ejemplo `1+2j`.
 
 > Una curiosidad de las expresiones literales numéricas es que podemos intercalar el carácter `_` entre los dígitos del número, sin que se altere su significado semántico. Este mecanismo existe para poder separar secciones visualmente. Por ejemplo, si queremos en nuestro código tener un separador de millares, podemos usar el guion bajo para tal propósito y tener `1_984` en lugar de `1984` si es de nuestro interés.
+
+..
+
+| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X | Y` | `X ^ Y` |
+|:---:|:---:|:----:|:----:|:-------:|:-------:|:-------:|
+| `1` | `1` |  `0` |  `0` |   `1`   |   `1`   |   `0`   |
+| `0` | `1` |  `1` |  `0` |   `0`   |   `1`   |   `1`   |
+| `1` | `0` |  `0` |  `1` |   `0`   |   `1`   |   `1`   |
+| `0` | `0` |  `1` |  `1` |   `0`   |   `0`   |   `0`   |
 
 ..
 
@@ -295,7 +316,7 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha Y bits de X. |
 | `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
 | `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de X con Y. |
-| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
+| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
 | `X == Y`<br/>`X != Y` | Igualdad y desigualdad de X con Y. |
 | `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de X con Y. |
 | `X is Y`<br/>`X is not Y` | Test de identidad de los objetos X e Y. |
@@ -312,6 +333,14 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 ..
 
 ## Clases y objetos
+
+..
+
+## Funciones nativas
+
+..
+
+## Biblioteca estándar
 
 ..
 
