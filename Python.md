@@ -1,4 +1,4 @@
-﻿# Python
+﻿# Python 3
 
 ## Primeros pasos
 
@@ -532,7 +532,31 @@ La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Pytho
 
 ..
 
-## Módulos de datos
+## Módulos de estructuras
+
+..
+
+## Módulos funcionales
+
+..
+
+## Módulos de ficheros y directorios
+
+..
+
+## Módulos del sistema operativo
+
+..
+
+## Módulos de concurrencia
+
+..
+
+## Módulos de comunicaciones
+
+..
+
+## Módulos de almacenamiento
 
 ..
 
