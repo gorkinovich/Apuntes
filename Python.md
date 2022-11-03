@@ -188,14 +188,14 @@ Tenemos diferentes operadores para construir expresiones booleanas. El primer bl
 
 | Operador | Descripción |
 |:--------:|:-----------:|
-| `X == Y`  | X es igual a Y. |
-| `X != Y`  | X no es igual a Y. |
-| `X <= Y`  | X es menor o igual que Y. |
-| `X < Y`   | X es menor que Y. |
-| `X >= Y`  | X es mayor o igual que Y. |
-| `X > Y`   | X es mayor que Y. |
-| `X is Y` | X e Y tienen la misma referencia. |
-| `X is not Y` | X e Y tienen diferentes referencias. |
+| `X == Y`  | **X** es igual a **Y**. |
+| `X != Y`  | **X** no es igual a **Y**. |
+| `X <= Y`  | **X** es menor o igual que **Y**. |
+| `X < Y`   | **X** es menor que **Y**. |
+| `X >= Y`  | **X** es mayor o igual que **Y**. |
+| `X > Y`   | **X** es mayor que **Y**. |
+| `X is Y` | **X** e **Y** tienen la misma referencia. |
+| `X is not Y` | **X** e **Y** tienen diferentes referencias. |
 
 Donde X e Y son expresiones de Python, que se evalúan a un valor que va a ser comparado para determinar si es cierta o falsa la comparación. Nótese que no es lo mismo `==` que `is`, porque lo primero compara el valor final de la expresión y el segundo compara las direcciones de la memoria donde se almacenan dichos valores. Por implementación, las variables que almacenan objetos, que son instancias de una clase, lo que almacenan es un puntero a una dirección de memoria donde está almacenado el objeto de verdad. Estos punteros se les conoce en Python como referencias y es lo que se compara al usar los operadores `is` e `is not`, ya que con `==` lo que comparamos es el valor. Entonces, para lo que se usa, el operador `is`, es para comprobar si dos objetos representan la misma instancia.
 
@@ -205,9 +205,9 @@ El segundo bloque son los operadores lógicos:
 
 | Operador | Descripción |
 |:--------:|:-----------:|
-| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de X. |
-| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de X con Y. |
-| `X or Y`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de X con Y. |
+| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de **X**. |
+| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de **X** con **Y**. |
+| `X or Y`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de **X** con **Y**. |
 
 De nuevo, X e Y son expresiones de Python. Estos operadores nos sirven para componer condiciones más complejas y para entenderlos mejor veamos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
 
@@ -217,6 +217,8 @@ De nuevo, X e Y son expresiones de Python. Estos operadores nos sirven para comp
 | `False` | `True`  | `True`  | `False` |  `False`  | `True`   |
 | `True`  | `False` | `False` | `True`  |  `False`  | `True`   |
 | `False` | `False` | `True`  | `True`  |  `False`  | `False`  |
+
+> Los operadores `and` y `or` funcionan con *lógica de cortocircuito*, es decir, al evaluar el primer operando se conoce el resultado final de la expresión, porque sea `False` en el caso de `and` o `True` en el caso de `or`, no se evaluará el segundo operando.
 
 El siguiente operador ternario, sirve para controlar la ejecución de expresiones en base a una condición booleana:
 
@@ -254,24 +256,24 @@ En cuanto a las operaciones que podemos realizar con números, el primer bloque 
 |:--------:|:-----------:|
 | `+X` | Signo positivo. |
 | `-X` | Signo negativo. |
-| `X + Y` | Suma: X más Y. |
-| `X - Y` | Resta: X menos Y. |
-| `X * Y` | Multiplicación: X por Y. |
-| `X / Y` | División: X entre Y. |
-| `X // Y` | División entera: X entre Y. |
-| `X % Y` | Resto de dividir X entre Y. |
-| `X ** Y` | X elevado a Y. |
+| `X + Y` | Suma: **X** más **Y**. |
+| `X - Y` | Resta: **X** menos **Y**. |
+| `X * Y` | Multiplicación: **X** por **Y**. |
+| `X / Y` | División: **X** entre **Y**. |
+| `X // Y` | División entera: **X** entre **Y**. |
+| `X % Y` | Resto de dividir **X** entre **Y**. |
+| `X ** Y` | **X** elevado a **Y**. |
 
 El segundo bloque son los operadores a nivel de bits:
 
 | Operador | Descripción |
 |:--------:|:-----------:|
-| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de X. |
-| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de X con Y. |
-| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de X con Y. |
-| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de X con Y. |
-| `X << Y` | Desplazamiento a la izquierda Y bits de X. |
-| `X >> Y` | Desplazamiento a la derecha Y bits de X. |
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de **X**. |
+| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de **X** con **Y**. |
+| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de **X** con **Y**. |
+| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de **X** con **Y**. |
+| `X << Y` | Desplazamiento a la izquierda **Y** bits de **X**. |
+| `X >> Y` | Desplazamiento a la derecha **Y** bits de **X**. |
 
 De modo similar a los operadores lógicos, aquí están las [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad) de los operadores lógicos aplicados a nivel de bits:
 
@@ -340,9 +342,92 @@ En cuanto a las operaciones que podemos realizar con listas, están explicadas e
 
 ### Operaciones con secuencias
 
-..
+Hemos visto varios tipos de estructuras secuenciales: `str`, `bytes`, `bytearray`, `tuple` y `list`. Se pueden usar los siguientes operadores y funciones con todas ellas:
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `X in S` | **X** existe en **S**. |
+| `X not in S` | **X** no existe en **S**. |
+| `S1 + S2` | **S1** y **S2** concatenadas. |
+| `S * N`<br/>`N * S` | **S** repetida **N** veces. |
+| `S[i]` | Elemento en la posición **i** de **S**. |
+| `S[i:j]` | Elementos desde **i** hasta **j-1** de **S**. |
+| `S[i:j:k]` | Elementos desde **i**, con saltos de **k** unidades, hasta **j-1** de **S**. |
+| `S[i:]` | Elementos desde **i** hasta el final de **S**. |
+| `S[:j]` | Elementos desde cero hasta **j-1** de **S**. |
+| `S[:]` | Copia *superficial* de **S**. |
+| `len(S)` | Número de elementos de **S**. |
+| `max(S)` | Elemento máximo de **S**. |
+| `min(S)` | Elemento mínimo de **S**. |
+| `iter(S)` | Iterador de **S**. |
+| `map(F,S)` | Aplica **F** a cada elemento de **S**. |
+
+El operador de acceso con índices en Python es muy versátil. Si un contenedor `S` tiene `N` elementos, los índices que podremos usar para acceder a su contenido serán los valores del `0` hasta `N-1`. Adicionalmente, si usamos valores negativos, accederemos desde el último elemento hasta el inicio, siendo `-1` el último elemento de `S`, `-2` el penúltimo y así sucesivamente. Si intentamos acceder a un elemento fuera de los límites, se lanza como error un `IndexError`.
+
+En el caso de acceder manejando rangos, si indicamos uno fuera de los límites de `S`, se devolverá un contenedor vacío. Si indicamos un rango que comienza en una `i` dentro del tamaño de `S` y una `j` en el exterior, se nos devolverán los elementos de `S` que hay desde `i` hasta el final del contenedor, sin que se produzca ningún error.
+
+Téngase en cuenta que, todas aquellas operaciones que devuelven como resultado un contenedor, están devolviendo uno nuevo con los elementos copiados. Por ejemplo:
+
+```Python
+# Fichero: copias.py
+S1 = [1,2,3,4,5,6]
+S2 = S1[:4]
+S2[1] = str(S2[1])
+print(S1)
+print(S2)
+```
+
+```
+$ python copias.py
+[1, 2, 3, 4, 5, 6]
+[1, '2', 3, 4]
+```
+
+Como se puede ver, tenemos una instancia del tipo lista en `S1` y, al seleccionar los cuatro primeros elementos de esta, se crea una instancia nueva del tipo lista en `S2`  con una copia del contenido de `S1`. Perfecto, ¿no? Sí, pero no. Hay que recordar que las variables en Python manejan referencias y no valores directamente. Por ejemplo:
+
+```Python
+# Fichero: copias.py
+S1 = [[1,2],[3,4],[5,6]]
+S2 = S1[:2]
+S2[0][1] = "O_O"
+print(S1)
+print(S2)
+```
+
+```
+$ python copias.py
+[[1, 'O_O'], [3, 4], [5, 6]]
+[[1, 'O_O'], [3, 4]]
+```
+
+Efectivamente `S2` es una copia de `S1`, siendo instancias distintas, pero el primer elemento de ambas apuntan al mismo objeto en memoria. Por ello, si se modifica dicho objeto desde uno de los contenedores, se verá también afectado el otro. Para poder hacer una copia profunda, en caso de ser necesario, existe la función [`copy.deepcopy`](https://docs.python.org/3/library/copy.html).
+
+De las estructuras secuenciales que existen, sólo `bytearray` y `list` son mutables, y por lo tanto el resto son inmutables. Teniendo en cuenta esto, los siguientes operadores y funciones se pueden usar con contenedores mutables:
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| `S[i] = X` | Modifica con **X** el elemento en la posición **i** de **S**. |
+| `S[i:j] = I` | Sustituye el segmento desde **i** hasta **j-1** de **S** con el contenido del iterador **I**. |
+| `S[i:j:k] = I` | Sustituye los elementos desde **i**, con saltos de **k** unidades, hasta **j-1** de **S** con el contenido del iterador **I**. Si el tamaño del rango indicado y de **I** no son iguales, se lanza el error `ValueError`. |
+| `S[i:] = I` | Sustituye el segmento desde **i** hasta el final de **S** con el contenido del iterador **I**. |
+| `S[:j] = I` | Sustituye el segmento desde cero hasta **j-1** de **S** con el contenido del iterador **I**. |
+| `S[:] = I` | Sustituye el contenido de **S** con el contenido del iterador **I**. |
+| `del S[i]` | Elimina el elemento en la posición **i** de **S**. |
+| `del S[i:j]` | Elimina los elementos desde **i** hasta **j-1** de **S**. |
+| `del S[i:j:k]` | Elimina los elementos desde **i**, con saltos de **k** unidades, hasta **j-1** de **S**. |
+| `del S[i:]` | Elimina los elementos desde **i** hasta el final de **S**. |
+| `del S[:j]` | Elimina los elementos desde cero hasta **j-1** de **S**. |
+| `del S[:]` | Elimina el contenido de **S**. |
+
+En general, la sustitución del contenido de `S` por el de un iterador `I`, consiste en borrar el segmento indicado en `S` e insertar los valores de `I` en el hueco. La excepción es al usar `S[i:j:k] = I`, ya que no hay una forma clara de resolver esa situación, cuando no coinciden en tamaño el número de elementos a modificar, porque en este caso no se trata de un segmento sino de elementos salteados y por lo tanto hay que ir modificando uno a uno.
 
 ### Diccionarios
+
+..
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| ` ` | .. |
 
 ..
 
@@ -350,7 +435,23 @@ En cuanto a las operaciones que podemos realizar con listas, están explicadas e
 
 ..
 
+| Operador | Descripción |
+|:--------:|:-----------:|
+| ` ` | .. |
+
+..
+
 ### Ficheros
+
+..
+
+### Asignación de valores
+
+..
+
+| Operador | Descripción |
+|:--------:|:-----------:|
+| ` ` | .. |
 
 ..
 
@@ -364,28 +465,32 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `[...]` | Listas. |
 | `(...)` | Paréntesis, tuplas y generadores. |
 | `X.atributo` | Referencia a un atributo de X. |
-| `X(args)` | Invocación de la función X. |
-| `X[i:j:k]` | Selección del contenedor X (*slicing*). |
-| `X[i]` | Indexado del contenedor X. |
-| `X ** Y` | X elevado a Y. |
-| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) a nivel de bits de X. |
-| `-X`<br/>`+X` | Negación e identidad de X. |
-| `X * Y`<br/>`X % Y`<br/>`X / Y`<br/>`X // Y` | Multiplicación/repetición, módulo/formato, división y división entera de X con Y. |
-| `X + Y`<br/>`X - Y` | Suma/concatenación y resta/diferencia de X con Y. |
-| `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha Y bits de X. |
-| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
-| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de X con Y. |
-| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de X con Y. |
-| `X == Y`<br/>`X != Y` | Igualdad y desigualdad de X con Y. |
-| `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de X con Y. |
-| `X is Y`<br/>`X is not Y` | Comparación de referencias con los objetos X e Y. |
-| `X in Y`<br/>`X not in Y` | Pertenencia o no de X al contenedor Y. |
-| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) lógica de X. |
-| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) lógica de X con Y, donde Y se evaluará si X es `True`. |
-| `X or Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) lógica de X con Y, donde Y se evaluará si X es `False`. |
-| `X if Y else Z` | X será evaluado si Y es `True`, si no se evalúa Z. |
+| `X(args)` | Invocación de la función **X**. |
+| `X[i:j:k]` | Selección del contenedor **X** (*slicing*). |
+| `X[i]` | Indexado del contenedor **X**. |
+| `await X` | Espera la evaluación de **X**. |
+| `X ** Y` | **X** elevado a **Y**. |
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) a nivel de bits de **X**. |
+| `-X`<br/>`+X` | Negación e identidad de **X**. |
+| `X * Y`<br/>`X % Y`<br/>`X / Y`<br/>`X // Y` | Multiplicación/repetición, módulo/formato, división y división entera de **X** con **Y**. |
+| `X + Y`<br/>`X - Y` | Suma/concatenación y resta/diferencia de **X** con **Y**. |
+| `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha **Y** bits de **X**. |
+| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de **X** con **Y**. |
+| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de **X** con **Y**. |
+| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de **X** con **Y**. |
+| `X == Y`<br/>`X != Y` | Igualdad y desigualdad de **X** con **Y**. |
+| `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de **X** con **Y**. |
+| `X is Y`<br/>`X is not Y` | Comparación de referencias con los objetos **X** e **Y**. |
+| `X in Y`<br/>`X not in Y` | Pertenencia o no de **X** al contenedor **Y**. |
+| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) lógica de **X**. |
+| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) lógica de **X** con **Y**, donde **Y** se evaluará si **X** es `True`. |
+| `X or Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) lógica de **X** con **Y**, donde **Y** se evaluará si **X** es `False`. |
+| `X if Y else Z` | **X** será evaluado si **Y** es `True`, si no se evalúa **Z**. |
 | `lambda args: X` | Expresión lambda. |
+| `X := Y` | Asignación del valor **Y** en la variable **X**. |
 | `yield X` | Generador de valores. |
+
+> En la categoría de la multiplicación estaría el operador `@`, que la documentación de Python lo denomina como [multiplicador de matrices](https://peps.python.org/pep-0465/), aunque la biblioteca estándar no implementa este operador. Sin embargo, bibliotecas como [`numpy`](https://numpy.org/) sí que lo usan para multiplicar matrices.
 
 ## Sentencias de control
 
@@ -395,11 +500,39 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 
 ..
 
-## Funciones nativas
+## Biblioteca estándar
+
+La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Python es muy completa y comprende varias áreas de trabajo.
 
 ..
 
-## Biblioteca estándar
+## Elementos nativos
+
+### Funciones nativas
+
+..
+
+### Constantes nativas
+
+..
+
+### Tipos nativos
+
+..
+
+### Excepciones nativas
+
+..
+
+## Módulos matemáticos
+
+..
+
+## Módulos de cadenas
+
+..
+
+## Módulos de datos
 
 ..
 
