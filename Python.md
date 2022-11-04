@@ -108,7 +108,7 @@ Y si lo importamos, tendremos la siguiente salida:
 ¡Adiós mundo!
 ```
 
-Por ello debemos tener en cuenta que `import` va a ejecutar el código que se pueda ejecutar en el módulo. Lo recomendable es evitar ejecutar código alguno, prescindiendo en el ejemplo del bloque de la sentencia `else`. En caso de necesitar inicializar el módulo se puede definir una función para ello. Para definir una función usaremos:
+Por ello debemos tener en cuenta que `import` va a ejecutar el código que se pueda ejecutar en el módulo. Lo recomendable es evitar ejecutar código alguno, prescindiendo en el ejemplo del bloque de la sentencia `else`. En caso de necesitar inicializar el módulo se puede definir una función para ello. Para definir una **función** usaremos:
 
 $$\texttt{def}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{variable_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{variable_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)} \texttt{:}$$
 
@@ -188,14 +188,14 @@ Tenemos diferentes operadores para construir expresiones booleanas. El primer bl
 
 | Operador | Descripción |
 |:--------:|:-----------:|
-| `X == Y`  | **X** es igual a **Y**. |
-| `X != Y`  | **X** no es igual a **Y**. |
-| `X <= Y`  | **X** es menor o igual que **Y**. |
-| `X < Y`   | **X** es menor que **Y**. |
-| `X >= Y`  | **X** es mayor o igual que **Y**. |
-| `X > Y`   | **X** es mayor que **Y**. |
-| `X is Y` | **X** e **Y** tienen la misma referencia. |
-| `X is not Y` | **X** e **Y** tienen diferentes referencias. |
+| `X == Y`  | `X` es igual a `Y`. |
+| `X != Y`  | `X` no es igual a `Y`. |
+| `X <= Y`  | `X` es menor o igual que `Y`. |
+| `X < Y`   | `X` es menor que `Y`. |
+| `X >= Y`  | `X` es mayor o igual que `Y`. |
+| `X > Y`   | `X` es mayor que `Y`. |
+| `X is Y` | `X` e `Y` tienen la misma referencia. |
+| `X is not Y` | `X` e `Y` tienen diferentes referencias. |
 
 Donde X e Y son expresiones de Python, que se evalúan a un valor que va a ser comparado para determinar si es cierta o falsa la comparación. Nótese que no es lo mismo `==` que `is`, porque lo primero compara el valor final de la expresión y el segundo compara las direcciones de la memoria donde se almacenan dichos valores. Por implementación, las variables que almacenan objetos, que son instancias de una clase, lo que almacenan es un puntero a una dirección de memoria donde está almacenado el objeto de verdad. Estos punteros se les conoce en Python como referencias y es lo que se compara al usar los operadores `is` e `is not`, ya que con `==` lo que comparamos es el valor. Entonces, para lo que se usa, el operador `is`, es para comprobar si dos objetos representan la misma instancia.
 
@@ -205,9 +205,9 @@ El segundo bloque son los operadores lógicos:
 
 | Operador | Descripción |
 |:--------:|:-----------:|
-| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de **X**. |
-| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de **X** con **Y**. |
-| `X or Y`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de **X** con **Y**. |
+| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de `X`. |
+| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
+| `X or Y`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
 
 De nuevo, X e Y son expresiones de Python. Estos operadores nos sirven para componer condiciones más complejas y para entenderlos mejor veamos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
 
@@ -256,24 +256,24 @@ En cuanto a las operaciones que podemos realizar con números, el primer bloque 
 |:--------:|:-----------:|
 | `+X` | Signo positivo. |
 | `-X` | Signo negativo. |
-| `X + Y` | Suma: **X** más **Y**. |
-| `X - Y` | Resta: **X** menos **Y**. |
-| `X * Y` | Multiplicación: **X** por **Y**. |
-| `X / Y` | División: **X** entre **Y**. |
-| `X // Y` | División entera: **X** entre **Y**. |
-| `X % Y` | Resto de dividir **X** entre **Y**. |
-| `X ** Y` | **X** elevado a **Y**. |
+| `X + Y` | Suma: `X` más `Y`. |
+| `X - Y` | Resta: `X` menos `Y`. |
+| `X * Y` | Multiplicación: `X` por `Y`. |
+| `X / Y` | División: `X` entre `Y`. |
+| `X // Y` | División entera: `X` entre `Y`. |
+| `X % Y` | Resto de dividir `X` entre `Y`. |
+| `X ** Y` | `X` elevado a `Y`. |
 
 El segundo bloque son los operadores a nivel de bits:
 
 | Operador | Descripción |
 |:--------:|:-----------:|
-| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de **X**. |
-| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de **X** con **Y**. |
-| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de **X** con **Y**. |
-| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de **X** con **Y**. |
-| `X << Y` | Desplazamiento a la izquierda **Y** bits de **X**. |
-| `X >> Y` | Desplazamiento a la derecha **Y** bits de **X**. |
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de `X`. |
+| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
+| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
+| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de `X` con `Y`. |
+| `X << Y` | Desplazamiento a la izquierda `Y` bits de `X`. |
+| `X >> Y` | Desplazamiento a la derecha `Y` bits de `X`. |
 
 De modo similar a los operadores lógicos, aquí están las [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad) de los operadores lógicos aplicados a nivel de bits:
 
@@ -326,19 +326,158 @@ multi-línea"""
 
 Con el prefijo `r` se puede indicar que es una cadena *bruta* (*raw*), en la que las barras invertidas (`\`) no sean tomadas como secuencias de escape, sino como caracteres normales. La única salvedad, con este formato de cadenas, es que la barra invertida no puede ir al final de la cadena sin que de un error al interprete.
 
-En cuanto a las operaciones que podemos realizar con cadenas, están explicadas en la sección sobre *operaciones con secuencias*.
+En cuanto a las operaciones que podemos realizar con cadenas, están explicadas en la sección sobre *operaciones con secuencias*. No obstante hay algunos métodos de la clase `str` a tener en cuenta. El primer bloque de métodos son las funciones de búsqueda en cadenas:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `S.count(SX)`<br/>`S.count(SX,i)`<br/>`S.count(SX,i,j)` | Devuelve el número de veces que encuentra `SX` en la cadena, entre las posiciones `i` y `j-1`. |
+| `S.find(SX)`<br/>`S.find(SX,i)`<br/>`S.find(SX,i,j)` | Devuelve la posición de la primera aparición de `SX` en la cadena, entre las posiciones `i` y `j-1`. Si no se encuentra `SX` devuelve `-1`. |
+| `S.rfind(SX)`<br/>`S.rfind(SX,i)`<br/>`S.rfind(SX,i,j)` | Devuelve la posición de la última aparición de `SX` en la cadena, entre las posiciones `i` y `j-1`. Si no se encuentra `SX` devuelve `-1`. |
+| `S.index(SX)`<br/>`S.index(SX,i)`<br/>`S.index(SX,i,j)` | Devuelve la posición de la primera aparición de `SX` en la cadena, entre las posiciones `i` y `j-1`. Si no se encuentra `SX` se lanza un `ValueError`. |
+| `S.rindex(SX)`<br/>`S.rindex(SX,i)`<br/>`S.rindex(SX,i,j)` | Devuelve la posición de la última aparición de `SX` en la cadena, entre las posiciones `i` y `j-1`. Si no se encuentra `SX` se lanza un `ValueError`. |
+| `S.startswith(SX)`<br/>`S.startswith(SX,i)`<br/>`S.startswith(SX,i,j)` | Comprueba si la subcadena, entre las posiciones `i` y `j-1`, empieza igual que `SX`. |
+| `S.endswith(SX)`<br/>`S.endswith(SX,i)`<br/>`S.endswith(SX,i,j)` | Comprueba si la subcadena, entre las posiciones `i` y `j-1`, termina igual que `SX`. |
+
+En todas estas funciones de búsqueda, por defecto, `i` tiene el valor `0` y `j` un valor superior al tamaño de la cadena. En el segundo bloque de métodos de `str` están las funciones para unir y partir cadenas:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `S.join(I)` | Devuelve una cadena que concatena las cadenas en el iterador `I`, usando como separador a `S`. Se lanza un `TypeError` si el iterador contiene elementos distintos al tipo `S`. |
+| `S.partition(SX)` | Busca la primera aparición de `SX` en la cadena y devuelve una tupla de tres componentes, con el lado izquierdo, `SX` y el lado derecho de la partición. Si no encuentra `SX` se devuelve `(S,'','')`. |
+| `S.rpartition(SX)` | Busca la última aparición de `SX` en la cadena y devuelve una tupla de tres componentes, con el lado izquierdo, `SX` y el lado derecho de la partición. Si no encuentra `SX` se devuelve `('','',S)`. |
+| `S.split(sep=None, maxsplit=-1)` | Devuelve una lista con todas las *palabras* que se forman al usar `sep` como separador. Con `None` como separador, se utilizarán los espacios en blanco. Con `maxsplit` indicamos el número máximo de particiones a realizar desde el inicio. |
+| `S.rsplit(sep=None, maxsplit=-1)` | Devuelve una lista con todas las *palabras* que se forman al usar `sep` como separador. Con `None` como separador, se utilizarán los espacios en blanco. Con `maxsplit` indicamos el número máximo de particiones a realizar desde el final. |
+| `S.splitlines(keepends=False)` | Devuelve una lista con todas las líneas que hay en la cadena. Salvo que `keepends` sea `True`, no se incluirán los saltos de línea en el resultado. |
+| `S.replace(S1,S2)`<br/>`S.replace(S1,S2,N)` | Devuelve una copia donde todas las apariciones de `S1` son sustituidas por `S2`. Cuando se indica `N`, en lugar de ser todas sólo se sustituyen las `N` primeras. |
+
+El tercer bloque de métodos de `str` son las funciones para dar formato a cadenas:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `S.format(*args, **kwargs)` | Devuelve una cadena que toma `S` como patrón de formato. (Ver la sección *cadenas con formato* para más información.) |
+| `S.format_map(M)` | Similar a `S.format(**M)`, pero usando directamente el objeto `M`, en lugar de copiarlo a un diccionario como pasaría con `format`. |
+| `S.capitalize()` | Devuelve una copia con la primera posición en mayúsculas. |
+| `S.casefold()` | Devuelve una copia en minúsculas, incluyendo letras especiales que no cubre el método `lower`. |
+| `S.lower()` | Devuelve una copia en minúsculas. |
+| `S.upper()` | Devuelve una copia en mayúsculas. |
+| `S.swapcase()` | Devuelve una copia con mayúsculas y minúsculas intercambiadas. |
+| `S.title()` | Devuelve una copia con cada palabra empezando por mayúsculas. |
+| `S.zfill(N)` | Devuelve una copia rellenando con ceros por la izquierda hasta alcanzar un ancho de `N`. Si `S` tiene como prefijo un signo, `+` o `-`, los ceros se insertan después del signo. |
+| `S.center(N)`<br/>`S.center(N,C)` | Devuelve una copia centrada con un ancho de `N` posiciones, usando como relleno el carácter `C`. Por defecto, `C` es `' '`. |
+| `S.ljust(N)`<br/>`S.ljust(N,C)` | Devuelve una copia alineada en la izquierda con un ancho de `N` posiciones, usando como relleno el carácter `C`. Por defecto, `C` es `' '`. |
+| `S.rjust(N)`<br/>`S.rjust(N,C)` | Devuelve una copia alineada en la derecha con un ancho de `N` posiciones, usando como relleno el carácter `C`. Por defecto, `C` es `' '`. |
+| `S.expandtabs(tabsize=8)` | Devuelve una copia donde las tabulaciones (`\t`) son sustituidas por espacios, en base a un ancho de columna definido por el parámetro `tabsize`. |
+| `S.lstrip()`<br/>`S.lstrip(SX)` | Devuelve una copia donde se eliminan, por la izquierda, caracteres que existen en `SX`, hasta encontrar uno que no. Si `SX` es `None` o no se indica, se borrarán espacios en blanco. |
+| `S.rstrip()`<br/>`S.rstrip(SX)` | Devuelve una copia donde se eliminan, por la derecha, caracteres que existen en `SX`, hasta encontrar uno que no. Si `SX` es `None` o no se indica, se borrarán espacios en blanco. |
+| `S.strip()`<br/>`S.strip(SX)` | Devuelve una copia donde se eliminan, por ambos lados, caracteres que existen en `SX`, hasta encontrar uno que no. Si `SX` es `None` o no se indica, se borrarán espacios en blanco. |
+| `S.removeprefix(SX)` | Si la cadena empieza con `SX`, devuelve una copia donde queda eliminado dicho prefijo. |
+| `S.removesuffix(SX)` | Si la cadena termina con `SX`, devuelve una copia donde queda eliminado dicho sufijo. |
+| `S.translate(T)` | Devuelve una copia donde se han sustituido los caracteres originales usando una tabla de traducción. |
+| `str.maketrans(x)`<br/>`str.maketrans(x,y)`<br/>`str.maketrans(x,y,z)` | Devuelve una tabla de traducción para usar con `translate`. |
+
+El último bloque de métodos de `str` son operaciones generales con cadenas:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `S.encode(encoding='utf-8', errors='strict')` | Codifica una cadena de texto a una cadena de bytes, utilizando una codificación y una política de gestión de los errores. |
+| `S.isalnum()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son alfanuméricos. Si no, devuelve `False`. |
+| `S.isalpha()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son alfabéticos. Si no, devuelve `False`. |
+| `S.isascii()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son ASCII. Si no, devuelve `False`. |
+| `S.isdecimal()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son números decimales. Si no, devuelve `False`. |
+| `S.isdigit()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son números. Si no, devuelve `False`. |
+| `S.isidentifier()` | Devuelve `True` si la cadena no es vacía y cumple las reglas para ser un identificador válido en Python. Si no, devuelve `False`. |
+| `S.islower()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son minúsculas. Si no, devuelve `False`. |
+| `S.isnumeric()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son números Unicode. Si no, devuelve `False`. |
+| `S.isprintable()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene se pueden mostrar. Si no, devuelve `False`. |
+| `S.isspace()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son espacios en blanco. Si no, devuelve `False`. |
+| `S.istitle()` | Devuelve `True` si la cadena no es vacía y cada palabra empieza por mayúscula. Si no, devuelve `False`. |
+| `S.isupper()` | Devuelve `True` si la cadena no es vacía y todos los caracteres que contiene son mayúsculas. Si no, devuelve `False`. |
+
+Exceptuando `casefold`, `isnumeric`, `isidentifier`, `isprintable`, `format_map`, `encode`, `isdecimal` y `format`, el resto de métodos también están disponibles para los tipos `bytes` y `bytearray`. Estos dos tipos tienen, además, los siguientes métodos que no tiene `str`:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `B.decode(encoding='utf-8', errors='strict')` | Decodifica una cadena de bytes a una cadena de texto, utilizando una codificación y una política de gestión de los errores. |
+| `B.hex()`<br/>`B.hex(C)`<br/>`B.hex(C,N)` | Transforma una cadena de bytes `B` a una cadena de texto con un número hexadecimal, donde `C` es el carácter separador utilizado entre grupos de bytes y `N` el número de bytes en cada grupo. Por defecto, `S` es una cadena vacía y `N` es `1`. |
+| `bytes.fromhex(S)` | Convierte la cadena de texto `S`, que contiene números hexadecimales, en una cadena de bytes. Los espacios en blanco son ignorados para la transformación. En caso de error se lanza un `ValueError`. |
+
+Finalmente, el tipo `bytearray` tiene los siguientes métodos, que no tienen `str` y `bytes` por ser inmutables:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `B.append(X)` | Añade `X` al final de la cadena. |
+| `B.clear()` | Elimina todos los elementos de la cadena. |
+| `B.copy()` | Copia *superficial* de la cadena. |
+| `B.extend(I)` | Añade el contenido del iterador `I` al final de la cadena. |
+| `B.insert(i,X)` | Inserta `X` en la posición `i` de la cadena. |
+| `B.pop()`<br/>`B.pop(i)` | Elimina el elemento en la posición `i` de la cadena y lo devuelve como resultado. Por defecto, `i` es `-1`. |
+| `B.remove(X)` | Elimina la primera aparición de `X` en la cadena. Si no se encuentra `X` se lanza un `ValueError`. |
+| `B.reverse()` | Invierte el orden de los elementos de la cadena. |
 
 ### Tuplas
 
-..
+Las tuplas son estructuras cuyos elementos, llamados componentes, tienen un orden fijo. Son estructuras de datos secuenciales e inmutables en Python, que pertenecen al tipo `tuple`. Las componentes no tienen un nombre asociado a ellas, pero sí una posición de índice. Para definir una tupla se usa la siguiente sintaxis:
 
-En cuanto a las operaciones que podemos realizar con tuplas, están explicadas en la sección sobre *operaciones con secuencias*.
+$$\texttt{(} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \texttt{,} \textcolor{red}{[} \mathit{expresi\acute{o}n_2} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
+
+Es decir, que `()` es la tupla vacía, `(1,)` la tupla con una componente, `(1,2)` la tupla con dos componentes y así sucesivamente. Nótese que hace falta dejar la coma, para el caso de una componente, o se tomarán los paréntesis como el operador `(` `)`. Se pueden anidar otras estructuras dentro de las tuplas, así como otras tuplas también.
+
+> En ocasiones se puede definir una tupla sin usar los paréntesis, como es el caso de la asignación con `=` o el retorno de una función con `return` o `yield`.
+
+También se puede utilizar la función constructora `tuple(I)` para construir nuevas instancias, donde `I` es un iterador, que se trata de un tipo de objeto que recorre el contenido de un objeto contenedor. Por ejemplo, `tuple('abc')` dará como resultado el valor `('a','b','c')`.
+
+En cuanto a las operaciones que podemos realizar con tuplas, están explicadas en la sección sobre *operaciones con secuencias*. No obstante hay dos métodos de la clase `tuple` a tener en cuenta:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `T.count(X)` | Devuelve el número de veces que encuentra `X` en el contenedor. |
+| `T.index(X)`<br/>`T.index(X,i)`<br/>`T.index(X,i,j)` | Devuelve la posición de la primera aparición de `X` en el contenedor, entre las posiciones `i` y `j-1`. Por defecto, `i` es `0` y `j` un valor superior al tamaño del contenedor. Si no se encuentra `X` se lanza un `ValueError`. |
 
 ### Listas
 
-..
+Las listas son estructuras secuenciales cuyos elementos tienen un orden definido. En el caso de Python las listas son mutables y pertenecen al tipo `list`. Sus elementos son accesibles mediante una posición de índice. Para definir una lista se usa la siguiente sintaxis:
 
-En cuanto a las operaciones que podemos realizar con listas, están explicadas en la sección sobre *operaciones con secuencias*.
+$$\texttt{[} \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+
+Donde `[]` es la lista vacía y el resto son listas con un tamaño arbitrario de elementos. Se pueden anidar otras estructuras dentro de las listas, así como otras listas también. Además, se puede utilizar la función constructora `list(I)` para construir nuevas instancias, donde `I` es un iterador, como ocurría con el caso de las tuplas. Por ejemplo, `list('abc')` dará como resultado el valor `['a','b','c']`.
+
+Una sintaxis alternativa, para definir listas, son las *listas intensionales* que tienen la siguiente sintaxis:
+
+$$\texttt{[} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \\ \qquad\quad \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+
+De este modo, podemos construir listas a partir de otros contenedores, mediante el [producto cartesiano](https://es.wikipedia.org/wiki/Producto_cartesiano). Para ello, tomamos un *iterador* y ajustamos cada elemento del mismo a un *patrón* (una variable o composición estructurada de variables), y opcionalmente podemos pedir que estos elementos cumplan una *condición*. Con el resultado del producto cartesiano de todos los elementos, que hayan cumplido las condiciones indicadas, construimos una *expresión* que conformará cada elemento de la lista final. Por ejemplo:
+
+```
+>>> [(a,b) for a in range(1,7) if a % 2 != 0
+...        for b in range(1,7) if b % 2 == 0]
+[(1, 2), (1, 4), (1, 6),
+ (3, 2), (3, 4), (3, 6),
+ (5, 2), (5, 4), (5, 6)]
+```
+
+Aquí estamos agrupando en tuplas lo tres primeros números impares, con los tres primeros pares. Para ello usamos la función `range(i,j)` que devuelve un iterador con números de `i` hasta `j-1`. La función `range` se verá mejor en la sección *sentencias de control*.
+
+En cuanto a las operaciones que podemos realizar con listas, están explicadas en la sección sobre *operaciones con secuencias*. No obstante hay algunos métodos de la clase `list` a tener en cuenta:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `L.append(X)` | Añade `X` al final del contenedor. |
+| `L.clear()` | Elimina todos los elementos del contenedor. |
+| `L.copy()` | Copia *superficial* del contenedor. |
+| `L.count(X)` | Devuelve el número de veces que encuentra `X` en el contenedor. |
+| `L.extend(I)` | Añade el contenido del iterador `I` al final del contenedor. |
+| `L.index(X)`<br/>`L.index(X,i)`<br/>`L.index(X,i,j)` | Devuelve la posición de la primera aparición de `X` en el contenedor, entre las posiciones `i` y `j-1`. Por defecto, `i` es `0` y `j` un valor superior al tamaño del contenedor. Si no se encuentra `X` se lanza un `ValueError`. |
+| `L.insert(i,X)` | Inserta `X` en la posición `i` del contenedor. |
+| `L.pop()`<br/>`L.pop(i)` | Elimina el elemento en la posición `i` del contenedor y lo devuelve como resultado. Por defecto, `i` es `-1`. |
+| `L.remove(X)` | Elimina la primera aparición de `X` en el contenedor. Si no se encuentra `X` se lanza un `ValueError`. |
+| `L.reverse()` | Invierte el orden de los elementos del contenedor. |
+| `L.sort(key=None, reverse=False)` | Ordena el contenido del contenedor, donde `key` es una función de un parámetro (usada habitualmente para devolver la clave a usar para la ordenación dentro de una estructura) y `reverse` es un *flag* para indicar si se ha de ordenar en sentido inverso o no. |
+
+### Iteradores y generadores
+
+Un iterador es un tipo de objeto cuyo propósito es el de recorrer el contenido de un contenedor de datos.
+
+..
 
 ### Operaciones con secuencias
 
@@ -346,21 +485,21 @@ Hemos visto varios tipos de estructuras secuenciales: `str`, `bytes`, `bytearray
 
 | Operador | Descripción |
 |:--------:|:-----------:|
-| `X in S` | **X** existe en **S**. |
-| `X not in S` | **X** no existe en **S**. |
-| `S1 + S2` | **S1** y **S2** concatenadas. |
-| `S * N`<br/>`N * S` | **S** repetida **N** veces. |
-| `S[i]` | Elemento en la posición **i** de **S**. |
-| `S[i:j]` | Elementos desde **i** hasta **j-1** de **S**. |
-| `S[i:j:k]` | Elementos desde **i**, con saltos de **k** unidades, hasta **j-1** de **S**. |
-| `S[i:]` | Elementos desde **i** hasta el final de **S**. |
-| `S[:j]` | Elementos desde cero hasta **j-1** de **S**. |
-| `S[:]` | Copia *superficial* de **S**. |
-| `len(S)` | Número de elementos de **S**. |
-| `max(S)` | Elemento máximo de **S**. |
-| `min(S)` | Elemento mínimo de **S**. |
-| `iter(S)` | Iterador de **S**. |
-| `map(F,S)` | Aplica **F** a cada elemento de **S**. |
+| `X in S` | `X` existe en `S`. |
+| `X not in S` | `X` no existe en `S`. |
+| `S1 + S2` | `S1` y `S2` concatenadas. |
+| `S * N`<br/>`N * S` | `S` repetida `N` veces. |
+| `S[i]` | Elemento en la posición `i` de `S`. |
+| `S[i:j]` | Elementos desde `i` hasta `j-1` de `S`. |
+| `S[i:j:k]` | Elementos desde `i`, con saltos de `k` unidades, hasta `j-1` de `S`. |
+| `S[i:]` | Elementos desde `i` hasta el final de `S`. |
+| `S[:j]` | Elementos desde cero hasta `j-1` de `S`. |
+| `S[:]` | Copia *superficial* de `S`. |
+| `len(S)` | Número de elementos de `S`. |
+| `max(S)` | Elemento máximo de `S`. |
+| `min(S)` | Elemento mínimo de `S`. |
+| `iter(S)` | Iterador de `S`. |
+| `map(F,S)` | Aplica `F` a cada elemento de `S`. |
 
 El operador de acceso con índices en Python es muy versátil. Si un contenedor `S` tiene `N` elementos, los índices que podremos usar para acceder a su contenido serán los valores del `0` hasta `N-1`. Adicionalmente, si usamos valores negativos, accederemos desde el último elemento hasta el inicio, siendo `-1` el último elemento de `S`, `-2` el penúltimo y así sucesivamente. Si intentamos acceder a un elemento fuera de los límites, se lanza como error un `IndexError`.
 
@@ -383,7 +522,7 @@ $ python copias.py
 [1, '2', 3, 4]
 ```
 
-Como se puede ver, tenemos una instancia del tipo lista en `S1` y, al seleccionar los cuatro primeros elementos de esta, se crea una instancia nueva del tipo lista en `S2`  con una copia del contenido de `S1`. Perfecto, ¿no? Sí, pero no. Hay que recordar que las variables en Python manejan referencias y no valores directamente. Por ejemplo:
+Como se puede ver, tenemos una instancia del tipo lista en `S1` y, al seleccionar los cuatro primeros elementos de esta, se crea una instancia nueva del tipo lista en `S2` con una copia del contenido de `S1`. Perfecto, ¿no? Sí, pero no. Hay que recordar que las variables en Python manejan referencias y no valores directamente. Por ejemplo:
 
 ```Python
 # Fichero: copias.py
@@ -406,20 +545,25 @@ De las estructuras secuenciales que existen, sólo `bytearray` y `list` son muta
 
 | Operador | Descripción |
 |:--------:|:-----------:|
-| `S[i] = X` | Modifica con **X** el elemento en la posición **i** de **S**. |
-| `S[i:j] = I` | Sustituye el segmento desde **i** hasta **j-1** de **S** con el contenido del iterador **I**. |
-| `S[i:j:k] = I` | Sustituye los elementos desde **i**, con saltos de **k** unidades, hasta **j-1** de **S** con el contenido del iterador **I**. Si el tamaño del rango indicado y de **I** no son iguales, se lanza el error `ValueError`. |
-| `S[i:] = I` | Sustituye el segmento desde **i** hasta el final de **S** con el contenido del iterador **I**. |
-| `S[:j] = I` | Sustituye el segmento desde cero hasta **j-1** de **S** con el contenido del iterador **I**. |
-| `S[:] = I` | Sustituye el contenido de **S** con el contenido del iterador **I**. |
-| `del S[i]` | Elimina el elemento en la posición **i** de **S**. |
-| `del S[i:j]` | Elimina los elementos desde **i** hasta **j-1** de **S**. |
-| `del S[i:j:k]` | Elimina los elementos desde **i**, con saltos de **k** unidades, hasta **j-1** de **S**. |
-| `del S[i:]` | Elimina los elementos desde **i** hasta el final de **S**. |
-| `del S[:j]` | Elimina los elementos desde cero hasta **j-1** de **S**. |
-| `del S[:]` | Elimina el contenido de **S**. |
+| `S[i] = X` | Modifica con `X` el elemento en la posición `i` de `S`. |
+| `S[i:j] = I` | Sustituye el segmento desde `i` hasta `j-1` de `S` con el contenido del iterador `I`. |
+| `S[i:j:k] = I` | Sustituye los elementos desde `i`, con saltos de `k` unidades, hasta `j-1` de `S` con el contenido del iterador `I`. Si el tamaño del rango indicado y de `I` no son iguales, se lanza el error `ValueError`. |
+| `S[i:] = I` | Sustituye el segmento desde `i` hasta el final de `S` con el contenido del iterador `I`. |
+| `S[:j] = I` | Sustituye el segmento desde cero hasta `j-1` de `S` con el contenido del iterador `I`. |
+| `S[:] = I` | Sustituye el contenido de `S` con el contenido del iterador `I`. |
+| `del S[i]` | Elimina el elemento en la posición `i` de `S`. |
+| `del S[i:j]` | Elimina los elementos desde `i` hasta `j-1` de `S`. |
+| `del S[i:j:k]` | Elimina los elementos desde `i`, con saltos de `k` unidades, hasta `j-1` de `S`. |
+| `del S[i:]` | Elimina los elementos desde `i` hasta el final de `S`. |
+| `del S[:j]` | Elimina los elementos desde cero hasta `j-1` de `S`. |
+| `del S[:]` | Elimina el contenido de `S`. |
 
 En general, la sustitución del contenido de `S` por el de un iterador `I`, consiste en borrar el segmento indicado en `S` e insertar los valores de `I` en el hueco. La excepción es al usar `S[i:j:k] = I`, ya que no hay una forma clara de resolver esa situación, cuando no coinciden en tamaño el número de elementos a modificar, porque en este caso no se trata de un segmento sino de elementos salteados y por lo tanto hay que ir modificando uno a uno.
+
+> Otras operaciones que se pueden realizar con contenedores mutables y operadores de *slicing* son:
+> + `S[len(L):] = I` equivale a usar el método `S.extend(I)`.
+> + `L[:0] = I` inserta al inicio del contenedor el contenido del iterador.
+> + `L[i:i] = [X]` equivale a usar el método `L.insert(i,X)`, por lo tanto, `L[i:i] = I` inserta en la posición `i` el contenido del iterador.
 
 ### Diccionarios
 
@@ -465,29 +609,29 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `[...]` | Listas. |
 | `(...)` | Paréntesis, tuplas y generadores. |
 | `X.atributo` | Referencia a un atributo de X. |
-| `X(args)` | Invocación de la función **X**. |
-| `X[i:j:k]` | Selección del contenedor **X** (*slicing*). |
-| `X[i]` | Indexado del contenedor **X**. |
-| `await X` | Espera la evaluación de **X**. |
-| `X ** Y` | **X** elevado a **Y**. |
-| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) a nivel de bits de **X**. |
-| `-X`<br/>`+X` | Negación e identidad de **X**. |
-| `X * Y`<br/>`X % Y`<br/>`X / Y`<br/>`X // Y` | Multiplicación/repetición, módulo/formato, división y división entera de **X** con **Y**. |
-| `X + Y`<br/>`X - Y` | Suma/concatenación y resta/diferencia de **X** con **Y**. |
-| `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha **Y** bits de **X**. |
-| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de **X** con **Y**. |
-| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de **X** con **Y**. |
-| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de **X** con **Y**. |
-| `X == Y`<br/>`X != Y` | Igualdad y desigualdad de **X** con **Y**. |
-| `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de **X** con **Y**. |
-| `X is Y`<br/>`X is not Y` | Comparación de referencias con los objetos **X** e **Y**. |
-| `X in Y`<br/>`X not in Y` | Pertenencia o no de **X** al contenedor **Y**. |
-| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) lógica de **X**. |
-| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) lógica de **X** con **Y**, donde **Y** se evaluará si **X** es `True`. |
-| `X or Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) lógica de **X** con **Y**, donde **Y** se evaluará si **X** es `False`. |
-| `X if Y else Z` | **X** será evaluado si **Y** es `True`, si no se evalúa **Z**. |
+| `X(args)` | Invocación de la función `X`. |
+| `X[i:j:k]` | Selección del contenedor `X` (*slicing*). |
+| `X[i]` | Indexado del contenedor `X`. |
+| `await X` | Espera la evaluación de `X`. |
+| `X ** Y` | `X` elevado a `Y`. |
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) a nivel de bits de `X`. |
+| `-X`<br/>`+X` | Negación e identidad de `X`. |
+| `X * Y`<br/>`X % Y`<br/>`X / Y`<br/>`X // Y` | Multiplicación/repetición, módulo/formato, división y división entera de `X` con `Y`. |
+| `X + Y`<br/>`X - Y` | Suma/concatenación y resta/diferencia de `X` con `Y`. |
+| `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha `Y` bits de `X`. |
+| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
+| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de `X` con `Y`. |
+| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
+| `X == Y`<br/>`X != Y` | Igualdad y desigualdad de `X` con `Y`. |
+| `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de `X` con `Y`. |
+| `X is Y`<br/>`X is not Y` | Comparación de referencias con los objetos `X` e `Y`. |
+| `X in Y`<br/>`X not in Y` | Pertenencia o no de `X` al contenedor `Y`. |
+| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) lógica de `X`. |
+| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) lógica de `X` con `Y`, donde `Y` se evaluará si `X` es `True`. |
+| `X or Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) lógica de `X` con `Y`, donde `Y` se evaluará si `X` es `False`. |
+| `X if Y else Z` | `X` será evaluado si `Y` es `True`, si no se evalúa `Z`. |
 | `lambda args: X` | Expresión lambda. |
-| `X := Y` | Asignación del valor **Y** en la variable **X**. |
+| `X := Y` | Asignación del valor `Y` en la variable `X`. |
 | `yield X` | Generador de valores. |
 
 > En la categoría de la multiplicación estaría el operador `@`, que la documentación de Python lo denomina como [multiplicador de matrices](https://peps.python.org/pep-0465/), aunque la biblioteca estándar no implementa este operador. Sin embargo, bibliotecas como [`numpy`](https://numpy.org/) sí que lo usan para multiplicar matrices.
@@ -496,7 +640,15 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 
 ..
 
+## Definición de funciones
+
+..
+
 ## Clases y objetos
+
+..
+
+## Cadenas con formato
 
 ..
 
@@ -505,8 +657,6 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Python es muy completa y comprende varias áreas de trabajo.
 
 ..
-
-## Elementos nativos
 
 ### Funciones nativas
 
