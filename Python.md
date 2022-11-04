@@ -443,7 +443,9 @@ Donde `[]` es la lista vacía y el resto son listas con un tamaño arbitrario de
 
 Una sintaxis alternativa, para definir listas, son las *listas intensionales* que tienen la siguiente sintaxis:
 
-$$\texttt{[} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \\\\ \qquad\quad\;\; \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]}$$
+
+$$\qquad\quad\ \ \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
 De este modo, podemos construir listas a partir de otros contenedores, mediante el [producto cartesiano](https://es.wikipedia.org/wiki/Producto_cartesiano). Para ello, tomamos un *iterador* y ajustamos cada elemento del mismo a un *patrón* (una variable o composición estructurada de variables), y opcionalmente podemos pedir que estos elementos cumplan una *condición*. Con el resultado del producto cartesiano de todos los elementos, que hayan cumplido las condiciones indicadas, construimos una *expresión* que conformará cada elemento de la lista final. Por ejemplo:
 
@@ -498,7 +500,9 @@ Aquellos tipos que son iterables, no hace falta llamar a la función `iter` cuan
 
 Otro elemento iterable que existe en el lenguaje son los generadores, que tienen la siguiente sintaxis:
 
-$$\texttt{(} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \\\\ \qquad\quad\;\; \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
+$$\texttt{(} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]}$$
+
+$$\qquad\quad\ \ \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
 
 Realmente, una lista intensional, es un generador definido entre corchetes. Sería lo mismo que definir un generador como argumento de la función constructora `list`:
 
