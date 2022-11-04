@@ -186,8 +186,8 @@ Los valores booleanos vienen del [álgebra de Boole](https://es.wikipedia.org/wi
 
 Tenemos diferentes operadores para construir expresiones booleanas. El primer bloque son los operadores de comparación:
 
-| Operador | Descripción |
-|:--------:|:-----------:|
+| Operación | Descripción |
+|:---------:|:-----------:|
 | `X == Y`  | `X` es igual a `Y`. |
 | `X != Y`  | `X` no es igual a `Y`. |
 | `X <= Y`  | `X` es menor o igual que `Y`. |
@@ -203,8 +203,8 @@ Donde X e Y son expresiones de Python, que se evalúan a un valor que va a ser c
 
 El segundo bloque son los operadores lógicos:
 
-| Operador | Descripción |
-|:--------:|:-----------:|
+| Operación | Descripción |
+|:---------:|:-----------:|
 | `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de `X`. |
 | `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
 | `X or Y`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
@@ -252,8 +252,8 @@ Basta con indicar un número y terminar con una `j` para representar los número
 
 En cuanto a las operaciones que podemos realizar con números, el primer bloque de operadores es el de los aritméticos:
 
-| Operador | Descripción |
-|:--------:|:-----------:|
+| Operación | Descripción |
+|:---------:|:-----------:|
 | `+X` | Signo positivo. |
 | `-X` | Signo negativo. |
 | `X + Y` | Suma: `X` más `Y`. |
@@ -266,18 +266,18 @@ En cuanto a las operaciones que podemos realizar con números, el primer bloque 
 
 El segundo bloque son los operadores a nivel de bits:
 
-| Operador | Descripción |
-|:--------:|:-----------:|
+| Operación | Descripción |
+|:---------:|:-----------:|
 | `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de `X`. |
 | `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
-| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
+| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
 | `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de `X` con `Y`. |
 | `X << Y` | Desplazamiento a la izquierda `Y` bits de `X`. |
 | `X >> Y` | Desplazamiento a la derecha `Y` bits de `X`. |
 
 De modo similar a los operadores lógicos, aquí están las [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad) de los operadores lógicos aplicados a nivel de bits:
 
-| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X \| Y` | `X ^ Y` |
+| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X | Y` | `X ^ Y` |
 |:---:|:---:|:----:|:----:|:-------:|:-------:|:-------:|
 | `1` | `1` |  `0` |  `0` |   `1`   |   `1`   |   `0`   |
 | `0` | `1` |  `1` |  `0` |   `0`   |   `1`   |   `1`   |
@@ -538,8 +538,8 @@ Como se puede ver, primero se crea un generador usando los paréntesis para deli
 
 Hemos visto varios tipos de estructuras secuenciales: `str`, `bytes`, `bytearray`, `tuple` y `list`. Se pueden usar los siguientes operadores y funciones con todas ellas:
 
-| Operador | Descripción |
-|:--------:|:-----------:|
+| Operación | Descripción |
+|:---------:|:-----------:|
 | `X in S` | `X` existe en `S`. |
 | `X not in S` | `X` no existe en `S`. |
 | `S1 + S2` | `S1` y `S2` concatenadas. |
@@ -598,8 +598,8 @@ Efectivamente `S2` es una copia de `S1`, siendo instancias distintas, pero el pr
 
 De las estructuras secuenciales que existen, sólo `bytearray` y `list` son mutables, y por lo tanto el resto son inmutables. Teniendo en cuenta esto, los siguientes operadores y funciones se pueden usar con contenedores mutables:
 
-| Operador | Descripción |
-|:--------:|:-----------:|
+| Operación | Descripción |
+|:---------:|:-----------:|
 | `S[i] = X` | Modifica con `X` el elemento en la posición `i` de `S`. |
 | `S[i:j] = I` | Sustituye el segmento desde `i` hasta `j-1` de `S` con el contenido del iterador `I`. |
 | `S[i:j:k] = I` | Sustituye los elementos desde `i`, con saltos de `k` unidades, hasta `j-1` de `S` con el contenido del iterador `I`. Si el tamaño del rango indicado y de `I` no son iguales, se lanza un `ValueError`. |
@@ -622,23 +622,108 @@ En general, la sustitución del contenido de `S` por el de un iterador `I`, cons
 
 ### Diccionarios
 
-..
+Los diccionarios son estructuras, con forma de conjunto, que relacionan una clave con un valor. En el caso de Python los diccionarios son mutables y pertenecen al tipo `dict`. Sus elementos son accesibles mediante una clave. Para definir un diccionario se usan las siguientes formas:
 
-| Operador | Descripción |
-|:--------:|:-----------:|
-| ` ` | .. |
+$$\texttt{\char123} \textcolor{red}{[} \mathit{clave_1} \texttt{:} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{clave_n} \texttt{:} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
-..
+$$\texttt{dict(} \textcolor{red}{[} \mathit{clave_1} \texttt{=} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{clave_n} \texttt{=} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
+
+$$\texttt{dict([} \texttt{[} \mathit{clave_1} \texttt{,} \mathit{expresi\acute{o}n_1} \texttt{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \texttt{[} \mathit{clave_n} \texttt{,} \mathit{expresi\acute{o}n_n} \texttt{]} \textcolor{red}{]} \textcolor{red}{]} \texttt{])}$$
+
+Donde `[]` y `dict()` son el diccionario vacío y el resto son diccionarios con un tamaño arbitrario de elementos.
+
+> La clave en un diccionario es un valor también. Es habitual usar una cadena de texto para dar nombre a la clave, por ejemplo, `{'edad':21}`. Para hacer lo mismo con `dict`, siempre que el nombre pueda ajustarse a un identificador de Python, sería con `dict(edad=21)`.
+
+También existe como alternativa el uso de generadores, para crear diccionarios intensionales con la siguiente sintaxis:
+
+$$\texttt{\char123} \mathit{expresi\acute{o}n_c} \texttt{:} \mathit{expresi\acute{o}n_v}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]}$$
+
+$$\qquad\qquad\qquad\qquad\quad \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+
+En cuanto a las operaciones que podemos realizar con diccionarios, tenemos los siguientes operadores y funciones:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `D[K]` | Devuelve el valor asociado a la clave `K` en `D`. |
+| `D[K] = X` | Asocia el valor `X` a la clave `K` en `D`. |
+| `del D[K]` | Elimina la entrada con la clave `K` en `D`. |
+| `D | D2` | Añade el contenido de `D2` a `D`. |
+| `K in D` | Comprueba si la clave `K` existe en `D`. |
+| `K not in D` | Comprueba si la clave `K` no existe en `D`. |
+| `len(D)` | Número de elementos de `D`. |
+| `iter(D)` | Iterador de las claves de `D`. |
+
+> Si se intenta acceder a una clave, que no existe en un diccionario, se lanzará un `KeyError`.
+
+En cuanto a los métodos de la clase `dict`, tenemos los siguientes:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `D.keys()` | Devuelve un iterador para recorrer las claves del diccionario. |
+| `D.values()` | Devuelve un iterador para recorrer los valores del diccionario. |
+| `D.items()` | Devuelve un iterador para recorrer los elementos `(clave,valor)` del diccionario. |
+| `D.clear()` | Borra el contenido del diccionario. |
+| `D.copy()` | Copia *superficial* del diccionario. |
+| `D.update(D2)` | Añade el contenido de `D2` al diccionario. Si existen la clave a añadir, se actualiza el valor asociado por el de `D2`. |
+| `D.get(K)`<br/>`D.get(K,X)` | Devuelve el valor asociado a la clave `K` en `D`. El argumento `X` actúa como valor por defecto si `K` no existe, si no se indica un valor `X`, se lanza un `KeyError`. |
+| `D.setdefault(K)`<br/>`D.setdefault(K,X)` | Devuelve el valor asociado a la clave `K` en `D`. Si no existe `K`, crea una nueva entrada en `D` y le asigna el valor `X`, que por defecto es `None`. |
+| `D.popitem()` | Elimina un elemento arbitrario en `D` y lo devuelve como un resultado `(clave,valor)`. Si el diccionario está vacío, se lanza un `KeyError`. |
+| `D.pop(K)`<br/>`D.pop(K,X)` | Elimina la entrada con la clave `K` en `D` y devuelve el valor asociado. Si no existe `K`, devuelve `X` como valor asociado, si no se indica un valor `X`, se lanza un `KeyError`. |
+| `dict.fromkeys(I)`<br/>`dict.fromkeys(I,X)` | Crea un diccionario que tiene como claves los valores obtenidos con el iterador `I` y le asigna como valor `X`. que por defecto es `None`. |
 
 ### Conjuntos
 
-..
+Los conjuntos son estructuras que contienen una serie de elementos sin orden fijo, ni duplicados. En el caso de Python los conjuntos son mutables y pertenecen al tipo `set`. Para definir un conjunto se usa la siguiente sintaxis:
 
-| Operador | Descripción |
-|:--------:|:-----------:|
-| ` ` | .. |
+$$\texttt{\char123} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
 
-..
+Donde `set()` es el conjunto vacío y el resto son conjuntos con un tamaño arbitrario de elementos. También existe como alternativa el uso de generadores, para crear conjuntos intensionales con la siguiente sintaxis:
+
+$$\texttt{\char123} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]}$$
+
+$$\qquad\quad\ \ \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+
+Además, se puede utilizar la función constructora `set(I)` para construir nuevas instancias, donde `I` es un iterador. Por ejemplo, `set('abc')` dará como resultado el valor `{'a','b','c'}`. Y si queremos tener conjuntos inmutables tenemos el tipo `frozenset`, que tiene la función constructora `frozenset(I)`, donde `I` es un iterador.
+
+En cuanto a las operaciones que podemos realizar con conjuntos, tenemos los siguientes operadores y funciones:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X in S` | `X` pertenece a `S`. |
+| `X not in S` | `X` no pertenece a `S`. |
+| `S1 <= S2`  | `S1` es subconjunto de `S2`. |
+| `S1 < S2`   | `S1` es subconjunto de `S2` y distintos. |
+| `S1 >= S2`  | `S1` es superconjunto de `S2`. |
+| `S1 > S2`   | `S1` es superconjunto de `S2` y distintos. |
+| `S1 - S2` | [Diferencia](https://es.wikipedia.org/wiki/Diferencia_de_conjuntos) de `S1` con `S2`. |
+| `S1 | S2` | [Unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de `S1` con `S2`. |
+| `S1 & S2` | [Intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de `S1` con `S2`. |
+| `S1 ^ S2` | [Diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de `S1` con `S2`. |
+| `len(S)` | Número de elementos de `S`. |
+
+En cuanto a los métodos de la clase `set`, tenemos los siguientes:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `S.add(X)` | Añade el elemento `X` al conjunto. |
+| `S.discard(X)` | Elimina el elemento `X` del conjunto si existe. |
+| `S.remove(X)` | Elimina el elemento `X` del conjunto. Si no existe, se lanza un `KeyError`. |
+| `S.pop()` | Elimina un elemento arbitrario del conjunto y lo devuelve como un resultado. Si el conjunto está vacío, se lanza un `KeyError`. |
+| `S.clear()` | Borra el contenido del conjunto . |
+| `S.copy()` | Copia *superficial* del conjunto . |
+| `S.isdisjoint(S2)` | Comprueba que no existan elementos en común entre conjuntos. |
+| `S.issubset(S2)` | Comprueba que `S` es subconjunto de `S2`. Equivale a `S <= S2`. |
+| `S.issuperset(S2)` | Comprueba que `S` es superconjunto de `S2`. Equivale a `S >= S2`. |
+| `S.union(*SS)` | Devuelve la unión de `S` con todos los conjuntos que hay en `*SS`. Equivale a `S | S1 | ... | SN`, donde `*SS` es `S1,...,SN`. |
+| `S.update(*SS)` | Actualiza `S` con la unión de `S` con todos los conjuntos que hay en `*SS`. Equivale a `S |= S1 | ... | SN`, donde `*SS` es `S1,...,SN`. |
+| `S.intersection(*SS)` | Devuelve la intersección de `S` con todos los conjuntos que hay en `*SS`. Equivale a `S & S1 & ... & SN`, donde `*SS` es `S1,...,SN`. |
+| `S.intersection_update(*SS)` | Actualiza `S` con la intersección de `S` con todos los conjuntos que hay en `*SS`. Equivale a `S &= S1 & ... & SN`, donde `*SS` es `S1,...,SN`. |
+| `S.symmetric_difference(S2)` | Devuelve la diferencia simétrica de `S` con `S2`. Equivale a `S ^ S2`. |
+| `S.symmetric_difference_update(S2)` | Actualiza `S` con la diferencia simétrica de `S` con `S2`. Equivale a `S ^= S2`. |
+| `S.difference(*SS)` | Devuelve la diferencia de `S` con todos los conjuntos que hay en `*SS`. Equivale a `S - S1 - ... - SN`, donde `*SS` es `S1,...,SN`. |
+| `S.difference_update(*SS)` | Actualiza `S` con la diferencia de `S` con todos los conjuntos que hay en `*SS`. Equivale a `S -= S1 | ... | SN`, donde `*SS` es `S1,...,SN`. |
+
+El tipo `frozenset` no dispone de los métodos `add`, `clear`, `difference_update`, `discard`, `intersection_update`, `pop`, `remove`, `symmetric_difference_update` y `update`, pero sí tiene un método `set()` que devuelve una copia mutable de su contenido.
 
 ### Ficheros
 
@@ -648,8 +733,8 @@ En general, la sustitución del contenido de `S` por el de un iterador `I`, cons
 
 ..
 
-| Operador | Descripción |
-|:--------:|:-----------:|
+| Operación | Descripción |
+|:---------:|:-----------:|
 | ` ` | .. |
 
 ..
@@ -658,8 +743,8 @@ En general, la sustitución del contenido de `S` por el de un iterador `I`, cons
 
 Esta es la precedencia, de mayor a menor, de los operadores en Python:
 
-| Operador | Descripción |
-|:--------:|:------------|
+| Operación | Descripción |
+|:---------:|:-----------:|
 | `{...}` | Diccionarios y conjuntos. |
 | `[...]` | Listas. |
 | `(...)` | Paréntesis, tuplas y generadores. |
@@ -672,11 +757,11 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) a nivel de bits de `X`. |
 | `-X`<br/>`+X` | Negación e identidad de `X`. |
 | `X * Y`<br/>`X % Y`<br/>`X / Y`<br/>`X // Y` | Multiplicación/repetición, módulo/formato, división y división entera de `X` con `Y`. |
-| `X + Y`<br/>`X - Y` | Suma/concatenación y resta/diferencia de `X` con `Y`. |
+| `X + Y`<br/>`X - Y` | Suma/concatenación y resta/[diferencia](https://es.wikipedia.org/wiki/Diferencia_de_conjuntos) de `X` con `Y`. |
 | `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha `Y` bits de `X`. |
 | `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
 | `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de `X` con `Y`. |
-| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
+| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
 | `X == Y`<br/>`X != Y` | Igualdad y desigualdad de `X` con `Y`. |
 | `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de `X` con `Y`. |
 | `X is Y`<br/>`X is not Y` | Comparación de referencias con los objetos `X` e `Y`. |
