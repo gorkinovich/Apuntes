@@ -443,7 +443,7 @@ Donde `[]` es la lista vacía y el resto son listas con un tamaño arbitrario de
 
 Una sintaxis alternativa, para definir listas, son las *listas intensionales* que tienen la siguiente sintaxis:
 
-$$\texttt{[} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \\ \qquad\quad \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
+$$\texttt{[} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \\\\ \qquad\quad\;\; \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{]}$$
 
 De este modo, podemos construir listas a partir de otros contenedores, mediante el [producto cartesiano](https://es.wikipedia.org/wiki/Producto_cartesiano). Para ello, tomamos un *iterador* y ajustamos cada elemento del mismo a un *patrón* (una variable o composición estructurada de variables), y opcionalmente podemos pedir que estos elementos cumplan una *condición*. Con el resultado del producto cartesiano de todos los elementos, que hayan cumplido las condiciones indicadas, construimos una *expresión* que conformará cada elemento de la lista final. Por ejemplo:
 
@@ -475,9 +475,60 @@ En cuanto a las operaciones que podemos realizar con listas, están explicadas e
 
 ### Iteradores y generadores
 
-Un iterador es un tipo de objeto cuyo propósito es el de recorrer el contenido de un contenedor de datos.
+Un iterador es un tipo de objeto cuyo propósito es el de recorrer el contenido de un contenedor de datos. Para ello hay dos funciones básicas:
 
-..
+| Función | Descripción |
+|:-------:|:-----------:|
+| `iter(X)` | Devuelve un iterador para el objeto `X`, siempre que su clase tenga implementada la interfaz para la iteración. |
+| `next(I)` | Devuelve el elemento actual y sitúa el iterador en el siguiente elemento. Si no quedan más elementos que recorrer, se lanza un `StopIteration`. |
+
+Por ejemplo:
+
+```
+>>> v = iter("abc")
+>>> next(v)
+'a'
+>>> next(v)
+'b'
+```
+
+Aquellos tipos que son iterables, no hace falta llamar a la función `iter` cuando se usa después de un `in`, porque el propio interprete es capaz de deducir que ha de obtener el iterador del contenedor sin indicarlo.
+
+> Téngase en cuenta que un iterador sólo avanza en una dirección. Una vez llega al final del contenedor, se terminó el recorrido y no queda nada más que hacer con el iterador. En este caso, para volver a recorrer el contenedor, haría falta crear un nuevo iterador a partir del contenedor.
+
+Otro elemento iterable que existe en el lenguaje son los generadores, que tienen la siguiente sintaxis:
+
+$$\texttt{(} \mathit{expresi\acute{o}n}\ \texttt{for}\ \mathit{patr\acute{o}n_1}\ \texttt{in}\ \mathit{iterador_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \\\\ \qquad\quad\;\; \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \mathit{patr\acute{o}n_n}\ \texttt{in}\ \mathit{iterador_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
+
+Realmente, una lista intensional, es un generador definido entre corchetes. Sería lo mismo que definir un generador como argumento de la función constructora `list`:
+
+```
+>>> lista=[1,2,3,4]
+>>> [x*2 for x in lista]
+[2, 4, 6, 8]
+>>> list(x*2 for x in lista)
+[2, 4, 6, 8]
+```
+
+Los generadores no dejan de ser instancias del tipo `generator` y que implementan la interfaz para la iteración. Por ejemplo:
+
+```
+>>> g = (x*2 for x in [1,2,3])
+>>> type(g)
+<class 'generator'>
+>>> next(g)
+2
+>>> next(g)
+4
+>>> next(g)
+6
+>>> next(g)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+```
+
+Como se puede ver, primero se crea un generador usando los paréntesis para delimitarlo. A continuación, con `type` obtenemos cuál es el tipo para una expresión, que en este caso es que `g` es de tipo clase `generator`. Después se va iterando, mediante la función `next`, hasta que se obtiene la excepción `StopIteration`, porque se ha llegado al final del recorrido.
 
 ### Operaciones con secuencias
 
@@ -509,28 +560,28 @@ Téngase en cuenta que, todas aquellas operaciones que devuelven como resultado 
 
 ```Python
 # Fichero: copias.py
-S1 = [1,2,3,4,5,6]
-S2 = S1[:4]
-S2[1] = str(S2[1])
-print(S1)
-print(S2)
+s1 = [1,2,3,4,5,6]
+s2 = s1[:4]
+s2[1] = 'due'
+print(s1)
+print(s2)
 ```
 
 ```
 $ python copias.py
 [1, 2, 3, 4, 5, 6]
-[1, '2', 3, 4]
+[1, 'due', 3, 4]
 ```
 
 Como se puede ver, tenemos una instancia del tipo lista en `S1` y, al seleccionar los cuatro primeros elementos de esta, se crea una instancia nueva del tipo lista en `S2` con una copia del contenido de `S1`. Perfecto, ¿no? Sí, pero no. Hay que recordar que las variables en Python manejan referencias y no valores directamente. Por ejemplo:
 
 ```Python
 # Fichero: copias.py
-S1 = [[1,2],[3,4],[5,6]]
-S2 = S1[:2]
-S2[0][1] = "O_O"
-print(S1)
-print(S2)
+s1 = [[1,2],[3,4],[5,6]]
+s2 = s1[:2]
+s2[0][1] = "O_O"
+print(s1)
+print(s2)
 ```
 
 ```
@@ -547,7 +598,7 @@ De las estructuras secuenciales que existen, sólo `bytearray` y `list` son muta
 |:--------:|:-----------:|
 | `S[i] = X` | Modifica con `X` el elemento en la posición `i` de `S`. |
 | `S[i:j] = I` | Sustituye el segmento desde `i` hasta `j-1` de `S` con el contenido del iterador `I`. |
-| `S[i:j:k] = I` | Sustituye los elementos desde `i`, con saltos de `k` unidades, hasta `j-1` de `S` con el contenido del iterador `I`. Si el tamaño del rango indicado y de `I` no son iguales, se lanza el error `ValueError`. |
+| `S[i:j:k] = I` | Sustituye los elementos desde `i`, con saltos de `k` unidades, hasta `j-1` de `S` con el contenido del iterador `I`. Si el tamaño del rango indicado y de `I` no son iguales, se lanza un `ValueError`. |
 | `S[i:] = I` | Sustituye el segmento desde `i` hasta el final de `S` con el contenido del iterador `I`. |
 | `S[:j] = I` | Sustituye el segmento desde cero hasta `j-1` de `S` con el contenido del iterador `I`. |
 | `S[:] = I` | Sustituye el contenido de `S` con el contenido del iterador `I`. |
