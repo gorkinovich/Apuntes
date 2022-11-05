@@ -448,8 +448,8 @@ $$\qquad\quad\ \ \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \math
 De este modo, podemos construir listas a partir de otros contenedores, mediante el [producto cartesiano](https://es.wikipedia.org/wiki/Producto_cartesiano). Para ello, tomamos un *iterador* y ajustamos cada elemento del mismo a un *patrón* (una variable o composición estructurada de variables), y opcionalmente podemos pedir que estos elementos cumplan una *condición*. Con el resultado del producto cartesiano de todos los elementos, que hayan cumplido las condiciones indicadas, construimos una *expresión* que conformará cada elemento de la lista final. Por ejemplo:
 
 ```
->>> [(a,b) for a in range(1,7) if a % 2 != 0
-...        for b in range(1,7) if b % 2 == 0]
+>>> [(a, b) for a in range(1, 7) if a % 2 != 0
+...         for b in range(1, 7) if b % 2 == 0]
 [(1, 2), (1, 4), (1, 6),
  (3, 2), (3, 4), (3, 6),
  (5, 2), (5, 4), (5, 6)]
@@ -505,17 +505,17 @@ $$\qquad\quad\ \ \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \math
 Realmente, una lista intensional, es un generador definido entre corchetes. Sería lo mismo que definir un generador como argumento de la función constructora `list`:
 
 ```
->>> lista=[1,2,3,4]
->>> [x*2 for x in lista]
+>>> lista = [1, 2, 3, 4]
+>>> [x * 2 for x in lista]
 [2, 4, 6, 8]
->>> list(x*2 for x in lista)
+>>> list(x * 2 for x in lista)
 [2, 4, 6, 8]
 ```
 
 Los generadores no dejan de ser instancias del tipo `generator` y que implementan la interfaz para la iteración. Por ejemplo:
 
 ```
->>> g = (x*2 for x in [1,2,3])
+>>> g = (x * 2 for x in [1, 2, 3])
 >>> type(g)
 <class 'generator'>
 >>> next(g)
@@ -562,7 +562,7 @@ Téngase en cuenta que, todas aquellas operaciones que devuelven como resultado 
 
 ```Python
 # Fichero: copias.py
-s1 = [1,2,3,4,5,6]
+s1 = [1, 2, 3, 4, 5, 6]
 s2 = s1[:4]
 s2[1] = 'due'
 print(s1)
@@ -579,7 +579,7 @@ Como se puede ver, tenemos una instancia del tipo lista en `S1` y, al selecciona
 
 ```Python
 # Fichero: copias.py
-s1 = [[1,2],[3,4],[5,6]]
+s1 = [[1, 2], [3, 4], [5, 6]]
 s2 = s1[:2]
 s2[0][1] = "O_O"
 print(s1)
