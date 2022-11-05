@@ -170,15 +170,13 @@ Te doy la bienvenida Arturo.
 
 Con la función `input` mostramos un mensaje por la consola y nos devuelve una cadena de texto, que luego es usada para construir el mensaje que mostramos con `print`.
 
-## Tipos y operadores básicos
-
-### Nulo o vacío
+## Nulo o vacío
 
 El valor `None` pertenece al tipo `NoneType` y representa el concepto de la semántica vacía o nula. Cuando algo no tiene valor, usamos este valor para indicarlo en nuestros programas. Por ejemplo, si una función no devuelve ningún valor explícitamente, se devolverá `None` como resultado.
 
 > Aunque parezca una contradicción, usar un valor para expresar algo que no tiene valor, en teoría de lenguajes una cosa son los conceptos teóricos que queremos representar y otra cómo necesitamos implementarlos.
 
-### Booleanos
+## Booleanos y condiciones
 
 Los valores booleanos vienen del [álgebra de Boole](https://es.wikipedia.org/wiki/%C3%81lgebra_de_Boole) y se usan para representar cuando una condición es verdadera o falsa. Para ello tenemos la constante `True` como verdadero y `False` como falso. Ambos valores pertenecen al tipo `bool`.
 
@@ -226,7 +224,7 @@ $$\mathit{expresi\acute{o}n_{True}}\ \texttt{if}\ \mathit{condici\acute{o}n}\ \t
 
 Si la *condición* es cierta, se ejecuta la primera *expresión*, si es falsa, se ejecuta la segunda. Aunque tengamos disponible este operador, no es recomendable su uso para evitar la ofuscación del código, en su lugar es mejor utilizar la sentencia `if`.
 
-### Números
+## Números enteros, reales y complejos
 
 Python permite representar números [enteros](https://es.wikipedia.org/wiki/N%C3%BAmero_entero), [reales](https://es.wikipedia.org/wiki/N%C3%BAmero_real) e [imaginarios](https://es.wikipedia.org/wiki/N%C3%BAmero_imaginario) (para componer números [complejos](https://es.wikipedia.org/wiki/N%C3%BAmero_complejo)). Para representar números enteros, que pertenecen al tipo `int`, tenemos:
 
@@ -286,7 +284,7 @@ De modo similar a los operadores lógicos, aquí están las [tablas de la verdad
 
 Además de estos operadores, existen las funciones nativas `abs`, `divmod` y `pow`, así como los módulo `math`, `cmath`, `numbers`, `decimal`, `fractions`, `random` y `statistics`, para trabajar con números. Estas funciones y módulos se verán en futuras secciones.
 
-### Cadenas de texto
+## Cadenas de texto
 
 Las cadenas de texto se delimitan con comillas dobles (`"`) o comillas simples (`'`). Es lo mismo `"texto"` que `'texto'`. La expresión `"ho" "la"` equivale a `"hola"`. Hay diferentes tipos de cadenas en Python:
 
@@ -414,7 +412,7 @@ Finalmente, el tipo `bytearray` tiene los siguientes métodos, que no tienen `st
 | `B.remove(X)` | Elimina la primera aparición de `X` en la cadena. Si no se encuentra `X` se lanza un `ValueError`. |
 | `B.reverse()` | Invierte el orden de los elementos de la cadena. |
 
-### Tuplas
+## Tuplas
 
 Las tuplas son estructuras cuyos elementos, llamados componentes, tienen un orden fijo. Son estructuras de datos secuenciales e inmutables en Python, que pertenecen al tipo `tuple`. Las componentes no tienen un nombre asociado a ellas, pero sí una posición de índice. Para definir una tupla se usa la siguiente sintaxis:
 
@@ -433,7 +431,7 @@ En cuanto a las operaciones que podemos realizar con tuplas, están explicadas e
 | `T.count(X)` | Devuelve el número de veces que encuentra `X` en el contenedor. |
 | `T.index(X)`<br/>`T.index(X,i)`<br/>`T.index(X,i,j)` | Devuelve la posición de la primera aparición de `X` en el contenedor, entre las posiciones `i` y `j-1`. Por defecto, `i` es `0` y `j` un valor superior al tamaño del contenedor. Si no se encuentra `X` se lanza un `ValueError`. |
 
-### Listas
+## Listas
 
 Las listas son estructuras secuenciales cuyos elementos tienen un orden definido. En el caso de Python las listas son mutables y pertenecen al tipo `list`. Sus elementos son accesibles mediante una posición de índice. Para definir una lista se usa la siguiente sintaxis:
 
@@ -475,12 +473,12 @@ En cuanto a las operaciones que podemos realizar con listas, están explicadas e
 | `L.reverse()` | Invierte el orden de los elementos del contenedor. |
 | `L.sort(key=None, reverse=False)` | Ordena el contenido del contenedor, donde `key` es una función de un parámetro (usada habitualmente para devolver la clave a usar para la ordenación dentro de una estructura) y `reverse` es un *flag* para indicar si se ha de ordenar en sentido inverso o no. |
 
-### Iteradores y generadores
+## Iteradores y generadores
 
 Un iterador es un tipo de objeto cuyo propósito es el de recorrer el contenido de un contenedor de datos. Para ello hay dos funciones básicas:
 
 | Función | Descripción |
-|:-------:|:-----------:|
+|:-------:|:------------|
 | `iter(X)` | Devuelve un iterador para el objeto `X`, siempre que su clase tenga implementada la interfaz para la iteración. |
 | `next(I)` | Devuelve el elemento actual y sitúa el iterador en el siguiente elemento. Si no quedan más elementos que recorrer, se lanza un `StopIteration`. |
 
@@ -534,7 +532,7 @@ StopIteration
 
 Como se puede ver, primero se crea un generador usando los paréntesis para delimitarlo. A continuación, con `type` obtenemos cuál es el tipo para una expresión, que en este caso es que `g` es de tipo clase `generator`. Después se va iterando, mediante la función `next`, hasta que se obtiene la excepción `StopIteration`, porque se ha llegado al final del recorrido.
 
-### Operaciones con secuencias
+## Operaciones con secuencias
 
 Hemos visto varios tipos de estructuras secuenciales: `str`, `bytes`, `bytearray`, `tuple` y `list`. Se pueden usar los siguientes operadores y funciones con todas ellas:
 
@@ -620,7 +618,7 @@ En general, la sustitución del contenido de `S` por el de un iterador `I`, cons
 > + `L[:0] = I` inserta al inicio del contenedor el contenido del iterador.
 > + `L[i:i] = [X]` equivale a usar el método `L.insert(i,X)`, por lo tanto, `L[i:i] = I` inserta en la posición `i` el contenido del iterador.
 
-### Diccionarios
+## Diccionarios
 
 Los diccionarios son estructuras, con forma de conjunto, que relacionan una clave con un valor. En el caso de Python los diccionarios son mutables y pertenecen al tipo `dict`. Sus elementos son accesibles mediante una clave. Para definir un diccionario se usan las siguientes formas:
 
@@ -658,7 +656,7 @@ En cuanto a las operaciones que podemos realizar con diccionarios, tenemos los s
 En cuanto a los métodos de la clase `dict`, tenemos los siguientes:
 
 | Operación | Descripción |
-|:---------:|:-----------:|
+|:---------:|:------------|
 | `D.keys()` | Devuelve un iterador para recorrer las claves del diccionario. |
 | `D.values()` | Devuelve un iterador para recorrer los valores del diccionario. |
 | `D.items()` | Devuelve un iterador para recorrer los elementos `(clave,valor)` del diccionario. |
@@ -671,7 +669,7 @@ En cuanto a los métodos de la clase `dict`, tenemos los siguientes:
 | `D.pop(K)`<br/>`D.pop(K,X)` | Elimina la entrada con la clave `K` en `D` y devuelve el valor asociado. Si no existe `K`, devuelve `X` como valor asociado, si no se indica un valor `X`, se lanza un `KeyError`. |
 | `dict.fromkeys(I)`<br/>`dict.fromkeys(I,X)` | Crea un diccionario que tiene como claves los valores obtenidos con el iterador `I` y le asigna como valor `X`. que por defecto es `None`. |
 
-### Conjuntos
+## Conjuntos
 
 Los conjuntos son estructuras que contienen una serie de elementos sin orden fijo, ni duplicados. En el caso de Python los conjuntos son mutables y pertenecen al tipo `set`. Para definir un conjunto se usa la siguiente sintaxis:
 
@@ -704,7 +702,7 @@ En cuanto a las operaciones que podemos realizar con conjuntos, tenemos los sigu
 En cuanto a los métodos de la clase `set`, tenemos los siguientes:
 
 | Operación | Descripción |
-|:---------:|:-----------:|
+|:---------:|:------------|
 | `S.add(X)` | Añade el elemento `X` al conjunto. |
 | `S.discard(X)` | Elimina el elemento `X` del conjunto si existe. |
 | `S.remove(X)` | Elimina el elemento `X` del conjunto. Si no existe, se lanza un `KeyError`. |
@@ -725,21 +723,109 @@ En cuanto a los métodos de la clase `set`, tenemos los siguientes:
 
 El tipo `frozenset` no dispone de los métodos `add`, `clear`, `difference_update`, `discard`, `intersection_update`, `pop`, `remove`, `symmetric_difference_update` y `update`, pero sí tiene un método `set()` que devuelve una copia mutable de su contenido.
 
-### Ficheros
+## Conversión de tipos
 
 ..
 
-### Asignación de valores
+## Asignación de valores
 
-..
+Para asignar un valor a una variable se utiliza la sentencia `=`:
 
-| Operación | Descripción |
+```Python
+lenguaje = "Python"
+```
+
+Decimos sentencia y no operador, porque no se puede combinar con otras expresiones. A la izquierda del igual ha de ir una variable y a la derecha una expresión con el valor a asignar. En caso necesario, se puede concatenar un número arbitrario de asignaciones:
+
+```Python
+a = b = c = 123
+```
+
+Además, podemos hacer algunos ajustes de patrón con estructuras:
+
+$$\mathit{variable_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{variable_n} \textcolor{red}{]}\ \texttt{=}\ \mathit{iterador\ de\ n\ elementos}$$
+
+$$\texttt{(} \mathit{variable_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{variable_n} \textcolor{red}{]} \texttt{)}\ \texttt{=}\ \mathit{iterador\ de\ n\ elementos}$$
+
+$$\texttt{[} \mathit{variable_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{variable_n} \textcolor{red}{]} \texttt{]}\ \texttt{=}\ \mathit{iterador\ de\ n\ elementos}$$
+
+Técnicamente hablando, las dos primeras son la misma forma, porque cuando no indicamos los paréntesis se manejan tuplas internamente. Hay que tener en cuenta, que la expresión a la derecha de la asignación, debe ser un contenedor o iterador con el mismo número de elementos que se trata de asignar, de lo contrario se lanza un `ValueError`. Veamos algunos ejemplos de asignación:
+
+```Python
+a = 1; b = 2
+b, a = a, b
+(c, d) = range(1, 3)
+[e, f, g] = range(5, 8)
+```
+
+> En Python se puede tener varias sentencias en una misma línea utilizando el punto y coma para separarlas.
+
+¿Qué hacer si sólo queremos extraer unos elementos del principio o del final? Podemos utilizar la notación `*variable`, para agrupar en una lista los elementos que no necesitamos separar. Por ejemplo:
+
+```Python
+a, b, *c = "hola"
+# a = 'h'
+# b = 'o'
+# c = ['l', 'a']
+*a, b, c = "hola"
+# a = ['h', 'o']
+# b = 'l'
+# c = 'a'
+a, *b, c = "hola"
+# a = 'h'
+# b = ['o', 'l']
+# c = 'a'
+```
+
+No se puede usar más de una variable con `*` en la asignación, pues Python no sería capaz de decidir cómo repartir los elementos de un contenedor. De variables sin `*` hay que usar mínimo una, para usar esta forma, y un máximo de tantos elementos como tenga el contenedor. Por ejemplo, `a,*b=[1]` asignaría `1` a la variable `a` y `[]` a `b`.
+
+Existe un operador `:=` para poder asignar variables dentro de otras expresiones, es decir, no puede usarse a solas este operador, porque para eso está la sentencia de asignación, pero sí puede usarse dentro de una condición o una operación aritmética, entre muchas otras. El ejemplo más habitual sería:
+
+```Python
+if objeto := mi_función():
+    print(objeto.dato)
+```
+
+Digamos que `mi_función` devuelve un valor y es asignado a la variable `objeto`. Si es una instancia no nula, suponiendo que si no se puede instanciar el tipo devolveríamos `None`, pues trabajaremos con el objeto. En este caso se accede a su propiedad `dato`, como ejemplo.
+
+También existe un conjunto de sentencias de asignación, que combinan algún operador numérico con la asignación. Son los siguientes:
+
+| Operación | Equivalencia |
 |:---------:|:-----------:|
-| ` ` | .. |
+| `X += Y` | `X = X + Y` |
+| `X -= Y` | `X = X - Y` |
+| `X *= Y` | `X = X * Y` |
+| `X /= Y` | `X = X / Y` |
+| `X //= Y` | `X = X // Y` |
+| `X %= Y` | `X = X % Y` |
+| `X **= Y` | `X = X ** Y` |
+| `X &= Y` | `X = X & Y` |
+| `X |= Y` | `X = X | Y` |
+| `X ^= Y` | `X = X ^ Y` |
+| `X >>= Y` | `X = X >> Y` |
+| `X <<= Y` | `X = X << Y` |
+
+## Sentencias de control
 
 ..
 
-### Precedencia de los operadores
+## Definición de funciones
+
+..
+
+## Clases y objetos
+
+..
+
+## Manejo de ficheros
+
+..
+
+## Formato de cadenas
+
+..
+
+## Precedencia de operadores
 
 Esta es la precedencia, de mayor a menor, de los operadores en Python:
 
@@ -774,23 +860,7 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `X := Y` | Asignación del valor `Y` en la variable `X`. |
 | `yield X` | Generador de valores. |
 
-> En la categoría de la multiplicación estaría el operador `@`, que la documentación de Python lo denomina como [multiplicador de matrices](https://peps.python.org/pep-0465/), aunque la biblioteca estándar no implementa este operador. Sin embargo, bibliotecas como [`numpy`](https://numpy.org/) sí que lo usan para multiplicar matrices.
-
-## Sentencias de control
-
-..
-
-## Definición de funciones
-
-..
-
-## Clases y objetos
-
-..
-
-## Cadenas con formato
-
-..
+> En la categoría de la multiplicación estaría el operador `@`, que la documentación de Python lo denomina como [multiplicador de matrices](https://peps.python.org/pep-0465/), aunque la biblioteca estándar no implementa este operador. Sin embargo, bibliotecas como [`numpy`](https://numpy.org/) sí que lo usan para multiplicar matrices. También existe su versión con asignación `@=`, para las clases que quieran implementar su uso.
 
 ## Biblioteca estándar
 
