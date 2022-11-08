@@ -840,7 +840,148 @@ También existe un conjunto de sentencias de asignación, que combinan algún op
 
 ## Formato de cadenas
 
-..
+### Estilo `printf`
+
+El primer método es heredado de los tiempos de Python 2 y se utiliza el operador `%` para dar formato a cadenas, usando la sintaxis `cadena % valores`. Por ejemplo:
+
+```
+>>> "Banda: %s" % "Queen"
+'Banda: Queen'
+>>> "%s (%d)" % ("A Kind of Magic", 1986)
+'A Kind of Magic (1986)'
+>>> "%(d)s (%(y)d)" % {'d': "A Night at the Opera", 'y': 1975}
+'A Night at the Opera (1975)'
+```
+
+Se usa la siguiente sintaxis como expresión de formato dentro de la cadena:
+
+$$\texttt{\char37} \textcolor{red}{[} \texttt{(} \mathit{nombre} \texttt{)} \textcolor{red}{]} \textcolor{red}{[} \mathit{flag} \textcolor{red}{]} \textcolor{red}{[} \mathit{ancho} \textcolor{red}{]} \textcolor{red}{[} \texttt{.} \mathit{precisi\acute{o}n} \textcolor{red}{]} \mathit{tipo}$$
+
+El *nombre* hace referencia a una clave dentro de un diccionario. El *flag* sirven para indicar la alineación del texto y estos son los siguientes valores:
+
+| Valor | Alineación | Ejemplo | Resultado |
+|:-----:|:----------:|:-------:|:---------:|
+| ` ` | A la derecha. | `"% 4i"%(123)` | `' 123'` |
+| `+` | A la derecha, mostrando el signo. | `"%+4i"%(123)` | `'+123'` |
+| `-` | A la izquierda. | `"%-4i"%(123)` | `'123 '` |
+| `0` | A la derecha con ceros. | `"%04i"%(123)` | `'0123'` |
+
+El *flag* por defecto es el espacio. El *ancho* es un entero para indicar el ancho que debe ocupar el dato y se puede usar `*` para tomar el valor entero de los valores de entrada. La *precisión* es un entero para indicar el número de decimales que mostrar con un número real y también se puede usar `*` como con el *ancho*. Por último están los *tipos* de datos:
+
+| Tipo | Descripción | Tipo | Descripción |
+|:----:|:------------|:----:|:------------|
+| `s` | Equivale a `str(X)`. | `f` | Número real con coma flotante. |
+| `r` | Equivale a `repr(X)`. | `F` | Número real con coma flotante. |
+| `c` | Carácter en `str` o `int`. | `e` | Número real con exponente. |
+| `i` | Número entero. | `E` | Número real con exponente. |
+| `o` | Número entero en base 8. | `g` | Opciones `f` o `e`. |
+| `d` | Número entero en base 10. | `G` | Opciones `F` o `E`. |
+| `x` | Número entero en base 16. | `%` | Para mostrar el carácter `%`. |
+| `X` | Número entero en base 16. | | |
+
+### Cadenas plantilla
+
+Otro método de formato para cadenas es el tipo `Template` dentro del módulo `string`, que se inicializa con una cadena que tendrá una serie de nombres identificadores con la forma `$nombre`. De este modo, se podrá invocar al método `substitute` con un diccionario como argumento, para que lo vaya consultando para sustituir las marcas de la plantilla. Si no se encuentra, alguno de los nombres de la plantilla, se lanza un `KeyError`. Si queremos evitar este comportamiento último, está el método `safe_substitute`, que en caso de no encontrar algún nombre, en lugar de lanzar un error, se limita a no realizar la sustitución.
+
+A continuación, un ejemplo del uso del tipo `Template`:
+
+```
+>>> import string
+>>> t = string.Template("$song ($autor)")
+>>> t.substitute({'autor': "Björk", 'song': "Human Behaviour"})
+'Human Behaviour (Björk)'
+>>> t.safe_substitute({'song': "Greensleeves"})
+'Greensleeves ($autor)'
+```
+
+> El código `$$` sirve para indicar el carácter `$` dentro de la cadena de formato.
+
+### Método `format`
+
+En Python 3 se añadió el método `format` para dar formato a cadenas, usando la sintaxis `cadena.format(valores)`. Por ejemplo:
+
+```
+>>> "Canción: {0}".format("How soon is now?")
+'Canción: How soon is now?'
+>>> "{} ({}-{})".format("The Smiths", 1982, 1987)
+'The Smiths (1982-1987)'
+>>> "{n} -> {p}".format(n="Morrissey", p="Voz")
+'Morrissey -> Voz'
+```
+
+Se usa la siguiente sintaxis como expresión de formato dentro de la cadena:
+
+$$\texttt{\char123} \textcolor{red}{[} \mathit{\acute{\imath}ndice} \textcolor{red}{]}\ \textcolor{red}{[} \mathit{acceso} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{!} \mathit{conversi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{:} \mathit{formato} \textcolor{red}{]} \texttt{\char125}$$
+
+El *índice* es un entero que representa la posición del dato dentro de los valores pasados como argumentos. El *acceso* consiste en un mecanismo opcional para acceder a información interna del valor, ya sea a una propiedad de objeto (`.nombre`) o a un elemento de contenedor (`[índice]`). La marca de *conversión* es una de las siguientes:
+
+| Valor | Descripción |
+|:-----:|:------------|
+| `s` | El dato se procesa con `str(X)`. |
+| `r` | El dato se procesa con `repr(X)`. |
+| `a` | El dato se procesa con `ascii(X)`. |
+
+El valor por defecto para la *conversión* es `s`. En cuanto al *formato*, se ha de seguir la siguiente sintaxis para especificarlo:
+
+$$\textcolor{red}{[} \textcolor{red}{[} \mathit{relleno} \textcolor{red}{]}\ \mathit{alineamiento} \textcolor{red}{]} \textcolor{red}{[} \mathit{signo} \textcolor{red}{]} \textcolor{red}{[} \texttt{z} \textcolor{red}{]} \textcolor{red}{[} \texttt{\char35} \textcolor{red}{]} \textcolor{red}{[} \texttt{0} \textcolor{red}{]} \textcolor{red}{[} \mathit{ancho} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{]} \textcolor{red}{[} \texttt{.} \mathit{precisi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \mathit{tipo} \textcolor{red}{]}$$
+
+El *relleno* consiste en un carácter cualquiera (exceptuando `{` y `}`) para rellenar el ancho de columna indicado con *ancho*. El *alineamiento* indica hacia dónde quedará el dato con respecto al relleno, siendo sus valores los siguientes:
+
+| Valor | Alineación |
+|:-----:|:----------:|
+| `<` | Izquierda |
+| `>` | Derecha |
+| `^` | Centrado |
+| `=` | Relleno detrás del signo |
+
+El *signo* indica qué se debe hacer con el signo de un número:
+
+| Valor | Descripción |
+|:-----:|:-----------:|
+| `+` | Se debe mostrar tanto el signo positivo como el negativo. |
+| `-` | Se debe mostrar sólo el signo negativo. |
+| ` ` | Se debe usar un espacio en blanco para el signo positivo y usar el signo negativo tal cual. |
+
+La opción `z` fuerza a que el cero negativo de los números de coma flotante se muestre como positivo. La opción `#` activa la forma alternativa de representación, que depende del tipo de dato a representar. La opción `0` se usa para rellenar con ceros detrás del signo un tipo numérico en base al *ancho*. La opción `,` indica que se debe utilizar la coma como separador de millares. Existe también una opción `_`, en lugar de `,`, para insertar el guion bajo como separador de millares en números reales y enteros, pero para enteros binarios, octales y hexadecimales, la separación es en grupos de cuatro dígitos en lugar de tres.
+
+ El *ancho* es un entero para indicar el ancho que debe ocupar el dato y se puede usar `*` para tomar el valor entero de los valores de entrada. La *precisión* es un entero para indicar el número de decimales que mostrar con un número real y también se puede usar `*` como con el *ancho*. No se puede usar la opción de *precisión* con datos que no sean números reales.
+
+Por último están los *tipos* de datos:
+
+| Tipo | Descripción | Tipo | Descripción |
+|:----:|:------------|:----:|:------------|
+| `s` | Cadena de texto. | `f` | Número real con coma flotante. |
+| `c` | Carácter en `int`. | `F` | Número real con coma flotante. |
+| `n` | Número con formato local. | `e` | Número real con exponente. |
+| `b` | Número entero en base 2. | `E` | Número real con exponente. |
+| `o` | Número entero en base 8. | `g` | Opciones `f` o `e`. |
+| `d` | Número entero en base 10. | `G` | Opciones `F` o `E`. |
+| `x` | Número entero en base 16. | `%` | Formato con porcentaje. |
+| `X` | Número entero en base 16. | | |
+
+Las opciones `X`, `F`, `E` y `G` mostrarán en mayúsculas cualquier elemento alfabético. Como curiosidad, el *formato* aquí definido es el que se usa como segundo parámetro de la función nativa `format`, siendo el primer parámetro el objeto a transformar en cadena de texto. 
+
+> Para poder representar los caracteres `{` y `}`, como parte de una cadena de formato, hay que utilizar los códigos `{{` y `}}` respectivamente. Estos códigos no se pueden usar como carácter de relleno en la expresión de formato.
+
+### Cadenas interpoladas
+
+El último método para dar formato a cadenas son las [cadenas interpoladas](https://peps.python.org/pep-0498/), que permiten usar variables del programa dentro de cadenas. Para poder hacerlo hay que definir la cadena con el prefijo `f`, que se puede combinar con el prefijo `r` de las cadenas en bruto.  Por ejemplo:
+
+```
+>>> foo=2001
+>>> f"Debug: {foo = }"
+'Debug: foo = 2001'
+```
+
+Se usa la siguiente sintaxis como expresión de formato dentro de la cadena:
+
+$$\texttt{\char123} \textcolor{red}{[} \mathit{expresi\acute{o}n} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{=} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{!} \mathit{conversi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{:} \mathit{formato} \textcolor{red}{]} \texttt{\char125}$$
+
+Las similitudes con el método `format` son considerables, ya que tanto la *conversión*, como el *formato*, son en principio iguales. De hecho, la implementación de `{X:formato}` equivale a `format(X,"formato")`. La única diferencia es que se puede tener expresiones de formato anidadas, pudiendo hacer cosas como `{variable:{ancho}.{precisión}}`.
+
+La opción `=` sirve para mostrar la *expresión* seguido de un igual y por último el valor formateado. Para la opción igual, se tomará como parte de la *expresión* todo aquello que se encuentre después de `{` hasta encontrar `}`, `!` o `:`, por lo tanto será sensible a todos los espacios que haya y no será lo mismo `{a=}` que `{a = }`, por ejemplo.
+
+En cuanto al tipo de expresiones que se pueden utilizar, la implementación actual es bastante flexible, pero existen algunas limitaciones documentadas en la [documentación oficial](https://docs.python.org/3/reference/lexical_analysis.html#f-strings). Por ejemplo, no se puede dejar una expresión vacía, y en el caso de expresiones lambda, y el uso del operador `:=`, requieren estar entre paréntesis.
 
 ## Precedencia de operadores
 
