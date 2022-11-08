@@ -729,20 +729,20 @@ Las funciones para convertir entre tipos básicos son las siguientes:
 
 | Función | Tipos | Descripción |
 |:-------:|:-----:|:------------|
-| `list(I)` | Iterables | De iterable a lista. |
-| `tuple(I)` | Iterables | De iterable a tupla . |
-| `''.join(IS) ` | Iterable con cadenas de texto | De iterable a cadena de texto. |
-| `eval(S)` | Cadena de texto | Evalúa la expresión Python de la cadena y devuelve el valor de su ejecución. |
 | `int(X)` | Cadena o número | Devuelve un número entero. |
 | `int(S,B)` | Cadena | De cadena de texto un número entero, indicando la base del mismo con `B`. |
 | `float` | Cadena o número | Devuelve un número entero real. |
-| `repr(X)` | Cualquiera | Devuelve la representación interna del objeto como una cadena de texto. |
+| `chr(N)` | Número entero | De número entero a su valor como carácter de texto. |
+| `ord(C)` | Carácter de texto | De carácter a su valor numérico entero. |
 | `str(X)` | Cualquiera | Devuelve el valor del objeto como una cadena de texto. |
+| `repr(X)` | Cualquiera | Devuelve la representación interna del objeto como una cadena de texto. |
 | `bin(N)` | Número entero | De número a cadena de texto con el número en representación binaria. |
 | `oct(N)` | Número entero | De número a cadena de texto con el número en representación octal. |
 | `hex(N)` | Número entero | De número a cadena de texto con el número en representación hexadecimal. |
-| `ord(C)` | Carácter de texto | De carácter a su valor numérico entero. |
-| `chr(N)` | Número entero | De número entero a su valor como carácter de texto. |
+| `list(I)` | Iterables | De iterable a lista. |
+| `tuple(I)` | Iterables | De iterable a tupla . |
+| `eval(S)` | Cadena de texto | Evalúa la expresión Python de la cadena y devuelve el valor de su ejecución. |
+| `''.join(IS) ` | Iterable con cadenas de texto | De iterable a cadena de texto. |
 
 ## Asignación de valores
 
