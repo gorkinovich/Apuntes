@@ -240,6 +240,8 @@ $$\mathit{d\acute{\imath}gitos} \texttt{.} \textcolor{red}{[} \mathit{d\acute{\i
 
 En este caso siempre será necesario el punto como separador decimal, pues de no indicarlo pasaría a ser un literal entero.
 
+> Existen tres valores especiales que son `float('nan')`, `float('-inf')` y `float('inf')`, para representar un no-número (*not a number*), menos infinito e infinito. Con el módulo `math` se pueden comprobar si se tratan de estos valores con las funciones `isnan(x)` e `isinf(x)`.
+
 Para representar números imaginarios tenemos:
 
 $$\mathit{n\acute{u}mero} \textcolor{red}{\char123} \texttt{j} \textcolor{red}{|} \texttt{J} \textcolor{red}{\char125}$$
@@ -796,6 +798,10 @@ a, *b, c = "hola"
 
 No se puede usar más de una variable con `*` en la asignación, pues Python no sería capaz de decidir cómo repartir los elementos de un contenedor. De variables sin `*` hay que usar mínimo una, para usar esta forma, y un máximo de tantos elementos como tenga el contenedor. Por ejemplo, `a,*b=[1]` asignaría `1` a la variable `a` y `[]` a `b`.
 
+> Otros patrones con los que se puede ajustar valores usando `*variable` son dentro de listas `[valor,*valores]` y tuplas `(valor,*valores)`. Téngase en cuenta que `*variable` agrupa valores en forma de lista y `**variable` los agrupa en forma de diccionario.
+> 
+> También se puede hacer el paso inverso, expandir el contenido de una lista o diccionario al asignar. Por ejemplo, si tenemos `v=[1,2,3]`, la expresión `[0,v]` da como resultado `[0,[1,2,3]]`, pero con `[0,*v]` obtendremos `[0,1,2,3]`. Lo mismo se aplica a `**variable` con los diccionarios. En la sección *definición de funciones* volveremos a ver un uso de estos mecanismos.
+
 Existe un operador `:=` para poder asignar variables dentro de otras expresiones, es decir, no puede usarse a solas este operador, porque para eso está la sentencia de asignación, pero sí puede usarse dentro de una condición o una operación aritmética, entre muchas otras. El ejemplo más habitual sería:
 
 ```Python
@@ -822,6 +828,43 @@ También existe un conjunto de sentencias de asignación, que combinan algún op
 | `X >>= Y` | `X = X >> Y` |
 | `X <<= Y` | `X = X << Y` |
 
+## Precedencia de operadores
+
+Esta es la precedencia, de mayor a menor, de los operadores en Python:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `{...}` | Diccionarios y conjuntos. |
+| `[...]` | Listas. |
+| `(...)` | Paréntesis, tuplas y generadores. |
+| `X.atributo` | Referencia a un atributo de X. |
+| `X(args)` | Invocación de la función `X`. |
+| `X[i:j:k]` | Selección del contenedor `X` (*slicing*). |
+| `X[i]` | Indexado del contenedor `X`. |
+| `await X` | Espera la evaluación de `X`. |
+| `X ** Y` | `X` elevado a `Y`. |
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) a nivel de bits de `X`. |
+| `-X`<br/>`+X` | Negación e identidad de `X`. |
+| `X * Y`<br/>`X % Y`<br/>`X / Y`<br/>`X // Y` | Multiplicación/repetición, módulo/formato, división y división entera de `X` con `Y`. |
+| `X + Y`<br/>`X - Y` | Suma/concatenación y resta/[diferencia](https://es.wikipedia.org/wiki/Diferencia_de_conjuntos) de `X` con `Y`. |
+| `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha `Y` bits de `X`. |
+| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
+| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de `X` con `Y`. |
+| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
+| `X == Y`<br/>`X != Y` | Igualdad y desigualdad de `X` con `Y`. |
+| `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de `X` con `Y`. |
+| `X is Y`<br/>`X is not Y` | Comparación de referencias con los objetos `X` e `Y`. |
+| `X in Y`<br/>`X not in Y` | Pertenencia o no de `X` al contenedor `Y`. |
+| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) lógica de `X`. |
+| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) lógica de `X` con `Y`, donde `Y` se evaluará si `X` es `True`. |
+| `X or Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) lógica de `X` con `Y`, donde `Y` se evaluará si `X` es `False`. |
+| `X if Y else Z` | `X` será evaluado si `Y` es `True`, si no se evalúa `Z`. |
+| `lambda args: X` | Expresión lambda. |
+| `X := Y` | Asignación del valor `Y` en la variable `X`. |
+| `yield X` | Generador de valores. |
+
+> En la categoría de la multiplicación estaría el operador `@`, que la documentación de Python lo denomina como [multiplicador de matrices](https://peps.python.org/pep-0465/), aunque la biblioteca estándar no implementa este operador. Sin embargo, bibliotecas como [`numpy`](https://numpy.org/) sí que lo usan para multiplicar matrices. También existe su versión con asignación `@=`, para las clases que quieran implementar su uso.
+
 ## Sentencias de control
 
 ..
@@ -831,10 +874,6 @@ También existe un conjunto de sentencias de asignación, que combinan algún op
 ..
 
 ## Clases y objetos
-
-..
-
-## Manejo de ficheros
 
 ..
 
@@ -983,42 +1022,135 @@ La opción `=` sirve para mostrar la *expresión* seguido de un igual y por últ
 
 En cuanto al tipo de expresiones que se pueden utilizar, la implementación actual es bastante flexible, pero existen algunas limitaciones documentadas en la [documentación oficial](https://docs.python.org/3/reference/lexical_analysis.html#f-strings). Por ejemplo, no se puede dejar una expresión vacía, y en el caso de expresiones lambda, y el uso del operador `:=`, requieren estar entre paréntesis.
 
-## Precedencia de operadores
+## Manejo de ficheros
 
-Esta es la precedencia, de mayor a menor, de los operadores en Python:
+Para trabajar con ficheros se usa el tipo `file`, pero para abrir ficheros se necesita la función nativa `open`, que devuelve instancias de `file`. Usaremos la siguiente sentencia:
 
-| Operación | Descripción |
-|:---------:|:-----------:|
-| `{...}` | Diccionarios y conjuntos. |
-| `[...]` | Listas. |
-| `(...)` | Paréntesis, tuplas y generadores. |
-| `X.atributo` | Referencia a un atributo de X. |
-| `X(args)` | Invocación de la función `X`. |
-| `X[i:j:k]` | Selección del contenedor `X` (*slicing*). |
-| `X[i]` | Indexado del contenedor `X`. |
-| `await X` | Espera la evaluación de `X`. |
-| `X ** Y` | `X` elevado a `Y`. |
-| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) a nivel de bits de `X`. |
-| `-X`<br/>`+X` | Negación e identidad de `X`. |
-| `X * Y`<br/>`X % Y`<br/>`X / Y`<br/>`X // Y` | Multiplicación/repetición, módulo/formato, división y división entera de `X` con `Y`. |
-| `X + Y`<br/>`X - Y` | Suma/concatenación y resta/[diferencia](https://es.wikipedia.org/wiki/Diferencia_de_conjuntos) de `X` con `Y`. |
-| `X << Y`<br/>`X >> Y` | Desplazamiento a la izquierda o derecha `Y` bits de `X`. |
-| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) a nivel de bits o [intersección](https://es.wikipedia.org/wiki/Intersecci%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
-| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) a nivel de bits o [diferencia simétrica](https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica) de conjuntos de `X` con `Y`. |
-| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) a nivel de bits o [unión](https://es.wikipedia.org/wiki/Uni%C3%B3n_de_conjuntos) de conjuntos de `X` con `Y`. |
-| `X == Y`<br/>`X != Y` | Igualdad y desigualdad de `X` con `Y`. |
-| `X < Y`<br/>`X <= Y`<br/>`X > Y`<br/>`X >= Y` | Comparación y subconjunto o superconjunto de `X` con `Y`. |
-| `X is Y`<br/>`X is not Y` | Comparación de referencias con los objetos `X` e `Y`. |
-| `X in Y`<br/>`X not in Y` | Pertenencia o no de `X` al contenedor `Y`. |
-| `not X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) lógica de `X`. |
-| `X and Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) lógica de `X` con `Y`, donde `Y` se evaluará si `X` es `True`. |
-| `X or Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) lógica de `X` con `Y`, donde `Y` se evaluará si `X` es `False`. |
-| `X if Y else Z` | `X` será evaluado si `Y` es `True`, si no se evalúa `Z`. |
-| `lambda args: X` | Expresión lambda. |
-| `X := Y` | Asignación del valor `Y` en la variable `X`. |
-| `yield X` | Generador de valores. |
+$$\texttt{with}\ \texttt{open(} \mathit{ruta} \texttt{,} \mathit{modo} \texttt{)}\ \texttt{as}\ \mathit{variable}$$
 
-> En la categoría de la multiplicación estaría el operador `@`, que la documentación de Python lo denomina como [multiplicador de matrices](https://peps.python.org/pep-0465/), aunque la biblioteca estándar no implementa este operador. Sin embargo, bibliotecas como [`numpy`](https://numpy.org/) sí que lo usan para multiplicar matrices. También existe su versión con asignación `@=`, para las clases que quieran implementar su uso.
+Con esto podremos operar con el fichero en el bloque anidado dentro de la sentencia `with`, donde *variable* es la instancia del fichero abierto, *ruta* es la ubicación del fichero a manipular y *modo* es una cadena de texto que contiene el modo de apertura indicado. Las opciones disponibles para el modo de apertura son las siguientes:
+
+| Opciones | Descripción |
+|:----:|:------------|
+| `r` | Modo lectura (modo por defecto). |
+| `w` | Modo escritura (trunca el contenido). |
+| `x` | Creación exclusiva (falla si existe). |
+| `a` | Modo escritura, si existe el fichero añade el contenido al final. |
+| `b` | Formato binario. |
+| `t` | Formato texto. |
+| `+` | Modo lectura y escritura. |
+
+Por defecto el modo es `"r"` que abre el fichero para lectura de texto, sería lo mismo que poner `"rt"`, es decir, si no se indica el formato se asume que es de texto y no binario. Con los modos `"w+"` y `"w+b"` se trunca el contenido del fichero, pero con `"r+"` y `"r+b"` no se trunca.
+
+> Se puede abrir un fichero usando la asignación con `v = open(ruta,modo)`, en lugar de usar la sentencia `with`, pero con este último se garantiza que, en caso de error durante la ejecución, se cerrará el objeto que ha abierto el fichero.
+
+Estos son los métodos y propiedades disponibles en la clase `file`:
+
+| Miembro | Descripción | Resultado |
+|:-------:|:------------|:----------|
+| `F.read()` | Lee el contenido entero del fichero. | **t:** `str`<br/>**b:** `bytes` |
+| `F.read(N)` | Lee `N` caracteres/bytes del fichero. | **t:** `str`<br/>**b:** `bytes` |
+| `F.readline()` | Lee una línea del fichero. | **t:** `str` |
+| `F.readlines()` | Lee las líneas del fichero. | **t:** `list` de `str` |
+| `F.write(X)` | Escribe una cadena en el fichero. (Nota: En modo texto añade un `\n` al final de la cadena añadida al fichero.) | - |
+| `F.writelines(X)` | Escribe una lista de cadenas en el fichero. | - |
+| `F.close()` | Cierra el fichero. | - |
+| `F.tell()` | Devuelve la posición actual en el fichero. | `int` |
+| `F.seek(N)`<br/>`F.seek(N,M)` | Modifica la posición actual en el fichero, donde `N` es el número de posiciones que avanzar y `M` el punto de partida (`0` desde el inicio, `1` desde la posición actual, `2` desde el final). | - |
+| `F.isatty()` | Comprueba si el fichero está conectado a un comando TTY. | `bool` |
+| `F.flush()` | Limpia el buffer de entrada. | - |
+| `F.truncate()`<br/>`F.truncate(N)` | Trunca el contenido a un tamaño de `N` bytes, que por defecto su valor es `0`. | - |
+| `F.fileno()` | Devuelve el número identificador del descriptor de fichero, valor que se usa en módulos como `os`. | `int` |
+| `F.closed` | Devuelve si el fichero está cerrado o no. | `bool` |
+| `F.mode` | Devuelve el modo de apertura del fichero. | - |
+| `F.name` | Devuelve la ruta del fichero. | - |
+
+> Cuando el fichero se abre en modo lectura de texto, podemos utilizarlo como si fuera un iterador con `for S in F`, para ir procesando las líneas del fichero.
+
+### Ficheros JSON
+
+El módulo `json` permite trabajar con el formato [JSON](https://es.wikipedia.org/wiki/JSON) con las siguientes funciones:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `json.dump(X,F)` | Guarda en un fichero de texto `F` un valor de Python `X` convertido al formato JSON. |
+| `json.dumps(X)` | Devuelve una cadena con un valor de Python `X` convertido al formato JSON. |
+| `json.load(X)` | Devuelve un valor de Python obtenido de leer un fichero de texto `F` con formato JSON. |
+| `json.loads(S)` | Devuelve un valor de Python obtenido de una cadena de texto `S` con formato JSON. |
+
+Los parámetros opcionales de `dump` y `dumps` son:
+
+| Parámetro | Descripción |
+|:---------:|:------------|
+| `skipkeys=False` | Con `True` se saltan aquellas claves de diccionario que no sean tipos básicos transformables (`str`, `int`, `float`, `bool`, `None`). |
+| `ensure_ascii=True` | Con `True` se todos los caracteres que no sean ASCII se convierten a secuencias de escape (`\uhhhh`). |
+| `check_circular=True` | Con `True` se hacen comprobaciones de referencias circulares en las estructuras, para evitar que se pueda producir un error de tipo `RecursionError`. |
+| `allow_nan=True` | Con `True` se salta la especificación de JSON, permitiendo representar `nan`, `-inf` e `inf`, con sus equivalentes de JavaScript (`NaN`, `-Infinity` e `Infinity`). |
+| `cls=None` | Instancia alternativa para codificar la salida en formato JSON. Por defecto se usa el tipo `json.JSONEncoder`. |
+| `indent=None` | Con un número natural se indica los espacios de identación a usar para la representación final. |
+| `separators=None` | Con una tupla `(isep,csep)` se indica el separador de ítems en listas y claves en objetos al generar el JSON. Por ejemplo, `(',',':')` genera una salida compacta, mientras que `(', ',': ')` sería la opción por defecto si no hay identación. |
+| `default=None` | Función, que recibe un argumento, usada cuando no se puede serializar un valor de Python. Por ejemplo, con `default=lambda x:str(x)` nos convierte a cadena todo valor no serializable, en lugar de lanzar un `TypeError`. |
+| `sort_keys=False` | Con `True` se las claves de los diccionarios se muestran en orden. |
+
+Los parámetros opcionales de `load` y `loads` son:
+
+| Parámetro | Descripción |
+|:---------:|:------------|
+| `cls=None` | Instancia alternativa para decodificar la entrada en formato JSON. Por defecto se usa el tipo `json.JSONDecoder`. |
+| `object_hook=None` | Función para gestionar el evento de decodificar un diccionario, recibe como argumento un `dict`. |
+| `parse_float=None` | Función para gestionar el evento de decodificar un número real, recibe como argumento un `float`. |
+| `parse_int=None` | Función para gestionar el evento de decodificar un número entero, recibe como argumento un `int`. |
+| `parse_constant=None` | Función para gestionar el evento de decodificar una constante (`NaN`, `-Infinity` e `Infinity`), recibe como argumento un `str`. |
+| `object_pairs_hook=None` | Función para gestionar el evento de decodificar un diccionario, recibe como argumento un `list` con pares clave-valor. Además, esta función tendrá prioridad sobre la definida con `object_hook`. |
+
+El tipo `JSONEncoder` codificar valores a formato JSON usando el método `encode(X)`, donde `X` es el valor a serializar. Si el tipo del valor no está soportado por el codificador, este se pasa al método `default(X)`, que por defecto lanza un `TypeError`.
+
+El tipo `JSONDecoder` decodifica cadenas en formato JSON a valores usando el método `decode(S)`, donde `S` es una cadena de texto.
+
+Para ampliar el comportamiento base del módulo `json`, tenemos que extenderlo de la siguiente manera:
+
+```Python
+# Fichero: jsonex.py
+import json
+
+class ComplexEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, complex):
+            return {'class': 'complex',
+                    'real' : obj.real,
+                    'imag' : obj.imag}
+        else:
+            return json.JSONEncoder.default(self, obj)
+
+def complex_decoder(data):
+    if 'class' in data and data['class'] == 'complex':
+        return complex(data['real'], data['imag'])
+    else:
+        return data
+
+def decode(victim):
+    return json.loads(victim, object_hook=complex_decoder)
+
+def encode(victim):
+    return json.dumps(victim, cls=ComplexEncoder)
+
+def test(victim):
+    print(f"{victim    = }")
+    to_json = encode(victim)
+    print(f"{to_json   = }")
+    from_json = decode(to_json)
+    print(f"{from_json = }")
+```
+
+```
+>>> import jsonex
+>>> jsonex.test([1, 2.3, 4+5j])
+victim    = [1, 2.3, (4+5j)]
+to_json   = '[1, 2.3, {"class": "complex", "real": 4.0, "imag": 5.0}]'
+from_json = [1, 2.3, (4+5j)]
+```
+
+En este ejemplo tomamos el tipo `complex`, que no está soportado por defecto por el módulo `json`, y creamos una clase codificadora que sobrescribe el método `default` para transformarlo a un diccionario con una forma concreta. Luego añadimos una función para gestionar diccionarios a la hora de decodificar el formato JSON.
 
 ## Biblioteca estándar
 
