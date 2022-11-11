@@ -960,27 +960,29 @@ $$\begin{array}{l}
 \\[0.5em] \qquad\qquad \mathit{bloque_n}
 \end{array}$$
 
-Este tipo de expresiones son típicas de lenguajes funcionales como Haskell o Erlang, donde *expresión* se evalúa a un valor y se intenta ajustar con las cláusulas `case` definidas en el orden que están declaradas. Para que se ajuste un valor a una cláusula tiene que encajar en el patrón definido y cumplirse la condición indicada si tiene la sección `if` definida. La condición de una cláusula es conocida también como guarda. Es una forma elegante y expresiva de ramificar la ejecución de un programa.
+Este tipo de expresiones son típicas de lenguajes funcionales como [Haskell](https://es.wikipedia.org/wiki/Haskell) o [Erlang](https://es.wikipedia.org/wiki/Erlang), donde *expresión* se evalúa a un valor y se intenta ajustar con las cláusulas `case` definidas en el orden que están declaradas. Para que se ajuste un valor a una cláusula tiene que encajar en el patrón definido y cumplirse la condición indicada si tiene la sección `if` definida. La condición de una cláusula es conocida también como guarda. Es una forma elegante y expresiva de ramificar la ejecución en un programa.
 
-Un patrón es una definición de un valor estructurado que combina valores literales con variables, que se asignarán con los valores contenidos en el valor obtenido al evaluar la *expresión*. De modo que al ajustar el valor a un patrón, se tendrá que cumplir la igualdad con los valores literales y asignar a las variables que se encuentren en el interior del patrón. Veamos ejemplos para hacernos una idea mejor:
+Un patrón es una definición de un valor estructurado que combina valores literales con variables, que se asignarán con los valores contenidos en el valor obtenido al evaluar la *expresión*. De modo que al ajustar el valor a un patrón, se tendrá que cumplir la igualdad con las posiciones que tengan valores literales y las que tengan variables se les tendrá que asignar los valores internos del valor que se está ajustando. Veamos ejemplos para hacernos una idea mejor:
 
-| Tipo | Ejemplo | Descripción |
-|:----:|:-------:|:------------|
-| Literales | `None`, `True`, `False`, `123`, `1.23`, `2+3j`, `"abc"`, etc. | Son constantes literales de los tipos básicos `int`, `float`, `complex`, `bool`, `str`, `bytes`, `bytearray`, etcétera. |
+| Categoría | Ejemplos | Descripción |
+|:---------:|:--------:|:------------|
+| Literales | `None`, `True`, `False`, `123`, `1.23`, `2+3j`, `"abc"`, etc. | Valores constantes de los tipos básicos `int`, `float`, `complex`, `bool`, `str`, `bytes`, etcétera. |
 | Tuplas | `()`, `(a, )`, `(a, b)`, `(a, *vs)`, etc. | Tuplas de N componentes, donde cada componente es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
 | Listas | `[]`, `[a]`, `[a, b]`, `[a, *vs]`, etc. | Listas de N elementos, donde cada posición es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
 | Diccionarios | `{}`, `{"k1": a}`, `{"k1": a, "k2": b}`, etc. | Diccionarios de N o más elementos, donde cada entrada tiene la forma clave-patrón. Si el diccionario tiene más elementos, de los indicados con el patrón, se ignoran. Se puede usar la notación `**kvs`, pero no se permite la forma `**_` al ser redundante. |
-| Clases | `Clase()`, `Clase(a,b,c)`, `Clase(a,n=b)`, etc. | Clases o tipos con una serie de parámetros posicionales o con nombre, donde cada argumento especificado es un patrón con el que ajustar los miembros de un objeto. |
-| Miembros | `obj.miembro ` | Se usa el valor de una propiedad en una instancia como patrón contra el que ajustar. |
+| Tipos | `Tipo()`, `Tipo(a,b,c)`, `Tipo(a,n=b)`, etc. | Tipos con una serie de parámetros posicionales o con nombre, donde cada argumento especificado es un patrón con el que ajustar los miembros del objeto. |
+| Miembros | `obj.miembro ` | Se usa el valor de una propiedad en un objeto como patrón contra el que ajustar. |
 | Enumeraciones | `Tipo.NOMBRE` | Las valores de enumeraciones requieren indicar el nombre del tipo donde han sido definidos, para evitar que la sentencia los utilice como variables que asignar. |
 | Alias. | `p as v ` | Permite asignar el valor que se ajusta con el patrón `p` en la variable `v`. |
 | Comodín | `_` | Se usa como una variable especial para cuando se quieren descartar valores que no se van a usar. Por ejemplo, si queremos un patrón que obtenga la cabeza de una lista, sería `[x, *_]`. |
 
-Se pueden agrupar patrones con el operador `|` para no tener que repetir código innecesario, por ejemplo, `case None | False:`. Hay más detalles sobre los patrones soportados en la [documentación](https://docs.python.org/3/reference/compound_stmts.html) oficial y ejemplos en el [tutorial](https://docs.python.org/3/tutorial/controlflow.html) del lenguaje.
+Sobre la asignación de variables, en los parámetros con nombre (`nombre=patrón`), no se modifica la propiedad del objeto, sino las variables del patrón. Del mismo modo, cuando se usa un miembro de un objeto, este no se verá modificado como ocurre con las variables sueltas.
 
-> Con los tipos `bool`, `bytearray`, `bytes`, `dict`, `float`, `frozenset`, `int`, `list`, `set`, `str` y `tuple`, si se intenta usarlos como un patrón de clase, con sus parámetros posicionales, la implementación lo gestiona de otra forma diferente al resto de clases.
+Se pueden agrupar patrones con el operador `|` para no tener que repetir código innecesario, por ejemplo, `case None | False:`. Para más información, hay más detalles sobre los patrones soportados en la [documentación](https://docs.python.org/3/reference/compound_stmts.html) oficial y ejemplos en el [tutorial](https://docs.python.org/3/tutorial/controlflow.html) del lenguaje.
+
+> Con los tipos `bool`, `bytearray`, `bytes`, `dict`, `float`, `frozenset`, `int`, `list`, `set`, `str` y `tuple`, si se intenta usarlos como un patrón de tipo, con sus parámetros posicionales, la implementación lo gestiona de otra forma diferente al resto de tipos.
 > 
-> También hay que tener en cuenta que hay funciones constructoras de clases que no tienen parámetros posicionales, porque todos sus parámetros tienen un valor por defecto, como es el caso de `complex`. En estos casos hay que usar como patrón los parámetros con nombre, por ejemplo, `complex(real=r, imag=i)`.
+> También hay que tener en cuenta que hay funciones constructoras de tipos que no tienen parámetros posicionales, porque todos sus parámetros tienen un valor por defecto, como es el caso de `complex`. En estos casos hay que usar como patrón los parámetros con nombre, por ejemplo, `complex(real=r, imag=i)`.
 
 ## Clases y objetos
 
