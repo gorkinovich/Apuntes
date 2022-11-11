@@ -53,7 +53,7 @@ Volviendo al código del ejemplo `hola.py`, la sentencia `import` nos permite ac
 
 Cuando usamos la consola de Python también podemos usar `import` para cargar un módulo. Por ejemplo:
 
-```
+```Python
 >>> import hola
 ¡Hola mundo!
 ['']
@@ -74,7 +74,7 @@ else:
 
 Que al importarlo dará como resultado:
 
-```
+```Python
 >>> import hola
 ¡Hola importado!
 ```
@@ -102,7 +102,7 @@ $ python adios.py
 
 Y si lo importamos, tendremos la siguiente salida:
 
-```
+```Python
 >>> import adios
 ¡Hola importado!
 ¡Adiós mundo!
@@ -246,7 +246,7 @@ Para representar números imaginarios tenemos:
 
 $$\mathit{n\acute{u}mero} \textcolor{red}{\char123} \texttt{j} \textcolor{red}{|} \texttt{J} \textcolor{red}{\char125}$$
 
-Basta con indicar un número y terminar con una `j` para representar los números imaginarios en Python. Para componer números complejos, que pertenecen al tipo `complex`, tenemos dos formas. La primera es con la función `complex(R,I)`, donde `R` es la parte real e `I` la imaginaria, siendo ambos parámetros números enteros o reales. La segunda consiste en sumar a un número, entero o real, un número imaginario, por ejemplo `1+2j`. Hay que tener en cuenta que Python no tiene como tipo el conjunto de los números imaginarios, por lo que `1j` es interpretado como `0+1j` y pertenecerá al tipo `complex`.
+Basta con indicar un número y terminar con una `j` para representar los números imaginarios en Python. Para componer números complejos, que pertenecen al tipo `complex`, tenemos dos formas. La primera es con la función `complex(R,I)`, donde `R` es la parte real e `I` la imaginaria, siendo ambos parámetros números enteros o reales. La segunda consiste en sumar o restar a un número, entero o real, un número imaginario, por ejemplo `1+2j` o `3-4j`. Hay que tener en cuenta que Python no tiene como tipo el conjunto de los números imaginarios, por lo que `1j` es interpretado como `0+1j` y pertenecerá al tipo `complex`.
 
 > Una curiosidad de las expresiones literales numéricas es que podemos intercalar el carácter `_` entre los dígitos del número, sin que se altere su significado semántico. Este mecanismo existe para poder separar secciones visualmente. Por ejemplo, si queremos en nuestro código tener un separador de millares, podemos usar el guion bajo para tal propósito y tener `1_984` en lugar de `1984` si es de nuestro interés.
 
@@ -449,7 +449,7 @@ $$\qquad\quad\ \ \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \math
 
 De este modo, podemos construir listas a partir de otros contenedores, mediante el [producto cartesiano](https://es.wikipedia.org/wiki/Producto_cartesiano). Para ello, tomamos un *iterador* y ajustamos cada elemento del mismo a un *patrón* (una variable o composición estructurada de variables), y opcionalmente podemos pedir que estos elementos cumplan una *condición*. Con el resultado del producto cartesiano de todos los elementos, que hayan cumplido las condiciones indicadas, construimos una *expresión* que conformará cada elemento de la lista final. Por ejemplo:
 
-```
+```Python
 >>> [(a, b) for a in range(1, 7) if a % 2 != 0
 ...         for b in range(1, 7) if b % 2 == 0]
 [(1, 2), (1, 4), (1, 6),
@@ -486,7 +486,7 @@ Un iterador es un tipo de objeto cuyo propósito es el de recorrer el contenido 
 
 Por ejemplo:
 
-```
+```Python
 >>> v = iter("abc")
 >>> next(v)
 'a'
@@ -506,7 +506,7 @@ $$\qquad\quad\ \ \textcolor{red}{[}\ \textcolor{red}{\dots}\ \texttt{for}\ \math
 
 Realmente, una lista intensional, es un generador definido entre corchetes. Sería lo mismo que definir un generador como argumento de la función constructora `list`:
 
-```
+```Python
 >>> lista = [1, 2, 3, 4]
 >>> [x * 2 for x in lista]
 [2, 4, 6, 8]
@@ -516,7 +516,7 @@ Realmente, una lista intensional, es un generador definido entre corchetes. Ser�
 
 Los generadores no dejan de ser instancias del tipo `generator` y que implementan la interfaz para la iteración. Por ejemplo:
 
-```
+```Python
 >>> g = (x * 2 for x in [1, 2, 3])
 >>> type(g)
 <class 'generator'>
@@ -867,11 +867,120 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 
 ## Sentencias de control
 
+Python no tiene separador de **líneas de programa**, asume que cada nueva línea del código es una línea separada de programa si están al mismo **nivel de tabulación**. Cuando la siguiente línea tiene un nivel mayor de tabulación, puede deberse a que estamos continuando la expresión de la línea anterior o estamos iniciando un nuevo bloque de programa, porque la línea anterior era una sentencia de control especial para ello.
+
+Para poder tener dos líneas de programa en una misma línea, se utiliza el `;` para separar las expresiones, por ejemplo, `v += 1; print(v)`. Aunque no es recomendable abusar de esta opción, para evitar que se ofusque mucho el código y se pierda claridad en su lectura.
+
+### Usando condiciones
+
+La sentencia `if` permite decidir si ejecutar un bloque de código en base a una condición:
+
+$$\begin{array}{l}
+\texttt{if}\ \mathit{condici\acute{o}n_1} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_1}
+\\[0.5em] \textcolor{red}{[} \texttt{elif}\ \mathit{condici\acute{o}n_2} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
+\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_n} \textcolor{red}{]}
+\end{array}$$
+
+Con esta sentencia primero se comprueba si la *condición~1~* se cumple, si fuera así se ejecuta el *bloque~1~*, si no se cumple, se comprueba la *condición~2~* y así sucesivamente hasta que se cumpla alguna condición. Si no se cumple ninguna condición, se ejecuta el *bloque~n~*, en caso de haberse definido una sección `else`. La único requisito obligatorio es que debe haber al menos un `if`, seguido de un número arbitrario de `elif`, para finalizar con un `else` si así se desea. La sección `if` debe ir siempre al inicio y la `else` al final.
+
+### Manejando bucles
+
+Para repetir la ejecución de un bloque varias veces, tenemos primero la sentencia `while`, que repetirá el bloque mientras se cumpla una condición:
+
+$$\begin{array}{l}
+\texttt{while}\ \mathit{condici\acute{o}n} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_1}
+\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
+\end{array}$$
+
+Mientras se cumpla la *condición*, se ejecutará el *bloque~1~*. Cuando deje de cumplirse la *condición*, se sale del bucle y se ejecuta la sección `else` si se ha definido.
+
+La segunda opción es la sentencia `for`, que recorre una secuencia de elementos:
+
+$$\begin{array}{l}
+\texttt{for}\ \mathit{variables}\ \texttt{in}\ \mathit{iterador}\texttt{:}
+\\[0.5em] \qquad \mathit{bloque_1}
+\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
+\end{array}$$
+
+Donde *variables* es una secuencia de variables separadas por comas. Mientras haya elementos, sobre los que iterar, se asignan los valores a las *variables* y se ejecutará el *bloque~1~*. Cuando no queden elementos, se sale del bucle y se ejecuta la sección `else` si se ha definido.
+
+¿Qué ocurre si queremos repetir N veces un bloque? Para ello podemos usar la sentencia `for` junto a la función `range`:
+
+$$\texttt{range(} \mathit{l\acute{\imath}mite} \texttt{)}$$
+
+$$\texttt{range(} \mathit{inicio} \texttt{,} \mathit{l\acute{\imath}mite} \textcolor{red}{[} \texttt{,} \mathit{salto} \textcolor{red}{]} \texttt{)}$$
+
+Esta función genera una secuencia de números que empieza desde *inicio* hasta *límite-1*, saltando las unidades indicadas en *salto*. Por defecto, el *inicio* es `0` y el *salto* es `1`. Por ejemplo:
+
+```Python
+>>> aux = ""
+>>> for v in range(2, 11, 2):
+...     aux += str(v) + " "
+...
+>>> print(aux)
+2 4 6 8 10
+```
+
+La ejecución de los bucles se puede alterar con las sentencias `continue` y `break`. La primera fuerza al bucle a saltar a la siguiente iteración, mientras que la segunda termina la ejecución del bucle, saltándose la sección `else` si la hubiera. Por ejemplo:
+
+```Python
+>>> aux = ""
+>>> for v in range(0, 100):
+...     if v > 10: break
+...     if v % 2 == 0: continue
+...     aux += str(v) + " "
+... else:
+...     aux += "..."
+...
+>>> print(aux)
+1 3 5 7 9
+```
+
+### Definir e invocar funciones
+
 ..
 
-## Definición de funciones
+### Selección de patrones
 
-..
+La sentencia `match` permite evaluar una expresión, y dependiendo del valor obtenido, decidir si ejecutar un bloque de código si el valor se ajusta a un patrón:
+
+$$\begin{array}{l}
+\texttt{match}\ \mathit{expresi\acute{o}n} \texttt{:}
+\\[0.5em] \qquad \texttt{case}\ \mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad\qquad \mathit{bloque_1}
+\\[0.5em] \qquad\qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \qquad \texttt{case}\ \mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad\qquad \mathit{bloque_n}
+\end{array}$$
+
+Este tipo de expresiones son típicas de lenguajes funcionales como Haskell o Erlang, donde *expresión* se evalúa a un valor y se intenta ajustar con las cláusulas `case` definidas en el orden que están declaradas. Para que se ajuste un valor a una cláusula tiene que encajar en el patrón definido y cumplirse la condición indicada si tiene la sección `if` definida. La condición de una cláusula es conocida también como guarda. Es una forma elegante y expresiva de ramificar la ejecución de un programa.
+
+Un patrón es una definición de un valor estructurado que combina valores literales con variables, que se asignarán con los valores contenidos en el valor obtenido al evaluar la *expresión*. De modo que al ajustar el valor a un patrón, se tendrá que cumplir la igualdad con los valores literales y asignar a las variables que se encuentren en el interior del patrón. Veamos ejemplos para hacernos una idea mejor:
+
+| Tipo | Ejemplo | Descripción |
+|:----:|:-------:|:------------|
+| Literales | `None`, `True`, `False`, `123`, `1.23`, `2+3j`, `"abc"`, etc. | Son constantes literales de los tipos básicos `int`, `float`, `complex`, `bool`, `str`, `bytes`, `bytearray`, etcétera. |
+| Tuplas | `()`, `(a, )`, `(a, b)`, `(a, *vs)`, etc. | Tuplas de N componentes, donde cada componente es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
+| Listas | `[]`, `[a]`, `[a, b]`, `[a, *vs]`, etc. | Listas de N elementos, donde cada posición es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
+| Diccionarios | `{}`, `{"k1": a}`, `{"k1": a, "k2": b}`, etc. | Diccionarios de N o más elementos, donde cada entrada tiene la forma clave-patrón. Si el diccionario tiene más elementos, de los indicados con el patrón, se ignoran. Se puede usar la notación `**kvs`, pero no se permite la forma `**_` al ser redundante. |
+| Clases | `Clase()`, `Clase(a,b,c)`, `Clase(a,n=b)`, etc. | Clases o tipos con una serie de parámetros posicionales o con nombre, donde cada argumento especificado es un patrón con el que ajustar los miembros de un objeto. |
+| Miembros | `obj.miembro ` | Se usa el valor de una propiedad en una instancia como patrón contra el que ajustar. |
+| Enumeraciones | `Tipo.NOMBRE` | Las valores de enumeraciones requieren indicar el nombre del tipo donde han sido definidos, para evitar que la sentencia los utilice como variables que asignar. |
+| Alias. | `p as v ` | Permite asignar el valor que se ajusta con el patrón `p` en la variable `v`. |
+| Comodín | `_` | Se usa como una variable especial para cuando se quieren descartar valores que no se van a usar. Por ejemplo, si queremos un patrón que obtenga la cabeza de una lista, sería `[x, *_]`. |
+
+Se pueden agrupar patrones con el operador `|` para no tener que repetir código innecesario, por ejemplo, `case None | False:`. Hay más detalles sobre los patrones soportados en la [documentación](https://docs.python.org/3/reference/compound_stmts.html) oficial y ejemplos en el [tutorial](https://docs.python.org/3/tutorial/controlflow.html) del lenguaje.
+
+> Con los tipos `bool`, `bytearray`, `bytes`, `dict`, `float`, `frozenset`, `int`, `list`, `set`, `str` y `tuple`, si se intenta usarlos como un patrón de clase, con sus parámetros posicionales, la implementación lo gestiona de otra forma diferente al resto de clases.
+> 
+> También hay que tener en cuenta que hay funciones constructoras de clases que no tienen parámetros posicionales, porque todos sus parámetros tienen un valor por defecto, como es el caso de `complex`. En estos casos hay que usar como patrón los parámetros con nombre, por ejemplo, `complex(real=r, imag=i)`.
 
 ## Clases y objetos
 
@@ -883,7 +992,7 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 
 El primer método es heredado de los tiempos de Python 2 y se utiliza el operador `%` para dar formato a cadenas, usando la sintaxis `cadena % valores`. Por ejemplo:
 
-```
+```Python
 >>> "Banda: %s" % "Queen"
 'Banda: Queen'
 >>> "%s (%d)" % ("A Kind of Magic", 1986)
@@ -924,7 +1033,7 @@ Otro método de formato para cadenas es el tipo `Template` dentro del módulo `s
 
 A continuación, un ejemplo del uso del tipo `Template`:
 
-```
+```Python
 >>> import string
 >>> t = string.Template("$song ($autor)")
 >>> t.substitute({'autor': "Björk", 'song': "Human Behaviour"})
@@ -939,7 +1048,7 @@ A continuación, un ejemplo del uso del tipo `Template`:
 
 En Python 3 se añadió el método `format` para dar formato a cadenas, usando la sintaxis `cadena.format(valores)`. Por ejemplo:
 
-```
+```Python
 >>> "Canción: {0}".format("How soon is now?")
 'Canción: How soon is now?'
 >>> "{} ({}-{})".format("The Smiths", 1982, 1987)
@@ -1006,7 +1115,7 @@ Las opciones `X`, `F`, `E` y `G` mostrarán en mayúsculas cualquier elemento al
 
 El último método para dar formato a cadenas son las [cadenas interpoladas](https://peps.python.org/pep-0498/), que permiten usar variables del programa dentro de cadenas. Para poder hacerlo hay que definir la cadena con el prefijo `f`, que se puede combinar con el prefijo `r` de las cadenas en bruto.  Por ejemplo:
 
-```
+```Python
 >>> foo=2001
 >>> f"Debug: {foo = }"
 'Debug: foo = 2001'
@@ -1142,7 +1251,7 @@ def test(victim):
     print(f"{from_json = }")
 ```
 
-```
+```Python
 >>> import jsonex
 >>> jsonex.test([1, 2.3, 4+5j])
 victim    = [1, 2.3, (4+5j)]
