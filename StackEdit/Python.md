@@ -1537,7 +1537,7 @@ from_json = [1, 2.3, (4+5j)]
 
 En este ejemplo tomamos el tipo `complex`, que no está soportado por defecto por el módulo `json`, y creamos una clase codificadora que sobrescribe el método `default` para transformarlo a un diccionario con una forma concreta. Luego añadimos una función para gestionar diccionarios a la hora de decodificar el formato JSON.
 
-## Ejecución "perezosa" y corutinas
+## Ejecución "perezosa" y corrutinas
 
 ..TODO..
 
