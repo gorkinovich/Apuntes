@@ -945,7 +945,66 @@ La ejecución de los bucles se puede alterar con las sentencias `continue` y `br
 
 ### Definir e invocar funciones
 
-..
+La sentencia `def` permite crear funciones dentro de un bloque de código, es decir, se pueden crear funciones dentro de otras funciones. La sintaxis para definir funciones es:
+
+$$\begin{array}{l}
+\texttt{def}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metro_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{par\acute{a}metro_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque}
+\end{array}$$
+
+Una función puede tener cero o más parámetros, que tendrán las siguientes formas posibles:
+
+| Forma | Descripción |
+|:-----:|:------------|
+| `var` | Parámetros que reciben su valor por argumentos posicionales únicamente. Esta forma de parámetros siempre han de ir antes que el resto de formas. |
+| `var=valor` | Parámetros con un valor por defecto, que reciben su valor por argumentos posicionales o con nombre. Si no se usa ningún argumento, tomará como valor el definido en `valor`. |
+| `*var` | Agrupa en una tupla todos los argumentos posicionales que se encuentre a continuación. Sólo se puede definir una única vez dentro de la secuencia de parámetros. Se puede ubicar delante de parámetros con un valor por defecto. |
+| `**var` | Agrupa en un diccionario un número arbitrario de argumentos con nombre. Sólo se puede definir al final y una única vez dentro de la secuencia de parámetros. |
+
+> Existen dos marcas [especiales](https://docs.python.org/3/tutorial/controlflow.html#special-parameters) al definir los bloques de parámetros que son `/,` y `*,`. La primera marca, separa un primer bloque de parámetros que sólo permite argumentos posicionales, de un segundo bloque que permite argumentos posicionales y con nombres. El segunda marca, separa el bloque que permite argumentos posicionales y con nombres, del siguiente bloque que sólo permite argumentos con nombre. Más allá de lo esotérico de estas herramientas, es posible encontrarse con ellas al revisar funciones de la biblioteca estándar de Python y por ello es recomendable entender lo que hacen.
+
+Todas las funciones devuelven un valor, que por defecto es el valor `None`, pero para cambiarlo por otro valor se usa la sentencia `return`, que indica el valor o secuencia de valores que se van a devolver. Por ejemplo:
+
+```Python
+>>> def flip(a, b):
+...     return b, a
+...
+>>> flip(1, 2)
+(2, 1)
+```
+
+Es decir, que al devolver una secuencia separada por comas, lo que realmente se devuelve es una tupla, porque es azúcar sintáctico. Obviamente podemos usar `a, b = flip(1, 2)`, como vimos en la sección de la asignación de variables.
+
+Para invocar una función definida se usa la siguiente sintaxis:
+
+$$\mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{argumento_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{argumento_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
+
+Donde las formas de los argumentos son las siguientes:
+
+| Forma | Descripción |
+|:-----:|:------------|
+| `X` | Argumentos posicionales, que dependiendo en la posición que estén, asignan su valor al parámetro en dicha posición. |
+| `var=X` | Argumentos con nombre, que asignan su valor directamente a al parámetro `var`. No pueden usarse delante de un parámetro posicional, porque Python no sabría entonces cómo organizar aquello. |
+| `*X` | Inyecta una secuencia de valores como argumentos posicionales. Si tiene más valores que parámetros posicionales, se lanza un `TypeError`. |
+| `**X` | Inyecta una secuencia de valores como argumentos con nombre. Se lanza un `TypeError` cuando hay una clave que no existe como nombre de parámetro en la función. |
+
+Por ejemplo:
+
+```Python
+>>> def foo(a, b=None, *c, **d):
+...     print(a, b, c, d)
+...
+>>> foo(123)
+123 None () {}
+>>> foo(1, 2, 3, 4)
+1 2 (3, 4) {}
+>>> foo(*[1, 2, 3, 4])
+1 2 (3, 4) {}
+>>> foo(a=1, b=2, c=3, d=4, e=5)
+1 2 () {'c': 3, 'd': 4, 'e': 5}
+>>> foo(**{'a':1, 'b':2, 'c':3, 'd':4, 'e':5})
+1 2 () {'c': 3, 'd': 4, 'e': 5}
+```
 
 ### Selección de patrones
 
@@ -984,9 +1043,44 @@ Se pueden agrupar patrones con el operador `|` para no tener que repetir código
 > 
 > También hay que tener en cuenta que hay funciones constructoras de tipos que no tienen parámetros posicionales, porque todos sus parámetros tienen un valor por defecto, como es el caso de `complex`. En estos casos hay que usar como patrón los parámetros con nombre, por ejemplo, `complex(real=r, imag=i)`.
 
+### Gestión de recursos
+
+La sentencia `with` sirve para gestionar correctamente la limpieza de recursos, como sería el caso de manejar ficheros en un programa. Su sintaxis es:
+
+$$\begin{array}{l}
+\texttt{with}\ \mathit{expresi\acute{o}n_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{destino_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n}\ \textcolor{red}{[} \texttt{as}\ \mathit{destino_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque}
+\end{array}$$
+
+..TODO..
+
+### Otras operaciones
+
+La sentencia `pass` es una operación que no hace nada. Ya que no hay delimitadores de bloque en Python, esta sentencia es la única manera de definir un bloque vacío, algo que en lenguajes estilo C se haría con `{}`.
+
+> Una forma útil de utilizar `pass` es cuando tenemos una jerarquía de clases y queremos definir una interfaz global, que las clases hijas podrán sobrescribir o no. Entonces, para evitar que las funciones de la clase padre hagan nada, se puede utilizar `pass` como cuerpo de dichos métodos. De ese modo, podemos invocar el método con seguridad en clases hijas que no necesiten sobrescribirlo.
+
+La sentencia `del`, que hemos visto en las operaciones con estructuras de datos, sirve para eliminar elementos en la memoria. Su sintaxis es:
+
+$$\texttt{del}\ \mathit{v\acute{\imath}ctima}$$
+
+Donde la víctima tiene alguna de las siguientes formas:
+
+| Forma | Descripción |
+|:-----:|:------------|
+| `var` | Borra una variable en el ámbito actual. |
+| `var[i]`<br/>`var[i:j]`<br/>`var[i:j:k]` | Borra elementos dentro de un contenedor. |
+| `var.miembro` | Borra una propiedad de un objeto. |
+
+..TODO..
+
 ## Clases y objetos
 
-..
+..TODO..
+
+## Errores y excepciones
+
+..TODO..
 
 ## Formato de cadenas
 
@@ -1267,7 +1361,7 @@ En este ejemplo tomamos el tipo `complex`, que no está soportado por defecto po
 
 La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Python es muy completa y comprende varias áreas de trabajo.
 
-..
+..TODO..
 
 ### Funciones nativas
 
