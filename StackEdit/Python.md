@@ -865,223 +865,6 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 
 > En la categoría de la multiplicación estaría el operador `@`, que la documentación de Python lo denomina como [multiplicador de matrices](https://peps.python.org/pep-0465/), aunque la biblioteca estándar no implementa este operador. Sin embargo, bibliotecas como [`numpy`](https://numpy.org/) sí que lo usan para multiplicar matrices. También existe su versión con asignación `@=`, para las clases que quieran implementar su uso.
 
-## Sentencias de control
-
-Python no tiene separador de **líneas de programa**, asume que cada nueva línea del código es una línea separada de programa si están al mismo **nivel de tabulación**. Cuando la siguiente línea tiene un nivel mayor de tabulación, puede deberse a que estamos continuando la expresión de la línea anterior o estamos iniciando un nuevo bloque de programa, porque la línea anterior era una sentencia de control especial para ello.
-
-Para poder tener dos líneas de programa en una misma línea, se utiliza el `;` para separar las expresiones, por ejemplo, `v += 1; print(v)`. Aunque no es recomendable abusar de esta opción, para evitar que se ofusque mucho el código y se pierda claridad en su lectura.
-
-### Usando condiciones
-
-La sentencia `if` permite decidir si ejecutar un bloque de código en base a una condición:
-
-$$\begin{array}{l}
-\texttt{if}\ \mathit{condici\acute{o}n_1} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque_1}
-\\[0.5em] \textcolor{red}{[} \texttt{elif}\ \mathit{condici\acute{o}n_2} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
-\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
-\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque_n} \textcolor{red}{]}
-\end{array}$$
-
-Con esta sentencia primero se comprueba si la *condición~1~* se cumple, si fuera así se ejecuta el *bloque~1~*, si no se cumple, se comprueba la *condición~2~* y así sucesivamente hasta que se cumpla alguna condición. Si no se cumple ninguna condición, se ejecuta el *bloque~n~*, en caso de haberse definido una sección `else`. La único requisito obligatorio es que debe haber al menos un `if`, seguido de un número arbitrario de `elif`, para finalizar con un `else` si así se desea. La sección `if` debe ir siempre al inicio y la `else` al final.
-
-### Manejando bucles
-
-Para repetir la ejecución de un bloque varias veces, tenemos primero la sentencia `while`, que repetirá el bloque mientras se cumpla una condición:
-
-$$\begin{array}{l}
-\texttt{while}\ \mathit{condici\acute{o}n} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque_1}
-\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
-\end{array}$$
-
-Mientras se cumpla la *condición*, se ejecutará el *bloque~1~*. Cuando deje de cumplirse la *condición*, se sale del bucle y se ejecuta la sección `else` si se ha definido.
-
-La segunda opción es la sentencia `for`, que recorre una secuencia de elementos:
-
-$$\begin{array}{l}
-\texttt{for}\ \mathit{variables}\ \texttt{in}\ \mathit{iterador}\texttt{:}
-\\[0.5em] \qquad \mathit{bloque_1}
-\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
-\end{array}$$
-
-Donde *variables* es una secuencia de variables separadas por comas. Mientras haya elementos, sobre los que iterar, se asignan los valores a las *variables* y se ejecutará el *bloque~1~*. Cuando no queden elementos, se sale del bucle y se ejecuta la sección `else` si se ha definido.
-
-¿Qué ocurre si queremos repetir N veces un bloque? Para ello podemos usar la sentencia `for` junto a la función `range`:
-
-$$\texttt{range(} \mathit{l\acute{\imath}mite} \texttt{)}$$
-
-$$\texttt{range(} \mathit{inicio} \texttt{,} \mathit{l\acute{\imath}mite} \textcolor{red}{[} \texttt{,} \mathit{salto} \textcolor{red}{]} \texttt{)}$$
-
-Esta función genera una secuencia de números que empieza desde *inicio* hasta *límite-1*, saltando las unidades indicadas en *salto*. Por defecto, el *inicio* es `0` y el *salto* es `1`. Por ejemplo:
-
-```Python
->>> aux = ""
->>> for v in range(2, 11, 2):
-...     aux += str(v) + " "
-...
->>> print(aux)
-2 4 6 8 10
-```
-
-La ejecución de los bucles se puede alterar con las sentencias `continue` y `break`. La primera fuerza al bucle a saltar a la siguiente iteración, mientras que la segunda termina la ejecución del bucle, saltándose la sección `else` si la hubiera. Por ejemplo:
-
-```Python
->>> aux = ""
->>> for v in range(0, 100):
-...     if v > 10: break
-...     if v % 2 == 0: continue
-...     aux += str(v) + " "
-... else:
-...     aux += "..."
-...
->>> print(aux)
-1 3 5 7 9
-```
-
-### Definir e invocar funciones
-
-La sentencia `def` permite crear funciones dentro de un bloque de código, es decir, se pueden crear funciones dentro de otras funciones. La sintaxis para definir funciones es:
-
-$$\begin{array}{l}
-\texttt{def}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metro_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{par\acute{a}metro_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque}
-\end{array}$$
-
-Una función puede tener cero o más parámetros, que tendrán las siguientes formas posibles:
-
-| Forma | Descripción |
-|:-----:|:------------|
-| `var` | Parámetros que reciben su valor por argumentos posicionales únicamente. Esta forma de parámetros siempre han de ir antes que el resto de formas. |
-| `var=valor` | Parámetros con un valor por defecto, que reciben su valor por argumentos posicionales o con nombre. Si no se usa ningún argumento, tomará como valor el definido en `valor`. |
-| `*var` | Agrupa en una tupla todos los argumentos posicionales que se encuentre a continuación. Sólo se puede definir una única vez dentro de la secuencia de parámetros. Se puede ubicar delante de parámetros con un valor por defecto. |
-| `**var` | Agrupa en un diccionario un número arbitrario de argumentos con nombre. Sólo se puede definir al final y una única vez dentro de la secuencia de parámetros. |
-
-> Existen dos marcas [especiales](https://docs.python.org/3/tutorial/controlflow.html#special-parameters) al definir los bloques de parámetros que son `/,` y `*,`. La primera marca, separa un primer bloque de parámetros que sólo permite argumentos posicionales, de un segundo bloque que permite argumentos posicionales y con nombres. El segunda marca, separa el bloque que permite argumentos posicionales y con nombres, del siguiente bloque que sólo permite argumentos con nombre. Más allá de lo esotérico de estas herramientas, es posible encontrarse con ellas al revisar funciones de la biblioteca estándar de Python y por ello es recomendable entender lo que hacen.
-
-Todas las funciones devuelven un valor, que por defecto es el valor `None`, pero para cambiarlo por otro valor se usa la sentencia `return`, que indica el valor o secuencia de valores que se van a devolver. Por ejemplo:
-
-```Python
->>> def flip(a, b):
-...     return b, a
-...
->>> flip(1, 2)
-(2, 1)
-```
-
-Es decir, que al devolver una secuencia separada por comas, lo que realmente se devuelve es una tupla, porque es azúcar sintáctico. Obviamente podemos usar `a, b = flip(1, 2)`, como vimos en la sección de la asignación de variables.
-
-Para invocar una función definida se usa la siguiente sintaxis:
-
-$$\mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{argumento_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{argumento_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
-
-Donde las formas de los argumentos son las siguientes:
-
-| Forma | Descripción |
-|:-----:|:------------|
-| `X` | Argumentos posicionales, que dependiendo en la posición que estén, asignan su valor al parámetro en dicha posición. |
-| `var=X` | Argumentos con nombre, que asignan su valor directamente a al parámetro `var`. No pueden usarse delante de un parámetro posicional, porque Python no sabría entonces cómo organizar aquello. |
-| `*X` | Inyecta una secuencia de valores como argumentos posicionales. Si tiene más valores que parámetros posicionales, se lanza un `TypeError`. |
-| `**X` | Inyecta una secuencia de valores como argumentos con nombre. Se lanza un `TypeError` cuando hay una clave que no existe como nombre de parámetro en la función. |
-
-Por ejemplo:
-
-```Python
->>> def foo(a, b=None, *c, **d):
-...     print(a, b, c, d)
-...
->>> foo(123)
-123 None () {}
->>> foo(1, 2, 3, 4)
-1 2 (3, 4) {}
->>> foo(*[1, 2, 3, 4])
-1 2 (3, 4) {}
->>> foo(a=1, b=2, c=3, d=4, e=5)
-1 2 () {'c': 3, 'd': 4, 'e': 5}
->>> foo(**{'a':1, 'b':2, 'c':3, 'd':4, 'e':5})
-1 2 () {'c': 3, 'd': 4, 'e': 5}
-```
-
-### Selección de patrones
-
-La sentencia `match` permite evaluar una expresión, y dependiendo del valor obtenido, decidir si ejecutar un bloque de código si el valor se ajusta a un patrón:
-
-$$\begin{array}{l}
-\texttt{match}\ \mathit{expresi\acute{o}n} \texttt{:}
-\\[0.5em] \qquad \texttt{case}\ \mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \texttt{:}
-\\[0.5em] \qquad\qquad \mathit{bloque_1}
-\\[0.5em] \qquad\qquad\qquad \textcolor{red}{\vdots}
-\\[0.5em] \qquad \texttt{case}\ \mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \texttt{:}
-\\[0.5em] \qquad\qquad \mathit{bloque_n}
-\end{array}$$
-
-Este tipo de expresiones son típicas de lenguajes funcionales como [Haskell](https://es.wikipedia.org/wiki/Haskell) o [Erlang](https://es.wikipedia.org/wiki/Erlang), donde *expresión* se evalúa a un valor y se intenta ajustar con las cláusulas `case` definidas en el orden que están declaradas. Para que se ajuste un valor a una cláusula tiene que encajar en el patrón definido y cumplirse la condición indicada si tiene la sección `if` definida. La condición de una cláusula es conocida también como guarda. Es una forma elegante y expresiva de ramificar la ejecución en un programa.
-
-Un patrón es una definición de un valor estructurado que combina valores literales con variables, que se asignarán con los valores contenidos en el valor obtenido al evaluar la *expresión*. De modo que al ajustar el valor a un patrón, se tendrá que cumplir la igualdad con las posiciones que tengan valores literales y las que tengan variables se les tendrá que asignar los valores internos del valor que se está ajustando. Veamos ejemplos para hacernos una idea mejor:
-
-| Categoría | Ejemplos | Descripción |
-|:---------:|:--------:|:------------|
-| Literales | `None`, `True`, `False`, `123`, `1.23`, `2+3j`, `"abc"`, etc. | Valores constantes de los tipos básicos `int`, `float`, `complex`, `bool`, `str`, `bytes`, etcétera. |
-| Tuplas | `()`, `(a, )`, `(a, b)`, `(a, *vs)`, etc. | Tuplas de N componentes, donde cada componente es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
-| Listas | `[]`, `[a]`, `[a, b]`, `[a, *vs]`, etc. | Listas de N elementos, donde cada posición es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
-| Diccionarios | `{}`, `{"k1": a}`, `{"k1": a, "k2": b}`, etc. | Diccionarios de N o más elementos, donde cada entrada tiene la forma clave-patrón. Si el diccionario tiene más elementos, de los indicados con el patrón, se ignoran. Se puede usar la notación `**kvs`, pero no se permite la forma `**_` al ser redundante. |
-| Tipos | `Tipo()`, `Tipo(a,b,c)`, `Tipo(a,n=b)`, etc. | Tipos con una serie de parámetros posicionales o con nombre, donde cada argumento especificado es un patrón con el que ajustar los miembros del objeto. |
-| Miembros | `obj.miembro ` | Se usa el valor de una propiedad en un objeto como patrón contra el que ajustar. |
-| Enumeraciones | `Tipo.NOMBRE` | Las valores de enumeraciones requieren indicar el nombre del tipo donde han sido definidos, para evitar que la sentencia los utilice como variables que asignar. |
-| Alias. | `p as v ` | Permite asignar el valor que se ajusta con el patrón `p` en la variable `v`. |
-| Comodín | `_` | Se usa como una variable especial para cuando se quieren descartar valores que no se van a usar. Por ejemplo, si queremos un patrón que obtenga la cabeza de una lista, sería `[x, *_]`. |
-
-Sobre la asignación de variables, en los parámetros con nombre (`nombre=patrón`), no se modifica la propiedad del objeto, sino las variables del patrón. Del mismo modo, cuando se usa un miembro de un objeto, este no se verá modificado como ocurre con las variables sueltas.
-
-Se pueden agrupar patrones con el operador `|` para no tener que repetir código innecesario, por ejemplo, `case None | False:`. Para más información, hay más detalles sobre los patrones soportados en la [documentación](https://docs.python.org/3/reference/compound_stmts.html) oficial y ejemplos en el [tutorial](https://docs.python.org/3/tutorial/controlflow.html) del lenguaje.
-
-> Con los tipos `bool`, `bytearray`, `bytes`, `dict`, `float`, `frozenset`, `int`, `list`, `set`, `str` y `tuple`, si se intenta usarlos como un patrón de tipo, con sus parámetros posicionales, la implementación lo gestiona de otra forma diferente al resto de tipos.
-> 
-> También hay que tener en cuenta que hay funciones constructoras de tipos que no tienen parámetros posicionales, porque todos sus parámetros tienen un valor por defecto, como es el caso de `complex`. En estos casos hay que usar como patrón los parámetros con nombre, por ejemplo, `complex(real=r, imag=i)`.
-
-### Gestión de recursos
-
-La sentencia `with` sirve para gestionar correctamente la limpieza de recursos, como sería el caso de manejar ficheros en un programa. Su sintaxis es:
-
-$$\begin{array}{l}
-\texttt{with}\ \mathit{expresi\acute{o}n_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{destino_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n}\ \textcolor{red}{[} \texttt{as}\ \mathit{destino_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque}
-\end{array}$$
-
-..TODO..
-
-### Otras operaciones
-
-La sentencia `pass` es una operación que no hace nada. Ya que no hay delimitadores de bloque en Python, esta sentencia es la única manera de definir un bloque vacío, algo que en lenguajes estilo C se haría con `{}`.
-
-> Una forma útil de utilizar `pass` es cuando tenemos una jerarquía de clases y queremos definir una interfaz global, que las clases hijas podrán sobrescribir o no. Entonces, para evitar que las funciones de la clase padre hagan nada, se puede utilizar `pass` como cuerpo de dichos métodos. De ese modo, podemos invocar el método con seguridad en clases hijas que no necesiten sobrescribirlo.
-
-La sentencia `del`, que hemos visto en las operaciones con estructuras de datos, sirve para eliminar elementos en la memoria. Su sintaxis es:
-
-$$\texttt{del}\ \mathit{v\acute{\imath}ctima}$$
-
-Donde la víctima tiene alguna de las siguientes formas:
-
-| Forma | Descripción |
-|:-----:|:------------|
-| `var` | Borra una variable en el ámbito actual. |
-| `var[i]`<br/>`var[i:j]`<br/>`var[i:j:k]` | Borra elementos dentro de un contenedor. |
-| `var.miembro` | Borra una propiedad de un objeto. |
-
-..TODO..
-
-## Clases y objetos
-
-..TODO..
-
-## Errores y excepciones
-
-..TODO..
-
 ## Formato de cadenas
 
 ### Estilo `printf`
@@ -1227,6 +1010,403 @@ La opción `=` sirve para mostrar la *expresión* seguido de un igual y por últ
 
 En cuanto al tipo de expresiones que se pueden utilizar, la implementación actual es bastante flexible, pero existen algunas limitaciones documentadas en la [documentación oficial](https://docs.python.org/3/reference/lexical_analysis.html#f-strings). Por ejemplo, no se puede dejar una expresión vacía, y en el caso de expresiones lambda, y el uso del operador `:=`, requieren estar entre paréntesis.
 
+## Sentencias de control
+
+Python no tiene separador de **líneas de programa**, asume que cada nueva línea del código es una línea separada de programa si están al mismo **nivel de tabulación**. Cuando la siguiente línea tiene un nivel mayor de tabulación, puede deberse a que estamos continuando la expresión de la línea anterior o estamos iniciando un nuevo bloque de programa, porque la línea anterior era una sentencia de control especial para ello.
+
+Para poder tener dos líneas de programa en una misma línea, se utiliza el `;` para separar las expresiones, por ejemplo, `v += 1; print(v)`. Aunque no es recomendable abusar de esta opción, para evitar que se ofusque mucho el código y se pierda claridad en su lectura.
+
+### Usando condiciones
+
+La sentencia `if` permite decidir si ejecutar un bloque de código en base a una condición:
+
+$$\begin{array}{l}
+\texttt{if}\ \mathit{condici\acute{o}n_1} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_1}
+\\[0.5em] \textcolor{red}{[} \texttt{elif}\ \mathit{condici\acute{o}n_2} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
+\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_n} \textcolor{red}{]}
+\end{array}$$
+
+Con esta sentencia primero se comprueba si la *condición~1~* se cumple, si fuera así se ejecuta el *bloque~1~*, si no se cumple, se comprueba la *condición~2~* y así sucesivamente hasta que se cumpla alguna condición. Si no se cumple ninguna condición, se ejecuta el *bloque~n~*, en caso de haberse definido una sección `else`. La único requisito obligatorio es que debe haber al menos un `if`, seguido de un número arbitrario de `elif`, para finalizar con un `else` si así se desea. La sección `if` debe ir siempre al inicio y la `else` al final.
+
+### Manejando bucles
+
+Para repetir la ejecución de un bloque varias veces, tenemos primero la sentencia `while`, que repetirá el bloque mientras se cumpla una condición:
+
+$$\begin{array}{l}
+\texttt{while}\ \mathit{condici\acute{o}n} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_1}
+\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
+\end{array}$$
+
+Mientras se cumpla la *condición*, se ejecutará el *bloque~1~*. Cuando deje de cumplirse la *condición*, se sale del bucle y se ejecuta la sección `else` si se ha definido.
+
+La segunda opción es la sentencia `for`, que recorre una secuencia de elementos:
+
+$$\begin{array}{l}
+\texttt{for}\ \mathit{variables}\ \texttt{in}\ \mathit{iterador} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_1}
+\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_2} \textcolor{red}{]}
+\end{array}$$
+
+Donde *variables* es una secuencia de variables separadas por comas. Mientras haya elementos, sobre los que iterar, se asignan los valores a las *variables* y se ejecutará el *bloque~1~*. Cuando no queden elementos, se sale del bucle y se ejecuta la sección `else` si se ha definido.
+
+¿Qué ocurre si queremos repetir N veces un bloque? Para ello podemos usar la sentencia `for` junto a la función `range`:
+
+$$\texttt{range(} \mathit{l\acute{\imath}mite} \texttt{)}$$
+
+$$\texttt{range(} \mathit{inicio} \texttt{,} \mathit{l\acute{\imath}mite} \textcolor{red}{[} \texttt{,} \mathit{salto} \textcolor{red}{]} \texttt{)}$$
+
+Esta función genera una secuencia de números que empieza desde *inicio* hasta *límite-1*, saltando las unidades indicadas en *salto*. Por defecto, el *inicio* es `0` y el *salto* es `1`. Por ejemplo:
+
+```Python
+>>> aux = ""
+>>> for v in range(2, 11, 2):
+...     aux += str(v) + " "
+...
+>>> print(aux)
+2 4 6 8 10
+```
+
+La ejecución de los bucles se puede alterar con las sentencias `continue` y `break`. La primera fuerza al bucle a saltar a la siguiente iteración, mientras que la segunda termina la ejecución del bucle, saltándose la sección `else` si la hubiera. Por ejemplo:
+
+```Python
+>>> aux = ""
+>>> for v in range(0, 100):
+...     if v > 10: break
+...     if v % 2 == 0: continue
+...     aux += str(v) + " "
+... else:
+...     aux += "..."
+...
+>>> print(aux)
+1 3 5 7 9
+```
+
+### Definir e invocar funciones
+
+La sentencia `def` permite crear funciones dentro de un bloque de código, es decir, se pueden crear funciones dentro de otras funciones. La sintaxis para definir funciones es:
+
+$$\begin{array}{l}
+\texttt{def}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metro_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{par\acute{a}metro_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque}
+\end{array}$$
+
+Una función puede tener cero o más parámetros, que tendrán las siguientes formas posibles:
+
+| Forma | Descripción |
+|:-----:|:------------|
+| `var` | Parámetros que reciben su valor por argumentos posicionales únicamente. Esta forma de parámetros siempre han de ir antes que el resto de formas. |
+| `var=valor` | Parámetros con un valor por defecto, que reciben su valor por argumentos posicionales o con nombre. Si no se usa ningún argumento, tomará como valor el definido en `valor`. |
+| `*var` | Agrupa en una tupla todos los argumentos posicionales que se encuentre a continuación. Sólo se puede definir una única vez dentro de la secuencia de parámetros. Se puede ubicar delante de parámetros con un valor por defecto. |
+| `**var` | Agrupa en un diccionario un número arbitrario de argumentos con nombre. Sólo se puede definir al final y una única vez dentro de la secuencia de parámetros. |
+
+> Existen dos marcas [especiales](https://docs.python.org/3/tutorial/controlflow.html#special-parameters) al definir los bloques de parámetros que son `/,` y `*,`. La primera marca, separa un primer bloque de parámetros que sólo permite argumentos posicionales, de un segundo bloque que permite argumentos posicionales y con nombres. El segunda marca, separa el bloque que permite argumentos posicionales y con nombres, del siguiente bloque que sólo permite argumentos con nombre. Más allá de lo esotérico de estas herramientas, es posible encontrarse con ellas al revisar funciones de la biblioteca estándar de Python y por ello es recomendable entender lo que hacen.
+
+Todas las funciones devuelven un valor, que por defecto es el valor `None`, pero para cambiarlo por otro valor se usa la sentencia `return`, que indica el valor o secuencia de valores que se van a devolver. También se puede usar para salir arbitrariamente de una función, devolviendo `None` como resultado. Esta es su sintaxis:
+
+$$\texttt{return}\ \textcolor{red}{[} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]}$$
+
+Por ejemplo:
+
+```Python
+>>> def flip(a, b):
+...     return b, a
+...
+>>> flip(1, 2)
+(2, 1)
+```
+
+Es decir, que al devolver una secuencia separada por comas, lo que realmente se devuelve es una tupla, porque es azúcar sintáctico. Obviamente podemos usar `a, b = flip(1, 2)`, como vimos en la sección de la asignación de variables.
+
+Para invocar una función definida se usa la siguiente sintaxis:
+
+$$\mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{argumento_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{argumento_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{)}$$
+
+Donde las formas de los argumentos son las siguientes:
+
+| Forma | Descripción |
+|:-----:|:------------|
+| `X` | Argumentos posicionales, que dependiendo en la posición que estén, asignan su valor al parámetro en dicha posición. |
+| `var=X` | Argumentos con nombre, que asignan su valor directamente a al parámetro `var`. No pueden usarse delante de un parámetro posicional, porque Python no sabría entonces cómo organizar aquello. |
+| `*X` | Inyecta una secuencia de valores como argumentos posicionales. Si tiene más valores que parámetros posicionales, se lanza un `TypeError`. |
+| `**X` | Inyecta una secuencia de valores como argumentos con nombre. Se lanza un `TypeError` cuando hay una clave que no existe como nombre de parámetro en la función. |
+
+Por ejemplo:
+
+```Python
+>>> def foo(a, b=None, *c, **d):
+...     print(a, b, c, d)
+...
+>>> foo(123)
+123 None () {}
+>>> foo(1, 2, 3, 4)
+1 2 (3, 4) {}
+>>> foo(*[1, 2, 3, 4])
+1 2 (3, 4) {}
+>>> foo(a=1, b=2, c=3, d=4, e=5)
+1 2 () {'c': 3, 'd': 4, 'e': 5}
+>>> foo(**{'a':1, 'b':2, 'c':3, 'd':4, 'e':5})
+1 2 () {'c': 3, 'd': 4, 'e': 5}
+```
+
+### Ámbito de las variables
+
+Para declarar una variable hay dos formas: definirla como un parámetro, en funciones o clases, o asignarle un valor con la sentencia de asignación. En ambos casos, para que la variable sea creada y se pueda usar, hay que asignarle un valor primero. Con los parámetros se asigna su valor con la invocación de la función y con el resto cuando se usa la sentencia de asignación.
+
+El lugar donde ha sido asignada, por primera vez la variable, es su ámbito. Los diferente ámbitos que hay son los módulos, las funciones y las clases. Una variable declarada en un ámbito, es accesible desde ámbitos internos sin necesitar hacer nada, pero aquí está el problema:
+
+```Python
+# Fichero: ambito.py
+x = 10
+print(f"{x = }")
+
+def foo():
+	x += 1
+	print(f"{x = }")
+
+foo()
+```
+
+Al intentar ejecutarlo se lanza un `UnboundLocalError`, diciéndonos que el valor de `x` no es accesible porque no ha sido inicializada. Esto ocurre porque toda asignación en Python es tomada como una declaración local de la variable asignada, por lo tanto `x` en `foo` es local al ámbito de dicha función y es una variable diferente a la `x` declarada en el ámbito del módulo. Para superar este escollo tenemos la sentencia `global`:
+
+$$\texttt{global}\ \mathit{variable_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{variable_n} \textcolor{red}{]} $$
+
+Todas las variables que declaremos con esta sentencia, son identificadas como variables globales al módulo. Se pueden indicar variables que no hayan sido creadas todavía, aunque para usarlas haya que inicializarlas primero, que será en esa primera asignación que se creará la variable, pero se hará en el ámbito del módulo y no del local. Por ejemplo:
+
+```Python
+# Fichero: ambito.py
+x = 10
+print(f"{x = }")
+
+def foo():
+	global x, y
+	x += 1
+	y = x * 2
+	print(f"{x = }")
+
+foo()
+print(f"{y = }")
+```
+
+Cuya ejecución nos muestra por pantalla:
+
+```Python
+x = 10
+x = 11
+y = 22
+```
+
+Pero veamos ahora qué ocurre si:
+
+```Python
+# Fichero: ambitof.py
+def bar():
+    x = 20
+    def foo():
+        global x
+        x //= 10
+    foo()
+    print(f"bar: {x = }")
+
+x = 10
+bar()
+print(f"mod: {x = }")
+```
+
+El resultado es:
+
+```Python
+bar: x = 20
+mod: x = 1
+```
+
+Para modificar la `x` en `bar`, y no la global, usamos la sentencia `nonlocal`:
+
+$$\texttt{nonlocal}\ \mathit{variable_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{variable_n} \textcolor{red}{]}$$
+
+Donde todas las variables declaradas como no locales son buscadas en los ámbitos locales más próximos, descartando el ámbito global. De ese modo tendríamos:
+
+```Python
+# Fichero: ambitof.py
+def barnl():
+    x = 20
+    def foo():
+        nonlocal x
+        x //= 10
+    foo()
+    print(f"bnl: {x = }")
+
+def bargl():
+    x = 20
+    def foo():
+        global x
+        x //= 10
+    foo()
+    print(f"bgl: {x = }")
+
+x = 10
+barnl()
+print(f"mod: {x = }")
+bargl()
+print(f"mod: {x = }")
+```
+
+Y ahora el resultado sería:
+
+```Python
+bnl: x = 2
+mod: x = 10
+bgl: x = 20
+mod: x = 1
+```
+
+### Selección de patrones
+
+La sentencia `match` permite evaluar una expresión, y dependiendo del valor obtenido, decidir si ejecutar un bloque de código si el valor se ajusta a un patrón:
+
+$$\begin{array}{l}
+\texttt{match}\ \mathit{expresi\acute{o}n} \texttt{:}
+\\[0.5em] \qquad \texttt{case}\ \mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad\qquad \mathit{bloque_1}
+\\[0.5em] \qquad\qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \qquad \texttt{case}\ \mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{if}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad\qquad \mathit{bloque_n}
+\end{array}$$
+
+Este tipo de expresiones son típicas de lenguajes funcionales como [Haskell](https://es.wikipedia.org/wiki/Haskell) o [Erlang](https://es.wikipedia.org/wiki/Erlang), donde *expresión* se evalúa a un valor y se intenta ajustar con las cláusulas `case` definidas en el orden que están declaradas. El orden es importante, porque se ejecutará sólo el bloque de la primera cláusula a la que se pueda ajustar el valor. Para que se ajuste un valor a una cláusula tiene que encajar en el patrón definido y cumplirse la condición indicada si tiene la sección `if` definida. La condición de una cláusula es conocida también como guarda. Es una forma elegante y expresiva de ramificar la ejecución en un programa.
+
+Un patrón es una definición de un valor estructurado que combina valores literales con variables, que se asignarán con los valores contenidos en el valor obtenido al evaluar la *expresión*. De modo que al ajustar el valor a un patrón, se tendrá que cumplir la igualdad con las posiciones que tengan valores literales y las que tengan variables se les tendrá que asignar los valores internos del valor que se está ajustando. Veamos ejemplos para hacernos una idea mejor:
+
+| Categoría | Ejemplos | Descripción |
+|:---------:|:--------:|:------------|
+| Literales | `None`, `True`, `False`, `123`, `1.23`, `2+3j`, `"abc"`, etc. | Valores constantes de los tipos básicos `int`, `float`, `complex`, `bool`, `str`, `bytes`, etcétera. |
+| Tuplas | `()`, `(a, )`, `(a, b)`, `(a, *vs)`, etc. | Tuplas de N componentes, donde cada componente es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
+| Listas | `[]`, `[a]`, `[a, b]`, `[a, *vs]`, etc. | Listas de N elementos, donde cada posición es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
+| Diccionarios | `{}`, `{"k1": a}`, `{"k1": a, "k2": b}`, etc. | Diccionarios de N o más elementos, donde cada entrada tiene la forma clave-patrón. Si el diccionario tiene más elementos, de los indicados con el patrón, se ignoran. Se puede usar la notación `**kvs`, pero no se permite la forma `**_` al ser redundante. |
+| Tipos | `Tipo()`, `Tipo(a,b,c)`, `Tipo(a,n=b)`, etc. | Tipos con una serie de parámetros posicionales o con nombre, donde cada argumento especificado es un patrón con el que ajustar los miembros del objeto. |
+| Miembros | `obj.miembro ` | Se usa el valor de una propiedad en un objeto como patrón contra el que ajustar. |
+| Enumeraciones | `Tipo.NOMBRE` | Las valores de enumeraciones requieren indicar el nombre del tipo donde han sido definidos, para evitar que la sentencia los utilice como variables que asignar. |
+| Alias. | `p as v ` | Permite asignar el valor que se ajusta con el patrón `p` en la variable `v`. |
+| Comodín | `_` | Se usa como una variable especial para cuando se quieren descartar valores que no se van a usar. Por ejemplo, si queremos un patrón que obtenga la cabeza de una lista, sería `[x, *_]`. |
+
+Sobre la asignación de variables, en los parámetros con nombre (`nombre=patrón`), no se modifica la propiedad del objeto, sino las variables del patrón. Del mismo modo, cuando se usa un miembro de un objeto, este no se verá modificado como ocurre con las variables sueltas.
+
+Se pueden agrupar patrones con el operador `|` para no tener que repetir código innecesario, por ejemplo, `case None | False:`. Para más información, hay más detalles sobre los patrones soportados en la [documentación](https://docs.python.org/3/reference/compound_stmts.html) oficial y ejemplos en el [tutorial](https://docs.python.org/3/tutorial/controlflow.html) del lenguaje.
+
+> Con los tipos `bool`, `bytearray`, `bytes`, `dict`, `float`, `frozenset`, `int`, `list`, `set`, `str` y `tuple`, si se intenta usarlos como un patrón de tipo, con sus parámetros posicionales, la implementación lo gestiona de otra forma diferente al resto de tipos.
+> 
+> También hay que tener en cuenta que hay funciones constructoras de tipos que no tienen parámetros posicionales, porque todos sus parámetros tienen un valor por defecto, como es el caso de `complex`. En estos casos hay que usar como patrón los parámetros con nombre, por ejemplo, `complex(real=r, imag=i)`.
+
+### Gestión de recursos
+
+La sentencia `with` sirve para gestionar correctamente la limpieza de recursos, como sería el caso de manejar ficheros en un programa. Su sintaxis es:
+
+$$\begin{array}{l}
+\texttt{with}\ \mathit{expresi\acute{o}n_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{destino_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n}\ \textcolor{red}{[} \texttt{as}\ \mathit{destino_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque}
+\end{array}$$
+
+Se evalúa la *expresión* y se asigna su resultado al *destino*, que será una o más variables. Las instancias de los tipos que se crean, y se asignan a *destino*, tienen que implementar el protocolo de gestión de recursos, que tiene una función de entrada y una de salida al bloque. Por ejemplo, en la función de salida estará el código que cierra un fichero que esté todavía abierto.
+
+> La sentencia `with` garantiza que si la función de entrada se ejecuta con éxito, siempre se llamará a la función de salida cuando se salga del `with`, sin importar que se haya producido un error durante la ejecución del bloque.
+
+### Otras operaciones
+
+La sentencia `pass` es una operación que no hace nada. Ya que no hay delimitadores de bloque en Python, esta sentencia es la única manera de definir un bloque vacío, algo que en lenguajes estilo C se haría con `{}`.
+
+> Una forma útil de utilizar `pass` es cuando tenemos una jerarquía de clases y queremos definir una interfaz global, que las clases hijas podrán sobrescribir o no. Entonces, para evitar que las funciones de la clase padre hagan nada, se puede utilizar `pass` como cuerpo de dichos métodos. De ese modo, podemos invocar el método con seguridad en clases hijas que no necesiten sobrescribirlo.
+
+La sentencia `del`, que hemos visto en las operaciones con estructuras de datos, sirve para eliminar elementos en la memoria. Su sintaxis es:
+
+$$\texttt{del}\ \mathit{v\acute{\imath}ctima}$$
+
+Donde la víctima tiene alguna de las siguientes formas:
+
+| Forma | Descripción |
+|:-----:|:------------|
+| `var` | Borra una variable de la memoria. |
+| `var[i]`<br/>`var[i:j]`<br/>`var[i:j:k]` | Borra elementos dentro de un contenedor. |
+| `var.miembro` | Borra una propiedad de un objeto. |
+
+La sentencia `import`, carga un módulo o elementos del mismo, para poder usarlos en el módulo actual. Para ello tenemos la siguiente sintaxis:
+
+$$\texttt{import}\ \mathit{m\acute{o}dulo_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{nombre_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{m\acute{o}dulo_n}\ \textcolor{red}{[} \texttt{as}\ \mathit{nombre_n} \textcolor{red}{]} \textcolor{red}{]}$$
+
+Con esta sentencia podemos cargar diferentes módulos y asignarles un nombre identificador distinto, para utilizarlos. Por ejemplo, `import foo as f` nos permite utilizar los miembros de `foo` como `f.miembro` en lugar de `foo.miembro`. Otra forma de usar elementos de otros módulos es con la siguiente sintaxis:
+
+$$\texttt{from}\ \mathit{m\acute{o}dulo}\ \texttt{import}\ \textcolor{red}{\char123} \texttt{*} \textcolor{red}{|} \mathit{miembro_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{nombre_1} \textcolor{red}{]} $$
+
+$$\qquad\qquad\qquad\qquad\ \ \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{miembro_n}\ \textcolor{red}{[} \texttt{as}\ \mathit{nombre_n} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{\char125}$$
+
+Aquí tenemos que indicar el *módulo* al que queremos acceder, para seleccionar los *miembros* que queremos importar y con qué *nombres* los vamos a usar. Con la sentencia `from` no hace falta usar la notación `módulo.miembro`, porque hemos importado al ámbito del módulo actual dichos elementos. Con `*` lo que se hace es importar todos los miembros que hay en el *módulo*. Hay que tener en cuenta que puede haber problemas de colisiones de nombres si no se tiene cuidado al importar definiciones con `from`.
+
+> Para indicar el módulo que queremos importar, se usa como notación una secuencia de nombres separados por punto, por ejemplo, `juego.datos.jugador`. Esto lo que hace es ir al directorio `juego/datos` y buscar a `jugador.py` para importarlo.
+
+Por último, tenemos el operador `lambda`, que nos permite crear funciones anónimas con ciertas limitaciones. Esta es su sintaxis:
+
+$$\texttt{lambda}\ \textcolor{red}{[} \mathit{var_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{var_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}\ \mathit{expresi\acute{o}n}$$
+
+Sólo podemos definir parámetros posicionales y el cuerpo de la función es una única expresión. Es mucho menos flexible que las lambda abstracciones de otros lenguajes, pero sigue teniendo su utilidad para funciones de orden superior.
+
+## Clases y objetos
+
+..TODO..
+
+## Errores y excepciones
+
+..TODO..
+
+$$\texttt{raise}\ \textcolor{red}{[} \mathit{excepci\acute{o}n_1}\ \textcolor{red}{[} \texttt{from}\ \mathit{excepci\acute{o}n_2} \textcolor{red}{]} \textcolor{red}{]}$$
+
+..
+
+$$\begin{array}{l}
+\texttt{try} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ problem\acute{a}tico}
+\\[0.5em] \texttt{except}\ \textcolor{red}{[} \mathit{tipo_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{variable_1} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_1}
+\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \textcolor{red}{[} \texttt{except}\ \textcolor{red}{[} \mathit{tipo_n}\ \textcolor{red}{[} \texttt{as}\ \mathit{variable_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_n} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ else} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{finally} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ final} \textcolor{red}{]}
+\end{array}$$
+
+..
+
+$$\begin{array}{l}
+\texttt{try} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ problem\acute{a}tico}
+\\[0.5em] \texttt{except*}\ \textcolor{red}{[} \mathit{tipo_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{variable_1} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_1}
+\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \textcolor{red}{[} \texttt{except*}\ \textcolor{red}{[} \mathit{tipo_n}\ \textcolor{red}{[} \texttt{as}\ \mathit{variable_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque_n} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{else} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ else} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{finally} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ final} \textcolor{red}{]}
+\end{array}$$
+
+..
+
+$$\begin{array}{l}
+\texttt{try} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ problem\acute{a}tico}
+\\[0.5em] \texttt{finally} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ final}
+\end{array}$$
+
+..
+
 ## Manejo de ficheros
 
 Para trabajar con ficheros se usa el tipo `file`, pero para abrir ficheros se necesita la función nativa `open`, que devuelve instancias de `file`. Usaremos la siguiente sentencia:
@@ -1356,6 +1536,34 @@ from_json = [1, 2.3, (4+5j)]
 ```
 
 En este ejemplo tomamos el tipo `complex`, que no está soportado por defecto por el módulo `json`, y creamos una clase codificadora que sobrescribe el método `default` para transformarlo a un diccionario con una forma concreta. Luego añadimos una función para gestionar diccionarios a la hora de decodificar el formato JSON.
+
+## Ejecución "perezosa" y corutinas
+
+..TODO..
+
+$$\texttt{yield}\ \textcolor{red}{\char123} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{|} \texttt{from}\ \mathit{iterador} \textcolor{red}{\char125}$$
+
+..
+
+```Python
+>>> def nums():
+...     n = 0
+...     while True:
+...         yield n
+...         n += 1
+...
+>>> i = nums()
+>>> i
+<generator object nums at 0x0000020F>
+>>> next(i)
+0
+>>> next(i)
+1
+>>> next(i)
+2
+```
+
+..
 
 ## Biblioteca estándar
 
