@@ -1356,7 +1356,118 @@ Sólo podemos definir parámetros posicionales y el cuerpo de la función es una
 
 ## Clases y objetos
 
+Para definir nuevos tipos en el lenguaje se utiliza la sentencia `class`:
+
+$$\begin{array}{l}
+\texttt{class}\ \mathit{nombre} \textcolor{red}{[} \texttt{(} \mathit{tipo_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{tipo_n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \texttt{metaclass=} \mathit{tipo_m} \textcolor{red}{]} \texttt{)} \textcolor{red}{]} \texttt{:}
+\\[0.5em] \qquad \mathit{bloque\ de\ definiciones}
+\end{array}$$
+
+Le damos un *nombre* a la clase, para poder identificar al tipo. Una clase puede heredar de una o varias clases, por defecto, si no se indica ninguna se hereda de `object`. La herencia nos permite acceder a definiciones de la clase padre desde la hija, así como sobrescribir cuando sea necesario alguna de las definiciones.
+
+> Para decidir cuál es la definición que se selecciona, a la hora de buscar entre las clases padres, se utiliza el algoritmo [MRO](https://www.python.org/download/releases/2.3/mro/) para dicha búsqueda. En líneas generales, se hace un recorrido por niveles, de izquierda a derecha, para buscar los elementos en el árbol de herencia.
+> 
+> Entrando en más detalle, una definición se inicia su búsqueda en la clase actual. Cuando no se encuentra el elemento, se añade a una cola, en el orden que están definidos, los tipos de los que se hereda. A continuación, se toma el primer elemento en la cola donde buscar la definición, si no se encuentra se añade sus padres a la cola (descartando aquellos que ya hubieran sido añadidos previamente) y se continua el proceso tomando el siguiente candidato.
+
+### Miembros
+
+Supongamos, por ejemplo, la siguiente clase:
+
+```Python
+class Vector:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+```
+
+Para crear una nueva instancia de la clase haremos:
+
+```Python
+>>> a = Vector(1, 2)
+>>> print(a.x, a.y)
+1 2
+```
+
+La notación `Tipo(args)` crea un objeto de la clase `Tipo` en la memoria e invoca su método constructor `self.__init__(args)`. Para acceder a los miembros de un objeto se usa la notación con el punto `objeto.miembro`. Pero para definir métodos, que vayan a usar las instancias de la clase `objeto.método(args)`, es necesario que exista un parámetro extra al inicio, que contendrá la referencia al objeto que invoca el método. Se recomienda llamar `self` a este parámetro, para seguir las normas de estilo del lenguaje. Por ejemplo:
+
+```Python
+class Vector:
+    def __init__(self, x=0, y=0, z=0):
+        self.x = x
+        self.y = y
+    def show(self):
+        print(self.x, self.y)
+```
+
+```Python
+>>> a = Vector(1, 2)
+>>> a.show()
+1 2
+```
+
+Los objetos en Python permiten que se puedan extender arbitrariamente, dada la naturaleza dinámica del lenguaje. Para ello se usa la notación punto `objeto.nombre`, usando el *nombre* indicado como clave para buscar en el diccionario interno asociado al objeto. Por ejemplo:
+
+```Python
+>>> a.name = "Juan"
+>>> a.name
+'Juan'
+```
+
+Se puede hacer con cualquier instancia, exceptuando las creadas con la clase `object`. De hecho en `__init__` es esto lo que estamos haciendo al asignar un valor a `self.x` o `self.y`.
+
+También los módulos y los tipos tienen un diccionario interno que podremos extender, ya que en cierto modo son objetos en la memoria que gestiona el interprete de Python. Así que podríamos, por ejemplo, hacer lo siguiente:
+
+```Python
+>>> Vector.z = 0
+>>> print(a.x, a.y, a.z)
+1 2 0
+>>> b = Vector(3, 4)
+>>> b.z = 5
+>>> print(b.x, b.y, b.z)
+3 4 5
+>>> print(a.x, a.y, a.z)
+1 2 0
+>>> Vector.z = 1
+>>> print(a.x, a.y, a.z)
+1 2 1
+```
+
+¿Qué ha ocurrido aquí exactamente? Primero hemos definido la propiedad `z` para la clase `Vector`, modificando su diccionario interno. Cuando queremos consultar una propiedad en un objeto, se busca primero en su diccionario y después en el de la clase si no se encuentra nada en la instancia. Por ello `a.z` nos devuelve el valor que hemos asignado en el diccionario de `Vector`.  Pero al asignar un valor a `b.z` no se modifica el diccionario de `Vector`, sino el del objeto `b`, y por ello `a.z` sigue valiendo cero, hasta que modificamos su valor en el diccionario del tipo.
+
+> Las propiedades almacenadas en el diccionario de la clase, vienen a ser el equivalente a las variables estáticas en clases de lenguajes estilo C. Para poder acceder a una propiedad estática de la clase, desde un método de un objeto, hay que usar la notación punto `Tipo.nombre`, ya que usando el nombre a secas irá a buscar la variable fuera del ámbito de la clase.
+
+Si queremos añadir un método nuevo a un objeto, fuera de su definición, tendremos que añadirlo al diccionario de la clase. Si intentamos añadir el método al diccionario del objeto, al invocarlo nos dará como error que falta un parámetro en su invocación, porque no se está pasando la referencia al objeto como primer argumento. Por ejemplo:
+
+```Python
+>>> a.show()
+1 2
+>>> Vector.sum = lambda s: s.x + s.y
+>>> a.sum()
+3
+```
+
+### Visibilidad
+
+¿Se puede declarar miembros privados en Python? No se puede, porque el diccionario del objeto es público y se guarda todas las variables en él. Se ofrece como mecanismo, sobre todo para evitar colisión entre propiedades de clases padres con las hijas, la notación `__miembro` que el compilador convierte en el identificador `_Tipo__miembro`. Por ejemplo:
+
+```Python
+>>> class Foo:
+...     __bar = 0
+...
+>>> dir(Foo)
+['_Foo__bar', ...]
+```
+
+> La función `dir` sirve para consultar los miembros de cualquier elemento en memoria, sea un módulo, clase u objeto.
+
+### Decoradores
+
 ..TODO..
+
+### Métodos especiales
+
+..TODO..
+
 
 ## Errores y excepciones
 
