@@ -1167,8 +1167,8 @@ x = 10
 print(f"{x = }")
 
 def foo():
-	x += 1
-	print(f"{x = }")
+    x += 1
+    print(f"{x = }")
 
 foo()
 ```
@@ -1185,10 +1185,10 @@ x = 10
 print(f"{x = }")
 
 def foo():
-	global x, y
-	x += 1
-	y = x * 2
-	print(f"{x = }")
+    global x, y
+    x += 1
+    y = x * 2
+    print(f"{x = }")
 
 foo()
 print(f"{y = }")
@@ -1462,7 +1462,117 @@ Si queremos añadir un método nuevo a un objeto, fuera de su definición, tendr
 
 ### Decoradores
 
-..TODO..
+Los decoradores son funciones para procesar definiciones dentro de un módulo y tienen la siguiente sintaxis:
+
+```Python
+@decorador
+def nombre(args):
+    # Código...
+```
+
+Que se traduce en lo siguiente:
+
+```Python
+def nombre(args):
+    # Código...
+
+nombre = decorador(nombre)
+```
+
+Se puede aplicar también a clases y a los métodos de una clase. También hay que tener en cuenta que se puede usar una función constructora de clase como decorador, aunque ello implica que dicha clase tendrá que implementar protocolos especiales para usar el objeto instanciado como una función.
+
+Se pueden usar varios decoradores con una sola definición y también se puede tener argumentos de entrada:
+
+```Python
+@f(arg)
+class NombreTipo:
+    pass
+
+@f1
+@f2
+def nombre_función():
+    pass
+```
+
+Que se traduce en lo siguiente:
+
+```Python
+class NombreTipo:
+    pass
+
+def nombre_función():
+    pass
+
+NombreTipo = f(arg)(NombreTipo)
+nombre_función = f1(f2(nombre_función))
+```
+
+La biblioteca estándar de Python trae tres funciones nativas que se pueden usar como decoradores: , `property` y `staticmethod`. 
+
+| Función | Descripción |
+|:-------:|:------------|
+| `classmethod(F)` | Define la función `F` como un método de clase. Este tipo de métodos recibe como primer parámetro una referencia al tipo. Se puede invocar con la notación `Tipo.F()`, aunque también permite hacerlo con `objeto.F()`, ignorando el objeto para tener sólo en cuenta el tipo del mismo. |
+| `property(fget=None, fset=None, fdel=None, doc=None)` | Define una propiedad de clase utilizando una serie de funciones (`fget`, `fset`, `fdel`) y una cadena de documentación (`doc`). De este modo se puede redefinir cómo se accede a una variable. |
+| `staticmethod(F)` | Define la función `F` como un método estático. Este tipo de métodos no recibe como primer parámetro la referencia de su invocador. Se puede invocar con la notación `Tipo.F()` y `objeto.F()`. |
+
+Por ejemplo:
+
+```Python
+class Foo:
+    bar = 0
+
+    @staticmethod
+    def inc_bar(valor):
+        Foo.bar += valor
+
+    @classmethod
+    def show_bar(cls):
+        print(cls.bar)
+
+    def __init__(self, data):
+        self.__data = data
+
+    @property
+    def data(self):
+        """Propiedad 'data' de 'Foo'."""
+        print("get data:", self.__data)
+        return self.__data
+
+    @data.setter
+    def data(self, value):
+        print("set data:", self.__data, "=", value)
+        self.__data = value
+
+    @data.deleter
+    def data(self):
+        print("del data:", self.__data)
+        del self.__data
+```
+
+Usando así los métodos de clase y estáticos:
+
+```Python
+>>> Foo.show_bar()
+0
+>>> Foo.inc_bar(10)
+>>> Foo.show_bar()
+10
+```
+
+Y usando así las propiedades de un objeto:
+
+```Python
+>>> v = Foo(123)
+>>> v.data
+get data: 123
+123
+>>> v.data = 321
+set data: 123 = 321
+>>> del v.data
+del data: 321
+>>> Foo.data.__doc__
+"Propiedad 'data' de 'Foo'."
+```
 
 ### Métodos especiales
 
