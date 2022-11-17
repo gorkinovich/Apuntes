@@ -1578,18 +1578,39 @@ del data: 321
 
 ..TODO..
 
-
 ## Errores y excepciones
 
-..TODO..
+Cuando se genera un error, o una situación inesperada en un algoritmo, es normal lanzar una excepción para indicar que no se ha podido realizar una operación con éxito. Esta es la sintaxis para lanzar excepciones:
 
 $$\texttt{raise}\ \textcolor{red}{[} \mathit{excepci\acute{o}n_1}\ \textcolor{red}{[} \texttt{from}\ \mathit{excepci\acute{o}n_2} \textcolor{red}{]} \textcolor{red}{]}$$
 
-..
+Las *excepciones* son clases que heredan de la clase `Exception` y con la sentencia `raise` podemos lanzar una. La sección `from` sirve para encadenar varias excepciones y procesarlas conjuntamente. Con `from None` se elimina la cadena de excepciones. Los miembros destacados del tipo `Exception` son:
+
+| Miembros | Descripción |
+|:--------:|:------------|
+| `Exception(*args)` | Constructor de la clase que recibe una tupla de argumentos como información descriptiva sobre las causas que han provocado la excepción. |
+| `e.args` | Tupla con información descriptiva sobre las causas que han provocado la excepción. |
+| `e.with_traceback(tb)` | Modifica la información sobre la pila de ejecución al generarse la excepción. |
+| `e.add_note(note)` | Añade una cadena de texto `note` a la lista de notas de la excepción, para añadir más información sobre las causas que han provocado la excepción. |
+| `e.__notes__` | Lista de notas de la excepción. Este atributo se crea con la primera llamada a `add_note`. |
+
+
+También se pueden lanzar grupos de excepciones con `ExceptionGroup`, e incluso heredar de la misma, cuando hace falta lanzar varias excepciones a la vez. Esta clase hereda de `Exception` y sus miembros adicionales destacados son:
+
+| Miembros | Descripción |
+|:--------:|:------------|
+| `ExceptionGroup(msg, excs)` | Constructor de la clase que recibe una cadena de texto `msg` y una lista de excepciones `excs`. |
+| `e.message` | El mensaje de texto que describe al grupo. |
+| `e.exceptions` | La lista con el grupo de excepciones. |
+| `e.subgroup(cond)` | Selecciona un subgrupo de excepciones y devuelve un `ExceptionGroup` con ellas. Para seleccionar los candidatos se usa `cond`, que puede ser una función predicado, un tipo excepción o una tupla de ellos. |
+| `e.split(cond)` | Devuelve una tupla `(match, rest)`, donde `match` es el resultado de `subgroup(cond)` y `rest` es un `ExceptionGroup` con el resto de excepciones que no han cumplido la condición. |
+| `e.derive(excs)` | Devuelve una copia de la excepción, sustituyendo la lista con el grupo de excepciones. |
+
+Una vez lanzada la excepción, para poder capturarla y tomar medidas, necesitamos la sentencia `try`, cuya primera variante sintáctica es:
 
 $$\begin{array}{l}
 \texttt{try} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque\ problem\acute{a}tico}
+\\[0.5em] \qquad \mathit{bloque\ inicial}
 \\[0.5em] \texttt{except}\ \textcolor{red}{[} \mathit{tipo_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{variable_1} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
 \\[0.5em] \qquad \mathit{bloque_1}
 \\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
@@ -1601,11 +1622,13 @@ $$\begin{array}{l}
 \\[0.5em] \qquad \mathit{bloque\ final} \textcolor{red}{]}
 \end{array}$$
 
-..
+Con esta forma podemos capturar excepciones sueltas de un *tipo* determinado, y acceder a su contenido mediante una *variable*, con la sección `except`. La sección `else` se ejecutará si el *bloque inicial* se ha ejecutado sin que se lance ninguna excepción. La sección `finally` se ejecutará siempre, se produzca una excepción o no. Además, también será ejecutado de forma previa, el *bloque final* de `finally`, al uso dentro del `try` de las sentencias `return`, `continue` o `break`.
+
+La segunda variante de `try` es:
 
 $$\begin{array}{l}
 \texttt{try} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque\ problem\acute{a}tico}
+\\[0.5em] \qquad \mathit{bloque\ inicial}
 \\[0.5em] \texttt{except*}\ \textcolor{red}{[} \mathit{tipo_1}\ \textcolor{red}{[} \texttt{as}\ \mathit{variable_1} \textcolor{red}{]} \textcolor{red}{]} \texttt{:}
 \\[0.5em] \qquad \mathit{bloque_1}
 \\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
@@ -1617,16 +1640,16 @@ $$\begin{array}{l}
 \\[0.5em] \qquad \mathit{bloque\ final} \textcolor{red}{]}
 \end{array}$$
 
-..
+La diferencia con la primera son las secciones `except*` que permiten capturar *tipos* de excepciones que haya dentro de grupos de excepciones (`ExceptionGroup` y familia). Dependiendo de las excepciones lanzadas, se pueden llegar a ejecutar varias secciones `except*`.
+
+La última variante de `try` es:
 
 $$\begin{array}{l}
 \texttt{try} \texttt{:}
-\\[0.5em] \qquad \mathit{bloque\ problem\acute{a}tico}
+\\[0.5em] \qquad \mathit{bloque\ inicial}
 \\[0.5em] \texttt{finally} \texttt{:}
 \\[0.5em] \qquad \mathit{bloque\ final}
 \end{array}$$
-
-..
 
 ## Manejo de ficheros
 
