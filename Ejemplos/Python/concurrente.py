@@ -1,4 +1,4 @@
-# Fichero: paralelo.py
+# Fichero: concurrente.py
 import asyncio
 import random
 
