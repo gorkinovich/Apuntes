@@ -1886,7 +1886,7 @@ Tenemos dos corrutinas, `foo` y `bar`. La primera función suma todos los entero
 
 > En ocasiones puede hacer falta usar versiones asíncronas de iteradores y gestores de recursos. Para ello se puede modificar el comportamiento de `for` y `with` con `async for` y `async with`, que son azúcar sintáctico que permite manejar las versiones asíncronas de iteradores y gestores de recursos. Los iteradores asíncronos han de implementar los métodos especiales `__aiter__` y `__anext__`. Los gestores de recursos asíncronos han de implementar los métodos especiales `__aenter__` y `__aexit__`. Estos métodos especiales deben ser implementados como corrutinas.
 
-Se puede utilizar `yield` dentro de una `async def`, pero en lugar de generar una instancia de corrutina, lo que genera es una instancia de un generador asíncrono, que es de tipo `async_generator`, que es un tipo de iterador asíncrono. Por ejemplo:
+Se puede utilizar `yield` dentro de una `async def`, pero en lugar de generar una instancia de corrutina, lo que genera es una instancia de un [generador asíncrono](https://peps.python.org/pep-0525/), que es de tipo `async_generator`, que es un tipo de iterador asíncrono. Por ejemplo:
 
 ```Python
 >>> async def foo(n):
