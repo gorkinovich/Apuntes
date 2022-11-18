@@ -514,7 +514,7 @@ Realmente, una lista intensional, es un generador definido entre corchetes. Ser�
 [2, 4, 6, 8]
 ```
 
-Los generadores no dejan de ser instancias del tipo `generator` y que implementan la interfaz para la iteración. Por ejemplo:
+Los generadores no dejan de ser instancias del tipo [`generator`](https://docs.python.org/3/reference/expressions.html#generator-iterator-methods) y que implementan la interfaz para la iteración. Por ejemplo:
 
 ```Python
 >>> g = (x * 2 for x in [1, 2, 3])
@@ -1655,7 +1655,7 @@ $$\begin{array}{l}
 
 Para trabajar con ficheros se usa el tipo `file`, pero para abrir ficheros se necesita la función nativa `open`, que devuelve instancias de `file`. Usaremos la siguiente sentencia:
 
-$$\texttt{with}\ \texttt{open(} \mathit{ruta} \texttt{,} \mathit{modo} \texttt{)}\ \texttt{as}\ \mathit{variable}$$
+$$\texttt{with}\ \texttt{open(} \mathit{ruta} \texttt{,} \mathit{modo} \texttt{)}\ \texttt{as}\ \mathit{variable} \texttt{:}$$
 
 Con esto podremos operar con el fichero en el bloque anidado dentro de la sentencia `with`, donde *variable* es la instancia del fichero abierto, *ruta* es la ubicación del fichero a manipular y *modo* es una cadena de texto que contiene el modo de apertura indicado. Las opciones disponibles para el modo de apertura son las siguientes:
 
@@ -1781,13 +1781,17 @@ from_json = [1, 2.3, (4+5j)]
 
 En este ejemplo tomamos el tipo `complex`, que no está soportado por defecto por el módulo `json`, y creamos una clase codificadora que sobrescribe el método `default` para transformarlo a un diccionario con una forma concreta. Luego añadimos una función para gestionar diccionarios a la hora de decodificar el formato JSON.
 
-## Ejecución "perezosa" y corrutinas
+## Concurrencia
 
-..TODO..
+### Ejecución "perezosa" y generadores
+
+Python ofrece mecanismos para realizar cierto tipo de ejecución perezosa mediante la sentencia `yield`:
 
 $$\texttt{yield}\ \textcolor{red}{\char123} \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{|} \texttt{from}\ \mathit{iterador} \textcolor{red}{\char125}$$
 
-..
+Una función que contenga una o más sentencias `yield` se convierte en un objeto de tipo [`generator`](https://docs.python.org/3/reference/expressions.html#generator-iterator-methods), que sigue las mismas reglas que vimos en la sección de *iteradores y generadores*. Podemos lanzar una serie de valores, obtenidos por una serie de *expresiones*, o podemos ir devolviendo valores dentro de un iterador con la sección `from` de la sentencia.
+
+Veamos un ejemplo de función generadora de valores:
 
 ```Python
 >>> def nums():
@@ -1807,7 +1811,102 @@ $$\texttt{yield}\ \textcolor{red}{\char123} \mathit{expresi\acute{o}n_1} \textco
 2
 ```
 
-.. `async def` `async for` `await` `coroutine`
+Definimos una función `nums`, que va lanzando números enteros con `yield`. Cada vez que se invoque la función, se devuelve un objeto de tipo `generator`, que podemos recorrer con la función `next`. En este caso, el objeto generador no tiene un final y por ello nunca se lanzará un `StopIteration`.
+
+### Corrutinas y ejecución asíncrona
+
+Las [corrutinas](https://peps.python.org/pep-0492/) es otro mecanismo del lenguaje para gestionar la ejecución asíncrona del código. Para definir una, necesitamos definir una función como `async def`. Esto indica al compilador que se trata de un objeto de tipo `coroutine`, similar a `generator`, pero sin implementar el protocolo de iteración (`__iter__` y `__next__`). Luego, dentro de las corrutinas, se puede utilizar el operador `await`, que suspende la ejecución de la función a la espera del resultado de la expresión que lo acompaña. Las expresiones que pueden acompañar a `await` han de implementar la interfaz `__await__`, por ejemplo, una instancia del tipo `coroutine` lo hace. Veamos un ejemplo:
+
+```Python
+async def foo(n):
+    print(n)
+    if n > 0:
+        return n + await foo(n - 1)
+    else:
+        return 0
+
+try:
+    f = foo(5)
+    f.send(None)
+except StopIteration as e:
+    print(e.args)
+```
+
+La variable `f` almacena la instancia de la corrutina y para ejecutarla hay que utilizar el método `send`, pasando `None` como argumento por temas de implementación. Una vez se termina de ejecutar, se lanza una excepción de tipo `StopIteration`, que tiene como argumentos el resultado devuelto por la función.
+
+Para poder ejecutar varias corrutinas, de forma concurrente, tenemos el módulo [`asyncio`](https://docs.python.org/3/library/asyncio.html). Veamos un ejemplo parecido al anterior:
+
+```Python
+# Fichero: concurrente.py
+import asyncio
+import random
+import sys
+
+async def foo(id, value):
+    result = 0
+    while value >= 0:
+        print(f"{id}: {value}")
+        await asyncio.sleep(random.uniform(1,2))
+        result += value
+        value -= 1
+    return id, result
+
+async def bar(maxids, maxval):
+    if maxids > 0:
+        print("INICIO")
+        random.seed()
+        crs = [foo(id, maxval) for id in range(maxids)]
+        [print(type(i)) for i in crs]
+        print("EJECUTAR")
+        results = await asyncio.gather(*crs)
+        print("FINAL")
+        print(f"{results = }")
+    else:
+        print("NADA")
+
+def test(maxids, maxval):
+    asyncio.run(bar(maxids, maxval))
+
+if __name__ == "__main__":
+    ids = 3
+    val = 6
+
+    try:
+        if len(sys.argv) >= 3:
+            val = int(sys.argv[2])
+        if len(sys.argv) >= 2:
+            ids = int(sys.argv[1])
+    except:
+        pass
+
+    test(ids, val)
+```
+
+Tenemos dos corrutinas, `foo` y `bar`. La primera función suma todos los enteros desde `value` hasta `0`, haciendo una llamada asíncrona a [`asyncio.sleep`](https://docs.python.org/3/library/asyncio-task.html#asyncio.sleep), que recibe un número aleatorio de segundos entre `1` y `2`, para ejecutar un retardo que simule una operación asíncrona exterior. La segunda función configura el número de instancias de `foo` que vamos a crear y las ejecuta con [`asyncio.gather`](https://docs.python.org/3/library/asyncio-task.html#asyncio.gather) de forma concurrente, recibiendo el resultado de todas ellas en `results`. Por último, con [`asyncio.run`](https://docs.python.org/3/library/asyncio-runner.html#asyncio.run) podemos ejecutar una corrutina y recibir su resultado.
+
+> En ocasiones puede hacer falta usar versiones asíncronas de iteradores y gestores de recursos. Para ello se puede modificar el comportamiento de `for` y `with` con `async for` y `async with`, que son azúcar sintáctico que permite manejar las versiones asíncronas de iteradores y gestores de recursos. Los iteradores asíncronos han de implementar los métodos especiales `__aiter__` y `__anext__`. Los gestores de recursos asíncronos han de implementar los métodos especiales `__aenter__` y `__aexit__`. Estos métodos especiales deben ser implementados como corrutinas.
+
+Se puede utilizar `yield` dentro de una `async def`, pero en lugar de generar una instancia de corrutina, lo que genera es una instancia de un generador asíncrono, que es de tipo `async_generator`, que es un tipo de iterador asíncrono. Por ejemplo:
+
+```Python
+>>> async def foo(n):
+...     for i in range(n):
+...         yield i
+...
+>>> async def bar(n):
+...     async for i in foo(n):
+...         print(i)
+...
+>>> asyncio.run(bar(4))
+0
+1
+2
+3
+```
+
+Aquí las instancias de `foo` serán de tipo `async_generator`, mientras que las instancias de `bar` serán de tipo `coroutine`. Con el bucle `async for` lo que se hace es instanciar `foo`, como si hiciéramos `f = foo(n)`, e invocar `anext(f).send(None)` para obtener una excepción de tipo `StopIteration`, que contiene en sus argumentos el valor que queremos asignar a `i`. Cuando ya no quedan más elementos, sobre los que iterar, se lanza una excepción de tipo `StopAsyncIteration`.
+
+..TODO..
 
 ## Biblioteca estándar
 
@@ -1819,15 +1918,7 @@ La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Pytho
 
 ..
 
-### Constantes nativas
-
-..
-
 ### Tipos nativos
-
-..
-
-### Excepciones nativas
 
 ..
 
@@ -1852,10 +1943,6 @@ La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Pytho
 ..
 
 ## Módulos del sistema operativo
-
-..
-
-## Módulos de concurrencia
 
 ..
 
