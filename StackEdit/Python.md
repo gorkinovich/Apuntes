@@ -1807,7 +1807,7 @@ $$\texttt{yield}\ \textcolor{red}{\char123} \mathit{expresi\acute{o}n_1} \textco
 2
 ```
 
-..
+.. `async def` `async for` `await` `coroutine`
 
 ## Biblioteca estándar
 
