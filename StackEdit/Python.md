@@ -41,7 +41,7 @@ Una **variable** es una "caja" que tiene un nombre y su contenido es un valor qu
 
 Una **función** representa un código modular que podemos utilizar con diferentes valores de entrada, para obtener diferentes resultados de salida. En esencia es muy parecido al concepto de función matemática, donde tenemos un nombre, unos parámetros representados por variables de ámbito local a la función, un cuerpo de expresiones que define lo que hace y unos valores como resultado.
 
-Una **clase** representa lo que se denomina un tipo, que es una representación abstracta de un concepto con el que va a trabajar el programa. Por un lado tendremos la definición del tipo y por otro las instancias de un tipo, que son los valores concretos con los que está trabajando el programa. Se podría decir que la definición es la forma y la instancia es el contenido. Para definir un tipo, hace falta definir sus **atributos**, que son las propiedades y operaciones del mismo, donde las propiedades son variables y las operaciones son funciones. En Python se denomina clase a la definición de un tipo y objeto a la instancia del mismo. También se denomina a las funciones de una clase como métodos de la misma.
+Una **clase** representa lo que se denomina un tipo, que es una representación abstracta de un concepto con el que va a trabajar el programa. Por un lado tendremos la definición del tipo y por otro las instancias de un tipo, que son los valores concretos con los que está trabajando el programa. Se podría decir que la definición es la forma y la instancia es el contenido. Para definir un tipo, hace falta definir sus **miembros**, que son los atributos y las operaciones del mismo, donde los atributos son variables y las operaciones son funciones. En Python se denomina clase a la definición de un tipo y objeto a la instancia del mismo. También se denomina a las funciones de una clase como métodos de la misma.
 
 El **ámbito** de una variable es aquellas ubicaciones donde se puede utilizar la misma. El módulo, la función, la clase o el método, son algunos de los diferentes ámbitos donde se puede declarar una variable. Para declarar una variable basta con asignarle un valor:
 
@@ -809,7 +809,7 @@ if objeto := mi_función():
     print(objeto.dato)
 ```
 
-Digamos que `mi_función` devuelve un valor y es asignado a la variable `objeto`. Si es una instancia no nula, suponiendo que si no se puede instanciar el tipo devolveríamos `None`, pues trabajaremos con el objeto. En este caso se accede a su propiedad `dato`, como ejemplo.
+Digamos que `mi_función` devuelve un valor y es asignado a la variable `objeto`. Si es una instancia no nula, suponiendo que si no se puede instanciar el tipo devolveríamos `None`, pues trabajaremos con el objeto. En este caso se accede a su atributo `dato`, como ejemplo.
 
 También existe un conjunto de sentencias de asignación, que combinan algún operador numérico con la asignación. Son los siguientes:
 
@@ -837,7 +837,7 @@ Esta es la precedencia, de mayor a menor, de los operadores en Python:
 | `{...}` | Diccionarios y conjuntos. |
 | `[...]` | Listas. |
 | `(...)` | Paréntesis, tuplas y generadores. |
-| `X.atributo` | Referencia a un atributo de X. |
+| `X.miembro` | Referencia a un miembro de X. |
 | `X(args)` | Invocación de la función `X`. |
 | `X[i:j:k]` | Selección del contenedor `X` (*slicing*). |
 | `X[i]` | Indexado del contenedor `X`. |
@@ -940,7 +940,7 @@ Se usa la siguiente sintaxis como expresión de formato dentro de la cadena:
 
 $$\texttt{\char123} \textcolor{red}{[} \mathit{\acute{\imath}ndice} \textcolor{red}{]}\ \textcolor{red}{[} \mathit{acceso} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{!} \mathit{conversi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{:} \mathit{formato} \textcolor{red}{]} \texttt{\char125}$$
 
-El *índice* es un entero que representa la posición del dato dentro de los valores pasados como argumentos. El *acceso* consiste en un mecanismo opcional para acceder a información interna del valor, ya sea a una propiedad de objeto (`.nombre`) o a un elemento de contenedor (`[índice]`). La marca de *conversión* es una de las siguientes:
+El *índice* es un entero que representa la posición del dato dentro de los valores pasados como argumentos. El *acceso* consiste en un mecanismo opcional para acceder a información interna del valor, ya sea a un atributo del objeto (`.nombre`) o a un elemento de contenedor (`[índice]`). La marca de *conversión* es una de las siguientes:
 
 | Valor | Descripción |
 |:-----:|:------------|
@@ -1290,12 +1290,12 @@ Un patrón es una definición de un valor estructurado que combina valores liter
 | Listas | `[]`, `[a]`, `[a, b]`, `[a, *vs]`, etc. | Listas de N elementos, donde cada posición es un patrón a su vez. Permite usar la notación `*vs` para agrupar en una variable varios valores, igual que en la sentencia de la asignación. |
 | Diccionarios | `{}`, `{"k1": a}`, `{"k1": a, "k2": b}`, etc. | Diccionarios de N o más elementos, donde cada entrada tiene la forma clave-patrón. Si el diccionario tiene más elementos, de los indicados con el patrón, se ignoran. Se puede usar la notación `**kvs`, pero no se permite la forma `**_` al ser redundante. |
 | Tipos | `Tipo()`, `Tipo(a,b,c)`, `Tipo(a,n=b)`, etc. | Tipos con una serie de parámetros posicionales o con nombre, donde cada argumento especificado es un patrón con el que ajustar los miembros del objeto. |
-| Miembros | `obj.miembro ` | Se usa el valor de una propiedad en un objeto como patrón contra el que ajustar. |
+| Miembros | `obj.miembro ` | Se usa el valor de un atributo en un objeto como patrón contra el que ajustar. |
 | Enumeraciones | `Tipo.NOMBRE` | Las valores de enumeraciones requieren indicar el nombre del tipo donde han sido definidos, para evitar que la sentencia los utilice como variables que asignar. |
 | Alias. | `p as v ` | Permite asignar el valor que se ajusta con el patrón `p` en la variable `v`. |
 | Comodín | `_` | Se usa como una variable especial para cuando se quieren descartar valores que no se van a usar. Por ejemplo, si queremos un patrón que obtenga la cabeza de una lista, sería `[x, *_]`. |
 
-Sobre la asignación de variables, en los parámetros con nombre (`nombre=patrón`), no se modifica la propiedad del objeto, sino las variables del patrón. Del mismo modo, cuando se usa un miembro de un objeto, este no se verá modificado como ocurre con las variables sueltas.
+Sobre la asignación de variables, en los parámetros con nombre (`nombre=patrón`), no se modifica los atributos del objeto, sino las variables del patrón. Del mismo modo, cuando se usa un miembro de un objeto, este no se verá modificado como ocurre con las variables sueltas.
 
 Se pueden agrupar patrones con el operador `|` para no tener que repetir código innecesario, por ejemplo, `case None | False:`. Para más información, hay más detalles sobre los patrones soportados en la [documentación](https://docs.python.org/3/reference/compound_stmts.html) oficial y ejemplos en el [tutorial](https://docs.python.org/3/tutorial/controlflow.html) del lenguaje.
 
@@ -1332,7 +1332,7 @@ Donde la víctima tiene alguna de las siguientes formas:
 |:-----:|:------------|
 | `var` | Borra una variable de la memoria. |
 | `var[i]`<br/>`var[i:j]`<br/>`var[i:j:k]` | Borra elementos dentro de un contenedor. |
-| `var.miembro` | Borra una propiedad de un objeto. |
+| `var.miembro` | Borra un atributo de un objeto. |
 
 La sentencia `import`, carga un módulo o elementos del mismo, para poder usarlos en el módulo actual. Para ello tenemos la siguiente sintaxis:
 
@@ -1432,9 +1432,9 @@ También los módulos y los tipos tienen un diccionario interno que podremos ext
 1 2 1
 ```
 
-¿Qué ha ocurrido aquí exactamente? Primero hemos definido la propiedad `z` para la clase `Vector`, modificando su diccionario interno. Cuando queremos consultar una propiedad en un objeto, se busca primero en su diccionario y después en el de la clase si no se encuentra nada en la instancia. Por ello `a.z` nos devuelve el valor que hemos asignado en el diccionario de `Vector`.  Pero al asignar un valor a `b.z` no se modifica el diccionario de `Vector`, sino el del objeto `b`, y por ello `a.z` sigue valiendo cero, hasta que modificamos su valor en el diccionario del tipo.
+¿Qué ha ocurrido aquí exactamente? Primero hemos definido el atributo `z` para la clase `Vector`, modificando su diccionario interno. Cuando queremos consultar un atributo en un objeto, se busca primero en su diccionario y después en el de la clase si no se encuentra nada en la instancia. Por ello `a.z` nos devuelve el valor que hemos asignado en el diccionario de `Vector`.  Pero al asignar un valor a `b.z` no se modifica el diccionario de `Vector`, sino el del objeto `b`, y por ello `a.z` sigue valiendo cero, hasta que modificamos su valor en el diccionario del tipo.
 
-> Las propiedades almacenadas en el diccionario de la clase, vienen a ser el equivalente a las variables estáticas en clases de lenguajes estilo C. Para poder acceder a una propiedad estática de la clase, desde un método de un objeto, hay que usar la notación punto `Tipo.nombre`, ya que usando el nombre a secas irá a buscar la variable fuera del ámbito de la clase.
+> Los atributos almacenados en el diccionario de la clase, vienen a ser el equivalente a las variables estáticas en clases de lenguajes estilo C. Para poder acceder a un atributo estático de la clase, desde un método de un objeto, hay que usar la notación punto `Tipo.nombre`, ya que usando el nombre a secas irá a buscar la variable fuera del ámbito de la clase.
 
 Si queremos añadir un método nuevo a un objeto, fuera de su definición, tendremos que añadirlo al diccionario de la clase. Si intentamos añadir el método al diccionario del objeto, al invocarlo nos dará como error que falta un parámetro en su invocación, porque no se está pasando la referencia al objeto como primer argumento. Por ejemplo:
 
@@ -1448,7 +1448,7 @@ Si queremos añadir un método nuevo a un objeto, fuera de su definición, tendr
 
 ### Visibilidad
 
-¿Se puede declarar miembros privados en Python? No se puede, porque el diccionario del objeto es público y se guarda todas las variables en él. Se ofrece como mecanismo, sobre todo para evitar colisión entre propiedades de clases padres con las hijas, la notación `__miembro` que el compilador convierte en el identificador `_Tipo__miembro`. Por ejemplo:
+¿Se puede declarar miembros privados en Python? No se puede, porque el diccionario del objeto es público y se guarda todas las variables en él. Se ofrece como mecanismo, sobre todo para evitar colisión entre los atributos de las clases padres con las hijas, la notación `__miembro` que el compilador convierte en el identificador `_Tipo__miembro`. Por ejemplo:
 
 ```Python
 >>> class Foo:
@@ -1459,6 +1459,18 @@ Si queremos añadir un método nuevo a un objeto, fuera de su definición, tendr
 ```
 
 > La función `dir` sirve para consultar los miembros de cualquier elemento en memoria, sea un módulo, clase u objeto.
+
+### Atributos especiales
+
+..TODO..
+
+### Métodos especiales
+
+..TODO..
+
+### Herencia y polimorfismo
+
+..TODO..
 
 ### Decoradores
 
@@ -1507,12 +1519,12 @@ NombreTipo = f(arg)(NombreTipo)
 nombre_función = f1(f2(nombre_función))
 ```
 
-La biblioteca estándar de Python trae tres funciones nativas que se pueden usar como decoradores: , `property` y `staticmethod`. 
+La biblioteca estándar de Python trae tres funciones nativas que se pueden usar como decoradores: `classmethod`, `property` y `staticmethod`. 
 
 | Función | Descripción |
 |:-------:|:------------|
 | `classmethod(F)` | Define la función `F` como un método de clase. Este tipo de métodos recibe como primer parámetro una referencia al tipo. Se puede invocar con la notación `Tipo.F()`, aunque también permite hacerlo con `objeto.F()`, ignorando el objeto para tener sólo en cuenta el tipo del mismo. |
-| `property(fget=None, fset=None, fdel=None, doc=None)` | Define una propiedad de clase utilizando una serie de funciones (`fget`, `fset`, `fdel`) y una cadena de documentación (`doc`). De este modo se puede redefinir cómo se accede a una variable. |
+| `property(fget=None, fset=None, fdel=None, doc=None)` | Define un atributo de clase utilizando una serie de funciones (`fget`, `fset`, `fdel`) y una cadena de documentación (`doc`). De este modo se puede redefinir cómo se accede a una variable. |
 | `staticmethod(F)` | Define la función `F` como un método estático. Este tipo de métodos no recibe como primer parámetro la referencia de su invocador. Se puede invocar con la notación `Tipo.F()` y `objeto.F()`. |
 
 Por ejemplo:
@@ -1573,10 +1585,6 @@ del data: 321
 >>> Foo.data.__doc__
 "Propiedad 'data' de 'Foo'."
 ```
-
-### Métodos especiales
-
-..TODO..
 
 ## Errores y excepciones
 
@@ -1673,7 +1681,7 @@ Por defecto el modo es `"r"` que abre el fichero para lectura de texto, sería l
 
 > Se puede abrir un fichero usando la asignación con `v = open(ruta,modo)`, en lugar de usar la sentencia `with`, pero con este último se garantiza que, en caso de error durante la ejecución, se cerrará el objeto que ha abierto el fichero.
 
-Estos son los métodos y propiedades disponibles en la clase `file`:
+Estos son los métodos y atributos disponibles en la clase `file`:
 
 | Miembro | Descripción | Resultado |
 |:-------:|:------------|:----------|
@@ -1815,7 +1823,7 @@ Definimos una función `nums`, que va lanzando números enteros con `yield`. Cad
 
 ### Corrutinas y ejecución asíncrona
 
-Las [corrutinas](https://peps.python.org/pep-0492/) es otro mecanismo del lenguaje para gestionar la ejecución asíncrona del código. Para definir una, necesitamos definir una función como `async def`. Esto indica al compilador que se trata de un objeto de tipo `coroutine`, similar a `generator`, pero sin implementar el protocolo de iteración (`__iter__` y `__next__`). Luego, dentro de las corrutinas, se puede utilizar el operador `await`, que suspende la ejecución de la función a la espera del resultado de la expresión que lo acompaña. Las expresiones que pueden acompañar a `await` han de implementar la interfaz `__await__`, por ejemplo, una instancia del tipo `coroutine` lo hace. Veamos un ejemplo:
+Las [corrutinas](https://peps.python.org/pep-0492/) es otro mecanismo del lenguaje para gestionar la ejecución asíncrona del código. Para definir una, necesitamos definir una función como `async def`. Esto indica al compilador que se trata de un objeto de tipo [`coroutine`](https://docs.python.org/3/reference/datamodel.html#coroutines), similar a `generator`, pero sin implementar el protocolo de iteración (`__iter__` y `__next__`). Luego, dentro de las corrutinas, se puede utilizar el operador `await`, que suspende la ejecución de la función a la espera del resultado de la expresión que lo acompaña. Las expresiones que pueden acompañar a `await` han de implementar la interfaz `__await__`, por ejemplo, una instancia del tipo `coroutine` lo hace. Veamos un ejemplo:
 
 ```Python
 async def foo(n):
@@ -1884,7 +1892,7 @@ if __name__ == "__main__":
 
 Tenemos dos corrutinas, `foo` y `bar`. La primera función suma todos los enteros desde `value` hasta `0`, haciendo una llamada asíncrona a [`asyncio.sleep`](https://docs.python.org/3/library/asyncio-task.html#asyncio.sleep), que recibe un número aleatorio de segundos entre `1` y `2`, para ejecutar un retardo que simule una operación asíncrona exterior. La segunda función configura el número de instancias de `foo` que vamos a crear y las ejecuta con [`asyncio.gather`](https://docs.python.org/3/library/asyncio-task.html#asyncio.gather) de forma concurrente, recibiendo el resultado de todas ellas en `results`. Por último, con [`asyncio.run`](https://docs.python.org/3/library/asyncio-runner.html#asyncio.run) podemos ejecutar una corrutina y recibir su resultado.
 
-> En ocasiones puede hacer falta usar versiones asíncronas de iteradores y gestores de recursos. Para ello se puede modificar el comportamiento de `for` y `with` con `async for` y `async with`, que son azúcar sintáctico que permite manejar las versiones asíncronas de iteradores y gestores de recursos. Los iteradores asíncronos han de implementar los métodos especiales `__aiter__` y `__anext__`. Los gestores de recursos asíncronos han de implementar los métodos especiales `__aenter__` y `__aexit__`. Estos métodos especiales deben ser implementados como corrutinas.
+> En ocasiones puede hacer falta usar versiones asíncronas de [iteradores](https://docs.python.org/3/reference/datamodel.html#asynchronous-iterators) y [gestores de recursos](https://docs.python.org/3/reference/datamodel.html#asynchronous-context-managers). Para ello se puede modificar el comportamiento de `for` y `with` con `async for` y `async with`, que son azúcar sintáctico que permite manejar las versiones asíncronas de iteradores y gestores de recursos. Los iteradores asíncronos han de implementar los métodos especiales `__aiter__` y `__anext__`. Los gestores de recursos asíncronos han de implementar los métodos especiales `__aenter__` y `__aexit__`. Estos métodos especiales deben ser implementados como corrutinas.
 
 Se puede utilizar `yield` dentro de una `async def`, pero en lugar de generar una instancia de corrutina, lo que genera es una instancia de un [generador asíncrono](https://peps.python.org/pep-0525/), que es de tipo `async_generator`, que es un tipo de iterador asíncrono. Por ejemplo:
 
@@ -1914,43 +1922,31 @@ La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Pytho
 
 ..TODO..
 
-### Funciones nativas
+### Tipos y funciones nativas
 
 ..
 
-### Tipos nativos
+### Funciones matemáticas
 
 ..
 
-## Módulos matemáticos
+### Manipular cadenas
 
 ..
 
-## Módulos de cadenas
+### Manipular estructuras
 
 ..
 
-## Módulos de estructuras
+### Manipular funciones
 
 ..
 
-## Módulos funcionales
+### Manipular el sistema de ficheros
 
 ..
 
-## Módulos de ficheros y directorios
-
-..
-
-## Módulos del sistema operativo
-
-..
-
-## Módulos de comunicaciones
-
-..
-
-## Módulos de almacenamiento
+### Manipular el sistema operativo
 
 ..
 
