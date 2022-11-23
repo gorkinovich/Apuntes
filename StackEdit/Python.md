@@ -1415,7 +1415,7 @@ Los objetos en Python permiten que se puedan extender arbitrariamente, dada la n
 
 Se puede hacer con cualquier instancia, exceptuando las creadas con la clase `object`. De hecho en `__init__` es esto lo que estamos haciendo al asignar un valor a `self.x` o `self.y`.
 
-También los módulos y los tipos tienen un diccionario interno que podremos extender, ya que en cierto modo son objetos en la memoria que gestiona el interprete de Python. Así que podríamos, por ejemplo, hacer lo siguiente:
+También los módulos y los tipos tienen un diccionario interno que podremos extender, ya que son objetos en la memoria que gestiona el interprete de Python. Así que podríamos, por ejemplo, hacer lo siguiente:
 
 ```Python
 >>> Vector.z = 0
@@ -1462,7 +1462,26 @@ Si queremos añadir un método nuevo a un objeto, fuera de su definición, tendr
 
 ### Atributos especiales
 
-..TODO..
+Todo en Python tiene un tipo y por lo tanto se pueden crear instancias en la memoria. Algunas instancias las gestiona el programador, mientras que otras como los módulos, tipos o funciones, las gestiona el propio interprete. Hay que tener en cuenta que los módulos son instancias de la clase `module`, los tipos de `type` y las funciones de `function`. Como consecuencia de esto último, estos objetos tienen algunos atributos especiales a los que podemos acceder:
+
+| Miembro | Tipo | Descripción |
+|:-------:|:----:|:------------|
+| `__doc__` | `function`<br/>`module`<br/>`type` | Documentación del objeto. |
+| `__name__` | `function`<br/>`module`<br/>`type` | Nombre del objeto. |
+| `__annotations__` | `function`<br/>`module`<br/>`type` | Diccionario con las anotaciones de tipos de los parámetros en las funciones o las variables en los módulos y tipos. La clave para el tipo de retorno de una función es `return`. |
+| `__module__` | `function`<br/>`type` | Nombre del módulo al que pertenece la función o el tipo. |
+| `__dict__` | `function`<br/>`type` | Diccionario con los atributos de la función o la clase. |
+| `__qualname__` | `function` | Nombre completo del objeto, incluyendo las clases a las que pertenece la función. |
+| `__defaults__` | `function` | Tupla con los valores por defecto de los parámetros posicionales o `None` si no lo tiene. |
+| `__kwdefaults__` | `function` | Diccionario con los valores por defecto de los parámetros no posicionales. |
+| `__globals__` | `function` | Diccionario con las variables globales para la función. (Sólo de lectura.) |
+| `__closure__` | `function` | Tupla de celdas que contiene enlaces a las variables libres de la función. (Sólo de lectura.) |
+| `__code__` | `function` | Objeto de código que representa el cuerpo compilado de la función. |
+| `__file__` | `module` | Ruta del fichero donde está el módulo. |
+| `__bases__` | `type` | Tupla con las clases de las que se hereda. |
+| `__mro__` | `type` | Tupla con las clases de las que se hereda ordenadas mediante el algoritmo MRO. |
+
+> El atributo `X.__class__` da el objeto que representa al tipo al que pertenece una instancia `X`. La función nativa `type(X)` equivale al usar este atributo.
 
 ### Métodos especiales
 
