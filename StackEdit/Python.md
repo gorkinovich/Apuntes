@@ -1485,7 +1485,137 @@ Todo en Python tiene un tipo y por lo tanto se pueden crear instancias en la mem
 
 ### Métodos especiales
 
-..TODO..
+Existen una serie de nombres especiales a la hora de definir métodos en Python, que sirven para implementar diversos protocolos o interfaces de comportamiento. Los métodos de operaciones generales para implementar son los siguientes:
+
+| Método | Parámetros | Descripción |
+|:------:|:----------:|:------------|
+| `__new__` | `(cls, ...args)` | Es un método estático que se invoca cuando se quiere crear una nueva instancia del tipo `cls`. |
+| `__init__` | `(self, ...args)` | Se invoca para inicializar el objeto después de haber sido creado. También conocido como el método constructor de la clase. |
+| `__del__` | `(self)` | Se invoca cuando el objeto va a ser destruido. También conocido como el método destructor de la clase. |
+| `__eq__` | `(self, X)` | Equivale a `self == X`. |
+| `__ne__` | `(self, X)` | Equivale a `self != X`. |
+| `__lt__` | `(self, X)` | Equivale a `self < X`. |
+| `__le__` | `(self, X)` | Equivale a `self <= X`. |
+| `__gt__` | `(self, X)` | Equivale a `self > X`. |
+| `__ge__` | `(self, X)` | Equivale a `self >= X`. |
+| `__bool__` | `(self)` | Invocado por `bool(self)`, devuelve el valor booleano que representa al objeto. |
+| `__str__` | `(self)` | Invocado por `str(self)`, devuelve una cadena de texto que representa al objeto. |
+| `__repr__` | `(self)` | Invocado por `repr(self)`, devuelve la representación interna del objeto como una cadena de texto. |
+| `__format__` | `(self, fmtspec)` | Invocado por `format(self, fmtspec)`, devuelve una cadena de texto que representa al objeto, con un formato determinado. |
+| `__bytes__` | `(self)` | Invocado por `bytes(self)`, devuelve una cadena de bytes que representa al objeto. |
+| `__hash__` | `(self)` | Invocado por `hash(self)`, devuelve un número entero como valor hash que representa el identificador único del objeto. Este método es invocado cuando se usa el objeto como clave para un diccionario. |
+| `__call__` | `(self, ...args)` | Se invoca al usar el objeto como una llamada a función. Equivale a `self(args)`. |
+| `__instancecheck__` | `(self, instance)` | Invocado por `instancecheck`, para comprobar si `instance` es una instancia de una clase. |
+| `__subclasscheck__` | `(self, subclass)` | Invocado por `subclasscheck`, para comprobar si `subclass` es una subclase de una clase. |
+
+Estos son los métodos para implementar el acceso a atributos:
+
+| Método | Parámetros | Descripción |
+|:------:|:----------:|:------------|
+| `__getattribute__` | `(self, name)` | Se invoca al consultar un atributo de un objeto con `self.name`. Cuando no existe se devuelve un `AttributeError`. |
+| `__getattr__` | `(self, name)` | Se invoca cuando al consultar un atributo, de un objeto con `self.name`, este no existe y `__getattribute__` ha lanzado un `AttributeError`. |
+| `__setattr__` | `(self, name, value)` | Se invoca cuando se quiere asignar un valor a un atributo de un objeto con `self.name = value`. |
+| `__delattr__` | `(self, name)` | Se invoca cuando se quiere eliminar un atributo de un objeto con `del self.name`. |
+| `__dir__` | `(self)` | Invocado por `dir(self)`, devuelve una secuencia con todos los atributos del objeto. |
+
+Estos son los métodos para implementar descriptores de atributos:
+
+| Método | Parámetros | Descripción |
+|:------:|:----------:|:------------|
+| `__get__` | `(self, instance, owner=None)` | Se invoca cuando se consulta un descriptor con `instance.self` o `owner.self`, dependiendo de si el atributo se encuentra en una instancia de una clase o en la clase. |
+| `__set__` | `(self, instance, value)` | Se invoca cuando se modifica un descriptor con `instance.self = value`. |
+| `__delete__` | `(self, instance)` | Se invoca cuando se elimina un descriptor con `del instance.self`. |
+
+Estos son los métodos para implementar contenedores de datos:
+
+| Método | Parámetros | Descripción |
+|:------:|:----------:|:------------|
+| `__len__` | `(self)` | Invocado por `len(self)`, devuelve número de elementos del contenedor. |
+| `__getitem__` | `(self, key)` | Invocado por `self[key]`, para consultar un elemento del contenedor. Se deberá lanzar un `TypeError` si `key` es del tipo equivocado, un `IndexError` al intentar acceder a una posición fuera de los límites, o un `KeyError` si la clave no existe en el diccionario. |
+| `__setitem__` | `(self, key, value)` | Invocado por `self[key] = value`, para modificar un elemento del contenedor. Se deberá lanzar las mismas excepciones que `__getitem__`. |
+| `__delitem__` | `(self, key)` | Invocado por `del self[key]`, para eliminar un elemento del contenedor. Se deberá lanzar las mismas excepciones que `__getitem__`. |
+| `__missing__` | `(self, key)` | Invocado por `__getitem__`, en subclases de `dict`, cuando la clave no ha sido encontrada. |
+| `__contains__` | `(self, item)` | Invocado por `item in self`, para determinar la existencia de un elemento en el contenedor. |
+| `__reversed__` | `(self)` | Invocado por `reversed(self)`, para devolver una iterador que recorre el contenedor de forma inversa. |
+| `__iter__` | `(self)` | Invocado por `iter(self)`, para obtener un iterador que recorre el contenedor. |
+| `__next__` | `(self)` | Invocado por `next(self)`, para devolver el elemento actual y avanzar una posición el puntero del iterador actual. Se deberá lanzar un `StopIteration` cuando se invoque después de terminar el recorrido. |
+
+Estos son los métodos para implementar tipos numéricos:
+
+| Método | Parámetros | Descripción |
+|:------:|:----------:|:------------|
+| `__add__` | `(self, X)` | Equivale a `self + X`. |
+| `__sub__` | `(self, X)` | Equivale a `self - X`. |
+| `__mul__` | `(self, X)` | Equivale a `self * X`. |
+| `__matmul__` | `(self, X)` | Equivale a `self @ X`. |
+| `__truediv__` | `(self, X)` | Equivale a `self / X`. |
+| `__floordiv__` | `(self, X)` | Equivale a `self // X`. |
+| `__mod__` | `(self, X)` | Equivale a `self % X`. |
+| `__divmod__` | `(self, X)` | Equivale a `divmod(self, X)`. |
+| `__pow__` | `(self, X)`<br/>`(self, X, Y)` | Equivale a `self ** X`, `pow(self, X)` o `pow(self, X, Y)`. |
+| `__lshift__` | `(self, X)` | Equivale a `self << X`. |
+| `__rshift__` | `(self, X)` | Equivale a `self >> X`. |
+| `__and__` | `(self, X)` | Equivale a `self & X`. |
+| `__xor__` | `(self, X)` | Equivale a `self ^ X`. |
+| `__or__` | `(self, X)` | Equivale a `self | X`. |
+| `__radd__` | `(self, X)` | Equivale a `X + self`. |
+| `__rsub__` | `(self, X)` | Equivale a `X - self`. |
+| `__rmul__` | `(self, X)` | Equivale a `X * self`. |
+| `__rmatmul__` | `(self, X)` | Equivale a `X @ self`. |
+| `__rtruediv__` | `(self, X)` | Equivale a `X / self`. |
+| `__rfloordiv__` | `(self, X)` | Equivale a `X // self`. |
+| `__rmod__` | `(self, X)` | Equivale a `X % self`. |
+| `__rdivmod__` | `(self, X)` | Equivale a `divmod(X, self)`. |
+| `__rpow__` | `(self, X)`<br/>`(self, X, Y)` | Equivale a `X ** X`, `pow(X, self)` o `pow(X, self, Y)`. |
+| `__rlshift__` | `(self, X)` | Equivale a `X << self`. |
+| `__rrshift__` | `(self, X)` | Equivale a `X >> self`. |
+| `__rand__` | `(self, X)` | Equivale a `X & self`. |
+| `__rxor__` | `(self, X)` | Equivale a `X ^ self`. |
+| `__ror__` | `(self, X)` | Equivale a `X | self`. |
+| `__iadd__` | `(self, X)` | Equivale a `self += X`. |
+| `__isub__` | `(self, X)` | Equivale a `self -= X`. |
+| `__imul__` | `(self, X)` | Equivale a `self *= X`. |
+| `__imatmul__` | `(self, X)` | Equivale a `self @= X`. |
+| `__itruediv__` | `(self, X)` | Equivale a `self /= X`. |
+| `__ifloordiv__` | `(self, X)` | Equivale a `self //= X`. |
+| `__imod__` | `(self, X)` | Equivale a `self %= X`. |
+| `__ipow__` | `(self, X)` | Equivale a `self **= X`. |
+| `__ilshift__` | `(self, X)` | Equivale a `self <<= X`. |
+| `__irshift__` | `(self, X)` | Equivale a `self >>= X`. |
+| `__iand__` | `(self, X)` | Equivale a `self &= X`. |
+| `__ixor__` | `(self, X)` | Equivale a `self ^= X`. |
+| `__ior__` | `(self, X)` | Equivale a `self |= X`. |
+| `__neg__` | `(self)` | Equivale a `-self`. |
+| `__pos__` | `(self)` | Equivale a `+self`. |
+| `__abs__` | `(self)` | Equivale a `abs(self)`. |
+| `__invert__` | `(self)` | Equivale a `~self`. |
+| `__complex__` | `(self)` | Equivale a `complex(self)`. |
+| `__int__` | `(self)` | Equivale a `int(self)`. |
+| `__float__` | `(self)` | Equivale a `float(self)`. |
+| `__index__` | `(self)` | Equivale a `operator.index(self)`. |
+| `__round__` | `(self)`<br/>`(self, ndigits)` | Equivale a `round(self)` o `round(self, ndigits)`. |
+| `__trunc__` | `(self)` | Equivale a `math.trunc(self)`. |
+| `__floor__` | `(self)` | Equivale a `math.floor(self)`. |
+| `__ceil__` | `(self)` | Equivale a `math.ceil(self)`. |
+
+> Cuando no se quiera soportar un operador determinado, es recomendable devolver el valor especial `NotImplemented`, que luego provocará una excepción de tipo `TypeError` fuera del método.
+
+Estos son los métodos para implementar gestores de recursos:
+
+| Método | Parámetros | Descripción |
+|:------:|:----------:|:------------|
+| `__enter__` | `(self)` | Se invoca al entrar en el contexto asociado al objeto manejado por la sentencia `with`. |
+| `__exit__` | `(self, extype, exvalue, traceback)` | Se invoca al salir del contexto asociado al objeto. Si se sale sin ninguna excepción, los tres últimos parámetros valdrán `None`, en caso contrario, se recibe el tipo de la excepción, su valor y su pila de ejecución. |
+
+Estos son los métodos para implementar protocolos asíncronos:
+
+| Método | Parámetros | Descripción |
+|:------:|:----------:|:------------|
+| `__await__` | `(self)` | Devuelve un iterador como resultado de la espera de un resultado con `await self`. |
+| `__aiter__` | `(self)` | Devuelve un iterador asíncrono con `aiter(self)`. |
+| `__anext__` | `(self)` | Devuelve el valor actual y pasa al siguiente en un iterador asíncrono con `anext(self)`. El método debe ser una corrutina `async def`. |
+| `__aenter__` | `(self)` | Entra en un contexto de gestión de recursos asíncrono con `async with`. El método debe ser una corrutina `async def`. |
+| `__aexit__` | `(self)` | Sale de un contexto de gestión de recursos asíncrono con `async with`. El método debe ser una corrutina `async def`. |
 
 ### Herencia y polimorfismo
 
@@ -1932,8 +2062,6 @@ Se puede utilizar `yield` dentro de una `async def`, pero en lugar de generar un
 ```
 
 Aquí las instancias de `foo` serán de tipo `async_generator`, mientras que las instancias de `bar` serán de tipo `coroutine`. Con el bucle `async for` lo que se hace es instanciar `foo`, como si hiciéramos `f = foo(n)`, e invocar `anext(f).send(None)` para obtener una excepción de tipo `StopIteration`, que contiene en sus argumentos el valor que queremos asignar a `i`. Cuando ya no quedan más elementos, sobre los que iterar, se lanza una excepción de tipo `StopAsyncIteration`.
-
-..TODO..
 
 ## Biblioteca estándar
 
