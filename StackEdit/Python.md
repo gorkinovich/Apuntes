@@ -292,9 +292,9 @@ Las cadenas de texto se delimitan con comillas dobles (`"`) o comillas simples (
 
 | Tipo | Forma | Descripción |
 |:----:|:-----:|:------------|
-| `str` | `"..."`<br/>`'...'`<br/>`str(b,e)` | Cadena de texto Unicode (UTF-8) inmutable, donde `b` es una cadena de bytes y `e` es una cadena de texto con la codificación. |
-| `bytes` | `b"..."`<br/>`b'...'`<br/>`bytes(s,e)` | Cadena de bytes inmutable, donde `s` es una cadena de texto y `e` es una cadena de texto con la codificación. |
-| `bytearray` | `bytearray(b)`<br/>`bytearray(s,e)` | Cadena de bytes mutable, donde `b` es una cadena de bytes, `s` es una cadena de texto y `e` es una cadena de texto con la codificación. |
+| `str` | `"..."`<br/>`'...'`<br/>`str(B,E)` | Cadena de texto Unicode (UTF-8) inmutable, donde `B` es una cadena de bytes y `E` es una cadena de texto con la codificación. |
+| `bytes` | `b"..."`<br/>`b'...'`<br/>`bytes(S,E)` | Cadena de bytes inmutable, donde `S` es una cadena de texto y `E` es una cadena de texto con la codificación. |
+| `bytearray` | `bytearray(B)`<br/>`bytearray(S,E)` | Cadena de bytes mutable, donde `B` es una cadena de bytes, `S` es una cadena de texto y `E` es una cadena de texto con la codificación. |
 
 El cada letra en Unicode, dependiendo de su representación, puede ocupar entre 1 y 3 bytes, mientras que en ASCII sólo puede ocupar 1 byte. Por ello, el tamaño en letras de una cadena `str` puede ser menor que en bytes y, por lo tanto, se requiere indicar la codificación a usar para transformar de texto a bytes y viceversa. Algunas de las codificaciones más conocidas son: `ascii`, `utf-8`, `utf-16`, `utf-32`, `latin`.
 
@@ -2192,37 +2192,168 @@ VERDE = 2
 AZUL = 4
 ```
 
+## Funciones nativas
+
+El lenguaje Python tiene las siguientes [funciones nativas](https://docs.python.org/3/library/functions.html):
+
+| Función | Descripción |
+|:-------:|:------------|
+| `abs(x)` | Da el valor absoluto del número `x`. |
+| `aiter(obj)` | Da un iterador asíncrono del contenedor `obj`. |
+| `all(iterable)` | Da `True` si todos los elementos del iterador son `True` (o si el contenedor está vacío). |
+| `anext(iterator)`<br/>`anext(iterator, default)` | Da el siguiente elemento del iterador asíncrono, si no quedan más elementos devuelve el valor por defecto o lanza `StopAsyncIteration`. |
+| `any(iterable)` | Da `True` si algún elemento del iterador es `True`. Si el contenedor está vacío devuelve `False`. |
+| `ascii(obj)` | Da la cadena de texto que representa al objeto, usando secuencias de escape para los caracteres no ASCII. |
+| `bin(x)` | Da la cadena de texto que representa el número entero `x` en binario. |
+| `bool(x=False)` | Da el valor booleano que representa al objeto `x`. |
+| `breakpoint(*args, **kws)` | Produce un punto de ruptura en la ejecución para invocar al depurador del lenguaje. |
+| `bytearray(b)`<br/>`bytearray(s,e)` | Da una cadena de bytes mutable, donde `b` es una cadena de bytes, `s` es una cadena de texto y `e` es una cadena de texto con la codificación. |
+| `bytes(b)`<br/>`bytes(s,e)` | Da una cadena de bytes inmutable, donde `b` es una cadena de bytes, `s` es una cadena de texto y `e` es una cadena de texto con la codificación. |
+| `callable(obj)` | Da `True` si el objeto puede ser usado como una función. |
+| `chr(n)` | Da el carácter Unicode que representa al número entero `n`. |
+| `@classmethod` | Transforma un método en un método de clase. |
+| `compile(source, filename, mode)` | Compila un fichero para devolver un objeto con el AST (árbol sintáctico abstracto) que poder ejecutar. |
+| `complex(real=0, imag=0)`<br/>`complex(string)` | Construye un número complejo a partir de dos números o de una cadena. |
+| `delattr(obj, name)` | Borra un atributo con nombre del objeto. |
+| `dict(**kwarg)`<br/>`dict(i, /, **kwarg)` | Construye un diccionario a partir de la información recibida en los argumentos y el iterador `i`. |
+| `dir()`<br/>`dir(obj)` | Da el nombre de los atributos del objeto o del ámbito local donde es invocada sin argumentos. |
+| `divmod(x, y)` | Da una tupla cuyo resultado es `(x // y, x % y)`. En el caso de que sean números flotantes, la primera componente es el resultado de `math.floor(x / y)`. |
+| `enumerate(iterable, start=0)` | Da una lista de tuplas, cuya primera componente es un entero (empezando por `start`) y la segunda cada elemento del iterador. |
+| `eval(expression, /, globals=None, locals=None)` | Evalúa una expresión para ejecutarla y obtener su resultado. La expresión puede ser un AST o una cadena de texto con código. |
+| `exec(object, globals=None, locals=None, /, *, closure=None)` | Ejecuta un objeto AST para obtener su resultado. |
+| `filter(function, iterable)` | Da un iterador que filtra elementos del iterador con una función predicado. |
+| `float(x=0.0)` | Construye un número real a partir de un número. |
+| `format(value, format_spec='')` | Da la cadena de texto que representa a `value` con el formato especificado en `format_spec`. |
+| `frozenset(iterable=set())` | Construye un conjunto inmutable a partir de un iterador. |
+| `getattr(obj, name)`<br/>`getattr(obj, name, default)` | Obtiene un atributo con nombre del objeto, devolviendo un valor por defecto si no existe o lanzando un `AttributeError` si no se indica un valor por defecto. |
+| `globals()` | Da un diccionario con el espacio de nombres del módulo actual. |
+| `hasattr(obj, name)` | Consulta si existe un atributo con nombre en el objeto. |
+| `hash(obj)` | Da el valor hash que representa al objeto. |
+| `help()`<br/>`help(request)` | Invoca al sistema de ayuda nativo. |
+| `hex(x)` | Da la cadena de texto que representa el número entero `x` en hexadecimal. |
+| `id(obj)` | Da un número entero que sirve como identificador único de un objeto mientras esté vivo en la memoria. |
+| `input()`<br/>`input(prompt)` | Pide al usuario que introduzca una cadena de texto por la terminal, mostrando el mensaje `prompt` previamente. |
+| `int(x=0)`<br/>`int(x, /, base=10)` | Construye un número entero a partir de un número o una cadena de texto, indicando la base en la que está codificada. |
+| `isinstance(obj, classinfo)` | Da `True` si el objeto es una instancia de la clase `classinfo`. |
+| `issubclass(class, classinfo)` | Da `True` si la clase `class` es una subclase de la clase `classinfo`. |
+| `iter(obj)`<br/>`iter(obj, sentinel)` | Da un iterador del contenedor `obj`. |
+| `len(s)` | Da el número de elementos del contenedor `s`. |
+| `list()`<br/>`list(iterable)` | Construye una lista a partir de un iterador. |
+| `locals()` | Da un diccionario con la tabla de nombres local actual. |
+| `map(function, iterable, /, *iterables)` | Da un iterador que aplica a los elementos del iterador una función. |
+| `max(iterable, /, *, key=None)`<br/>`max(iterable, /, *, default, key=None)`<br/>`max(arg1, arg2, /, *, *args, key=None)` | Da el mayor elemento en un iterador o secuencia de argumentos. Si el iterador es vacío se lanza un `ValueError` o se devuelve `default`. La parámetro `key` será una función que recibe un elemento y devuelve el valor clave. |
+| `min(iterable, /, *, key=None)`<br/>`min(iterable, /, *, default, key=None)`<br/>`min(arg1, arg2, /, *, *args, key=None)` | Da el menor elemento en un iterador o secuencia de argumentos. Si el iterador es vacío se lanza un `ValueError` o se devuelve `default`. El parámetro `key` será una función que recibe un elemento y devuelve el valor clave. |
+| `anext(iterator)`<br/>`anext(iterator, default)` | Da el siguiente elemento del iterador, si no quedan más elementos devuelve el valor por defecto o lanza `StopIteration`. |
+| `oct(x)` | Da la cadena de texto que representa el número entero `x` en octal. |
+| `open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)` | Abre un fichero y devuelve un objeto para manejarlo. |
+| `ord(c)` | Da el número entero que representa al carácter Unicode `c`. |
+| `por(base, exp, mod=None)` | Da el resultado de la operación `base ** exp` si `mod` es `None`, si no da el resultado de `(base ** exp) % mod`. |
+| `print(*objects, sep=' ', end='\n', file=None, flush=False)` | Muestra un mensaje por pantalla en la terminal. |
+| `property(fget=None, fset=None, fdel=None, doc=None)` | Decorador para crear una propiedad como atributo de una clase. |
+| `range(stop)`<br/>`range(start, stop, step=1)` | Construye una secuencia inmutable de números. |
+| `repr(obj)` | Da la cadena de texto que conforma la representación interna de un objeto. |
+| `reversed(seq)` | Da un iterador que recorre una secuencia iterable en orden inverso. |
+| `round(number, ndigits=None)` | Redondea un número con una precisión indicada. Si la precisión de `ndigits` es `None`, se redondea al número entero más cercano. |
+| `set()`<br/>`set(iterable)` | Construye un conjunto vacío o a partir de un iterador. |
+| `setattr(obj, name, value)` | Asigna o modifica un atributo con nombre del objeto. |
+| `slice(stop)`<br/>`slice(start, stop, step=1)` | Construye un objeto `slice` que representa los índices requeridos por `range`. |
+| `sorted(iterable, /, *, key=None, reverse=False)` |  Da un iterador que recorre de forma ordenada una secuencia iterable. El parámetro `key` será una función que recibe un elemento y devuelve el valor clave y `reverse` indica si se ha de ordenar en orden inverso o no. |
+| `@staticmethod` | Transforma un método en un método estático. |
+| `str(object='')`<br/>`str(object=b'', encoding='utf-8', errors='strict')` | Da una cadena de texto que representa a un objeto o una cadena binaria, con una codificación determinada. |
+| `sum(iterable, /, start=0)` | Da la suma de todos los elementos de un iterador. |
+| `super()`<br/>`super(type, object_or_type=None)` | Da el siguiente objeto proxy en la cadena de herencia actual. |
+| `tuple()`<br/>`tuple(iterable)` | Construye una tupla vacía o a partir de un iterador. |
+| `type(object)`<br/>`type(name, bases, dict, /, **kwds)` | Con un argumento da el tipo de un objeto. Con tres o más argumentos, devuelve una nueva instancia de una clase. |
+| `vars()`<br/>`vars(object)` | Da un diccionario con los atributos de un módulo, clase, instancia u otro objeto con el atributo `__dict__`. |
+| `<ip(*iterables, strict=False)` | Da un iterador en el que cada elemento es una tupla, donde cada componente es un elemento de los iteradores pasados como argumentos. |
+
 ## Biblioteca estándar
 
-La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Python es muy completa y comprende varias áreas de trabajo.
+La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Python es muy completa y comprende varias áreas de trabajo. Dentro del [tutorial oficial](https://docs.python.org/3/tutorial/) de Python, hay una introducción abarcando algunos aspectos básicos de la misma. Estas son las áreas o categorías que hay en la biblioteca:
+- [Manejo de texto](https://docs.python.org/3/library/text.html)
+- [Manejo de datos binarios](https://docs.python.org/3/library/binary.html)
+- [Tipos de datos del lenguaje](https://docs.python.org/3/library/datatypes.html)
+- [Números y matemáticas](https://docs.python.org/3/library/numeric.html)
+- [Programación funcional](https://docs.python.org/3/library/functional.html)
+- [Acceso a ficheros y directorios](https://docs.python.org/3/library/filesys.html)
+- [Persistencia de datos](https://docs.python.org/3/library/persistence.html)
+- [Compresión y archivado de datos](https://docs.python.org/3/library/archiving.html)
+- [Formatos de ficheros](https://docs.python.org/3/library/fileformats.html)
+- [Criptografía](https://docs.python.org/3/library/crypto.html)
+- [Manejo genérico de sistemas operativos](https://docs.python.org/3/library/allos.html)
+- [Ejecución concurrente](https://docs.python.org/3/library/concurrency.html)
+- [Comunicación entre procesos y redes](https://docs.python.org/3/library/ipc.html)
+- [Manejo de datos de internet](https://docs.python.org/3/library/netdata.html)
+- [Herramientas para lenguajes de marcado](https://docs.python.org/3/library/markup.html)
+- [Protocolos y soporte de internet](https://docs.python.org/3/library/internet.html)
+- [Multimedia](https://docs.python.org/3/library/mm.html)
+- [Localización de textos](https://docs.python.org/3/library/i18n.html)
+- [Frameworks para programas](https://docs.python.org/3/library/frameworks.html)
+- [Interfaces gráficas con Tk](https://docs.python.org/3/library/tk.html)
+- [Herramientas de desarrollo](https://docs.python.org/3/library/development.html)
+- [Depuración y análisis de ejecución](https://docs.python.org/3/library/debug.html)
+- [Empacado y distribución de software](https://docs.python.org/3/library/distribution.html)
+- [Servicios de ejecución de Python](https://docs.python.org/3/library/python.html)
+- [Interpretes propios de Python](https://docs.python.org/3/library/custominterp.html)
+- [Importación de módulos](https://docs.python.org/3/library/modules.html)
+- [Servicios del lenguaje Python](https://docs.python.org/3/library/language.html)
+- [Servicios de MS Windows](https://docs.python.org/3/library/windows.html)
+- [Servicios de Unix](https://docs.python.org/3/library/unix.html)
+- [Módulos reemplazados](https://docs.python.org/3/library/superseded.html)
 
-..TODO..
+Algunos de los módulos más destacados son los siguientes:
 
-### Tipos y funciones nativas
-
-..
-
-### Funciones matemáticas
-
-..
-
-### Manipular cadenas
-
-..
-
-### Manipular estructuras
-
-..
-
-### Manipular funciones
-
-..
-
-### Manipular el sistema de ficheros
-
-..
-
-### Manipular el sistema operativo
-
-..
+| Módulo | Descripción |
+|:------:|:------------|
+| [`string`](https://docs.python.org/3/library/string.html) | Operaciones comunes con cadenas de texto. |
+| [`re`](https://docs.python.org/3/library/re.html) | Operaciones con expresiones regulares. |
+| [`struct`](https://docs.python.org/3/library/struct.html) | Interpretar bytes como paquetes de datos binarios. |
+| [`codecs`](https://docs.python.org/3/library/codecs.html) | Registro y clases base de codificación de texto. |
+| [`datetime`](https://docs.python.org/3/library/datetime.html) | Tipos básicos para fechas y horas. |
+| [`zoneinfo`](https://docs.python.org/3/library/zoneinfo.html) | Soporte para los usos horarios de la [IANA](https://es.wikipedia.org/wiki/Internet_Assigned_Numbers_Authority). |
+| [`calendar`](https://docs.python.org/3/library/calendar.html) | Funciones generales con calendarios. |
+| [`collections`](https://docs.python.org/3/library/collections.html) | Tipos de datos contenedores. |
+| [`heapq`](https://docs.python.org/3/library/heapq.html) | Algoritmo del montículo con una cola. |
+| [`bisect`](https://docs.python.org/3/library/bisect.html) | Algoritmo del array de bisección. |
+| [`array`](https://docs.python.org/3/library/array.html) | Array de valores numéricos eficiente. |
+| [`weakref`](https://docs.python.org/3/library/weakref.html) | Referencias débiles. |
+| [`types`](https://docs.python.org/3/library/types.html) | Creación de tipos dinámicos y nombres para tipos nativos. |
+| [`copy`](https://docs.python.org/3/library/copy.html) | Operaciones de copia ligera y profunda. |
+| [`enum`](https://docs.python.org/3/library/enum.html) | Soporte para enumeraciones. |
+| [`graphlib`](https://docs.python.org/3/library/graphlib.html) | Operaciones con estructuras de tipo grafo. |
+| [`numbers`](https://docs.python.org/3/library/numbers.html) | Clases abstractas base para números. |
+| [`math`](https://docs.python.org/3/library/math.html) | Funciones matemáticas. |
+| [`cmath`](https://docs.python.org/3/library/cmath.html) | Funciones matemáticas para números complejos. |
+| [`decimal`](https://docs.python.org/3/library/decimal.html) | Aritmética de punto fijo y punto flotante. |
+| [`fractions`](https://docs.python.org/3/library/fractions.html) | Números racionales. |
+| [`random`](https://docs.python.org/3/library/random.html) | Generación de números pseudo-aleatorios. |
+| [`statistics`](https://docs.python.org/3/library/statistics.html) | Funciones matemáticas estadísticas. |
+| [`operator`](https://docs.python.org/3/library/operator.html) | Operadores estándar como funciones. |
+| [`os`](https://docs.python.org/3/library/os.html) | Interfaces varias del sistema operativo. |
+| [`io`](https://docs.python.org/3/library/io.html) | Herramientas base para trabajar con flujos. |
+| [`time`](https://docs.python.org/3/library/time.html) | Acceso y conversión de tiempos. |
+| [`logging`](https://docs.python.org/3/library/logging.html) | Sistema para registrar eventos. |
+| [`curses`](https://docs.python.org/3/library/curses.html) | Gestor para representar una terminal de texto. |
+| [`pathlib`](https://docs.python.org/3/library/pathlib.html) | Rutas del sistema de fichero. |
+| [`os.path`](https://docs.python.org/3/library/os.path.html) | Manipulación estándar de rutas. |
+| [`filecmp`](https://docs.python.org/3/library/filecmp.html) | Comparación de ficheros y directorios. |
+| [`tempfile`](https://docs.python.org/3/library/tempfile.html) | Generación temporal de ficheros y directorios. |
+| [`shutil`](https://docs.python.org/3/library/shutil.html) | Operaciones de alto nivel con ficheros. |
+| [`sqlite3`](https://docs.python.org/3/library/sqlite3.html) | Interfaz DB-API 2.0 para bases de datos SQLite. |
+| [`zipfile`](https://docs.python.org/3/library/zipfile.html) | Lectura y escritura de ficheros ZIP. |
+| [`tarfile`](https://docs.python.org/3/library/tarfile.html) | Lectura y escritura de ficheros TAR. |
+| [`threading`](https://docs.python.org/3/library/threading.html) | Paralelismo basado en hilos. |
+| [`multiprocessing`](https://docs.python.org/3/library/multiprocessing.html) | Paralelismo basado en procesos. |
+| [`queue`](https://docs.python.org/3/library/queue.html) | Clase cola síncrona. |
+| [`asyncio`](https://docs.python.org/3/library/asyncio.html) | Lectura y escritura asíncrona. |
+| [`socket`](https://docs.python.org/3/library/socket.html) | Interfaz de red de bajo nivel. |
+| [`json`](https://docs.python.org/3/library/json.html) | Codificador y decodificador de JSON. |
+| [`html`](https://docs.python.org/3/library/html.html) | Soporte para HTML. |
+| [`xml.dom`](https://docs.python.org/3/library/xml.dom.html) | Soporte para DOM. |
+| [`xml.sax`](https://docs.python.org/3/library/xml.sax.html) | Soporte para SAX2. |
+|  [`webbrowser`](https://docs.python.org/3/library/webbrowser.html) | Controlador básico del navegador web. |
+| [`urllib`](https://docs.python.org/3/library/urllib.html) | Manejo de URLs. |
+| [`http`](https://docs.python.org/3/library/http.html) | Soporte para HTTP. |
+| [`socketserver`](https://docs.python.org/3/library/socketserver.html) | Framework para servidores de red. |
+| [`ipaddress`](https://docs.python.org/3/library/ipaddress.html) | Soporte para manipular IPv4/IPv6. |
 
