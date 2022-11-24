@@ -1619,7 +1619,75 @@ Estos son los métodos para implementar protocolos asíncronos:
 
 ### Herencia y polimorfismo
 
-..TODO..
+Las clases pueden heredar definiciones de otras clases y para acceder a ellas se utiliza el algoritmo [MRO](https://www.python.org/download/releases/2.3/mro/) descrito al inicio de la sección. Es por ello que el orden en el que se definen los padres de una clase es importante. Por ejemplo:
+
+```Python
+# Fichero: herencia.py
+
+class Abuelos:
+    def __init__(self):
+        print("Los abuelos han llegado.")
+
+    def saludar(self):
+        print("¡Los abuelos saludan!")
+
+class Padres(Abuelos):
+    def __init__(self):
+        super().__init__()
+        print("Los padres han llegado.")
+
+    def saludar(self):
+        print("¡Los padres saludan!")
+
+class Tíos(Abuelos):
+    def __init__(self):
+        super().__init__()
+        print("Los tíos han llegado.")
+
+    def saludar(self):
+        print("¡Los tíos saludan!")
+
+class Hijos(Padres, Tíos):
+    def __init__(self):
+        super().__init__()
+        print("Los hijos han llegado.")
+
+    def saludar(self, salsup=True):
+        if salsup:
+            super(Hijos, self).saludar()
+        print("¡Los hijos saludan!")
+
+    def saludos(self):
+        Abuelos.saludar(self)
+        Padres.saludar(self)
+        Tíos.saludar(self)
+        self.saludar(False)
+
+if __name__ == "__main__":
+    hijos = Hijos()
+    print()
+    hijos.saludar()
+    print()
+    hijos.saludos()
+```
+
+```
+$ python herencia.py
+Los abuelos han llegado.
+Los tíos han llegado.
+Los padres han llegado.
+Los hijos han llegado.
+
+¡Los padres saludan!
+¡Los hijos saludan!
+
+¡Los abuelos saludan!
+¡Los padres saludan!
+¡Los tíos saludan!
+¡Los hijos saludan!
+```
+
+La función nativa `super` ayuda a seleccionar el siguiente tipo en la secuencia de herencia para la instancia de un objeto. Esta función recibe dos parámetros posibles, un tipo y una instancia, pero se pueden omitir usando `super()`, que equivale a poner `super(Hijos, self)` dentro de la clase `Hijos`. En caso de querer acceder a un método concreto, de uno de los padres, podemos usar la notación `Padre.método(self, ...)`, como es el caso de `Abuelos.saludar(self)`.
 
 ### Decoradores
 
