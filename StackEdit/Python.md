@@ -2131,6 +2131,67 @@ Se puede utilizar `yield` dentro de una `async def`, pero en lugar de generar un
 
 Aquí las instancias de `foo` serán de tipo `async_generator`, mientras que las instancias de `bar` serán de tipo `coroutine`. Con el bucle `async for` lo que se hace es instanciar `foo`, como si hiciéramos `f = foo(n)`, e invocar `anext(f).send(None)` para obtener una excepción de tipo `StopIteration`, que contiene en sus argumentos el valor que queremos asignar a `i`. Cuando ya no quedan más elementos, sobre los que iterar, se lanza una excepción de tipo `StopAsyncIteration`.
 
+## Enumeraciones
+
+La forma básica de crear una enumeración es de la siguiente manera:
+
+```Python
+>>> from enum import Enum
+>>> class Color(Enum):
+...     ROJO  = 1
+...     VERDE = 2
+...     AZUL  = 3
+...
+>>> Color.ROJO
+<Color.ROJO: 1>
+>>> print(Color.ROJO)
+Color.ROJO
+```
+
+La clase `Enum` dentro del módulo [`enum`](https://docs.python.org/3/library/enum.html) nos permite definir enumeraciones de valores, de forma similar a otros lenguajes. Por indicaciones, de la guía de estilo del código, se recomienda poner en mayúsculas los nombres identificadores, para hacer notar que se tratan de valores constantes. También podemos hacer lo anterior, asignando valores de forma automática con la función `auto`:
+
+```Python
+>>> from enum import Enum, auto
+>>> class Color(Enum):
+...     ROJO  = auto()
+...     VERDE = auto()
+...     AZUL  = auto()
+...
+>>> (Color.ROJO, Color.VERDE, Color.AZUL)
+(<Color.ROJO: 1>, <Color.VERDE: 2>, <Color.AZUL: 3>)
+```
+
+> Existe el decorador `@unique` para comprobar que en efecto los  valores asignados a cada identificador son únicos dentro de la enumeración, como alternativa a la función `auto()` si necesitamos usar una secuencia de valores distinta.
+
+Las enumeraciones de tipo `Enum` sólo pueden asignar un único valor por variable. Existen variantes como `IntEnum`, `StrEnum` o `ReprEnum`, que limitan los valores a los que se puede inicializar cada identificador de la enumeración a números enteros y cadenas de texto. En caso de querer asignar a una variable una combinación de valores, haremos lo siguiente:
+
+```Python
+>>> from enum import Flag, auto
+>>> class Color(Flag):
+...     ROJO  = auto()
+...     VERDE = auto()
+...     AZUL  = auto()
+...
+>>> (Color.ROJO, Color.VERDE, Color.AZUL)
+(<Color.ROJO: 1>, <Color.VERDE: 2>, <Color.AZUL: 4>)
+>>> fucsia = Color.ROJO | Color.AZUL
+>>> fucsia
+<Color.ROJO|AZUL: 5>
+```
+
+El tipo `Flag` nos permite crear enumeraciones para trabajar con combinaciones de valores usando los operadores a nivel de bits (`&`, `|`, `^`, `~`). Existe `IntFlag` como variante a `Flag`, ya que este último no permite comparaciones con valores que no pertenezcan al mismo tipo de enumeración, mientras que el primero permite ser comparado con otros valores enteros. Esta diferencia también se cumple entre `IntEnum` y `Enum`. También se pueden usar los operadores a nivel de bits con `IntFlag`, para trabajar con combinaciones de valores. Los operadores de igualdad y desigualdad sí se pueden utilizar con todos los tipos de enumeración, pero tanto `Enum` como `Flag`, darán como falsa la condición `Color.ROJO == 1`, cosa que no pasaría de heredar de `IntEnum` o `IntFlag`.
+
+Los valores en una enumeración tienen dos atributos importantes: `name` y `value`. El primero muestra el nombre identificador del valor y el segundo el valor asignado:
+
+```Python
+>>> for c in Color:
+...     print(c.name, "=", c.value)
+...
+ROJO = 1
+VERDE = 2
+AZUL = 4
+```
+
 ## Biblioteca estándar
 
 La [biblioteca estándar](https://docs.python.org/3/library/index.html) de Python es muy completa y comprende varias áreas de trabajo.
