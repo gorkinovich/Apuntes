@@ -1012,7 +1012,7 @@ En cuanto al tipo de expresiones que se pueden utilizar, la implementación actu
 
 ## Sentencias de control
 
-Python no tiene separador de **líneas de programa**, asume que cada nueva línea del código es una línea separada de programa si están al mismo **nivel de tabulación**. Cuando la siguiente línea tiene un nivel mayor de tabulación, puede deberse a que estamos continuando la expresión de la línea anterior o estamos iniciando un nuevo bloque de programa, porque la línea anterior era una sentencia de control especial para ello.
+Python no tiene separador de **líneas de programa**, asume que cada nueva línea del código es una línea separada de programa si están al mismo **nivel de tabulación**. Cuando la siguiente línea tiene un nivel mayor de tabulación, puede deberse a que estamos continuando la expresión de la línea anterior o estamos iniciando un nuevo bloque de programa, porque la línea anterior era una sentencia de control especial para ello. En ocasiones, para dividir una sentencia en varias líneas, además de añadir un aumento de la tabulación, hará falta que la línea previa termine con `\`, para hacer explícito que dichas líneas conforman una sola.
 
 Para poder tener dos líneas de programa en una misma línea, se utiliza el `;` para separar las expresiones, por ejemplo, `v += 1; print(v)`. Aunque no es recomendable abusar de esta opción, para evitar que se ofusque mucho el código y se pierda claridad en su lectura.
 
