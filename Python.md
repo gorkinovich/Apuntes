@@ -1292,7 +1292,7 @@ Un patrón es una definición de un valor estructurado que combina valores liter
 | Tipos | `Tipo()`, `Tipo(a,b,c)`, `Tipo(a,n=b)`, etc. | Tipos con una serie de parámetros posicionales o con nombre, donde cada argumento especificado es un patrón con el que ajustar los miembros del objeto. |
 | Miembros | `obj.miembro ` | Se usa el valor de un atributo en un objeto como patrón contra el que ajustar. |
 | Enumeraciones | `Tipo.NOMBRE` | Las valores de enumeraciones requieren indicar el nombre del tipo donde han sido definidos, para evitar que la sentencia los utilice como variables que asignar. |
-| Alias. | `p as v ` | Permite asignar el valor que se ajusta con el patrón `p` en la variable `v`. |
+| Alias | `p as v ` | Permite asignar el valor que se ajusta con el patrón `p` en la variable `v`. |
 | Comodín | `_` | Se usa como una variable especial para cuando se quieren descartar valores que no se van a usar. Por ejemplo, si queremos un patrón que obtenga la cabeza de una lista, sería `[x, *_]`. |
 
 Sobre la asignación de variables, en los parámetros con nombre (`nombre=patrón`), no se modifican los atributos del objeto, sino las variables del patrón. Del mismo modo, cuando se usa un miembro de un objeto, este no se verá modificado como ocurre con las variables sueltas.
