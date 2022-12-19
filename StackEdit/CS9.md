@@ -71,6 +71,8 @@ El primer grupo de literales es el valor nulo, que representa la semántica vac�
 
 $$\texttt{null}$$
 
+> Técnicamente hablando, el valor nulo se utiliza para indicar que una variable, con una referencia a un objeto, no está apuntando a ninguna instancia del tipo que tiene y por lo tanto no tiene valor.
+
 El siguiente grupo son los [booleanos](https://es.wikipedia.org/wiki/Booleano). Estos se utilizan para dar valor a condiciones que pueden ser ciertas o falsas. Su sintaxis es la siguiente:
 
 $$\textcolor{red}{\char123} \texttt{true} \textcolor{red}{|} \texttt{false} \textcolor{red}{\char125}$$
@@ -96,7 +98,7 @@ Los sufijos validos son:
 | `l`, `L` | `long` | Entero largo con signo (64 bits). |
 | `ul`, `lu`, `uL`, `lU`,<br/>`Ul`, `Lu`, `UL`, `LU` | `ulong` | Entero largo sin signo (64 bits). |
 
-Además, se puede usar `_` como separador entre dígitos, para agrupar los números de la forma que necesitemos.
+Además, se puede usar `_` como separador entre dígitos, para agrupar los números de la forma que necesitemos. Por ejemplo, `1_234` o `0x1234_5678`.
 
 El siguiente grupo son los números reales, cuya sintaxis es:
 
