@@ -324,14 +324,14 @@ Al igual que con los enteros, `float` y `double` también tienen las constantes 
 También tienen las funciones para convertir de cadena a número y viceversa, a lo que hay que sumar, entre muchas otras, funciones estáticas para comprobar si un número cumple una condición. Por ejemplo, `IsNaN` comprueba si el valor es en efecto `NaN`, porque en este caso concreto cualquier comparación con esta constante dará falso como resultado:
 
 ```csharp
-using System;
+using static System.Console;
 
-var número = 1.0 / 0.0;                               // Infinito
-Console.WriteLine(número == double.PositiveInfinity); // True
+var número = 1.0 / 0.0;                       // Infinito
+WriteLine(número == double.PositiveInfinity); // True
 
-número /= double.PositiveInfinity;       // NaN
-Console.WriteLine(número == float.NaN);  // False
-Console.WriteLine(double.IsNaN(número)); // True
+número /= double.PositiveInfinity; // NaN
+WriteLine(número == float.NaN);    // False
+WriteLine(double.IsNaN(número));   // True
 ```
 
 El tipo `decimal` también comparte con los enteros las constantes `MinValue` y `MaxValue`, así como la conversión de número a cadena y viceversa. A ello se le suma las constantes:
@@ -365,19 +365,224 @@ Estas son las conversiones implícitas que permite el lenguaje:
 Para hacer la conversión inversa habrá que realizar un *casting* para evitar que el compilador nos de un error, ya que en esos casos la probabilidad de pérdida de información es muy alta. Por ejemplo:
 
 ```csharp
-using System;
+using static System.Console;
 
 byte a = 128;
 int b = a * 2;
-Console.WriteLine($"{a}, {b}"); // 128, 256
+WriteLine($"{a}, {b}"); // 128, 256
 
 a = (byte)b;
-Console.WriteLine($"{a}, {b}"); // 0, 256
+WriteLine($"{a}, {b}"); // 0, 256
 ```
 
 ## Operadores
 
-..
+### Booleanos
+
+El primer bloque de operadores booleanos son los de comparación:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X == Y`  | `X` es igual a `Y`. |
+| `X != Y`  | `X` no es igual a `Y`. |
+| `X <= Y`  | `X` es menor o igual que `Y`. |
+| `X < Y`   | `X` es menor que `Y`. |
+| `X >= Y`  | `X` es mayor o igual que `Y`. |
+| `X > Y`   | `X` es mayor que `Y`. |
+| `X is T`   | `X` es de tipo `T`. |
+
+El primer bloque de operadores booleanos son los lógicos:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `!X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de `X`. |
+| `X && Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
+| `X || Y`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
+
+Estos operadores nos permiten componer condiciones más complejas. Para entenderlos mejor aquí tenemos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
+
+|   `X`   |   `Y`   |  `!X`   |  `!Y`   | `X && Y`  | `X || Y` |
+|:-------:|:-------:|:-------:|:-------:|:---------:|:--------:|
+| `true`  | `true`  | `false` | `false` |  `true`   | `true`   |
+| `false` | `true`  | `true`  | `false` |  `false`  | `true`   |
+| `true`  | `false` | `false` | `true`  |  `false`  | `true`   |
+| `false` | `false` | `true`  | `true`  |  `false`  | `false`  |
+
+Los operadores de conjunción y disyunción funcionan por [cortocircuito](https://es.wikipedia.org/wiki/Evaluaci%C3%B3n_de_cortocircuito), por lo que si el operando izquierdo es suficiente para determinar el resultado, no se evaluará el operando derecho. Es decir, si `X` es `false` en una conjunción, el resultado será `false`, pero si es `true` en una disyunción, el resultado será `true`.
+
+Por último, existe el operador condicional ternario `C ? T : F`, donde se evalúa la condición `C` y si esta es cierta, se devuelve el valor de la expresión `T`, si es falsa se devuelve el valor de `F`.
+
+### Numéricos
+
+El primer bloque de operadores numéricos es el de los aritméticos:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `+X` | Signo positivo. |
+| `-X` | Signo negativo. |
+| `X + Y` | Suma: `X` más `Y`. |
+| `X - Y` | Resta: `X` menos `Y`. |
+| `X * Y` | Multiplicación: `X` por `Y`. |
+| `X / Y` | División: `X` entre `Y`. |
+| `X % Y` | Resto de dividir `X` entre `Y`. |
+| `++X`, `X++` | Incremento prefijo y postfijo. |
+| `--X`, `X--` | Decremento prefijo y postfijo. |
+
+La diferencia entre el incremento, o decremento, prefijo y postfijo radica en que la versión postfija devuelve el valor de `X` previo al cambio. Con la versión prefija se realiza el cambio y entonces se devuelve el valor de `X`:
+
+```csharp
+using static System.Console;
+
+int x = 1;
+WriteLine(++x); // 2
+WriteLine(x++); // 2
+WriteLine(x);   // 3
+```
+
+El segundo bloque son los operadores a nivel de bits:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de `X`. |
+| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
+| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
+| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de `X` con `Y`. |
+| `X << Y` | Desplazamiento a la izquierda `Y` bits de `X`. |
+| `X >> Y` | Desplazamiento a la derecha `Y` bits de `X`. |
+
+De modo similar a los operadores lógicos, están son sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
+
+| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X | Y` | `X ^ Y` |
+|:---:|:---:|:----:|:----:|:-------:|:-------:|:-------:|
+| `1` | `1` |  `0` |  `0` |   `1`   |   `1`   |   `0`   |
+| `0` | `1` |  `1` |  `0` |   `0`   |   `1`   |   `1`   |
+| `1` | `0` |  `0` |  `1` |   `0`   |   `1`   |   `1`   |
+| `0` | `0` |  `1` |  `1` |   `0`   |   `0`   |   `0`   |
+
+Los operadores aritméticos sólo se aplican a los tipos básicos `int`, `uint`, `long`, `ulong`, `float`, `double` y `decimal`. Mientras que los operadores a nivel de bit sólo se aplican a los tipos básicos `int`, `uint`, `long` y `ulong`. El resto de tipos básicos numéricos enteros, serán convertidos a `int`, por ejemplo:
+
+```csharp
+using static System.Console;
+
+byte a = 128;
+WriteLine((a).GetType());     // System.Byte
+WriteLine((a + 2).GetType()); // System.Int32
+```
+
+La opción de compilación `CheckForOverflowUnderflow`, activa o desactiva si se debe vigilar el desbordamiento, por arriba o por abajo, de una operación aritmética. Cuando está activada, si al realizar una operación se supera el límite del rango de valores del tipo utilizado, se lanzará una excepción `OverflowException`. Con los operadores `checked` y `unchecked` podemos activar o desactivar este comportamiento. Por ejemplo:
+
+```csharp
+using static System.Console;
+
+var a = double.MaxValue;
+try {
+    checked {
+        WriteLine(unchecked((int) a));
+        WriteLine((int) a);
+    }
+} catch (OverflowException e) {
+    WriteLine(e.Message);
+}
+```
+
+El primer *casting* no dará error, pero el segundo sí y saltará al bloque del `catch`. La sintaxis de estos operadores permite una expresión entre paréntesis (`checked(expresión)`) o un bloque entre llaves (`checked { expresiones }`).
+
+### Tipos y objetos
+
+El siguiente bloque son operadores básicos para manipular objetos:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X.Y` | Acceso al miembro `Y` de `X`. |
+| `X[Y]` | Acceso al elemento `Y` en `X`. |
+| `X()` | Invocación de la función `X`. |
+| `(T)X` | *Casting* para convertir el resultado de `X` al tipo `T`. |
+| `X as T` | Convierte el tipo del resultado de `X` a `T`. Si no se puede devuelve `null`, por ello sólo se puede aplicar a tipo por referencia. |
+
+Este bloque son operadores relacionados con la comprobación de referencias nulas:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X?.Y` | Acceso condicional a un miembro cuando `X` no es `null`. |
+| `X?[Y]` | Acceso condicional a un elemento cuando `X` no es `null`. |
+| `X ?? Y` | Devuelve `X` si no es `null`, en caso contrario devuelve `Y`. |
+| `X!` | Permite saltarse las restricciones del modo *nullable*. Es un modo para tipos por referencia, que obliga al compilador dar un aviso si cree que hay una posibilidad de que ocurra una `NullReferenceException`, al intentar acceder al contenido de `X`. |
+
+Estos operadores permiten un acceso avanzado a elementos de un contenedor:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `^X` | Índices negativos, para acceder a los elementos desde el final del contenedor. El valor de la expresión `X` ha de ser un número entero. Por ejemplo, `^1` sería el último elemento. |
+| `X..Y` | Rango de índices, para acceder a los elementos de `X` hasta `Y-1`. El valor de las expresiones `X` e `Y` han de ser números enteros o índices negativos. |
+
+El lenguaje C# permite acceso a la memoria a bajo nivel mediante punteros, para poder trabajar con código nativo. Sin embargo, no es recomendable su uso, salvo que se necesite comunicarse el programa con bibliotecas escritas en código nativo. El código que utiliza punteros debe delimitarse por un bloque `unsafe` y activar la opción de compilación para ello. Estos son los operadores disponibles para punteros:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X->Y` | Acceso al miembro `Y` de `X`. |
+| `&X` | Dirección de `X` en la memoria. |
+| `*X` | Contenido apuntado por `X` en la memoria. |
+
+### Especiales
+
+Estos son operadores especiales del lenguaje, cuyo uso será estudiado mejor en siguientes secciones:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `await` | Espera asíncrona para el resultado de una tarea. |
+| `default` | Devuelve el valor por defecto para un tipo. |
+| `delegate` | Permite definir funciones anónimas. |
+| `nameof` | Devuelve como una cadena de texto el nombre de un elemento (variable, tipo o miembro). Se resuelve en tiempo de compilación. |
+| `new` | Reserva espacio en la memoria para un objeto, ya sea un tipo por valor (en la pila) o un tipo por referencia (en el montículo). |
+| `sizeof` | Da el tamaño que ocupa en memoria un tipo por valor. Está limitado a código `unsafe`, salvo para tipos básicos, por ejemplo `sizeof(int)`. |
+| `switch` | Ramificación por encaje de patrones. |
+| `stackalloc` | Modificador para reservar memoria en la pila de programa. |
+| `typeof` | Devuelve el tipo de un parámetro de tipo en genéricos. |
+| `with` | Modificación de objetos inmutables. |
+| `=>` | Operador para definir lambdas. |
+
+### Asignación
+
+Estos son los operadores de asignación disponibles:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X = Y` | Asigna `Y` a `X`. |
+| `X += Y` | Equivale a `X = X + Y`. |
+| `X -= Y` | Equivale a `X = X - Y`. |
+| `X *= Y` | Equivale a `X = X * Y`. |
+| `X /= Y` | Equivale a `X = X / Y`. |
+| `X %= Y` | Equivale a `X = X % Y`. |
+| `X &= Y` | Equivale a `X = X & Y`. |
+| `X |= Y` | Equivale a `X = X | Y`. |
+| `X ^= Y` | Equivale a `X = X ^ Y`. |
+| `X <<= Y` | Equivale a `X = X << Y`. |
+| `X >>= Y` | Equivale a `X = X >> Y`. |
+| `X ??= Y` | Equivale a `X = X ?? Y`. |
+
+### Precedencia
+
+Esta es la precedencia de mayor a menor de los operadores del lenguaje:
+
+| Categoría | Operaciones | Asociatividad |
+|:----------|:-----------:|:-------------:|
+| Primarios | `x.y`, `f(x)`, `a[i]`, `x?.y`, `x?[y]`, `x++`, `x--`, `x!`, `new`, `typeof`, `checked`, `unchecked`, `default`, `nameof`, `delegate`, `sizeof`, `stackalloc`, `x->y` | Izquierda |
+| Unarios | `+x`, `-x`, `!x`, `~x`, `++x`, `--x`, `^x`, `(T)x`, `await`, `&x`, `*x`, `true`, `false` | Izquierda |
+| Rangos | `x..y` | Izquierda |
+| Sentencias | `switch`, `with` | Izquierda |
+| Multiplicación | `x * y`, `x / y`, `x % y` | Izquierda |
+| Adición | `x + y`, `x – y` | Izquierda |
+| Desplazamiento | `x << y`, `x >> y` | Izquierda |
+| Relacionales | `x < y`, `x > y`, `x <= y`, `x >= y`, `x is T`, `x as T` | Izquierda |
+| Igualdad | `x == y`, `x != y` | Izquierda |
+| Conjunción | `x & y` | Izquierda |
+| Disyunción exclusiva | `x ^ y` | Izquierda |
+| Disyunción | `x | y` | Izquierda |
+| Conjunción condicional | `x && y` | Izquierda |
+| Disyunción condicional | `x || y` | Izquierda |
+| Nulidad | `x ?? y` | Derecha |
+| Condicional | `c ? t : f` | Derecha |
+| Asignación y lambas | `x = y`, `x += y`, `x -= y`, `x *= y`, `x /= y`, `x %= y`, `x &= y`, `x |= y`, `x ^= y`, `x <<= y`, `x >>= y`, `x ??= y`, `=>` | Derecha |
 
 ## Control de la ejecución
 
