@@ -82,7 +82,7 @@ Al escribir `///`, en Visual Studio, nos generará automáticamente las etiqueta
     </summary> */
 ```
 
-## Nombres
+## Nombres identificadores
 
 En un programa es necesario poner nombres a los elementos con los que trabajamos. Para ello, un identificador se compone de una sucesión de letras (mayúsculas y minúsculas), dígitos (`0`-`9`) y/o el guion bajo (`_`), que no debe comenzar por dígito. No se podrán usar las [palabras reservadas](https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/) del lenguaje como identificadores, salvo que se utilice como prefijo el símbolo `@` (por ejemplo, `@class`).
 
@@ -245,7 +245,7 @@ Con el prefijo `@` la cadena será "cruda" y no tendrá en cuenta ninguna secuen
 
 ## Constantes
 
-Se pueden declarar constantes de la siguiente manera:
+Una constante es un valor fijo con nombre. Se pueden declarar de la siguiente manera:
 
 $$\texttt{const}\ \mathit{tipo}\ \mathit{nombre_1}\ \texttt{=}\ \mathit{literal_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \texttt{=}\ \mathit{literal_n} \textcolor{red}{]} \texttt{;}$$
 
@@ -253,7 +253,7 @@ Su valor no se puede modificar durante la ejecución, de ahí que sean constante
 
 ## Variables
 
-La sintaxis estándar para definir variables es la siguiente:
+Una variable es un valor con nombre que puede variar durante la ejecución del programa. La sintaxis estándar para definir variables es la siguiente:
 
 $$\mathit{tipo}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{;}$$
 
@@ -330,7 +330,7 @@ var número = 1.0 / 0.0;                       // Infinito
 WriteLine(número == double.PositiveInfinity); // True
 
 número /= double.PositiveInfinity; // NaN
-WriteLine(número == float.NaN);    // False
+WriteLine(número == double.NaN);   // False
 WriteLine(double.IsNaN(número));   // True
 ```
 
@@ -376,6 +376,8 @@ WriteLine($"{a}, {b}"); // 0, 256
 ```
 
 ## Operadores
+
+En esta sección veremos por encima los operadores disponibles en el lenguaje. En algunos casos particulares se verán con más detalles en secciones posteriores.
 
 ### Booleanos
 
@@ -515,6 +517,8 @@ Estos operadores permiten un acceso avanzado a elementos de un contenedor:
 | `^X` | Índices negativos, para acceder a los elementos desde el final del contenedor. El valor de la expresión `X` ha de ser un número entero. Por ejemplo, `^1` sería el último elemento. |
 | `X..Y` | Rango de índices, para acceder a los elementos de `X` hasta `Y-1`. El valor de las expresiones `X` e `Y` han de ser números enteros o índices negativos. |
 
+### Punteros
+
 El lenguaje C# permite acceso a la memoria a bajo nivel mediante punteros, para poder trabajar con código nativo. Sin embargo, no es recomendable su uso, salvo que se necesite comunicarse el programa con bibliotecas escritas en código nativo. El código que utiliza punteros debe delimitarse por un bloque `unsafe` y activar la opción de compilación para ello. Estos son los operadores disponibles para punteros:
 
 | Operación | Descripción |
@@ -525,7 +529,7 @@ El lenguaje C# permite acceso a la memoria a bajo nivel mediante punteros, para 
 
 ### Especiales
 
-Estos son operadores especiales del lenguaje, cuyo uso será estudiado mejor en siguientes secciones:
+Estos son operadores especiales del lenguaje:
 
 | Operación | Descripción |
 |:---------:|:-----------:|
@@ -584,35 +588,210 @@ Esta es la precedencia de mayor a menor de los operadores del lenguaje:
 | Condicional | `c ? t : f` | Derecha |
 | Asignación y lambas | `x = y`, `x += y`, `x -= y`, `x *= y`, `x /= y`, `x %= y`, `x &= y`, `x |= y`, `x ^= y`, `x <<= y`, `x >>= y`, `x ??= y`, `=>` | Derecha |
 
-## Control de la ejecución
+## Funciones
 
-..
+Una función es un bloque de código con nombre, que podemos parametrizar, para obtener diferentes resultados. Para definir una se utiliza la siguiente sintaxis:
 
-### Condicionales
+$$\textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
 
-..
+$$\textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;}$$
 
-### Bucles
+Una función tiene un tipo de retorno, pero si no devuelve nada usará `void` como tipo del resultado. También se permite usar `dynamic` como tipo de retorno, con las implicaciones que ello tiene para la ejecución. Luego se puede tener entre cero y N parámetros, cuya sintaxis es:
 
-..
+$$\textcolor{red}{[} \texttt{ref} \textcolor{red}{|} \texttt{out} \textcolor{red}{|} \texttt{in} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{\char125}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \texttt{,}$$
 
-### Excepciones
+$$\textcolor{red}{\dots} \texttt{,}\ \texttt{params}\ \mathit{tipo}\texttt{[]}\ \mathit{nombre_n}$$
 
-..
+Cada parámetro tiene que tener un tipo concreto o dinámico. También pueden tener una serie de modificadores de comportamiento, que también serán necesarios usarlos al llamar a la función, de modo que:
+
+| Llamada | Descripción |
+|:-------:|:------------|
+| `f(x)` | `x` se pasa por valor. |
+| `f(ref x)` | `x` se pasa por referencia. |
+| `f(out x)` | `x` recibe por referencia un resultado. |
+| `f(in x)` | `x` se pasa por referencia en modo sólo lectura. |
+
+Por la naturaleza de estos modificadores, es necesario usar una variable como argumento en la llamada. El motivo de obligar a pasar algo como referencia, se debe a que los tipos por valor se pasan siempre por copia y sus modificaciones se pierden al salir del método. Del mismo modo, si queremos reasignar una variable de un tipo por referencia, dentro del método, tendríamos el mismo problema:
+
+```csharp
+using static System.Console;
+
+void bar (string a) => a += " bar";
+void foo (ref string a) => a += " foo";
+
+string a = "a";
+WriteLine(a); // a
+bar(a);
+WriteLine(a); // a
+foo(ref a);
+WriteLine(a); // a foo
+```
+
+El modificador `out` se utiliza para devolver valores, sin necesidad de que se inicialice la variable usada como argumento previamente. Es decir, con `ref` e `in`, si usamos una variable sin inicializar como argumento, el compilador nos alertará de ello. Además, con `out` podemos declarar las variables en la propia invocación de la función:
+
+```csharp
+using static System.Console;
+
+void foo (string v, out int x, out int y) {
+    x = v.Length / 10;
+    y = v.Length % 10;
+}
+
+var s = "En un lugar de la Mancha...";
+foo(s, out int _, out int n);
+WriteLine(n);
+```
+
+Nótese que con `_` se pueden descartar valores que no nos interesen recoger.
+
+Los parámetros, de forma opcional, pueden tener un valor por defecto, que tiene que ser una constante o un constructor de un tipo por valor. Los parámetros con los modificadores `ref` y `out` no podrán tener un valor por defecto. Cuando un parámetro tiene un valor por defecto, se lo denomina parámetro opcional y no pueden definirse delante de los parámetros no opcionales.
+
+```csharp
+using static System.Console;
+
+void foo (int x, int y = 10) => WriteLine(x * y);
+
+foo(5);    // 50
+foo(5, 2); // 10
+```
+
+También de forma opcional, al final del todo, se puede declarar con `params` un parámetro de tipo array que permite invocaciones con un número arbitrario de argumentos:
+
+```csharp
+using static System.Console;
+
+void foo (string name = "none", params int[] args) {
+    Write(name + ": ");
+    foreach (var item in args) {
+        Write(item.ToString() + " ");
+    }
+    WriteLine();
+}
+
+foo();                // none:
+foo("some", 1, 2, 3); // some: 1 2 3
+```
+
+A la hora de invocar una una función, se puede utilizar el nombre de los parámetros en la llamada. Esta herramienta puede ayudar en casos donde se tienen muchos parámetros opcionales:
+
+```csharp
+using static System.Console;
+
+int foo (int n = 0, int a = 1, int b = 1, int c = 0) {
+    return a * n * n + b * n + c;
+}
+
+WriteLine(foo(2));                   // 6
+WriteLine(foo(n: 2, b: 2));          // 8
+WriteLine(foo(c: 10, n: 2));         // 16
+WriteLine(foo(n: 1, 2, c: 3, b: 4)); // 9
+```
+
+Se pueden mezclar argumentos con nombre y posicionales, siempre que se respeten las posiciones para los parámetros con nombres, que estén anteriores a los otros parámetros indicados posicionalmente. Es decir, en la última llamada no podemos hacer `foo(c: 3, 2, n: 1, b: 4)`, aunque se esté presuntamente respetando la posición del parámetro `a`, porque el compilador realmente ignora los nombres de todos los argumentos que haya previos a un argumento posicional.
+
+La sentencia `return` se utiliza para devolver un valor del tipo de retorno indicado. En el caso del último ejemplo se devolvía un número entero. En funciones con `void` como retorno, se pude utilizar `return;` para salir en cualquier punto de la ejecución de una función.
+
+Si es necesario, se pueden anidar funciones dentro de otras funciones:
+
+```csharp
+using static System.Console;
+
+int fact (int n) {
+    static int f (int v, int r) =>
+        (v <= 1) ? r : f(v - 1, r * v);
+    return f(n, 1);
+}
+
+WriteLine(fact(3)); // 6
+WriteLine(fact(4)); // 24
+WriteLine(fact(5)); // 120
+```
+
+Las funciones de una sola expresión con `=>` no requieren de la sentencia `return` para devolver un valor, se deduce del tipo de retorno que lo harán. Además, el modificador `static` sirve para evitar que `f` pudiera acceder a variables que están fuera de su ámbito, algo que puede ser útil para que nos avise el compilador por si nos equivocamos sin querer.
 
 ## Tipos de usuario
 
-..
+El lenguaje C# tiene una jerarquía de tipos con la que tenemos que trabajar si queremos crear tipos de datos propios para nuestros proyectos. Estas son las clases que tienen un significado especial para el lenguaje:
+
+| Clase | Descripción |
+|:-----:|:------------|
+| [`System.Object`](https://learn.microsoft.com/dotnet/api/system.object) | Clase de la que heredan todas las clases del lenguaje. La palabra reservada `object` es un sinónimo de esta clase. |
+| [`System.String`](https://learn.microsoft.com/dotnet/api/system.string) | Clase que representa las cadenas de texto. |
+| [`System.ValueType`](https://learn.microsoft.com/dotnet/api/system.valuetype) | Clase base de los tipos por valor. |
+| [`System.Enum`](https://learn.microsoft.com/dotnet/api/system.enum) | Clase base de los tipos enumeración. |
+| [`System.Array`](https://learn.microsoft.com/dotnet/api/system.array) | Clase base de los tipos array. |
+| [`System.Delegate`](https://learn.microsoft.com/dotnet/api/system.delegate) | Clase base de los tipos delegados, que representan funciones anónimas en el lenguaje. |
+| [`System.Exception`](https://learn.microsoft.com/dotnet/api/system.exception) | Clase base para los tipos de excepciones. |
+
+Por significado especial entendemos que su semántica varía con respecto otras clases, a la hora de compilar nuestros programas. Por ejemplo, una clase normal, que hereda de `object`, será un tipo por referencia, que se almacenará en la memoria del montículo; pero si hereda de `ValueType` su semántica cambiará y pasará a almacenarse en la pila del programa las instancias de dicho tipo.
+
+### Visibilidad
+
+Los elementos que definamos en nuestro programa, pueden estar contenidos en un espacio de nombre o dentro de un tipo. Esto hace que sea importante tener en cuenta cuál es la visibilidad de dicho elemento con respecto al resto. Por ello existen los siguientes modificadores de visibilidad:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `public` | El tipo/miembro es visible por todos. |
+| `private` | El miembro es visible sólo en el tipo donde está definido. |
+| `protected` | El miembro es visible sólo en el tipo donde está definido y en los herederos del tipo. |
+| `internal` | El tipo/miembro es visible sólo por otros tipos del mismo ensamblado. |
+| `protected internal` | El miembro no es visible para otros tipos, que no heredan del tipo donde está definido, en otros ensamblados. |
+| `private protected` | El miembro es visible sólo en el tipo donde está definido y en los herederos del tipo que estén en el mismo ensamblado. |
+
+Téngase en cuenta que sólo se puede elegir un único modificador de visibilidad a la hora de definir un tipo o miembro. A modo de resumen tenemos esta tabla relativa a la ubicación de aquel que invoca:
+
+| Ubicación | `public` | `protected internal` | `protected` | `internal` | `private protected` | `private` |
+|:---------:|:--------:|:--------------------:|:-----------:|:----------:|:-------------------:|:---------:|
+| Dueño | Sí | Sí | Sí | Sí | Sí | Sí |
+| Hijo (mismo ensamblado) | Sí | Sí | Sí | Sí | Sí | No |
+| Tipo (mismo ensamblado) | Sí | Sí | No | Sí | No | No |
+| Hijo (otro ensamblado) | Sí | Sí | Sí | No | No | No |
+| Tipo (otro ensamblado) | Sí | No | No | No | No | No |
+
+Para tipos, definidos en un espacio de nombres, se utilizará `internal` por defecto, si no se indica modificador alguno de visibilidad. Pero para todo elemento, definido dentro de un tipo, se utilizará `private` por defecto, incluso si es un tipo anidado en otro tipo.
 
 ### Clases
 
-..
+La sintaxis para definir una clase es la siguiente:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{class}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:} \mathit{padre\ e\ interfaces} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}$$
+
+Los modificadores de visibilidad disponibles para las clases son `public` e `internal`. También tenemos como modificadores de comportamiento los siguientes:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `static` | Clase estática, todos sus miembros serán estáticos. |
+| `abstract` | Clase abstracta, alguno de sus métodos es abstracto, es decir, no está definido y lo tendrán que definir sus clases hijas. |
+| `sealed` | Clase sellada, ninguna otra clase podrá heredar de ella. |
+| `unsafe` | Clase con código inseguro, para poder usar punteros. |
+| `partial` | Clase parcial, que sus elementos están definidos en uno o varios ficheros de código fuente. Este modificador se suele utilizar para herramientas que generan código automático. |
+
+Algunos modificadores no se pueden combinar entre sí, ya que provocaría una situación contradictoria. Por ejemplo, no una clase no puede ser estática y abstracta a la vez.
+
+La [herencia](https://es.wikipedia.org/wiki/Herencia_%28inform%C3%A1tica%29) en C# sólo nos permite heredar de un único padre, que por defecto será `object`. Lo que sí podemos es heredar de múltiples interfaces, que veremos más adelante.
 
 ### Campos
 
-..
+Los campos son variables que pertenecen a una clase. Para definir un campo se utiliza la siguiente sintaxis:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{\char125}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
+
+Además de los modificadores de visibilidad, los de comportamiento disponibles son los siguientes:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `static` | La variable será un campo estático. |
+| `readonly` | La variable es sólo de lectura una vez es inicializada, ya sea en su definición o en el constructor. |
+
+También se puede declarar constantes como campos con `const`, en cuyo caso es obligatorio inicializar su valor, y los únicos modificadores disponibles son los de visibilidad.
 
 ### Métodos
+
+Los métodos son funciones que pertenecen a una clase. Para definir un método se utiliza la siguiente sintaxis:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
+
+$$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{|} \texttt{;} \textcolor{red}{\char125}$$
 
 ..
 
@@ -636,6 +815,25 @@ Esta es la precedencia de mayor a menor de los operadores del lenguaje:
 
 ..
 
+## Control de la ejecución
+
+..
+
+### Condicionales
+
+..
+
+### Bucles
+
+..
+
+### Excepciones
+
+..
+
+## Funciones anónimas
+
+..
 
 ## LINQ
 
@@ -648,5 +846,4 @@ Esta es la precedencia de mayor a menor de los operadores del lenguaje:
 ### E/S por consola
 
 ..
-
 
