@@ -838,11 +838,154 @@ $$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\ch
 
 ..
 
+## E/S por consola
+
+..
+
+## Formato de cadenas
+
+.. `String.Format` `{index[,alineamiento][:formato]}` `{{` `}}` ..
+
+| Código | Descripción | Tipos | Precisión |
+|:------:|:-----------:|:-----:|:---------:|
+| `c`, `C` | Divisa | Números | Definida en `NumberFormatInfo` de `System.Globalization`. |
+| `d`, `D` | Decimal | Enteros| - |
+| `e`, `E` | Científico | Números | De 6 dígitos decimales. |
+| `f`, `F` | Punto fijo | Números | Definida en `NumberFormatInfo` de `System.Globalization`. |
+| `g`, `G` | General | Números | Dependiente del tipo numérico. |
+| `n`, `N` | Número | Números | Definida en `NumberFormatInfo` de `System.Globalization`. |
+| `p`, `P` | Porcentaje | Números | Definida en `NumberFormatInfo` de `System.Globalization`. |
+| `r`, `R` | Ida y vuelta | Reales | - |
+| `x`, `X` | Hexadecimal | Enteros | - |
+
+..
+
+```csharp
+using static System.Console;
+
+void foo (string format, object value) {
+    try {
+        WriteLine(format, value);
+    } catch (Exception) {
+        WriteLine($"No \"{format}\" with {value}");
+    }
+}
+
+int a = 255;
+foo("{0:c4} \t {0:C4}", a);   // 255,0000 ?       255,0000 ?
+foo("{0:d4} \t\t {0:D4}", a); // 0255             0255
+foo("{0:e4} \t {0:E4}", a);   // 2,5500e+002      2,5500E+002
+foo("{0:f4} \t {0:F4}", a);   // 255,0000         255,0000
+foo("{0:g4} \t\t {0:G4}", a); // 255              255
+foo("{0:n4} \t {0:N4}", a);   // 255,0000         255,0000
+foo("{0:p4} \t {0:P4}", a);   // 25.500,0000 %    25.500,0000 %
+foo("{0:r4} \t {0:R4}", a);   // No "{0:r4}       {0:R4}" with 255
+foo("{0:x4} \t\t {0:X4}", a); // 00ff             00FF
+
+float b = 1.23f;
+foo("{0:c4} \t {0:C4}", b);   // 1,2300 ?         1,2300 ?
+foo("{0:d4} \t {0:D4}", b);   // No "{0:d4}       {0:D4}" with 1,23
+foo("{0:e4} \t {0:E4}", b);   // 1,2300e+000      1,2300E+000
+foo("{0:f4} \t\t {0:F4}", b); // 1,2300           1,2300
+foo("{0:g4} \t\t {0:G4}", b); // 1,23             1,23
+foo("{0:n4} \t\t {0:N4}", b); // 1,2300           1,2300
+foo("{0:p4} \t {0:P4}", b);   // 123,0000 %       123,0000 %
+foo("{0:r4} \t\t {0:R4}", b); // 1,23             1,23
+foo("{0:x4} \t {0:X4}", b);   // No "{0:x4}       {0:X4}" with 1,23
+```
+
+..
+
+| Código | Descripción | Ejemplo | Valor | Resultado |
+|:------:|:-----------:|:-------:|:-----:|:---------:|
+| `0` | Ceros | `{0:0.000}`<br/>`{0:000.0}` | `23.45` | `23,450`<br/>`023,5` |
+| `#` | Dígitos | `{0:#.###}`<br/>`{0:###.#}` | `23.45` | `23,45`<br/>`23,5` |
+| `.` | Decimales | `{0:#.00}` | `42` | `42,00` |
+| `,` | Millares | `{0:#.###}` | `1234` | `1.234` |
+| `%` | Porcentaje | `{0:0.##%}`<br/>`{0:0.## %}` | `0.12345` | `12,35%`<br/>`12,35 %` |
+
+.. `DateTime` `DateTimeOffset` ..
+
+| Código | Descripción | Ejemplo |
+|:------:|:-----------:|:-------:|
+| `d` | Fecha corta. | `26/12/2022` |
+| `D` | Fecha larga. | `lunes, 26 de diciembre de 2022` |
+| `f` | Fecha larga con hora corta. | `lunes, 26 de diciembre de 2022 7:53 p.m.` |
+| `F` | Fecha larga con hora larga. | `lunes, 26 de diciembre de 2022 7:53:42 p.m.` |
+| `g` | Fecha corta con hora corta. | `26/12/2022 7:53 p.m.` |
+| `G` | Fecha corta con hora larga. | `26/12/2022 7:53:42 p.m.` |
+| `M`, `m` | Día y mes. | `26 de diciembre` |
+| `O`, `o` | Ida y vuelta. | `2022-12-26T19:53:42.5655419+01:00` |
+| `R`, `r` | RFC1123. | `Mon, 26 Dec 2022 19:53:42 GMT` |
+| `s` | Fecha y hora ordenable. | `2022-12-26T19:53:42` |
+| `t` | Hora corta. | `7:53 p.m.` |
+| `T` | Hora larga. | `7:53:42 p.m.` |
+| `u` | Fecha y hora universal ordenable. | `2022-12-26 19:53:42Z` |
+| `U` | Fecha y hora universal. | `lunes, 26 de diciembre de 2022 6:53:42 p.m.` |
+| `Y`, `y` | Mes y año. | `diciembre de 2022` |
+
+..
+
+| Código | Descripción | Código | Descripción |
+|:------:|:-----------:|:------:|:-----------:|
+| `d` | Día (`1`-`31`) | `dd` | Día (`01`-`31`) |
+| `ddd` | Día nombre corto (`lun`) | `dddd` | Día nombre largo (`lunes`) |
+| `f` | Décimas (10^-1^) de segundo | `ff` | Centésimas (10^-2^) de segundo |
+| `fff` | Milésimas (10^-3^) de segundo | `ffff` | 10^-4^ de segundo |
+| `fffff` | 10^-5^ de segundo | `ffffff` | Millonésima (10^-6^) de segundo |
+| `fffffff` | 10^-7^ de segundo | `F` | Décimas (10^-1^) de segundo o nada si es cero |
+| `FF` | Centésimas (10^-2^) de segundo o nada si es cero | `FFF` | Milésimas (10^-3^) de segundo o nada si es cero |
+| `FFFF` | 10^-4^ de segundo o nada si es cero | `FFFFF` | 10^-5^ de segundo o nada si es cero |
+| `FFFFFF` | Millonésima (10^-6^) de segundo o nada si es cero | `FFFFFFF` | 10^-7^ de segundo o nada si es cero |
+| `g`, `gg` | Era (`a. C.`, `d. C.`) | `h` | Hora (`1`-`12`) |
+| `hh` | Hora (`01`-`12`) | `H` | Hora (`1`-`24`) |
+| `HH` | Hora (`01`-`24`) | `K` | Zona horaria (`+01:00`) |
+| `m` | Minuto (`1`-`59`) | `mm` | Minuto (`01`-`59`) |
+| `M` | Mes (`1`-`12`) | `MM` | Mes (`01`-`12`) |
+| `MMM` | Mes nombre corto (`dic`) | `MMMM` | Mes nombre largo (`diciembre`) |
+| `s` | Segundo (`1`-`59`) | `ss` | Segundo (`01`-`59`) |
+| `t` | AM/PM (`a`, `p`) | `tt` | AM/PM (`a.m.`, `p.m.`) |
+| `y` | Año (`1`-`99`) | `yy` | Año (`01`-`99`) |
+| `yyy` | Año con mínimo 3 dígitos | `yyyy` | Año con 4 dígitos |
+| `yyyyy` | Año con 5 dígitos | `z` | Uso horario |
+| `zz` | Uso horario con 2 dígitos | `zzz` | Uso horario con horas y minutos |
+| `:` | Separador de tiempo | `/` | Separador de fecha |
+| `"..."`<br/>`'...'` | Texto literal | `%` | Usar especificador de formato propio (`%d`) |
+| `\` | Carácter de escape | Otros | Texto literal |
+
+.. `TimeSpan` ..
+
+| Código | Descripción | Ejemplo |
+|:------:|:-----------:|:-------:|
+| `c` | Formato constante. | `1.02:03:04` |
+| `g` | Formato general corto. | `1:2:03:04` |
+| `G` | Formato general largo. | `1:02:03:04,0000000` |
+
+..
+
+| Código | Descripción | Código | Descripción |
+|:------:|:-----------:|:------:|:-----------:|
+| `d`, `%d` | Días | `dd`-`dddddddddd` | Días con ceros a la izquierda |
+| `h`, `%h` | Horas | `hh` | Horas con ceros a la izquierda |
+| `s`, `%s` | Segundos | `ss` | Segundos con ceros a la izquierda |
+| `f`, `%f` | Décimas de segundo | `ff`-`fffffff` | De 10^-2^ a 10^-7^ de segundo |
+| `F`, `%F` | Décimas de segundo o nada si es cero | `FF`-`FFFFFFF` | De 10^-2^ a 10^-7^ de segundo  o nada si es cero |
+| `'...'` | Texto literal | `\` | Carácter de escape |
+| Otros | Texto literal |
+
+.. `Enum.ToString` ..
+
+| Código | Descripción |
+|:------:|:-----------:|
+| `g`, `G` | Representación como texto. |
+| `f`, `F` | Representación de *flags* como texto. |
+| `d`, `D` | Representación como número decimal. |
+| `x`, `X` | Representación como número hexadecimal. |
+
+..
+
 ## La biblioteca estándar
 
 ..
 
-### E/S por consola
-
-..
 
