@@ -792,7 +792,74 @@ $$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{
 
 $$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{|} \texttt{;} \textcolor{red}{\char125}$$
 
-..
+Además de los modificadores de visibilidad, los de comportamiento disponibles son los siguientes:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `static` | La función será un método estático. |
+| `partial` | La función es un método parcial, dentro de una clase parcial, por lo tanto puede aparecer la firma de la función en otro fichero del fichero donde esté su implementación. |
+| `abstract` | La función será un método abstracto, es decir, que no tiene implementación en esa clase y serán las clases hijas las que implementen el método. Sólo las clases abstractas pueden tener métodos abstractos. |
+| `virtual` | La función será un método virtual, es decir, que podrá ser sobrescrito por un método en las clases hijas. |
+| `override` | La función será un método que sobrescribe un método abstracto o virtual de la clase padre. |
+| `sealed` | La función será un método sellado, es decir, no se podrá seguir sobrescribiendo dicho método en las clases hijas de la actual. Es por ello que, este modificador, se tiene que utilizar junto a `override` para poder usarlo. |
+
+Dentro de las funciones no estáticas de una clase, se podrá utilizar la palabra reservada `this`, que representa la instancia actual que invoca la función. Puede ser útil para hacer explícito los elementos que pertenecen a la instancia de la clase, o simplemente para resolver conflictos entre nombres, cuando un parámetro tiene el mismo nombre que un campo o propiedad.
+
+También existe la palabra reservada `base`, que representa los elementos de la clase padre, para acceder a ellos en caso de haber quedado ocultos por los elementos de la clase actual.
+
+### Métodos especiales
+
+El primer método especial es el constructor de la clase, que es la función que se invoca cuando usamos el operador `new` crear una nueva instancia de la clase. Su sintaxis es:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)} \textcolor{red}{[} \texttt{:} \textcolor{red}{\char123} \texttt{base} \textcolor{red}{|} \texttt{this} \textcolor{red}{\char125} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)} \textcolor{red}{]}$$
+
+$$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{\char125}$$
+
+Donde *modificadores* son los modificadores de visibilidad del constructor, ya que no hace falta que sea público siempre. El *nombre* tiene que ser el mismo que el nombre del tipo. Puede tener cero o más parámetros de entrada, como las funciones normales. La palabra reservada `base`, en este contexto, se utiliza para invocar a un constructor de la clase padre; mientras que `this` se utiliza para invocar a otro constructor de la misma clase.
+
+> Se puede llegar a usar el modificador `static`, para definir un constructor para la parte estática de la clase, pero es obligatorio que sea también `public` y sólo puede existir un constructor estático, que además no podrá tener parámetros. Tampoco podrá usar `base` y `this`, ya que son "variables" relativas a los objetos instanciados y no a la parte estática de un tipo.
+
+El segundo método especial es el destructor de la clase, que es la función que se invoca cuando el objeto va a ser eliminado de la memoria por el recolector de basura. Su sintaxis es:
+
+$$\texttt{\textasciitilde} \mathit{nombre} \texttt{(} \texttt{)} \textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{\char125}$$
+
+No tiene ni modificadores, ni parámetros, ni tampoco se puede invocar. Esto es porque en realidad el compilador transforma esta función al siguiente código:
+
+```csharp
+protected override void Finalize() {
+    try {
+         // Expresiones del destructor...
+    } finally {
+         base.Finalize();
+    }
+}
+```
+
+El método [`Finalize`](https://learn.microsoft.com/dotnet/api/system.object.finalize) es uno de los métodos de la clase `object`, que se pueden sobrescribir por sus hijas. Este es el método que es invocado por el recolector de basura, antes de eliminarlo de la memoria. Al final, este método se utiliza para controlar la eliminación de recursos abiertos por el objeto, tales como ficheros, por ejemplo. Es decir, si cuando se va a borrar el objeto, se nos ha olvidado cerrar un fichero, con el destructor nos podemos encargar de controlar que se cierre correctamente.
+
+> Debido al no determinismo del recolector de basura, no podremos saber cuándo, ni en qué orden, se invoque a los métodos `Finalize` de los objetos pendientes de ser eliminados. Para poder controlar la limpieza de recursos, podemos utilizar las interfaces [`System.IDisposable`](https://learn.microsoft.com/dotnet/api/system.idisposable) y [`System.IAsyncDisposable`](https://learn.microsoft.com/dotnet/api/system.iasyncdisposable). Además, sentencias como `using`, invocan al método `Dispose` automáticamente, si la interfaz `IDisposable` está implementada. En caso de haberse invocado la limpieza de recursos con `Dispose`, podemos con la función [`GC.SuppressFinalize(object)`](https://learn.microsoft.com/dotnet/api/system.gc.suppressfinalize) eliminar al objeto de la cola encargada de llamar al método `Finalize`, para evitar que se ejecute de nuevo el código de limpieza de recursos.
+
+El siguiente método especial es el deconstructor de la clase, que es la función que se invoca cuando el objeto es asignado a una tupla, para descomponer el valor en diferentes componentes. Su sintaxis es:
+
+$$\texttt{public}\ \texttt{void}\ \texttt{Deconstruct} \texttt{(} \texttt{out}\ \mathit{tipo_1}\ \mathit{nombre_1} \texttt{,} \textcolor{red}{\dots} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+Por ejemplo:
+
+```csharp
+using static System.Console;
+
+var p = new Point() { X = 1, Y = 2 };
+var (a, b) = p;
+WriteLine($"{a}, {b}"); // 1, 2
+
+class Point {
+    public int X, Y;
+    public void Deconstruct (out int x, out int y) {
+        x = X;
+        y = Y;
+    }
+}
+```
 
 ### Propiedades
 
