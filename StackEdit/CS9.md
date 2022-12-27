@@ -844,7 +844,15 @@ $$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\ch
 
 ## Formato de cadenas
 
-.. `String.Format` `{index[,alineamiento][:formato]}` `{{` `}}` ..
+El formato de cadenas, realizado por funciones como [`String.Format`](https://learn.microsoft.com/dotnet/api/system.string.format) o [`Console.WriteLine`](https://learn.microsoft.com/dotnet/api/system.console.writeline), consiste en cadenas de texto que tienen una serie de códigos especiales, delimitados entre llaves, que siguen la siguiente sintaxis:
+
+$$\texttt{\char123} \mathit{\acute{\imath}ndice} \textcolor{red}{[} \texttt{,} \mathit{alineamiento} \textcolor{red}{]} \textcolor{red}{[} \texttt{:} \mathit{formato} \textcolor{red}{]} \texttt{\char125}$$
+
+Donde el *índice* es la posición dentro del array de argumentos que acompaña a la cadena de formato, en la llamada a las funciones como `String.Format`, que como es un parámetro con el modificador `params`, se pasan como si fueran argumentos posicionales normales en la llamada. Si necesitáramos poner los caracteres de las llaves, tendríamos que usar la codificación `{{` y `}}` para lograrlo.
+
+También se puede usar el formato de cadenas directamente con lo que se llama [interpolación de cadenas](https://learn.microsoft.com/dotnet/csharp/language-reference/tokens/interpolated). Esta última técnica consiste en una cadena de texto que tiene el símbolo dólar como prefijo, por ejemplo, `$"texto"`. La diferencia es que, en lugar de usar un *índice*, podremos usar directamente expresiones del lenguaje, como variables de programa u operaciones. Además, se pueden combinar con las cadenas "crudas", por ejemplo, `$@"\mi\ruta"`.
+
+El *alineamiento* es un número entero que indica un ancho de columna, alineando a la izquierda el valor si es negativo y a la derecha si es positivo, rellenando con espacios para alcanzar el ancho indicado. En cuanto al *formato* es una serie de códigos, que indica a la función cómo se ha de representar en texto la información. Para valores numéricos tenemos los siguientes códigos:
 
 | Código | Descripción | Tipos | Precisión |
 |:------:|:-----------:|:-----:|:---------:|
@@ -858,7 +866,7 @@ $$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\ch
 | `r`, `R` | Ida y vuelta | Reales | - |
 | `x`, `X` | Hexadecimal | Enteros | - |
 
-..
+Estos códigos permiten estar acompañados por un número entero, para indicar la precisión en la representación del dato. Veamos el siguiente ejemplo para observar los resultados de cada código y de la precisión:
 
 ```csharp
 using static System.Console;
@@ -894,7 +902,7 @@ foo("{0:r4} \t\t {0:R4}", b); // 1,23             1,23
 foo("{0:x4} \t {0:X4}", b);   // No "{0:x4}       {0:X4}" with 1,23
 ```
 
-..
+También podemos crear un formato propio con los siguientes códigos:
 
 | Código | Descripción | Ejemplo | Valor | Resultado |
 |:------:|:-----------:|:-------:|:-----:|:---------:|
@@ -904,7 +912,9 @@ foo("{0:x4} \t {0:X4}", b);   // No "{0:x4}       {0:X4}" with 1,23
 | `,` | Millares | `{0:#.###}` | `1234` | `1.234` |
 | `%` | Porcentaje | `{0:0.##%}`<br/>`{0:0.## %}` | `0.12345` | `12,35%`<br/>`12,35 %` |
 
-.. `DateTime` `DateTimeOffset` ..
+Podemos combinar estos códigos de formato propio entre sí, con gran flexibilidad, como muestran algunos de los ejemplos.
+
+Otros códigos disponibles para dar formato son los de fechas. Estos nos permiten dar formato a valores de las clases [`System.DateTime`](https://learn.microsoft.com/dotnet/api/system.datetime) y [`System.DateTimeOffset`](https://learn.microsoft.com/dotnet/api/system.datetimeoffset), usando los siguientes códigos:
 
 | Código | Descripción | Ejemplo |
 |:------:|:-----------:|:-------:|
@@ -924,7 +934,7 @@ foo("{0:x4} \t {0:X4}", b);   // No "{0:x4}       {0:X4}" with 1,23
 | `U` | Fecha y hora universal. | `lunes, 26 de diciembre de 2022 6:53:42 p.m.` |
 | `Y`, `y` | Mes y año. | `diciembre de 2022` |
 
-..
+De forma similar a con los números, también podemos crear formatos propios con los siguientes códigos:
 
 | Código | Descripción | Código | Descripción |
 |:------:|:-----------:|:------:|:-----------:|
@@ -953,7 +963,7 @@ foo("{0:x4} \t {0:X4}", b);   // No "{0:x4}       {0:X4}" with 1,23
 | `"..."`<br/>`'...'` | Texto literal | `%` | Usar especificador de formato propio (`%d`) |
 | `\` | Carácter de escape | Otros | Texto literal |
 
-.. `TimeSpan` ..
+Para los valores de la clase [`System.TimeSpan`](https://learn.microsoft.com/dotnet/api/system.timespan) tenemos los siguientes códigos:
 
 | Código | Descripción | Ejemplo |
 |:------:|:-----------:|:-------:|
@@ -961,7 +971,7 @@ foo("{0:x4} \t {0:X4}", b);   // No "{0:x4}       {0:X4}" with 1,23
 | `g` | Formato general corto. | `1:2:03:04` |
 | `G` | Formato general largo. | `1:02:03:04,0000000` |
 
-..
+Y estos códigos nos permitirán crear formatos propios:
 
 | Código | Descripción | Código | Descripción |
 |:------:|:-----------:|:------:|:-----------:|
@@ -973,7 +983,7 @@ foo("{0:x4} \t {0:X4}", b);   // No "{0:x4}       {0:X4}" with 1,23
 | `'...'` | Texto literal | `\` | Carácter de escape |
 | Otros | Texto literal |
 
-.. `Enum.ToString` ..
+Por último, para la función [`Enum.ToString`](https://learn.microsoft.com/dotnet/api/system.enum.tostring) tenemos estos códigos, para dar formato a valores enumerados:
 
 | Código | Descripción |
 |:------:|:-----------:|
@@ -981,8 +991,6 @@ foo("{0:x4} \t {0:X4}", b);   // No "{0:x4}       {0:X4}" with 1,23
 | `f`, `F` | Representación de *flags* como texto. |
 | `d`, `D` | Representación como número decimal. |
 | `x`, `X` | Representación como número hexadecimal. |
-
-..
 
 ## La biblioteca estándar
 
