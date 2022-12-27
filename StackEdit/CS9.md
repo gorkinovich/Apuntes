@@ -708,6 +708,10 @@ WriteLine(fact(5)); // 120
 
 Las funciones de una sola expresión con `=>` no requieren de la sentencia `return` para devolver un valor, se deduce del tipo de retorno que lo harán. Además, el modificador `static` sirve para evitar que `f` pudiera acceder a variables que están fuera de su ámbito, algo que puede ser útil para que nos avise el compilador por si nos equivocamos sin querer.
 
+## Estructuras de datos
+
+..TODO..
+
 ## Tipos de usuario
 
 El lenguaje C# tiene una jerarquía de tipos con la que tenemos que trabajar si queremos crear tipos de datos propios para nuestros proyectos. Estas son las clases que tienen un significado especial para el lenguaje:
@@ -807,6 +811,20 @@ Dentro de las funciones no estáticas de una clase, se podrá utilizar la palabr
 
 También existe la palabra reservada `base`, que representa los elementos de la clase padre, para acceder a ellos en caso de haber quedado ocultos por los elementos de la clase actual.
 
+El lenguaje permite tener varias funciones con el mismo nombre, siempre que su firma sea distinta, es decir, que varíe la cantidad de parámetros y/o el tipo de alguno de sus parámetros:
+
+```csharp
+using static System.Console;
+
+WriteLine(Bar.Foo(3));  // 4
+WriteLine(Bar.Foo(3f)); // 1,5
+
+public class Bar {
+    static public int Foo (int x) => x + 1;
+    static public float Foo (float x) => x * 0.5f;
+}
+```
+
 ### Métodos especiales
 
 El primer método especial es el constructor de la clase, que es la función que se invoca cuando usamos el operador `new` crear una nueva instancia de la clase. Su sintaxis es:
@@ -818,6 +836,40 @@ $$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\ch
 Donde *modificadores* son los modificadores de visibilidad del constructor, ya que no hace falta que sea público siempre. El *nombre* tiene que ser el mismo que el nombre del tipo. Puede tener cero o más parámetros de entrada, como las funciones normales. La palabra reservada `base`, en este contexto, se utiliza para invocar a un constructor de la clase padre; mientras que `this` se utiliza para invocar a otro constructor de la misma clase.
 
 > Se puede llegar a usar el modificador `static`, para definir un constructor para la parte estática de la clase, pero es obligatorio que sea también `public` y sólo puede existir un constructor estático, que además no podrá tener parámetros. Tampoco podrá usar `base` y `this`, ya que son "variables" relativas a los objetos instanciados y no a la parte estática de un tipo.
+
+Veamos algunos ejemplos de construcción de objetos:
+
+```csharp
+using static System.Console;
+
+var ps = new Point[] {
+    new Point(),          // (0, 0)
+    new Point{},          // (0, 0)
+    new Point(1),         // (1, 0)
+    new Point(1, 2),      // (1, 2)
+    new Point(y:2),       // (0, 2)
+    new Point{X=3, Y=4},  // (3, 4)
+    new Point(5) {Y=6},   // (5, 6)
+    new Point(y:5) {X=6}, // (6, 5)
+    new Point{X=7},       // (7, 0)
+    new Point{Y=8},       // (0, 8)
+};
+
+foreach (var p in ps) WriteLine($"{p}");
+
+class Point {
+    public int X, Y;
+    public Point (int x = 0, int y = 0) {
+        X = x;
+        Y = y;
+    }
+    public override string ToString () {
+        return $"({X}, {Y})";
+    }
+}
+```
+
+Podemos tener parámetros opcionales y combinarlo con la inicialización de objetos, usando las llaves. La inicialización de objetos será posible, siempre que exista la posibilidad de tener un constructor con cero argumentos, ya sea porque exista uno con cero parámetros o porque tenga todos los parámetros opcionales.
 
 El segundo método especial es el destructor de la clase, que es la función que se invoca cuando el objeto va a ser eliminado de la memoria por el recolector de basura. Su sintaxis es:
 
@@ -863,51 +915,67 @@ class Point {
 
 ### Propiedades
 
-..
+..TODO..
+
+### Indexadores
+
+..TODO..
+
+### La clase `object`
+
+..TODO..
+
+### Métodos extensibles
+
+..TODO..
+
+### Sobrecarga de operadores
+
+..TODO..
 
 ### Interfaces
 
-..
+..TODO..
 
 ### Estructuras
 
-..
+..TODO..
 
 ### Registros
 
-..
+..TODO..
 
 ### Enumeraciones
 
-..
+..TODO..
 
 ## Control de la ejecución
 
-..
+..TODO..
 
 ### Condicionales
 
-..
+..TODO..
 
 ### Bucles
 
-..
+..TODO..
 
 ### Excepciones
 
-..
+..TODO..
 
 ## Funciones anónimas
 
-..
+..TODO..
 
 ## LINQ
 
-..
+..TODO..
 
 ## E/S por consola
 
-..
+..TODO..
 
 ## Formato de cadenas
 
@@ -1061,6 +1129,5 @@ Por último, para la función [`Enum.ToString`](https://learn.microsoft.com/dotn
 
 ## La biblioteca estándar
 
-..
-
+..TODO..
 
