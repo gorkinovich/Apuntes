@@ -256,13 +256,13 @@ Una variable es un valor con nombre que puede variar durante la ejecución del p
 
 $$\mathit{tipo}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{;}$$
 
+Podemos usar la palabra clave `dynamic` como *tipo* al declarar una variable, o cualquier elemento que tenga tipo. Al hacer esto, se marca el tipo de dicho elemento como dinámico, sea una variable, el tipo de una función, etcétera.
+
+> El tipado dinámico realiza la comprobación de tipos en tiempo de ejecución, en lugar de hacerlo durante la compilación, como ocurre con el tipado estático. Esto permite una mayor flexibilidad en el código, pero también puede ser una mayor fuente de errores durante la ejecución, por un mal uso de los tipos instanciados. Se incorporó esta característica a .NET para poder dar soporte a lenguajes como Python en la plataforma.
+
 Con la palabra clave `var` se indica al compilador que infiera el tipo para la variable en base a la expresión que inicializa su valor:
 
 $$\texttt{var}\ \mathit{nombre_1}\ \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{;}$$
-
-Con la palabra clave `dynamic` se marca el tipo de la variable como dinámico y las comprobaciones de tipo se resuelven en tiempo de ejecución, en lugar de hacerlo durante la compilación. Esto hace que sea más flexible, pero también puede provocar más errores durante la ejecución. Su sintaxis es:
-
-$$\texttt{dynamic}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{;}$$
 
 ## Tipos básicos
 
@@ -481,7 +481,7 @@ try {
         WriteLine(unchecked((int) a));
         WriteLine((int) a);
     }
-} catch (OverflowException e) {
+} catch (System.OverflowException e) {
     WriteLine(e.Message);
 }
 ```
@@ -591,15 +591,11 @@ Esta es la precedencia de mayor a menor de los operadores del lenguaje:
 
 Una función es un bloque de código con nombre, que podemos parametrizar, para obtener diferentes resultados. Para definir una se utiliza la siguiente sintaxis:
 
-$$\textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
-
-$$\textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;}$$
+$$\textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{\char125}$$
 
 Una función tiene un tipo de retorno, pero si no devuelve nada usará `void` como tipo del resultado. También se permite usar `dynamic` como tipo de retorno, con las implicaciones que ello tiene para la ejecución. Luego se puede tener entre cero y N parámetros, cuya sintaxis es:
 
-$$\textcolor{red}{[} \texttt{ref} \textcolor{red}{|} \texttt{out} \textcolor{red}{|} \texttt{in} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{\char125}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \texttt{,}$$
-
-$$\textcolor{red}{\dots} \texttt{,}\ \texttt{params}\ \mathit{tipo}\texttt{[]}\ \mathit{nombre_n}$$
+$$\textcolor{red}{[} \texttt{ref} \textcolor{red}{|} \texttt{out} \textcolor{red}{|} \texttt{in} \textcolor{red}{]}\ \mathit{tipo_1}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_1} \textcolor{red}{]} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \texttt{params}\ \mathit{tipo_n}\texttt{[]}\ \mathit{nombre_n}$$
 
 Cada parámetro tiene que tener un tipo concreto o dinámico. También pueden tener una serie de modificadores de comportamiento, que también serán necesarios usarlos al llamar a la función, de modo que:
 
@@ -777,7 +773,7 @@ La [herencia](https://es.wikipedia.org/wiki/Herencia_%28inform%C3%A1tica%29) en 
 
 Los campos son variables que pertenecen a una clase. Para definir un campo se utiliza la siguiente sintaxis:
 
-$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{\char125}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
 
 Además de los modificadores de visibilidad, los de comportamiento disponibles son los siguientes:
 
@@ -792,7 +788,7 @@ También se puede declarar constantes como campos con `const`, en cuyo caso es o
 
 Los métodos son funciones que pertenecen a una clase. Para definir un método se utiliza la siguiente sintaxis:
 
-$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{dynamic} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
 
 $$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{|} \texttt{;} \textcolor{red}{\char125}$$
 
@@ -893,7 +889,7 @@ El método [`Finalize`](https://learn.microsoft.com/dotnet/api/system.object.fin
 
 El siguiente método especial es el deconstructor de la clase, que es la función que se invoca cuando el objeto es asignado a una tupla, para descomponer el valor en diferentes componentes. Su sintaxis es:
 
-$$\texttt{public}\ \texttt{void}\ \texttt{Deconstruct} \texttt{(} \texttt{out}\ \mathit{tipo_1}\ \mathit{nombre_1} \texttt{,} \textcolor{red}{\dots} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\texttt{public}\ \texttt{void}\ \texttt{Deconstruct} \texttt{(} \texttt{out}\ \mathit{tipo}\ \mathit{nombre} \texttt{,} \textcolor{red}{\dots} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
 
 Por ejemplo:
 
@@ -915,15 +911,157 @@ class Point {
 
 ### Propiedades
 
-..TODO..
+Las propiedades son funciones que pertenecen a una clase, pero que actúan como si se trataran de variables de la misma. Con las funciones, que componen la propiedad, se puede controlar la lectura y la escritura de otras variables, entre otras opciones. Para definir una propiedad se utiliza la siguiente sintaxis:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre}\ \texttt{\char123}\ \mathit{accesores}\ \texttt{\char125}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{]}$$
+
+La sintaxis de los *accesores* es la siguiente:
+
+$$\textcolor{red}{[} \mathit{visibilidad} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{get} \textcolor{red}{|} \texttt{set} \textcolor{red}{|} \texttt{init} \textcolor{red}{\char125}\ \textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{|} \texttt{;} \textcolor{red}{\char125}$$
+
+Además de los modificadores de visibilidad, los modificadores de comportamiento disponibles para las propiedades son los siguientes:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `static` | La propiedad es estática. |
+| `abstract` | La propiedad es abstracta, y por lo tanto no tendrá implementación en esa clase. Serán las clases hijas las que implementen la propiedad. Sólo las clases abstractas pueden tener propiedades abstractas. |
+| `virtual` | La propiedad es virtual, es decir, que podrá ser sobrescrita por un propiedad en las clases hijas. |
+| `override` | La propiedad sobrescribe una propiedad abstracta o virtual de la clase padre. |
+| `sealed` | La propiedad está sellada, es decir, no se podrá seguir sobrescribiendo dicha propiedad en las clases hijas de la actual. Es por ello que, este modificador, se tiene que utilizar junto a `override` para poder usarlo. |
+
+Los *accesores* tienen tres tipos posibles: `get` para obtener el valor de la propiedad, `set` para asignarle un valor e `init` para asignarle un valor sólo durante la inicialización. Se puede combinar `get` con `set` o `init`, pero no se puede definir una propiedad con estas dos últimas de forma simultanea. Dentro de los *accesores* de escritura, tenemos la palabra reservada `value`, que representa el valor que se está asignando a la propiedad:
+
+```csharp
+class Point {
+    private int x, y;
+    public int X {
+        get { return x; }
+        set { x = value; }
+    }
+    public int Y {
+        get => y;
+        set => y = value;
+    }
+    public Point (int x = 0, int y = 0) {
+        this.X = x;
+        this.Y = y;
+    }
+}
+```
+
+Pero también se pueden definir las propiedades de la siguiente manera:
+
+```csharp
+class Point {
+    public int X { get; set; }
+    public int Y { get; set; }
+    public Point (int x = 0, int y = 0) {
+        this.X = x;
+        this.Y = y;
+    }
+}
+```
+
+De este modo, el compilador genera automáticamente las funciones para `get` y `set`, además de un campo privado para almacenar los valores. De esta manera, podemos expresar lo mismo que en el ejemplo anterior, de forma más sucinta.
+
+Se puede modificar la visibilidad de un *accesor* para hacerlo más restrictivo todavía, pero nunca para hacerlo menos restrictivo:
+
+```csharp
+class Point {
+    public int X { get; private set; }
+    public int Y { get; private set; }
+    public Point (int x = 0, int y = 0) {
+        this.X = x;
+        this.Y = y;
+    }
+}
+```
+
+Con esto podremos modificar `X` e `Y` sólo desde el interior de la clase `Point`. Con `protected` podríamos modificarlo también en clases hijas, etcétera. Pero si el objetivo es crear un tipo de datos inmutable, que no se pueda modificar, podríamos hacer lo siguiente:
+
+```csharp
+class Point {
+    public int X { get; }
+    public int Y { get; }
+    public Point (int x = 0, int y = 0) {
+        this.X = x;
+        this.Y = y;
+    }
+}
+```
+
+Sin embargo, esto no nos permitiría utilizar la inicialización de objetos al crear la instancia con `new Point { X = 1, Y = 2 }`. Para ello tendríamos que utilizar `init` en lugar de `set`.
 
 ### Indexadores
 
-..TODO..
+Los indexadores son muy similares a las propiedades, pero en su caso permite manejar un objeto de una clase como si fuera un array de una o más dimensiones. Para definirlo se utiliza la siguiente sintaxis:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{[} \mathit{tipo_1}\ \mathit{nombre_1} \texttt{,} \textcolor{red}{\dots} \texttt{]}\ \texttt{\char123}\ \mathit{accesores}\ \texttt{\char125}$$
+
+La sintaxis de los *accesores* es la siguiente:
+
+$$\textcolor{red}{[} \mathit{visibilidad} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{get} \textcolor{red}{|} \texttt{set} \textcolor{red}{\char125}\ \textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{|} \texttt{;} \textcolor{red}{\char125}$$
+
+Además de los modificadores de visibilidad, los modificadores de comportamiento disponibles para los indexadores son los mismos que los de las propiedades, exceptuando `static`, ya que un indexador no puede ser estático. Otra diferencia es que los *accesores* deberán tener un cuerpo definido, salvo que el indexador sea `abstract`. En cuanto a los tipos que podemos usar como índices no hay límites, por lo tanto podremos usar objetos de tipos `Index` y `Range` sin problemas:
+
+```csharp
+using static System.Console;
+
+var v = new Vector(10);
+v[0] = -1;
+v[^1] = 10;
+v[1..9] = new int[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+for (int i = 0; i < v.Lenght; i++) {
+    WriteLine(v[i]);
+}
+
+class Vector {
+    private int[] data;
+    public int Lenght { get => data.Length; }
+    public Vector (int size) => data = new int[size];
+    public int this[int i] {
+        get => data[i];
+        set => data[i] = value;
+    }
+    public int this[System.Index i] {
+        get => data[i];
+        set => data[i] = value;
+    }
+    public int[] this[System.Range r] {
+        get => data[r];
+        set {
+            for (int i = r.Start.Value, j = 0; i < r.End.Value; i++, j++) {
+                data[i] = value[j];
+            }
+        }
+    }
+}
+```
+
+En este caso, a diferencia de las propiedades, sí podemos sobrecargar diferentes indexadores al variar los tipos de su firma. Otra posibilidad disponible, cuando el indexador es de lectura sólo, es hacer lo siguiente:
+
+```csharp
+// Dentro de una clase...
+private int[] data;
+public int this[int i] => data[i];
+```
 
 ### La clase `object`
 
-..TODO..
+La clase [`System.Objet`](https://learn.microsoft.com/dotnet/api/system.object) es la raíz de todos los tipos en la jerarquía del lenguaje. Sus principales métodos son:
+
+| Método | Modificadores | Descripción |
+|:------:|:-------------:|:------------|
+| `bool Equals(Object)` | `public`, `virtual` | Comprueba si el argumento es igual al objeto actual. |
+| `bool Equals(Object, Object)` | `public`, `static` | Comprueba si dos objetos son iguales. |
+| `void Finalize()` | `protected`, `virtual` | Realiza las operaciones de limpieza previas a ser eliminado el objeto de la memoria. |
+| `int GetHashCode()` | `public`, `virtual` | Obtiene el código hash del objeto. |
+| `Type GetType()` | `public` | Obtiene el tipo del objeto. |
+| `object MemberwiseClone()` | `protected` | Crea una copia superficial. |
+| `bool ReferenceEquals(Object, Object)` | `public`, `static` | Comprueba si dos objetos tienen la misma referencia. |
+| `string ToString()` | `public`, `virtual` | Devuelve la cadena de texto que representa al objeto. |
+
+Es común sobrescribir los métodos `Equals` y `GetHashCode`, cuando se quiere definir la semántica de igualdad de un tipo, además de sobrecargar los operadores `==` y `!=`. También el método `ToString` es habitual sobrescribirlo, para adaptarlo a la semántica real del tipo. El método `GetType` nos da una instancia de [`System.Type`](https://learn.microsoft.com/dotnet/api/system.type), que nos permite acceder a la información relativa al tipo en tiempo de ejecución, utilizando los mecanismos de la biblioteca [`System.Reflection`](https://learn.microsoft.com/dotnet/api/system.reflection).
 
 ### Métodos extensibles
 
@@ -1009,7 +1147,7 @@ using static System.Console;
 void foo (string format, object value) {
     try {
         WriteLine(format, value);
-    } catch (Exception) {
+    } catch (System.Exception) {
         WriteLine($"No \"{format}\" with {value}");
     }
 }
