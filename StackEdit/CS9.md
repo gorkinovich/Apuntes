@@ -1065,7 +1065,23 @@ Es común sobrescribir los métodos `Equals` y `GetHashCode`, cuando se quiere d
 
 ### Métodos extensibles
 
-..TODO..
+Los métodos extensibles son funciones que pertenecen a una clase estática, pero que se aplican a otro para extender su funcionalidad sin tener que heredar del mismo. Para definir un método extensible hay que crear una función estática, cuyo primer parámetro siga la sintaxis `this tipo nombre`, por ejemplo:
+
+```csharp
+using static System.Console;
+
+WriteLine("123".Repeat()); // 123123
+WriteLine(123.Repeat(4));  // 492
+
+static class Foo {
+    public static string Repeat (this string value) {
+        return value + value;
+    }
+    public static int Repeat (this int value, int number = 2) {
+        return value * number;
+    }
+}
+```
 
 ### Sobrecarga de operadores
 
