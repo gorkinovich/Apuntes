@@ -749,6 +749,27 @@ Téngase en cuenta que sólo se puede elegir un único modificador de visibilida
 
 Para tipos, definidos en un espacio de nombres, se utilizará `internal` por defecto, si no se indica modificador alguno de visibilidad. Pero para todo elemento, definido dentro de un tipo, se utilizará `private` por defecto, incluso si es un tipo anidado en otro tipo.
 
+### Comportamiento
+
+Además de los modificadores de visibilidad, los elementos que vamos definiendo pueden tener otros modificadores de comportamiento, para activar o no ciertas semánticas. Tenemos como modificadores de comportamiento los siguientes:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `abstract` | La definición es abstracta, es decir, su implementación corre a cargo de los tipos herederos. |
+| `async` | La definición es asíncrona, para poder ejecutarla de forma concurrente, pudiendo hacerlo en paralelo a otras. |
+| `extern` | La definición es externa, su implementación está definida de forma nativa. |
+| `new` | La definición oculta a otra definición del tipo padre. |
+| `override` | La definición sobrescribe otra en un tipo padre. |
+| `partial` | La definición es parcial, que se pueden usar diferentes ficheros para desarrollar su implementación. |
+| `readonly` | La definición es de sólo de lectura tras inicializarla, ya sea en la propia definición o en el constructor del tipo al que pertenece. |
+| `sealed` | La definición es sellada, no se podrá sobrescribir su implementación mediante herencia. |
+| `static` | La definición es estática, no pertenecerá a las instancias de un tipo. Si un tipo es estático, todos sus miembros también lo serán. |
+| `unsafe` | La definición es insegura, para poder usar punteros. |
+| `virtual` | La definición es virtual, es decir, que podrá ser sobrescrita por los tipos herederos. |
+| `volatile` | La definición es volátil, es decir, se puede acceder a ella simultáneamente desde diferentes hilos de ejecución. |
+
+No todos los modificadores de comportamiento se pueden emplear para cualquier tipo de definición, por ello veremos en cada elemento cuáles están soportados o no.
+
 ### Clases
 
 La sintaxis para definir una clase es la siguiente:
@@ -762,8 +783,8 @@ Los modificadores de visibilidad disponibles para las clases son `public` e `int
 | `static` | Clase estática, todos sus miembros serán estáticos. |
 | `abstract` | Clase abstracta, alguno de sus métodos es abstracto, es decir, no está definido y lo tendrán que definir sus clases hijas. |
 | `sealed` | Clase sellada, ninguna otra clase podrá heredar de ella. |
-| `unsafe` | Clase con código inseguro, para poder usar punteros. |
 | `partial` | Clase parcial, que sus elementos están definidos en uno o varios ficheros de código fuente. Este modificador se suele utilizar para herramientas que generan código automático. |
+| `unsafe` | Clase con código inseguro, para poder usar punteros. |
 
 Algunos modificadores no se pueden combinar entre sí, ya que provocaría una situación contradictoria. Por ejemplo, no una clase no puede ser estática y abstracta a la vez.
 
@@ -781,6 +802,9 @@ Además de los modificadores de visibilidad, los de comportamiento disponibles s
 |:-----------:|:------------|
 | `static` | La variable será un campo estático. |
 | `readonly` | La variable es sólo de lectura una vez es inicializada, ya sea en su definición o en el constructor. |
+| `new` | La variable oculta a otra variable de la clase padre. |
+| `volatile` | La variable es volátil, es decir, se puede acceder a ella simultáneamente desde diferentes hilos de ejecución. |
+| `unsafe` | La variable es insegura, para poder usar punteros. |
 
 También se puede declarar constantes como campos con `const`, en cuyo caso es obligatorio inicializar su valor, y los únicos modificadores disponibles son los de visibilidad.
 
@@ -802,6 +826,10 @@ Además de los modificadores de visibilidad, los de comportamiento disponibles s
 | `virtual` | La función será un método virtual, es decir, que podrá ser sobrescrito por un método en las clases hijas. |
 | `override` | La función será un método que sobrescribe un método abstracto o virtual de la clase padre. |
 | `sealed` | La función será un método sellado, es decir, no se podrá seguir sobrescribiendo dicho método en las clases hijas de la actual. Es por ello que, este modificador, se tiene que utilizar junto a `override` para poder usarlo. |
+| `new` | La función oculta a otra función de la clase padre. |
+| `async` | La función es asíncrona, para poder ejecutarla de forma concurrente, pudiendo hacerlo en paralelo a otras funciones. |
+| `extern` | La función es externa, su código está definido de forma nativa. |
+| `unsafe` | La función es insegura, para poder usar punteros. |
 
 Dentro de las funciones no estáticas de una clase, se podrá utilizar la palabra reservada `this`, que representa la instancia actual que invoca la función. Puede ser útil para hacer explícito los elementos que pertenecen a la instancia de la clase, o simplemente para resolver conflictos entre nombres, cuando un parámetro tiene el mismo nombre que un campo o propiedad.
 
@@ -832,6 +860,8 @@ $$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\ch
 Donde *modificadores* son los modificadores de visibilidad del constructor, ya que no hace falta que sea público siempre. El *nombre* tiene que ser el mismo que el nombre del tipo. Puede tener cero o más parámetros de entrada, como las funciones normales. La palabra reservada `base`, en este contexto, se utiliza para invocar a un constructor de la clase padre; mientras que `this` se utiliza para invocar a otro constructor de la misma clase.
 
 > Se puede llegar a usar el modificador `static`, para definir un constructor para la parte estática de la clase, pero es obligatorio que sea también `public` y sólo puede existir un constructor estático, que además no podrá tener parámetros. Tampoco podrá usar `base` y `this`, ya que son "variables" relativas a los objetos instanciados y no a la parte estática de un tipo.
+> 
+> Otros modificadores de comportamiento admitidos son `unsafe` y `extern`, para cuando se quiere construir un tipo que utiliza código no manejado o nativo.
 
 Veamos algunos ejemplos de construcción de objetos:
 
@@ -928,6 +958,9 @@ Además de los modificadores de visibilidad, los modificadores de comportamiento
 | `virtual` | La propiedad es virtual, es decir, que podrá ser sobrescrita por un propiedad en las clases hijas. |
 | `override` | La propiedad sobrescribe una propiedad abstracta o virtual de la clase padre. |
 | `sealed` | La propiedad está sellada, es decir, no se podrá seguir sobrescribiendo dicha propiedad en las clases hijas de la actual. Es por ello que, este modificador, se tiene que utilizar junto a `override` para poder usarlo. |
+| `new` | La propiedad oculta a otra propiedad de la clase padre. |
+| `extern` | La propiedad es externa, su código está definido de forma nativa. |
+| `unsafe` | La propiedad es insegura, para poder usar punteros. |
 
 Los *accesores* tienen tres tipos posibles: `get` para obtener el valor de la propiedad, `set` para asignarle un valor e `init` para asignarle un valor sólo durante la inicialización. Se puede combinar `get` con `set` o `init`, pero no se puede definir una propiedad con estas dos últimas de forma simultanea. Dentro de los *accesores* de escritura, tenemos la palabra reservada `value`, que representa el valor que se está asignando a la propiedad:
 
