@@ -901,7 +901,7 @@ El segundo método especial es el destructor de la clase, que es la función que
 
 $$\texttt{\textasciitilde} \mathit{nombre} \texttt{(} \texttt{)} \textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{\char125}$$
 
-No tiene ni modificadores, ni parámetros, ni tampoco se puede invocar. Esto es porque en realidad el compilador transforma esta función al siguiente código:
+No tiene ni modificadores (excepto `unsafe`, para manejar punteros), ni parámetros, ni tampoco se puede invocar. Esto es porque en realidad el compilador transforma esta función al siguiente código:
 
 ```csharp
 protected override void Finalize() {
@@ -1025,6 +1025,14 @@ class Point {
 
 Sin embargo, esto no nos permitiría utilizar la inicialización de objetos al crear la instancia con `new Point { X = 1, Y = 2 }`. Para ello tendríamos que utilizar `init` en lugar de `set`.
 
+Por último, podemos crear una propiedad que sólo tenga como *accesor* un `get` usando la siguiente forma simplificada:
+
+```csharp
+// Dentro de la clase:
+private int data;
+public int Data => data;
+```
+
 ### Indexadores
 
 Los indexadores son muy similares a las propiedades, pero en su caso permite manejar un objeto de una clase como si fuera un array de una o más dimensiones. Para definirlo se utiliza la siguiente sintaxis:
@@ -1071,10 +1079,10 @@ class Vector {
 }
 ```
 
-En este caso, a diferencia de las propiedades, sí podemos sobrecargar diferentes indexadores al variar los tipos de su firma. Otra posibilidad disponible, cuando el indexador es de lectura sólo, es hacer lo siguiente:
+En este caso, a diferencia de las propiedades, sí podemos sobrecargar diferentes indexadores al variar los tipos de su firma. Otra posibilidad disponible, igual que con las propiedades, cuando el indexador es sólo de lectura, podemos hacer lo siguiente:
 
 ```csharp
-// Dentro de una clase...
+// Dentro de la clase:
 private int[] data;
 public int this[int i] => data[i];
 ```
