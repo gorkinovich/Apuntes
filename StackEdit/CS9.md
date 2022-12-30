@@ -1126,7 +1126,106 @@ static class Foo {
 
 ### Sobrecarga de operadores
 
-..TODO..
+Se pueden sobrecargar los siguientes operadores del lenguaje:
+
+| Operadores | Aridad | Anotaciones |
+|:----------:|:------:|:------------|
+| `+`, `-`, `!`, `~`, `++`, `--`, `true`, `false` | Unaria | `true` y `false` deben sobrecargarse de forma conjunta. |
+| `+`, `-`, `*`, `/`, `%`, `&`, `|`, `^`, `<<`, `>>` | Binaria |  |
+| `==`, `!=`, `<`, `>`, `<=`, `>=` | Binaria | `==` con `!=`, `<` con `>` y `<=` con `>=`, deben sobrecargarse de forma conjunta. |
+
+Para [definir la sobrecarga](https://learn.microsoft.com/dotnet/csharp/language-reference/operators/operator-overloading) se ha de crear una función estática, que utilice la palabra clave `operator` seguida del operador, para luego tener los parámetros (uno o dos) a los que se va a aplicar la operación:
+
+```csharp
+using static System.Console;
+
+var a = new Foo(); // 0
+var b = a + 10;    // 10
+var c = 1 + b;     // 11
+var d = b + c;     // 21
+
+WriteLine($"{a.Bar}, {b.Bar}, {c.Bar}, {d.Bar}");
+
+class Foo {
+    public int Bar = 0;
+
+    public static Foo operator + (Foo left, int right)
+        => new Foo { Bar = left.Bar + right };
+
+    public static Foo operator + (int left, Foo right)
+        => new Foo { Bar = left + right.Bar };
+
+    public static Foo operator + (Foo left, Foo right)
+        => new Foo { Bar = left.Bar + right.Bar };
+}
+```
+
+Un caso especial y propenso a errores son los operadores de incremento o decremento. Recordemos que la versión postfija devuelve el valor previo al cambio y la prefija se devuelve el valor después del cambio. Sin embargo, sólo hay una opción para sobrecargar estos operadores, sin poder distinguir entre la versión prefija o postfija. Esta es la forma correcta de implementar los operadores:
+
+```csharp
+using static System.Console;
+
+var a = new Foo(); // a = 0
+var b = ++a;       // a = 1; b = 1
+var c = a++;       // a = 2; c = 1
+
+WriteLine($"{a.Bar}, {b.Bar}, {c.Bar}");
+
+class Foo {
+    public int Bar = 0;
+
+    public static Foo operator ++ (Foo victim)
+        => new Foo { Bar = victim.Bar + 1 };
+
+    public static Foo operator -- (Foo victim)
+        => new Foo { Bar = victim.Bar - 1 };
+}
+```
+
+Esto es debido a que la semántica real del operador es la siguiente:
+
+```csharp
+// Versión prefija: b = ++a;
+temp = operator ++(a);
+a = temp;
+b = temp;
+
+// Versión postfija: b = a++;
+temp = a;
+a = operator ++(a);
+b = temp;
+```
+
+Donde `temp` sería una variable fresca de tipo `Foo` creada por el compilador. Si los operadores, de incremento y decremento, los implementáramos mutando el contenido del operando, romperíamos la semántica y añadiríamos bugs.
+
+Otra cosa que podemos sobrecargar, son las operaciones de conversión de tipos mediante *casting*, mediante las palabras clave `implicit` y `explicit`. Por ejemplo:
+
+```csharp
+using static System.Math;
+using static System.Console;
+
+var a = new Foo { Bar = 1.5 };
+double b = a;
+int c = (int) a;
+int d = (int) a.Bar;
+
+WriteLine($"a = {a.Bar}"); // a = 1,5
+WriteLine($"b = {b}");     // b = 1,5
+WriteLine($"c = {c}");     // c = 2
+WriteLine($"d = {d}");     // d = 1
+
+class Foo {
+    public double Bar = 0;
+
+    public static implicit operator double (Foo victim)
+        => victim.Bar;
+
+    public static explicit operator int (Foo victim)
+        => (int) Round(victim.Bar);
+}
+```
+
+Usamos `implicit` cuando la conversión es implícita y `explicit` cuando queremos que el programador haga explícito que está habiendo una conversión. No se puede tener una sobrecarga implícita y explícita para un mismo tipo, pero sí podemos tener múltiples sobrecargas implícitas, o explícitas, para diferentes tipos.
 
 ### Interfaces
 
