@@ -587,6 +587,69 @@ Esta es la precedencia de mayor a menor de los operadores del lenguaje:
 | Condicional | `c ? t : f` | Derecha |
 | Asignación y lambas | `x = y`, `x += y`, `x -= y`, `x *= y`, `x /= y`, `x %= y`, `x &= y`, `x |= y`, `x ^= y`, `x <<= y`, `x >>= y`, `x ??= y`, `=>` | Derecha |
 
+## Arrays
+
+Los arrays es un tipo de dato estructurado que permite declarar N elementos con un orden fijo, que se pueden acceder de forma directa mediante un índice numérico. Su sintaxis es:
+
+$$\mathit{tipo} \texttt{[} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \textcolor{red}{]} \texttt{]} \textcolor{red}{[} \texttt{[} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \textcolor{red}{]} \texttt{]} \textcolor{red}{\dots} \texttt{[} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \textcolor{red}{]} \texttt{]} \textcolor{red}{]}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{inicializaci\acute{o}n_1} \textcolor{red}{]}$$
+
+$$\textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{inicializaci\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{;}$$
+
+La *inicialización* es una expresión que devuelve la instancia del array creado, ya sea el resultado de un `new`. En este último caso la sintaxis es:
+
+$$\texttt{new}\ \textcolor{red}{[} \mathit{tipo} \textcolor{red}{]} \texttt{[} \textcolor{red}{[} \mathit{tamaño_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{tamaño_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{]} \textcolor{red}{[} \texttt{[]} \textcolor{red}{\dots} \texttt{[]} \textcolor{red}{]} \textcolor{red}{[} \texttt{\char123}\ \mathit{valores}\ \texttt{\char125} \textcolor{red}{]}$$
+
+Se puede usar este tipo de expresiones `new` para asignar un valor a una variable array o un parámetro de una función, no está limitado a la declaración de variables únicamente, sino que es un tipo de expresión por sí misma. Se puede prescindir del tipo y del tamaño si se indican los valores que componen a la instancia. También. Por ejemplo, veamos ejemplos de arrays unidimensionales:
+
+```csharp
+int[] a = new int[2]; // = { 0, 0 };
+int[] b = new int[2] { 1, 2 };
+int[] c = new int[] { 1, 2 };
+int[] d = new[] { 1, 2 };
+int[] e = { 1, 2 };
+
+foo(new int[3] { 3, 2, 1 });
+foo(new int[] { 3, 2, 1 });
+foo(new[] { 3, 2, 1 });
+
+int foo (int[] victim) => victim.Length;
+```
+
+Para acceder al contenido se usa el operador `[]`, indicando un valor entero positivo. Pero también podemos usar el operador `^` para indicar índices negativos que para indexar desde el final hasta el principio, así como el operador `..` para obtener un fragmento del array:
+
+```csharp
+using static System.Console;
+
+int[] datos = { 1, 2, 3, 4, 5 };
+WriteLine(datos[0]);  // 1
+WriteLine(datos[^1]); // 5
+var subdatos = datos[2..4];
+WriteLine(subdatos[0]);  // 3
+WriteLine(subdatos[^1]); // 4
+```
+
+Para poder hacer arrays de varias dimensiones, el tipo debe incorporar entre los `[]` las comas que hagan falta, para alcanzar las dimensiones necesarias. Luego en el `new` también habrán de ser indicados los tamaños, separados por comas, aunque se pueden omitir si se definen los valores de la instancia, siendo igualmente necesarias las comas. Por ejemplo:
+
+```csharp
+int[,] a = new int[2,2]; // = { { 0, 0 }, { 0, 0 } };
+int[,] b = new int[2,2] { { 1, 2 }, { 3, 4 } };
+int[,] c = new int[,] { { 1, 2 }, { 3, 4 } };
+int[,] d = new[,] { { 1, 2 }, { 3, 4 } };
+int[,] e = { { 1, 2 }, { 3, 4 } };
+```
+
+Esto crea un array "compacto", ya que toda la memoria que emplea está en un único segmento continuo, excluyendo las referencias a los objetos del tipo de los elementos. Existe otra forma de hacer arrays con varias dimensiones, que consiste en arrays "fragmentados":
+
+```csharp
+int[][] a = new int[2][]; // = { null, null };
+int[][] b = new int[2][] { new[] { 1, 2 }, new[] { 3, 4, 5 } };
+int[][] c = new int[][] { new[] { 0, 1, 2 }, new[] { 3, 4 } };
+int[][] d = new[] { new int[] { 1, 2 }, new int[3] { 3, 4, 5 } };
+int[][] e = { new int[2] { 1, 2 }, new int[] { 3, 4, 5 } };
+```
+
+De esta manera lo que estamos creando es un array de objetos arrays. Por lo tanto, la memoria de cada celda de la matriz no es continua, sino que está dividida en segmentos esparcidos por la memoria. Una ventaja que trae esta forma, es que podemos tener elementos de diferentes tamaños, cosa que con la forma compacta no se podría.
+
 ## Funciones
 
 Una función es un bloque de código con nombre, que podemos parametrizar, para obtener diferentes resultados. Para definir una se utiliza la siguiente sintaxis:
@@ -703,10 +766,6 @@ WriteLine(fact(5)); // 120
 ```
 
 Las funciones de una sola expresión con `=>` no requieren de la sentencia `return` para devolver un valor, se deduce del tipo de retorno que lo harán. Además, el modificador `static` sirve para evitar que `f` pudiera acceder a variables que están fuera de su ámbito, algo que puede ser útil para que nos avise el compilador por si nos equivocamos sin querer.
-
-## Estructuras de datos
-
-..TODO..
 
 ## Tipos de usuario
 
@@ -1259,11 +1318,11 @@ Usamos `implicit` cuando la conversión es implícita y `explicit` cuando querem
 
 ..TODO..
 
-## Funciones anónimas
+## Genéricos
 
 ..TODO..
 
-## LINQ
+## Funciones anónimas
 
 ..TODO..
 
@@ -1421,7 +1480,11 @@ Por último, para la función [`Enum.ToString`](https://learn.microsoft.com/dotn
 | `d`, `D` | Representación como número decimal. |
 | `x`, `X` | Representación como número hexadecimal. |
 
-## La biblioteca estándar
+## LINQ
+
+..TODO..
+
+## Concurrencia y paralelismo
 
 ..TODO..
 
