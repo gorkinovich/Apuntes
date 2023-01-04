@@ -767,6 +767,8 @@ WriteLine(fact(5)); // 120
 
 Las funciones de una sola expresión con `=>` no requieren de la sentencia `return` para devolver un valor, se deduce del tipo de retorno que lo harán. Además, el modificador `static` sirve para evitar que `f` pudiera acceder a variables que están fuera de su ámbito, algo que puede ser útil para que nos avise el compilador por si nos equivocamos sin querer.
 
+Por último, la firma de una función consiste en la cabecera de su declaración, es decir, el tipo de retorno, el nombre, el número de parámetros y sus tipos. Esto es importante porque existen mecanismos que dependen de la firma de una función, sin definir su cuerpo, para trabajar.
+
 ## Tipos de usuario
 
 El lenguaje C# tiene una jerarquía de tipos con la que tenemos que trabajar si queremos crear tipos de datos propios para nuestros proyectos. Estas son las clases que tienen un significado especial para el lenguaje:
@@ -956,6 +958,8 @@ class Point {
 
 Podemos tener parámetros opcionales y combinarlo con la inicialización de objetos, usando las llaves. La inicialización de objetos será posible, siempre que exista la posibilidad de tener un constructor con cero argumentos, ya sea porque exista uno con cero parámetros o porque tenga todos los parámetros opcionales.
 
+> Si no se define ningún constructor en una clase, se genera con el compilador automáticamente uno por defecto sin parámetros, que inicializa los campos y propiedades a su valores por defecto (`default`), salvo que tengan un valor inicial en su definición.
+
 El segundo método especial es el destructor de la clase, que es la función que se invoca cuando el objeto va a ser eliminado de la memoria por el recolector de basura. Su sintaxis es:
 
 $$\texttt{\textasciitilde} \mathit{nombre} \texttt{(} \texttt{)} \textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{\char125}$$
@@ -1096,7 +1100,7 @@ public int Data => data;
 
 Los indexadores son muy similares a las propiedades, pero en su caso permite manejar un objeto de una clase como si fuera un array de una o más dimensiones. Para definirlo se utiliza la siguiente sintaxis:
 
-$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{[} \mathit{tipo_1}\ \mathit{nombre_1} \texttt{,} \textcolor{red}{\dots} \texttt{]}\ \texttt{\char123}\ \mathit{accesores}\ \texttt{\char125}$$
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{tipo}\ \texttt{this} \texttt{[} \mathit{tipo_1}\ \mathit{nombre_1} \texttt{,} \textcolor{red}{\dots} \texttt{]}\ \texttt{\char123}\ \mathit{accesores}\ \texttt{\char125}$$
 
 La sintaxis de los *accesores* es la siguiente:
 
@@ -1162,6 +1166,171 @@ La clase [`System.Objet`](https://learn.microsoft.com/dotnet/api/system.object) 
 | `string ToString()` | `public`, `virtual` | Devuelve la cadena de texto que representa al objeto. |
 
 Es común sobrescribir los métodos `Equals` y `GetHashCode`, cuando se quiere definir la semántica de igualdad de un tipo, además de sobrecargar los operadores `==` y `!=`. También el método `ToString` es habitual sobrescribirlo, para adaptarlo a la semántica real del tipo. El método `GetType` nos da una instancia de [`System.Type`](https://learn.microsoft.com/dotnet/api/system.type), que nos permite acceder a la información relativa al tipo en tiempo de ejecución, utilizando los mecanismos de la biblioteca [`System.Reflection`](https://learn.microsoft.com/dotnet/api/system.reflection).
+
+### Delegados y lambdas
+
+Los delegados es un mecanismo del lenguaje para crear tipos funcionales que cumplan una firma y poder así hacer referencia a diferentes funciones. Para ello se utiliza la palabra clave `delegate`, pudiendo indicar un modificador de visibilidad. Por ejemplo:
+
+```csharp
+using static System.Console;
+
+var foo = new Foo();
+Foo.Bar f = foo.Hola;
+f("Tatsuro Yamashita");
+f = Foo.Adios;
+f("Ryūichi Sakamoto");
+f = saludos;
+f("Mariya Takeuchi");
+
+void saludos (string value) => WriteLine($"Saludos: {value}");
+
+class Foo {
+    public delegate void Bar (string value);
+    public string Message = "Hola";
+    public void Hola (string value) => WriteLine($"{Message}: {value}");
+    public static void Adios (string value) => WriteLine($"Adios: {value}");
+}
+```
+
+Además, `delegate` se puede utilizar como operador para crear funciones anónimas, es decir, que no tienen nombre asociado a ellas:
+
+```csharp
+using static System.Console;
+
+System.Action<string, string> f = delegate (string n, string v) {
+    WriteLine($"{n}: {v}");
+};
+f("Miki Matsubara", "Stay with me!");
+
+System.Func<string> g = delegate { return "<3"; };
+f = delegate (string _, string v) {
+    WriteLine($"City Pop {v}");
+};
+f("Van Paugam", g());
+```
+
+Los tipos genéricos [`Action`](https://learn.microsoft.com/dotnet/api/system.action) y [`Func`](https://learn.microsoft.com/dotnet/api/system.func-1) son delegados de la biblioteca estándar, para poder trabajar con funciones anónimas. Para declarar una función anónima con `delegate`, si no tiene parámetros se puede omitir los paréntesis. También podemos con el guion bajo (`_`) descartar los parámetros que no queramos usar, pudiendo incluso descartarlos todos.
+
+Otra forma de definir una función sin nombre son las expresiones lambda, bien conocidas en el mundo de la programación funcional:
+
+```csharp
+using static System.Console;
+
+System.Func<string, string, string> f = (a, b) => a + ": " + b;
+System.Action<string> g = v => WriteLine(v);
+g(f("Junko Ohashi", "56709"));
+g(f("Taeko Ohnuki", "Carnaval"));
+```
+
+Las lambdas también pueden definirse su cuerpo con las llaves (`{` `}`):
+
+```csharp
+using static System.Console;
+
+System.Func<string, string, string> f = (a, b) => {
+    return a + ": " + b;
+};
+System.Action<string> g = v => { WriteLine(v); };
+g(f("Junko Ohashi", "56709"));
+g(f("Taeko Ohnuki", "Carnaval"));
+```
+
+También se pueden descartar parámetros con el guion bajo:
+
+```csharp
+using static System.Console;
+
+System.Func<string, string, string> f = (_, _) => "Anri";
+WriteLine(f("Shyness", "Boy"));
+```
+
+Se puede añadir el modificador `static` a una lambda, para evitar que se capturen por accidente variables del ámbito en el que está, haciendo que el compilador nos avise del error cometido:
+
+```csharp
+int x = 10;
+System.Func<int> f = () => x;        // Ok
+System.Func<int> g = static () => x; // Error con x
+```
+
+Otra curiosidad de los delegados, es que se pueden asignar varias funciones a la vez con el operador `+=` y quitarlas con `-=`:
+
+```csharp
+using static System.Console;
+
+System.Action<string, int> f = null;
+f += (v, n) => WriteLine($"{n}) Rydeen: {v}");
+f += delegate (string v, int n) { WriteLine($"{n}) Tong Poo: {v}"); };
+f += foo;
+f("YMO", 1);
+f -= foo;
+f("YMO", 2);
+
+void foo (string v, int n) => WriteLine($"{n}) Technopolis: {v}");
+```
+
+### Eventos
+
+Los eventos son a los delegados, lo que las propiedades a los campos de una clase. Su sintaxis es la siguiente:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{event}\ \mathit{tipo}\ \mathit{nombre}\  $$
+
+$$\textcolor{red}{\char123} \texttt{;} \textcolor{red}{|} \texttt{\char123}\ \texttt{add}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \texttt{remove}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \texttt{\char125} \textcolor{red}{\char125}$$
+
+De forma similar a las propiedades, si no se indica su `add` y `remove`, se generarán automáticamente durante la compilación. Estos *accesores*, además de utilizar la palabra clave `value` para hacer referencia al valor que se le está añadiendo o quitando, representan la operación `+=` y `-=` sobre una variable de tipo delegado.
+
+Además de los modificadores de visibilidad, tenemos los siguientes de comportamiento:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `static` | El evento es estático. |
+| `abstract` | El evento es abstracto y su implementación estará en las clases hijas, por lo que no se generarán automáticamente sus *accesores* `add` y `remove`. Sólo las clases abstractas pueden tener eventos abstractos. |
+| `virtual` | El evento es virtual, es decir, que podrá ser sobrescrito por un evento en las clases hijas. |
+| `override` | El evento sobrescribe un evento abstracto o virtual de la clase padre. |
+| `sealed` | El evento está sellado, es decir, no se podrá seguir sobrescribiendo en las clases hijas de la actual. Este modificador se tiene que utilizar junto a `override`. |
+| `new` | El evento oculta a otro de la clase padre. |
+
+A continuación un ejemplo completo manejando los eventos:
+
+```csharp
+using static System.Console;
+
+var foo = new Foo();
+foo.Saluda += () => WriteLine("Bay City");
+foo.Saluda += () => WriteLine("Junko Yagami");
+foo.Saludame();
+
+var faa = new Faa();
+faa.Saluda += () => WriteLine("I'm In Love");
+faa.Saluda += () => WriteLine("Tomoko Aran");
+faa.Saludame();
+
+class Foo {
+    public delegate void Bar ();
+
+    private Bar saluda;
+
+    public event Bar Saluda {
+        add {
+            WriteLine("Add event...");
+            saluda += value;
+        }
+        remove {
+            WriteLine("Remove event...");
+            saluda -= value;
+        }
+    }
+
+    public virtual void Saludame () => this.saluda();
+}
+
+class Faa : Foo {
+    public new event Bar Saluda;
+
+    public override void Saludame () => this.Saluda();
+}
+```
+
+Hay que tener en cuenta, que cuando el evento opera sobre una variable delegada, como ocurre con `Foo`, no se puede invocar como una función al evento. Sí se puede invocar como una función en `Faa`, porque luego se va a generar en tiempo de compilación el código completo del evento. Esto no quiere decir que se pueda hacer `faa.Saluda()`, porque la variable delegada generada es privada a la clase `Faa`, por eso sí se puede hacer `this.Saluda()`.
 
 ### Métodos extensibles
 
@@ -1288,7 +1457,158 @@ Usamos `implicit` cuando la conversión es implícita y `explicit` cuando querem
 
 ### Interfaces
 
-..TODO..
+Las interfaces es un mecanismo para definir qué operaciones debe tener implementadas una clase que herede de estas. Simplificando mucho, sería como una clase abstracta, donde todos los métodos declarados son abstractos. Su sintaxis es la siguiente:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{interface}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:} \mathit{interfaces} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}$$
+
+Los modificadores aplicables a una interfaz son los de visibilidad. En cuanto a las definiciones, se pueden definir métodos, propiedades, indexadores y eventos, con la principal diferencia de que en las interfaces las definiciones no tienen modificadores, porque se asume que son públicas siempre. Por ejemplo:
+
+```csharp
+using static System.Console;
+
+Bar foo = new Foo();
+foo.Evento += () => WriteLine("Material Girl");
+foo.Mostrar();
+foo.Texto = "How Soon Is Now?";
+for (int i = 0; i < foo.Texto.Length; i++) {
+    Write(foo[i]);
+}
+WriteLine();
+
+interface Bar {
+    void Mostrar ();
+    string Texto { get; set; }
+    char this[int i] { get; }
+    event System.Action Evento;
+}
+
+class Foo : Bar {
+    public char this[int i] => Texto[i];
+    public string Texto { get; set; }
+    public event System.Action Evento;
+    public void Mostrar () => Evento();
+
+    public Foo () {
+        Texto = "Plastic Love";
+        Evento += () => WriteLine(Texto);
+    }
+}
+```
+
+Como se pueden heredar varias interfaces, puede ocurrir que haya colisión con las definiciones. En principio no supone un problema, porque ambas interfaces usarán el mismo método en la clase que las implementa:
+
+```csharp
+using static System.Console;
+
+var foo = new Foo();
+foo.Saluda();
+((Hermano) foo).Saluda();
+((Primo) foo).Saluda();
+
+interface Hermano { void Saluda (); }
+interface Primo { void Saluda (); }
+
+class Foo : Hermano, Primo {
+    public void Saluda () => WriteLine("Hola");
+}
+```
+
+Pero si necesitáramos hacer distinción entre cada interfaz, tendríamos que implementar el método de forma explícita:
+
+```csharp
+using static System.Console;
+
+var foo = new Foo();
+foo.Saluda();
+((Hermano) foo).Saluda();
+((Primo) foo).Saluda();
+
+var bar = new Bar();
+// bar.Saluda(); <- No compila
+((Hermano) bar).Saluda();
+((Primo) bar).Saluda();
+
+interface Hermano { void Saluda (); }
+interface Primo { void Saluda (); }
+
+class Foo : Hermano, Primo {
+    public void Saluda () => WriteLine("Hola");
+    void Primo.Saluda () => WriteLine("Hola primo");
+}
+
+class Bar : Hermano, Primo {
+    void Hermano.Saluda () => WriteLine("Hola hermano");
+    void Primo.Saluda () => WriteLine("Hola primo");
+}
+```
+
+Como se puede observar, implementar un método de forma explícita no permite usar modificadores y dicho método sólo se puede invocar con una expresión que tenga como tipo la interfaz.
+
+Para evitar que se rompa todo un proyecto, al aumentar los miembros de una interfaz, es posible desde la versión 8.0 del lenguaje crear [métodos por defecto](https://learn.microsoft.com/dotnet/csharp/language-reference/proposals/csharp-8.0/default-interface-methods) para una definición:
+
+```csharp
+using static System.Console;
+
+Bar foo = new Foo();
+foo.Evento += () => WriteLine("Material Girl");
+foo.Mostrar();
+foo.Texto = "How Soon Is Now?";
+for (int i = 0; i < foo.Texto.Length; i++) {
+    Write(foo[i]);
+}
+WriteLine();
+
+interface Bar {
+    void Mostrar () => evento();
+    
+    string Texto {
+        get => Mensaje;
+        set => Mensaje = value;
+    }
+    
+    char this[int i] { get => Mensaje[i]; }
+
+    event System.Action Evento {
+        add => evento += value;
+        remove => evento -= value;
+    }
+
+    public static string Mensaje { set; get; }
+    public static void Saludo () => WriteLine(Mensaje);
+    private static System.Action evento = Saludo;
+}
+
+class Foo : Bar {
+    public Foo () => Bar.Mensaje = "Plastic Love";
+}
+```
+
+Es el mismo ejemplo del principio, pero usando métodos por defecto. Como se puede observar, podemos crear miembros estáticos dentro de una interfaz, de forma similar a como se hace en las clases. Hay que tener en cuenta, que los métodos por defecto no forman parte de la clase `Foo`, por lo tanto no se podría hacer `foo.Mostrar()` si `foo` fuera del tipo de la clase, en lugar de la interfaz.
+
+Se puede también revertir el efecto de los métodos por defecto, para obligar a las clases a tener que implementar un método, con del modificador `abstract` de la siguiente manera:
+
+```csharp
+using static System.Console;
+
+var foo = new Foo();
+foo.M();
+((A) foo).M();
+((B) foo).M();
+
+interface A {
+    void M () => WriteLine("A.M");
+}
+
+interface B : A {
+    abstract void M ();
+}
+
+class Foo : B {
+    public void M () => WriteLine("Foo.M");
+}
+```
+
+Existen más detalles derivados de los métodos por defecto, pero lo básico está ya cubierto con los anteriores ejemplos.
 
 ### Estructuras
 
@@ -1319,10 +1639,6 @@ Usamos `implicit` cuando la conversión es implícita y `explicit` cuando querem
 ..TODO..
 
 ## Genéricos
-
-..TODO..
-
-## Funciones anónimas
 
 ..TODO..
 
