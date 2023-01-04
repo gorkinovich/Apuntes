@@ -58,7 +58,7 @@ En C# hay varios tipos de comentarios. El primer tipo son los comentarios de lí
 // Comentario de una sola línea...
 ```
 
-Este tipo de comentario termina  con el salto de línea, por lo que todo el texto que venga detrás de `//` será ignorado por el compilador. Si necesitáramos que el comentario ocupe varias líneas, tenemos la siguiente manera:
+Este tipo de comentario termina con el salto de línea, por lo que todo el texto que venga detrás de `//` será ignorado por el compilador. Si necesitáramos que el comentario ocupe varias líneas, tenemos la siguiente manera:
 
 ```csharp
 /* Comentario que
@@ -186,7 +186,7 @@ $$\textcolor{red}{\char123} \texttt{true} \textcolor{red}{|} \texttt{false} \tex
 
 El siguiente grupo son los números enteros, cuya sintaxis es:
 
-$$\textcolor{red}{[} \mathit{prefijo} \textcolor{red}{]}  \mathit{d\acute{\imath}gitos} \textcolor{red}{[} \mathit{sufijo} \textcolor{red}{]}$$
+$$\textcolor{red}{[} \mathit{prefijo} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{[} \mathit{sufijo} \textcolor{red}{]}$$
 
 Los prefijos validos son:
 
@@ -337,9 +337,9 @@ El tipo `decimal` también comparte con los enteros las constantes `MinValue` y 
 
 | Constante | Descripción |
 |:---------:|:------------|
-|  `MinusOne` | Representación del valor `-1`. |
-|  `One` | Representación del valor `1`. |
-|  `Zero` | Representación del valor `0`. |
+| `MinusOne` | Representación del valor `-1`. |
+| `One` | Representación del valor `1`. |
+| `Zero` | Representación del valor `0`. |
 
 También en el caso de `decimal` tiene una cuantiosa variedad de funciones estáticas para realizar operaciones varias, como ocurre con el resto de tipos numéricos.
 
@@ -384,13 +384,13 @@ El primer bloque de operadores booleanos son los de comparación:
 
 | Operación | Descripción |
 |:---------:|:-----------:|
-| `X == Y`  | `X` es igual a `Y`. |
-| `X != Y`  | `X` no es igual a `Y`. |
-| `X <= Y`  | `X` es menor o igual que `Y`. |
-| `X < Y`   | `X` es menor que `Y`. |
-| `X >= Y`  | `X` es mayor o igual que `Y`. |
-| `X > Y`   | `X` es mayor que `Y`. |
-| `X is T`   | `X` es de tipo `T`. |
+| `X == Y` | `X` es igual a `Y`. |
+| `X != Y` | `X` no es igual a `Y`. |
+| `X <= Y` | `X` es menor o igual que `Y`. |
+| `X < Y` | `X` es menor que `Y`. |
+| `X >= Y` | `X` es mayor o igual que `Y`. |
+| `X > Y` | `X` es mayor que `Y`. |
+| `X is T` | `X` es de tipo `T`. |
 
 El primer bloque de operadores booleanos son los lógicos:
 
@@ -398,7 +398,7 @@ El primer bloque de operadores booleanos son los lógicos:
 |:---------:|:-----------:|
 | `!X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de `X`. |
 | `X && Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
-| `X || Y`  | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
+| `X || Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
 
 Estos operadores nos permiten componer condiciones más complejas. Para entenderlos mejor aquí tenemos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
 
@@ -911,6 +911,60 @@ void Bar (object v) {
 
 ### Bucles
 
+La sentencia de control `while` permite ejecutar un bloque de código mientras se cumpla una condición. Su sintaxis es:
+
+$$\texttt{while}\ \texttt{(} \mathit{condici\acute{o}n} \texttt{)}\ \mathit{bloque}$$
+
+Con la sentencia `do`-`while` podremos hacer lo mismo que con la anterior, con la diferencia de que siempre se ejecutará al menos una vez el bloque de código. Su sintaxis es:
+
+$$\texttt{do}\ \mathit{bloque}\ \texttt{while}\ \texttt{(} \mathit{condici\acute{o}n} \texttt{)} \texttt{;}$$
+
+Si queremos ejecutar el código un número determinado de veces, con la sentencia `for` podremos hacerlo con la siguiente sintaxis:
+
+$$\texttt{for}\ \texttt{(} \textcolor{red}{[} \mathit{inicio} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{[} \mathit{condici\acute{o}n} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{[} \mathit{incremento} \textcolor{red}{]} \texttt{)}\ \mathit{bloque}$$
+
+Donde *inicio* son las expresiones, separadas por comas, que se ejecutan antes de entrar en el bucle. Normalmente se utiliza el inicio para declarar las variables contadoras del bucle. Con *condición*, en cada iteración del bucle, se controla al inicio de cada vuelta si se ha de ejecutar o no. Y con *incremento* tenemos las expresiones que se ejecutan al final de cada iteración, que habitualmente se usan para incrementar los contadores.
+
+El último tipo de bucle disponible es `foreach`, que nos permite recorrer los elementos de un contenedor de datos, tales como los arrays por ejemplo. Su sintaxis es:
+
+$$\texttt{foreach}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{in}\ \mathit{contenedor} \texttt{)}\ \mathit{bloque}$$
+
+Con este ejemplo podremos ver en acción los diferentes tipos de bucles:
+
+```csharp
+using static System.Console;
+
+var nums = new[] { 1, 2, 3, 4 };
+string respuesta;
+do {
+    var i = 0;
+    Write("While: ");
+    while (i < nums.Length) {
+        Write($"{nums[i]} ");
+        ++i;
+    }
+    WriteLine();
+
+    Write("For: ");
+    for (int j = 0; j < nums.Length; j++) {
+        Write($"{nums[j]} ");
+    }
+    WriteLine();
+
+    Write("Foreach: ");
+    foreach (var n in nums) {
+        Write($"{n} ");
+
+    }
+    WriteLine();
+
+    WriteLine("¿Salir? (S/N) ");
+    respuesta = ReadLine().ToLower();
+} while (respuesta != "s");
+```
+
+### Saltos y retornos
+
 ..TODO..
 
 ### Excepciones
@@ -1420,7 +1474,7 @@ void foo (string v, int n) => WriteLine($"{n}) Technopolis: {v}");
 
 Los eventos son a los delegados, lo que las propiedades a los campos de una clase. Su sintaxis es la siguiente:
 
-$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{event}\ \mathit{tipo}\ \mathit{nombre}\  $$
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{event}\ \mathit{tipo}\ \mathit{nombre}$$
 
 $$\textcolor{red}{\char123} \texttt{;} \textcolor{red}{|} \texttt{\char123}\ \texttt{add}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \texttt{remove}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \texttt{\char125} \textcolor{red}{\char125}$$
 
@@ -1911,7 +1965,7 @@ Y estos códigos nos permitirán crear formatos propios:
 | `h`, `%h` | Horas | `hh` | Horas con ceros a la izquierda |
 | `s`, `%s` | Segundos | `ss` | Segundos con ceros a la izquierda |
 | `f`, `%f` | Décimas de segundo | `ff`-`fffffff` | De 10^-2^ a 10^-7^ de segundo |
-| `F`, `%F` | Décimas de segundo o nada si es cero | `FF`-`FFFFFFF` | De 10^-2^ a 10^-7^ de segundo  o nada si es cero |
+| `F`, `%F` | Décimas de segundo o nada si es cero | `FF`-`FFFFFFF` | De 10^-2^ a 10^-7^ de segundo o nada si es cero |
 | `'...'` | Texto literal | `\` | Carácter de escape |
 | Otros | Texto literal |
 
@@ -1936,3 +1990,6 @@ Por último, para la función [`Enum.ToString`](https://learn.microsoft.com/dotn
 
 ..TODO..
 
+$$\texttt{await}\ \texttt{foreach}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{in}\ \mathit{contenedor} \texttt{)}\ \mathit{bloque}$$
+
+..
