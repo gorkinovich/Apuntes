@@ -450,6 +450,7 @@ El segundo bloque son los operadores a nivel de bits:
 | `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de `X` con `Y`. |
 | `X << Y` | Desplazamiento a la izquierda `Y` bits de `X`. |
 | `X >> Y` | Desplazamiento a la derecha `Y` bits de `X`. |
+| `X >>> Y` | **C# 11:** Desplazamiento sin signo a la derecha `Y` bits de `X`. Siempre se añaden ceros por la izquierda con el desplazamiento, mientras que con `>>` se añaden unos si el primer bit es un `1`. |
 
 De modo similar a los operadores lógicos, están son sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
 
@@ -561,6 +562,7 @@ Estos son los operadores de asignación disponibles:
 | `X ^= Y` | Equivale a `X = X ^ Y`. |
 | `X <<= Y` | Equivale a `X = X << Y`. |
 | `X >>= Y` | Equivale a `X = X >> Y`. |
+| `X >>>= Y` | **C# 11:** Equivale a `X = X >>> Y`. |
 | `X ??= Y` | Equivale a `X = X ?? Y`. |
 
 ### Precedencia
@@ -768,6 +770,152 @@ WriteLine(fact(5)); // 120
 Las funciones de una sola expresión con `=>` no requieren de la sentencia `return` para devolver un valor, se deduce del tipo de retorno que lo harán. Además, el modificador `static` sirve para evitar que `f` pudiera acceder a variables que están fuera de su ámbito, algo que puede ser útil para que nos avise el compilador por si nos equivocamos sin querer.
 
 Por último, la firma de una función consiste en la cabecera de su declaración, es decir, el tipo de retorno, el nombre, el número de parámetros y sus tipos. Esto es importante porque existen mecanismos que dependen de la firma de una función, sin definir su cuerpo, para trabajar.
+
+## Sentencias de control
+
+Esta sección cubre las sentencias de control básicas del lenguaje. El resto de sentencias más avanzadas serán analizadas en otras secciones más específicas.
+
+### Condicionales
+
+La primera sentencia de control es el `if`-`else`, cuya sintaxis es la siguiente:
+
+$$\texttt{if}\ \texttt{(} \mathit{condici\acute{o}n} \texttt{)}\ \mathit{bloque_{true}}\ \textcolor{red}{[} \texttt{else}\ \mathit{bloque_{false}} \textcolor{red}{]}$$
+
+Recordemos que un bloque puede ser una sentencia terminada con punto y coma (`expresión;`) o un bloque de sentencias delimitado por llaves (`{ expresiones }`). Si la condición, que ha de ser una expresión booleana, se evalúa a `true`, se ejecutará el primer bloque, si no se ejecutará el segundo si está definido.
+
+```csharp
+using static System.Console;
+
+Write("A = ");
+int a = int.Parse(ReadLine());
+Write("B = ");
+int b = int.Parse(ReadLine());
+
+if (a == b) {
+    WriteLine("A y B son iguales.");
+} else if (a < b) {
+    WriteLine("A es menor que B.");
+} else {
+    WriteLine("A es mayor que B.");
+}
+```
+
+### Patrones
+
+La sentencia de control `switch` permite evaluar una expresión y ejecutar un bloque haciendo un ajuste de patrones con las diferentes cláusulas definidas. Su sintaxis es:
+
+$$\begin{array}{l}
+\texttt{switch}\ \texttt{(} \mathit{expresi\acute{o}n} \texttt{)}\ \texttt{\char123}
+\\[0.5em] \qquad \textcolor{red}{[} \texttt{case}\ \mathit{patr\acute{o}n_1}\ \textcolor{red}{[} \texttt{when}\ \mathit{condici\acute{o}n_1} \textcolor{red}{]} \texttt{:}\ \mathit{expresiones_1} \textcolor{red}{]}
+\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \qquad \textcolor{red}{[} \texttt{case}\ \mathit{patr\acute{o}n_n}\ \textcolor{red}{[} \texttt{when}\ \mathit{condici\acute{o}n_n} \textcolor{red}{]} \texttt{:}\ \mathit{expresiones_n} \textcolor{red}{]}
+\\[0.5em] \qquad \textcolor{red}{[} \texttt{default:}\ \mathit{expresiones} \textcolor{red}{]}
+\\[0.5em] \texttt{\char125}
+\end{array}$$
+
+Dependiendo del valor de la *expresión*, se va buscando en orden una cláusula `case` que encaje su patrón con el valor y su condición asociada. La primera que encaje será el punto de entrada de la ejecución, ejecutando sus expresiones hasta encontrar la sentencia `break` al final de dicho bloque, pues de lo contrario el compilador dará error. Si no se encaja con ninguna cláusula, se ejecutará la cláusula `default` de estar definida.
+
+> Si en lugar de salir del `switch` con un `break`, queremos saltar a otra cláusula, se puede usar la sentencia `goto` para lograrlo. Las dos variantes disponibles son `goto default` y `goto case valor`. No se permite usar con `goto case` nada que no sea un valor constante. También se puede evitar terminar con `break` si se utiliza una sentencia de salto (`return`, `throw`, `continue`, `goto etiqueta`).
+
+También tenemos disponible la expresión `switch`, cuya sintaxis es:
+
+$$\mathit{expresi\acute{o}n}\ \texttt{switch}\ \texttt{\char123}\ \mathit{patr\acute{o}n_1}\ \texttt{=>}\ \mathit{expresi\acute{o}n_1}$$
+
+$$\textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{patr\acute{o}n_n}\ \texttt{=>}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]}\ \texttt{\char125}$$
+
+Es algo más limitada que la sentencia `switch` en cuanto al cuerpo de las cláusulas, pero permite todas las categorías de patrones que hay. Por ejemplo, para crear la cláusula por defecto usaríamos `_ => expresión`, mientras que `case _:` interpreta el guion bajo como una variable y no como un patrón.
+
+El patrón más básico que existe es usar valores constantes, ya sean constantes definidas, valores enumerados o literales (números, letras, cadenas, `true`, `false` o `null`). Luego tenemos [patrones](https://learn.microsoft.com/dotnet/csharp/language-reference/operators/patterns) más avanzados como:
+
+| Categoría | Ejemplo | Descripción |
+|:---------:|:-------:|:------------|
+| Tipos | `System.Byte`<br/>`int _` | Comprueba si el valor pertenece al tipo. |
+| Declaración | `char X`<br/>`var Y` | Comprueba si el valor pertenece al tipo, declarando la variable `X` en el ámbito en caso afirmativo. |
+| Relacionales | `> 0`<br/>`<= 10` | Comprueba el valor en relación a otro valor constante usando los operadores `<`, `>`, `<=` y `>=`. |
+| Lógicos | `not null`<br/>`int and > 0` | Permiten crear patrones más complejos con los operadores lógicos `not`, `and` y `or`, siendo este su orden de prioridad en la evaluación. Estos operadores sólo se usan en patrones. |
+| Miembros | `{ Year: 2002, Month: 12 }` | Comprueba si miembros del valor encajan con los patrones indicados. |
+| Posicional | `(true, _)`<br/>`(> 10, not null)` | Comprueba si el valor encaja con un tipo tupla (ya sea por valor directo o por usar el método `Deconstruct`) y si los valores de los componentes de esta encajan con los patrones indicados. |
+| Descarte | `_` | Se descarta el valor en la posición indicada. |
+| Paréntesis | `not (1 or 2)` | Permite cambiar el orden de evaluación del patrón. |
+
+En principio, el sistema es suficientemente flexible como para combinar las diferentes categorías de patrones entre sí. La excepción a esto último son declaración de variables, que sí permite combinarlo con patrones de miembros, posicionales y de descarte, pero no con los demás.
+
+> En **C# 10** se permite más flexibilidad con los patrones de miembros, como se puede observar en el siguiente ejemplo:
+> 
+> ```csharp
+> bool TestCS9 (Bar value) =>
+>     value is { A: { N: > 1 }, B: { M: <= 1 } }
+>           or { A: { M: < 1 }, B: { N: >= 1 } };
+>
+> bool TestCS10 (Bar value) =>
+>     value is { A.N: > 1, B.M: <= 1 }
+>           or { A.M: < 1, B.N: >= 1 };
+>
+> record Foo(int N, int M);
+> record Bar(Foo A, Foo B);
+> ```
+> 
+> Luego en **C# 11** se han añadido patrones para arrays y listas, pudiendo indicar con `[]` los patrones de la secuencia separados por comas, por ejemplo. `[> 1, var s, _, ..]`. El patrón `..` sirve para indicar un número arbitrario (cero o muchos) de elementos en la secuencia, por ejemplo, `[_, _, ..]` es un patrón que encaja con secuencias que tengan como mínimo dos elementos.
+
+Por último tenemos el operador `is`, que nos permite comprobar si una expresión cumple un patrón. Su sintaxis es:
+
+$$\mathit{expresi\acute{o}n}\ \texttt{is}\ \mathit{patr\acute{o}n}$$
+
+Este primer ejemplo muestra el uso de las expresiones `is` y `switch`:
+
+```csharp
+string Foo (object v) {
+    if (v is System.DateTime { Month: var m })
+        return m switch {
+            >= 3 and <= 5 => "primavera",
+            >= 6 and <= 8 => "verano",
+            >= 9 and <= 11 => "otoño",
+            12 or 1 or 2 => "invierno",
+            _ => "error"
+        };
+    else
+        return "error";
+}
+```
+
+Y con este segundo ejemplo vemos la sentencia `swicth`, usando diferentes ejemplos de patrones:
+
+```csharp
+void Bar (object v) {
+    switch (v) {
+        case 0:
+            WriteLine("Cero");
+            break;
+        case 1:
+        case 2:
+            WriteLine("Uno o dos");
+            break;
+        case (string { Length: < 1 }, var y):
+            WriteLine($"('', {y})");
+            break;
+        case var (x, y) when x != y:
+            WriteLine($"({x}, {y})");
+            break;
+        case "hola":
+            WriteLine("adios");
+            break;
+        case not null:
+            WriteLine("No es null");
+            break;
+        default:
+            WriteLine("Indefinido");
+            break;
+    }
+}
+```
+
+### Bucles
+
+..TODO..
+
+### Excepciones
+
+..TODO..
 
 ## Tipos de usuario
 
@@ -1622,26 +1770,6 @@ Existen más detalles derivados de los métodos por defecto, pero lo básico est
 
 ..TODO..
 
-## Control de la ejecución
-
-..TODO..
-
-### Condicionales
-
-..TODO..
-
-### Bucles
-
-..TODO..
-
-### Excepciones
-
-..TODO..
-
-## Genéricos
-
-..TODO..
-
 ## E/S por consola
 
 ..TODO..
@@ -1795,6 +1923,10 @@ Por último, para la función [`Enum.ToString`](https://learn.microsoft.com/dotn
 | `f`, `F` | Representación de *flags* como texto. |
 | `d`, `D` | Representación como número decimal. |
 | `x`, `X` | Representación como número hexadecimal. |
+
+## Genéricos
+
+..TODO..
 
 ## LINQ
 
