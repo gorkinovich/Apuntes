@@ -1,4 +1,4 @@
-﻿# C# 9.0
+﻿# C# 9.0 (.NET 5.0)
 
 [C#](https://en.wikipedia.org/wiki/C_Sharp_(programming_language)) es un lenguaje de programación multiparadigma desarrollado por Microsoft. Este lenguaje se sustenta sobre la plataforma [.NET](https://dotnet.microsoft.com/), siendo necesaria como mínimo la versión 5.0 para desarrollar con la versión 9.0 del lenguaje. El IDE principal que tenemos disponible es el [Visual Studio](https://visualstudio.microsoft.com/), siendo su versión *Community* gratuita. También existe [Visual Studio Code](https://code.visualstudio.com/), que es una versión gratuita y más liviana, que permite configurarlo para todo tipo de lenguajes de programación. Estos son algunos enlaces de interés:
 
@@ -534,10 +534,10 @@ Estos son operadores especiales del lenguaje:
 | Operación | Descripción |
 |:---------:|:-----------:|
 | `await` | Espera asíncrona para el resultado de una tarea. |
-| `default` | Devuelve el valor por defecto para un tipo. |
+| `default` | Devuelve el valor por defecto para un tipo. Cuando el compilador es capaz de inferir el tipo de la expresión, se puede usar `default` en lugar de `default(Tipo)`. |
 | `delegate` | Permite definir funciones anónimas. |
 | `nameof` | Devuelve como una cadena de texto el nombre de un elemento (variable, tipo o miembro). Se resuelve en tiempo de compilación. |
-| `new` | Reserva espacio en la memoria para un objeto, ya sea un tipo por valor (en la pila) o un tipo por referencia (en el montículo). |
+| `new` | Reserva espacio en la memoria para un objeto, ya sea un tipo por valor (en la pila) o un tipo por referencia (en el montículo). Cuando el compilador es capaz de inferir el tipo de la expresión, se puede usar `new` en lugar de `new Tipo`. |
 | `sizeof` | Da el tamaño que ocupa en memoria un tipo por valor. Está limitado a código `unsafe`, salvo para tipos básicos, por ejemplo `sizeof(int)`. |
 | `switch` | Ramificación por encaje de patrones. |
 | `stackalloc` | Modificador para reservar memoria en la pila de programa. |
@@ -1141,7 +1141,7 @@ No todos los modificadores de comportamiento se pueden emplear para cualquier ti
 
 ### Clases
 
-La sintaxis para definir una clase es la siguiente:
+La sintaxis para definir una [clase](https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/class) es la siguiente:
 
 $$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{class}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:} \mathit{padre\ e\ interfaces} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}$$
 
@@ -1920,11 +1920,150 @@ Existen más detalles derivados de los métodos por defecto, pero lo básico est
 
 ### Estructuras
 
-..TODO..
+Las [estructuras](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/struct) nos permiten crear tipos por valor, mientras que las clases son tipos por referencia. Se definen con la siguiente sintaxis:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{struct}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:} \mathit{interfaces} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}$$
+
+Las estructuras heredan del tipo `System.ValueType` y no pueden heredar de ningún otro tipo, pero sí pueden implementar interfaces. Los modificadores que puede tener son los de visibilidad y `readonly` en cuanto al comportamiento. Este último modificador hace que el tipo sea de sólo lectura una vez inicializado sus campos y propiedades.
+
+En cuanto a las definiciones, varían los modificadores de visibilidad y comportamiento aceptados, ya que no se puede heredar de una estructura. Los modificadores disponibles son: `async`, `extern`, `new`, `override`, `readonly`, `static`, `unsafe` y `volatile`, que se usarán del mismo modo que en una clase. No obstante, podemos aplicar `readonly` a los métodos de la estructura, para forzar a que su código no modifique el contenido del objeto.
+
+Otra diferencia importante es que los campos y propiedades no se puede inicializar con un valor en su definición. Para inicializar una estructura se puede crear un constructor, que no puede ser definido sin parámetros, y que se tendrá que inicializar todos los campos y propiedades de la misma.
+
+El compilador genera internamente un constructor sin parámetros, que toma cada campo de la estructura y lo inicializa a su valor por defecto, el mismo que obtendríamos usando el operador `default`. Sobre el uso de este constructor, se puede inicializar el objeto con la sintaxis de inicialización de objetos. Por ejemplo:
+
+```csharp
+using static System.Console;
+
+var a = new Foo();
+a.Mostrar(); // 0
+
+var b = new Foo() { Dato = 10 };
+b.Mostrar(); // 10
+
+var c = new Bar();
+WriteLine($"{c.Dato} {c.Nombre}"); // 0
+
+var d = new Bar() { Nombre = "Bobbin" };
+WriteLine($"{d.Dato} {d.Nombre}"); // 0 Bobbin
+
+var e = new Bar(10);
+WriteLine($"{e.Dato} {e.Nombre}"); // 10 nada
+
+struct Foo {
+    public int Dato;
+    public override string ToString() => Dato.ToString();
+    public readonly void Mostrar () => WriteLine(Dato);
+}
+
+readonly struct Bar {
+    public int Dato { get; init; }
+    public string Nombre { get; init; }
+    public Bar (int dato = -1, string nombre = "nada") {
+        Dato = dato;
+        Nombre = nombre;
+    }
+}
+```
+
+Tampoco está permitido que una estructura tenga un método destructor. Por lo que se recomienda utilizar la interfaz `System.IDisposable`, para liberar recursos instanciados dentro de la estructura.
+
+> A partir de **C# 10** se permite inicializar campos y propiedades en su declaración. También se permite definir un constructor sin parámetros, que tendrá que ser público. En **C# 11** se quita la limitación de que se tengan que inicializar todos los campos y propiedades en un constructor.
 
 ### Registros
 
-..TODO..
+Los [registros](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) son un tipo por referencia especial pensados para datos inmutables. Su sintaxis es la siguiente:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{record}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{(} \mathit{campos} \texttt{)} \textcolor{red}{]}$$
+
+$$\textcolor{red}{[} \texttt{:} \mathit{padre\ e\ interfaces} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{;} \textcolor{red}{|} \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+
+A efectos prácticos un registro es una clase, por lo que soporta los mismos tipos de modificadores y definiciones dentro del tipo. Pero un registro sólo puede heredar de otro registro, como primera diferencia. Luego tenemos los *campos*, también llamados parámetros posicionales, que podemos definir entre los paréntesis que acompañan al *nombre* del registro, estos se definen como se definen las variables. Por ejemplo:
+
+```csharp
+public record Punto (int X, int Y);
+```
+
+Sería similar a la siguiente definición:
+
+```csharp
+public record Punto {
+    public int X { get; init; } = default;
+    public int Y { get; init; } = default;
+}
+```
+
+Para poder mutar un valor, y asignárselo a otra variable, tenemos el operador `with`:
+
+```csharp
+using static System.Console;
+
+Punto p0 = new();
+Punto p1 = new(1, 3);
+var p2 = new Punto() { Y = 2, Z = 4 };
+var p3 = p2 with { X = 4, Z = p1.Y * 2 };
+
+WriteLine(p0); // Punto { X = 0, Y = 0, Z = 0 }
+WriteLine(p1); // Punto { X = 1, Y = 3, Z = 0 }
+WriteLine(p2); // Punto { X = 0, Y = 2, Z = 4 }
+WriteLine(p3); // Punto { X = 4, Y = 2, Z = 6 }
+
+var p4 = new Punto();
+WriteLine(p0 == p4); // True
+WriteLine(object.ReferenceEquals(p0, p4)); // False
+
+record Punto (int X = 0, int Y = 0, int Z = 0);
+```
+
+Como se puede observar en el ejemplo, los registros tienen comprobación de la igualdad por valor y también formato automático de su contenido a cadena. Con los registros y con `with` tenemos una forma concisa de crear y modificar objetos inmutables.
+
+> La inmutabilidad de las propiedades de un registro se limitan al contenido inmediato de los campos del tipo. Esto significa que, si usamos tipos por referencia, no podremos reasignar a la propiedad un nuevo objeto, pero sí podremos modificar el contenido del objeto. Por ejemplo:
+> ```csharp
+> using static System.Console;
+>
+> var foo = new Foo(new[] { 1, 2, 3, 4 });
+>
+> for (int i = 0; i < foo.NS.Length; i++)
+>     foo.NS[i] *= 2;
+>
+> foreach (var item in foo.NS)
+>     WriteLine(item); // 2 4 6 8
+>
+> record Foo (int[] NS );
+> ```
+
+Hay que tener en cuenta que, con los parámetros posicionales del registro, se crean automáticamente propiedades con `init`, un constructor cuyos parámetros corresponden con la definición de los parámetros posicionales, y un método `Deconstruct` con parámetros `out` por cada parámetro posicional (se ignorarán los campos y propiedades definidos en el cuerpo del registro). No obstante, podemos redefinir algunos de estos elementos dentro del cuerpo del registro:
+
+```csharp
+using static System.Console;
+
+Bar v1 = new Bar(2, 3);
+using Bor v2 = new Bor();
+WriteLine(v1); // Bar { A = 2, B = 3 }
+WriteLine(v2); // Bor { A = 1, B = 1 }
+
+var (x, y) = v1;
+WriteLine($"{x}, {y}"); // 2, 3
+(x, y) = v2;
+WriteLine($"{x}, {y}"); // 2, 2
+// Borrar
+
+abstract record Foo : System.IDisposable {
+    public void Dispose () => WriteLine("Borrar");
+}
+
+record Bar (int A, int B) : Foo;
+
+record Bor (int A, int B) : Foo {
+    public Bor (int v = 1) : this(v, v) { }
+    public void Deconstruct (out int a, out int b) {
+        a = A * 2;
+        b = A * 2;
+    }
+}
+```
+
+> A partir de **C# 10** se pueden definir `record struct`, así como `readonly record struct`, para crear registros que sean tipos por valor. Con `record struct` los parámetros posicionales del registro serán mutables. También se puede usar el operador `with` con estructuras para obtener nuevos valores sin destruir el valor de partida.
 
 ### Enumeraciones
 
