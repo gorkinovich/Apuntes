@@ -819,9 +819,7 @@ Dependiendo del valor de la *expresión*, se va buscando en orden una cláusula 
 
 También tenemos disponible la expresión `switch`, cuya sintaxis es:
 
-$$\mathit{expresi\acute{o}n}\ \texttt{switch}\ \texttt{\char123}\ \mathit{patr\acute{o}n_1}\ \texttt{=>}\ \mathit{expresi\acute{o}n_1}$$
-
-$$\textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{patr\acute{o}n_n}\ \texttt{=>}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]}\ \texttt{\char125}$$
+$$\mathit{expresi\acute{o}n}\ \texttt{switch}\ \texttt{\char123}\ \mathit{patr\acute{o}n_1}\ \texttt{=>}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{patr\acute{o}n_n}\ \texttt{=>}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]}\ \texttt{\char125}$$
 
 Es algo más limitada que la sentencia `switch` en cuanto al cuerpo de las cláusulas, pero permite todas las categorías de patrones que hay. Por ejemplo, para crear la cláusula por defecto usaríamos `_ => expresión`, mientras que `case _:` interpreta el guion bajo como una variable y no como un patrón.
 
@@ -1163,7 +1161,7 @@ La [herencia](https://es.wikipedia.org/wiki/Herencia_%28inform%C3%A1tica%29) en 
 
 Los campos son variables que pertenecen a una clase. Para definir un campo se utiliza la siguiente sintaxis:
 
-$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{;}$$
 
 Además de los modificadores de visibilidad, los de comportamiento disponibles son los siguientes:
 
@@ -1181,9 +1179,7 @@ También se puede declarar constantes como campos con `const`, en cuyo caso es o
 
 Los métodos son funciones que pertenecen a una clase. Para definir un método se utiliza la siguiente sintaxis:
 
-$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
-
-$$\textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{|} \texttt{;} \textcolor{red}{\char125}$$
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{\char123} \mathit{tipo} \textcolor{red}{|} \texttt{void} \textcolor{red}{\char125}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)} \textcolor{red}{\char123} \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{|} \texttt{;} \textcolor{red}{\char125}$$
 
 Además de los modificadores de visibilidad, los de comportamiento disponibles son los siguientes:
 
@@ -1580,9 +1576,7 @@ void foo (string v, int n) => WriteLine($"{n}) Technopolis: {v}");
 
 Los eventos son a los delegados, lo que las propiedades a los campos de una clase. Su sintaxis es la siguiente:
 
-$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{event}\ \mathit{tipo}\ \mathit{nombre}$$
-
-$$\textcolor{red}{\char123} \texttt{;} \textcolor{red}{|} \texttt{\char123}\ \texttt{add}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \texttt{remove}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \texttt{\char125} \textcolor{red}{\char125}$$
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{event}\ \mathit{tipo}\ \mathit{nombre}\ \textcolor{red}{\char123} \texttt{;} \textcolor{red}{|} \texttt{\char123}\ \texttt{add}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \texttt{remove}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \texttt{\char125} \textcolor{red}{\char125}$$
 
 De forma similar a las propiedades, si no se indica su `add` y `remove`, se generarán automáticamente durante la compilación. Estos *accesores*, además de utilizar la palabra clave `value` para hacer referencia al valor que se le está añadiendo o quitando, representan la operación `+=` y `-=` sobre una variable de tipo delegado.
 
@@ -1974,9 +1968,7 @@ Tampoco está permitido que una estructura tenga un método destructor. Por lo q
 
 Los [registros](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/record) son un tipo por referencia especial pensados para datos inmutables. Su sintaxis es la siguiente:
 
-$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{record}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{(} \mathit{campos} \texttt{)} \textcolor{red}{]}$$
-
-$$\textcolor{red}{[} \texttt{:} \mathit{padre\ e\ interfaces} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{;} \textcolor{red}{|} \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{record}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{(} \mathit{campos} \texttt{)} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:} \mathit{padre\ e\ interfaces} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{;} \textcolor{red}{|} \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125} \textcolor{red}{\char125}$$
 
 A efectos prácticos un registro es una clase, por lo que soporta los mismos tipos de modificadores y definiciones dentro del tipo. Pero un registro sólo puede heredar de otro registro, como primera diferencia. Luego tenemos los *campos*, también llamados parámetros posicionales, que podemos definir entre los paréntesis que acompañan al *nombre* del registro, estos se definen como se definen las variables. Por ejemplo:
 
@@ -2067,7 +2059,74 @@ record Bor (int A, int B) : Foo {
 
 ### Enumeraciones
 
-..TODO..
+Las [enumeraciones](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/enum) son tipos cuya semántica está compuesta por una serie de valores con nombre. Su sintaxis es la siguiente:
+
+$$\textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \texttt{enum}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125}$$
+
+Los modificadores aplicables a las enumeraciones son los de visibilidad. Por defecto, el *tipo* de una enumeración es `int` y se empieza asignando el valor `0` al primer *nombre* de los valores, e incrementando en `+1` el valor de los siguientes nombres. Los tipos que puede tener una enumeración están restringidos a números enteros:
+
+```csharp
+using static System.Console;
+
+var x = Familia.Akane;
+WriteLine($"{x - 4}"); // -3
+WriteLine($"{x + 4}"); // Genma
+WriteLine($"{++x}\n"); // Nabiki
+
+foreach (var item in GetValues<Familia>()) {
+    WriteLine($"{item,-8} = {(int) item}");
+}
+
+T[] GetValues<T> () => (T[]) System.Enum.GetValues(typeof(T));
+
+public enum Familia {
+    Ranma, Akane, Nabiki, Kasumi,
+    Soun, Genma, Happosai, Nodoka
+}
+```
+
+Otra opción disponible es marcar una enumeración con el atributo [`[System.Flags]`](https://learn.microsoft.com/dotnet/api/system.flagsattribute), lo que permite asignar como valores combinaciones que usan los operadores `|`, `&` y `^`:
+
+```csharp
+using static System.Console;
+
+var y = Cowboys.Ein;
+WriteLine($"{y}");     // Ein
+WriteLine($"{y - 8}"); // Edo
+WriteLine($"{y + 8}"); // Edo, Ein
+WriteLine($"{++y}\n"); // Spike, Ein
+
+y = Cowboys.Bebop;
+WriteLine($"{y}");                  // Bebop
+WriteLine($"{y | Cowboys.Dragon}"); // Bebop, Dragon
+WriteLine($"{y ^ Cowboys.Ein}");    // Spike, Jet, Faye, Edo
+WriteLine($"{y & Cowboys.Faye}");   // Faye
+WriteLine($"{~y}\n");               // Andy, Dragon
+
+foreach (var item in GetValues<Cowboys>()) {
+    WriteLine($"{item,-7} = {(int) item}");
+}
+
+T[] GetValues<T> () => (T[]) System.Enum.GetValues(typeof(T));
+
+[System.Flags]
+public enum Cowboys : byte {
+    Spike   = 0b_0000_0001,
+    Jet     = 0b_0000_0010,
+    Faye    = 0b_0000_0100,
+    Edo     = 0b_0000_1000,
+    Ein     = 0b_0001_0000,
+    Andy    = 0b_0010_0000,
+    Julia   = 0b_0100_0000,
+    Vicious = 0b_1000_0000,
+    Dragon  = Julia | Vicious,
+    Bebop   = Spike | Jet | Faye | Edo | Ein
+}
+```
+
+En este caso es recomendable asignar los valores manualmente en binario, para que funcionen correctamente los *flags* que queremos asignar.
+
+Como muestran los ejemplos, se pueden hacer operaciones con los valores enumerados, ya que por debajo no dejan de ser números enteros, pero sólo se permiten los operadores `=`, `==`, `!=`, `<`, `>`, `<=`, `>=`, `+`, `-`, `+=`, `-=`, `++` y `sizeof` para las enumeraciones normales, para las de tipo *flags* también se permiten los operadores `^`, `&`, `|` y `~`.
 
 ## E/S por consola
 
