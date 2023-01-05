@@ -965,11 +965,117 @@ do {
 
 ### Saltos y retornos
 
-..TODO..
+La primera sentencia de salto es `return`, que se utiliza para salir de una función, devolviendo un valor de forma opcional. Su sintaxis es:
+
+$$\texttt{return}\ \textcolor{red}{[} \mathit{expresi\acute{o}n} \textcolor{red}{]} \texttt{;}$$
+
+Después están `break` y `continue`. La primera se utiliza en bucles, o sentencias `switch`, para salir fuera de dicha sentencia que la contiene. La segunda se utiliza en bucles y, en lugar de salir de este, lo que provoca es un salto a la siguiente iteración del bucle. Su sintaxis es:
+
+$$\texttt{break} \texttt{;}$$
+
+$$\texttt{continue} \texttt{;}$$
+
+Para entenderlo mejor, veamos el siguiente ejemplo:
+
+```csharp
+using static System.Console;
+
+dynamic[] xs = new dynamic[] {
+    1, 2, 3, 4, 5, 6, 7, false, 8, 9
+};
+foreach (var x in xs) {
+    if (x is false) break;
+    if (x % 2 == 0) continue;
+    Write($"{x} ");
+}
+WriteLine();
+// 1 3 5 7
+```
+
+Por último está el demonio de la programación estructurada, la sentencia maldita, la portadora de grandes tormentos de ofuscación, la que no debería ser nombrada. La sentencia `goto` se utiliza para hacer un salto incondicional a otra parte del código, que se identifica con una etiqueta. La sintaxis de esta herejía es:
+
+$$\mathit{etiqueta} \texttt{:}$$
+
+$$\texttt{goto}\ \mathit{etiqueta} \texttt{;}$$
+
+El uso de `goto` no se recomienda en absoluto, ya que puede derivar en muy malas prácticas de programación. Su uso debe estar muy justificado y es preferible utilizar otras opciones antes.
 
 ### Excepciones
 
-..TODO..
+Las excepciones es un mecanismo del lenguaje para gestionar los errores en nuestros programas. Cuando algo falle de forma inesperada, podemos lanzar una excepción con la siguiente sintaxis:
+
+$$\texttt{throw}\ \mathit{excepci\acute{o}n} \texttt{;}$$
+
+Donde *excepción* debe ser un objeto cuyo tipo sea de la clase [`Exception`](https://learn.microsoft.com/dotnet/api/system.exception) o herede de la misma. Esta clase tiene como miembros destacados los siguientes:
+
+| Miembro | Tipo | Descripción |
+|:-------:|:----:|:------------|
+| `Message` | `string` | Mensaje que describe el error actual. |
+| `StackTrace` | `string` | Cadena de texto con la pila de llamadas realizada cuando se produjo el error actual. |
+| `InnerException` | `Exception` | Devuelve la excepción causante de la excepción actual. Se utiliza para encadenar excepciones, cuando se captura una y se vuelve a lanzar dentro de otra nueva excepción. |
+
+Una vez lanzada la excepción, por nosotros o por el sistema, tendremos que capturarla con la sentencia `try`-`catch`-`finally`, cuya sintaxis es:
+
+$$\begin{array}{l}
+\texttt{try}\ \texttt{\char123}\ \mathit{expresiones_0}\ \texttt{\char125}
+\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_1}\ \textcolor{red}{[} \mathit{nombre_1} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \texttt{(} \mathit{condici\acute{o}n_1} \texttt{)} \textcolor{red}{]} \texttt{\char123}\ \mathit{expresiones_1}\ \texttt{\char125} \textcolor{red}{]}
+\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_n}\ \textcolor{red}{[} \mathit{nombre_n} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \texttt{(} \mathit{condici\acute{o}n_n} \texttt{)} \textcolor{red}{]} \texttt{\char123}\ \mathit{expresiones_n}\ \texttt{\char125} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{finally}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{]}
+\end{array}$$
+
+Hay que tener en cuenta que `try` debe ir acompañado al menos de un `catch` o un `finally`. En caso de lanzarse una excepción, se comprobará en el orden que están definidas las cláusulas `catch`, para ejecutar el bloque de expresiones que primero encaje con el error recibido, siempre que se cumpla la condición asociada en su `when` de estar definido. Esto significa que el orden importa, por lo que si la primera es un `catch (Exception)`, todas las que vengan después quedarán tapadas por esta primera, ya que es el modelo más genérico para capturar excepciones. Dentro de un `catch` se puede usar `throw;`, que relanza la última excepción capturada.
+
+La cláusula `finally` es un bloque de código que se ejecutará sin importar si se produce o no una excepción. Es una salvaguarda para poder ejecutar código que necesitemos para limpiar recursos sin liberar, por ejemplo.
+
+En este ejemplo podemos ver un manejo básico de las excepciones:
+
+```csharp
+using System;
+using static System.Console;
+
+try {
+    WriteLine("Hola");
+    div(10, 0);
+} catch(Exception e) {
+    WriteLine(e.Message);
+    WriteLine(e.StackTrace);
+} finally {
+    WriteLine("Adios");
+}
+
+int div (int x, int y) {
+    if (y == 0) {
+        throw new Exception("¡División entre cero!");
+    } else {
+        return (int) x / y;
+    }
+}
+```
+
+### Recursos
+
+La sentencia `using` tiene la misión de controlar la limpieza de recursos, de aquellos tipos que implementan la interfaz [`System.IDisposable`](https://learn.microsoft.com/dotnet/api/system.idisposable). Su sintaxis es alguna de las siguientes formas:
+
+$$\texttt{using}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \texttt{,} \textcolor{red}{\dots} \texttt{)}\ \mathit{bloque}$$
+
+$$\texttt{using}\ \mathit{tipo}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \texttt{,} \textcolor{red}{\dots} \texttt{;}$$
+
+La primera forma delimita el ámbito de la variable creada al bloque indicado, mientras que la segunda delimita el ámbito de la variable al que contiene la sentencia `using`. Se pueden declarar varias variables separadas por comas. Cuando se salga del ámbito, se ejecutará el método `Dispose()` del objeto instanciado, siempre que implemente la interfaz `IDisposable`. Por ejemplo:
+
+```csharp
+using System.IO;
+using static System.Console;
+
+string data = "uno\ndos\ntres\ncuatro";
+using (var reader = new StringReader(data)) {
+    string item;
+    do {
+        item = reader.ReadLine();
+        WriteLine(item);
+    } while (item != null);
+}
+```
 
 ## Tipos de usuario
 
@@ -1826,7 +1932,18 @@ Existen más detalles derivados de los métodos por defecto, pero lo básico est
 
 ## E/S por consola
 
-..TODO..
+La entrada y salida por consola en C# se realiza con la clase estática [`Console`](https://learn.microsoft.com/dotnet/api/system.console). Es una clase muy completa para poder manejar la terminal, pudiendo cambiar la posición del cursor o los colores, entre otras cosas. Pero en esta sección nos vamos a centrar en las operaciones más básicas:
+
+| Método | Descripción |
+|:------:|:------------|
+| `Clear` | Borra el contenido de la pantalla. |
+| `Read` | Obtiene un carácter del buffer del teclado. |
+| `ReadKey` | Obtiene la siguiente tecla pulsada en el teclado. |
+| `ReadLine` | Obtiene una línea de texto del buffer del teclado. |
+| `Write` | Escribe un valor en el buffer de pantalla. |
+| `WriteLine` | Escribe un valor en el buffer de pantalla y añade un salto de línea al final. |
+| `GetCursorPosition` | Obtiene una tupla con la posición del cursor. |
+| `SetCursorPosition` | Cambia la posición del cursor. |
 
 ## Formato de cadenas
 
@@ -1992,4 +2109,12 @@ Por último, para la función [`Enum.ToString`](https://learn.microsoft.com/dotn
 
 $$\texttt{await}\ \texttt{foreach}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{in}\ \mathit{contenedor} \texttt{)}\ \mathit{bloque}$$
 
-..
+$$\texttt{await}\ \texttt{using}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \texttt{)}\ \mathit{bloque}$$
+
+$$\texttt{yield}\ \texttt{return}\ \mathit{expresi\acute{o}n} \texttt{;}$$
+
+$$\texttt{yield}\ \texttt{break} \texttt{;}$$
+
+$$\texttt{lock}\ \texttt{(} \mathit{variable} \texttt{)}\ \mathit{bloque}$$
+
+.. [`System.IAsyncDisposable`](https://learn.microsoft.com/dotnet/api/system.iasyncdisposable)
