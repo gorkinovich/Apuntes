@@ -240,7 +240,7 @@ Para representar una cadena de texto se utiliza:
 
 $$\textcolor{red}{[} \texttt{@} \textcolor{red}{]} \texttt{"} \mathit{caracteres} \texttt{"}$$
 
-Con el prefijo `@` la cadena será "cruda" y no tendrá en cuenta ninguna secuencia de escape. Se utilizan para poder poner rutas de Windows sin tener que usar `\\` continuamente. La única salvedad con este tipo de cadenas es que con `""` se puede representar las comillas dobles.
+Con el prefijo `@` la cadena será "cruda" y no tendrá en cuenta ninguna secuencia de escape. Se utilizan para poder poner rutas de Windows sin tener que usar `\\` continuamente. La única salvedad con este tipo de cadenas es que con `""` se puede representar las comillas dobles. También se puede utilizar este tipo de cadenas para crear cadenas multilínea, a diferencia de las cadenas normales.
 
 ## Constantes
 
@@ -1211,6 +1211,28 @@ WriteLine(Bar.Foo(3f)); // 1,5
 public class Bar {
     static public int Foo (int x) => x + 1;
     static public float Foo (float x) => x * 0.5f;
+}
+```
+
+Al sobrescribir una función, podremos modificar el tipo `X` de retorno siempre que el nuevo tipo `Y` sea [covariante](https://es.wikipedia.org/wiki/Covarianza_y_contravarianza_%28ciencias_de_la_computaci%C3%B3n%29) con respecto a `X`, es decir, que `Y` sea subtipo de `X`. Esto es útil si por ejemplo queremos hacer una función de clonación:
+
+```csharp
+using static System.Console;
+
+B v1 = new B { X = 2, Y = 3 };
+B v2 = v1.Clone();
+WriteLine($"{v2.X}, {v2.Y}");
+
+class A {
+    public int X = 1;
+    public virtual A Clone () =>
+        new A { X = this.X };
+}
+
+class B : A {
+    public int Y = 1;
+    public override B Clone () =>
+        new B { X = this.X, Y = this.Y };
 }
 ```
 
@@ -2293,9 +2315,160 @@ Por último, para la función [`Enum.ToString`](https://learn.microsoft.com/dotn
 | `d`, `D` | Representación como número decimal. |
 | `x`, `X` | Representación como número hexadecimal. |
 
+## Conversiones y referencias
+
+Hay dos operadores con los que se puede convertir un expresión de un tipo a otro. El primero es el *casting*, que ya se ha mencionado con anterioridad, cuya forma `(T)X` nos indica que la expresión `X` pasará a ser de tipo `T`. Cuando queremos pasar de un tipo `T` a un tipo `U`, si `T` es descendiente de `U` la conversión será implícita, sin necesidad de hacer un *casting*, pero si `U` es descendiente de `T` sí necesitaremos hacer el casting explícito:
+
+```csharp
+string x = "hola";
+object y = x;
+string z = (string) y;
+```
+
+Pero, si tratamos de hacer el *casting* a un tipo incorrecto, se lanzará la excepción `System.InvalidCastException`:
+
+```csharp
+string x = "hola";
+object y = x;
+var z = (System.Delegate) y;
+```
+
+Una forma de evitar la excepción, es usando el operador `as`, cuya forma `X as T` nos indica que la expresión `X` pasará a ser de tipo `T` si es posible, si no lo es se devolverá `null`:
+
+```csharp
+using static System.Console;
+
+WriteLine(foo("hola")); // HOLA
+WriteLine(foo(123));    // <null>
+
+string foo (object v) {
+    var x = v as string;
+    if (x != null)
+        return x.ToUpper();
+    else
+        return "<null>";
+}
+```
+
+Aunque también podemos usar el operador  `is` con patrones para hacer lo mismo:
+
+```csharp
+using static System.Console;
+
+WriteLine(foo("hola")); // HOLA
+WriteLine(foo(123));    // <null>
+
+string foo (object v) {
+    if (v is string x)
+        return x.ToUpper();
+    else
+        return "<null>";
+}
+```
+
+> En la terminología de C#, cuando un tipo por valor es asignado a una variable de tipo `object`, se lo denomina *boxing*. Esto consiste en que se copia el valor de la pila a la memoria del montículo. La operación inversa se la denomina *unboxing*, que ocurre al hacer un *casting* de `object` a tipo por valor, tomando el valor de la memoria del montículo para almacenarlo en la pila.
+
+El caso es que tenemos los operadores para referencias nulas `?` y `??`. El primero permite acceder a un miembro con `?.`, o un elemento con `?[]`, si la expresión a la izquierda no es nula. Si fuera nula se limita a devolver `null` como resultado de la expresión. El segundo evalúa la expresión a la izquierda, para comprobar que su valor no sea nulo y devolverlo como resultado, si fuera nulo devolverá el valor de la expresión a la derecha. Tomando el ejemplo anterior:
+
+```csharp
+using static System.Console;
+
+WriteLine(foo("hola")); // HOLA
+WriteLine(foo(123));    // <null>
+
+string foo (object v) =>
+    (v as string)?.ToUpper() ?? "<null>";
+```
+
+Del operador `??` existe la variante `??=`, que asignará al lado izquierdo el valor del lado derecho, si el lado izquierdo es nulo.
+
+### Tipos por valor nulos
+
+ Además de todo lo anterior, el operador `?` tiene otra utilidad importante, para poder simular que se asigna el valor `null` a un tipo por valor. Para ello, al declarar la variable usaremos la forma `T?`, donde `T` es el tipo por valor, para que el compilador lo transforme en el tipo [`System.Nullable<T>`](https://learn.microsoft.com/dotnet/api/system.nullable-1):
+
+```csharp
+using static System.Console;
+
+int a = (int)sum(2, 3);
+int b = sum(2, "4") ?? 0;
+WriteLine($"{a}, {b}"); // 5, 0
+
+int? sum (object x, object y) {
+    int? a = x as int?;
+    int? b = y as int?;
+    return a + b;
+}
+```
+
+El operador `as` no permite su uso con estructuras, porque no aceptan `null` como valor, pero con `int?` se resuelve ese escollo. Para convertir de `Nullable<T>` a `T`, se puede realizar un *casting*, pero si el valor es nulo se lanza una excepción `System.InvalidOperationException`; mientras que con el operador `??`, en caso de ser nulo el valor, se devuelve el valor derecho como valor por defecto. Otro aspecto relevante es que `Nullable<T>` es gestionado por el compilador para poder hacer operaciones de forma transparente. Para las operaciones aritméticas, si uno de los dos operandos es nulo, se devuelve `null`. Para las operaciones de comparación o lógicas, si uno de los dos operandos es nulo, se devuelve `false`.
+
+Hay dos propiedades importantes en el tipo `Nullable<T>`. La primera es `HasValue`, de tipo `bool`, que devuelve si tiene valor real o no el objeto. El segundo es `Value`, de tipo `T`, que contendrá el valor real del objeto, siempre que `HasValue` sea `true`.
+
+### Tipos por valor nulos
+
+..TODO.. `!`
+
+### Covarianza y contravarianza
+
+Otro asunto importante en las conversiones de tipos es [la covarianza y la contravarianza](https://es.wikipedia.org/wiki/Covarianza_y_contravarianza_%28ciencias_de_la_computaci%C3%B3n%29), que determina las relaciones de subtipado entre tipos:
++ Son **covariantes** en el lenguaje los tipos de retorno de las funciones, así como el tipo de los elementos de un contenedor. Por ejemplo, si `A` es subtipo de `B`, entonces `IEnumerable<A>` es subtipo de `IEnumerable<B>`, por lo que podremos asignar implícitamente a una variable de tipo `IEnumerable<B>` un valor de tipo `IEnumerable<A>`.
+
++ Son **contravariantes** en el lenguaje los tipos de los parámetros de una función. Por ejemplo, si `A` es subtipo de `B`, entonces `Action<B>` es subtipo de `Action<A>`, por lo que podremos asignar implícitamente a una variable de tipo `Action<A>` un valor de tipo `Action<B>`.
+
+```csharp
+using System;
+using System.Collections.Generic;
+using static System.Console;
+
+WriteLine("Covarianza:");
+IEnumerable<Hija> v1 = new[] {
+    new Hija(),
+    new Hija { X = 2, Y = 3 }
+};
+IEnumerable<Madre> v2 = v1;
+foreach (var item in v2) {
+    WriteLine(item);
+}
+
+WriteLine("Contravarianza:");
+Action<Madre> f1 = x => WriteLine(x);
+Action<Hija> f2 = f1;
+foreach (var item in v1) {
+    f2(item);
+}
+
+class Madre {
+    public int X = 1;
+    public override string ToString () => $"M: {X}";
+}
+
+class Hija : Madre {
+    public int Y = 2;
+    public override string ToString () => $"H: {X}, {Y}";
+}
+```
+
+Esto se podrá entender algo mejor al implementar tipos genéricos.
+
+### Referencias locales
+
+La palabra clave `ref` tiene algunos usos especiales, para forzar el uso de referencias en lugar de valores.
+
+..TODO..
+
 ## Genéricos
 
 ..TODO..
+
+## Iteradores
+
+..TODO..
+
+$$\texttt{yield}\ \texttt{return}\ \mathit{expresi\acute{o}n} \texttt{;}$$
+
+$$\texttt{yield}\ \texttt{break} \texttt{;}$$
+
+..
 
 ## LINQ
 
@@ -2308,10 +2481,6 @@ Por último, para la función [`Enum.ToString`](https://learn.microsoft.com/dotn
 $$\texttt{await}\ \texttt{foreach}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{in}\ \mathit{contenedor} \texttt{)}\ \mathit{bloque}$$
 
 $$\texttt{await}\ \texttt{using}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \texttt{)}\ \mathit{bloque}$$
-
-$$\texttt{yield}\ \texttt{return}\ \mathit{expresi\acute{o}n} \texttt{;}$$
-
-$$\texttt{yield}\ \texttt{break} \texttt{;}$$
 
 $$\texttt{lock}\ \texttt{(} \mathit{variable} \texttt{)}\ \mathit{bloque}$$
 
