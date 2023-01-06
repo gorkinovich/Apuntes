@@ -2384,7 +2384,7 @@ Del operador `??` existe la variante `??=`, que asignará al lado izquierdo el v
 
 ### Tipos por valor nulos
 
- Además de todo lo anterior, el operador `?` tiene otra utilidad importante, para poder simular que se asigna el valor `null` a un tipo por valor. Para ello, al declarar la variable usaremos la forma `T?`, donde `T` es el tipo por valor, para que el compilador lo transforme en el tipo [`System.Nullable<T>`](https://learn.microsoft.com/dotnet/api/system.nullable-1):
+ Además de todo lo anterior, el operador `?` tiene [otra utilidad](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/nullable-value-types) importante, para poder simular que se asigna el valor `null` a un tipo por valor. Para ello, al declarar la variable usaremos la forma `T?`, donde `T` es el tipo por valor, para que el compilador lo transforme en el tipo [`System.Nullable<T>`](https://learn.microsoft.com/dotnet/api/system.nullable-1):
 
 ```csharp
 using static System.Console;
