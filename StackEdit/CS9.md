@@ -1934,6 +1934,8 @@ class Foo : B {
 
 Existen más detalles derivados de los métodos por defecto, pero lo básico está ya cubierto con los anteriores ejemplos.
 
+> En **C# 11** se pueden declarar miembros estáticos que deban implementar los tipos que extiendan dicha interfaz. Para ello se usa `static abstract` cuando la definición no tiene cuerpo definido, y `static virtual` cuando si tiene un cuerpo definido en la interfaz. También existe `static sealed` para miembros estáticos con cuerpo que no se pueden sobrescribir, aunque en principio con `static` a solas están sellados por defecto.
+
 ### Estructuras
 
 Las [estructuras](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/struct) nos permiten crear tipos por valor, mientras que las clases son tipos por referencia. Se definen con la siguiente sintaxis:
@@ -2585,11 +2587,184 @@ Se puede combinar `ref` con `readonly` de diferentes maneras, para impedir que s
 | `readonly ref Tipo` | No | Sí |
 | `readonly ref readonly Tipo` | No | No |
 
-Existe la posibilidad de declarar una estructura como `ref struct`, pero en contra de lo que parecería intuitivo, esto obliga a que los objetos de dicho tipo sólo puedan almacenarse en la pila y no se puedan crear referencias a los mismos. Es una característica especial, que se añadió para crear los tipos [`System.Span<T>`](https://learn.microsoft.com/dotnet/api/system.span-1) y [`System.ReadOnlySpan<T>`](https://learn.microsoft.com/dotnet/api/system.readonlyspan-1).
+Existe la posibilidad de declarar una estructura como [`ref struct`](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/ref-struct), pero en contra de lo que parecería intuitivo, esto obliga a que los objetos de dicho tipo sólo puedan almacenarse en la pila y no se puedan crear referencias a los mismos. Es una característica especial, que se añadió para crear los tipos [`System.Span<T>`](https://learn.microsoft.com/dotnet/api/system.span-1) y [`System.ReadOnlySpan<T>`](https://learn.microsoft.com/dotnet/api/system.readonlyspan-1).
 
 ## Genéricos
 
-..TODO..
+Los [parámetros de tipo genéricos](https://learn.microsoft.com/dotnet/csharp/programming-guide/generics/generic-type-parameters) es un mecanismo para poder definir algoritmos genéricos, que se puedan aplicar polimórficamente a diferentes tipos concretos. Se pueden definir código genérico con clases, estructuras, registros, interfaces, métodos y delegados. Para ello hay que definir las variables de tipo entre `<` y `>`, separadas por comas, justo después del nombre identificador del elemento:
+
+```csharp
+var v1 = new Foo<string, int> {
+    X = "A",
+    Y = 2
+};
+var v2 = new Foo<int, Foo<float, float>> {
+    X = 3,
+    Y = new Foo<float, float> {
+        X = 4f,
+        Y = 5f
+    }
+};
+
+class Foo<T1, T2> {
+    public T1 X;
+    public T2 Y;
+}
+```
+
+Cualquier tipo se puede utilizar para instanciar un tipo genérico, incluso otro tipo genérico. Este mecanismo es parecido a las plantillas de C++, pero las plantillas son más flexibles, ya que son como macros muy sofisticadas; mientras que los genéricos son una ayuda al compilador para no perder el polimorfismo, ya que por debajo en la implementación utilizan referencias al tipo `object`.
+
+### Restricciones
+
+Se pueden poner restricciones a las variables de tipo en los genéricos con la palabra clave `where`, usando la siguiente sintaxis:
+
+$$\texttt{where}\ \mathit{variable_1}\ \texttt{:}\ \mathit{restricciones_1}\ \textcolor{red}{[} \textcolor{red}{\dots}\ \texttt{where}\ \mathit{variable_n}\ \texttt{:}\ \mathit{restricciones_n} \textcolor{red}{]}$$
+
+Las restricciones se ponen al final de la firma de la declaración, es decir, justo antes del punto y coma o de la llave que inicia el bloque de definiciones. Cada opción en el conjunto de *restricciones*, asociado a una *variable*, se separa por comas. Las opciones que tenemos como restricciones son las siguientes:
+
+| Restricción | Descripción |
+|:-----------:|:------------|
+| `struct` | El tipo ha de ser un tipo por valor. Esta restricción implica a `new()`, por lo que no se puede combinar con ella. Tampoco se puede combinar con `unmanaged`. |
+| `class` | El tipo ha de ser un tipo por referencia, que incluye clases, interfaces, delegados o arrays. En un contexto *nullable*, será un tipo por referencia no nulo. |
+| `class?` | Como `class`, pero el tipo por referencia podrá ser nulo también. |
+| `notnull` | El tipo ha de ser un tipo no nulo, ya ser por valor o por referencia. |
+| `default` | Se usa para indicar que se va a sobrescribir un método genérico sin restricciones en el tipo padre. |
+| `unmanaged` | El tipo ha de ser un tipo no nulo no gestionado, es decir, tipos cuya memoria no está controlada por el recolector de basura (tipos numéricos, booleanos, enumeraciones, punteros y estructuras cuyos campos sólo son de tipo no gestionados). Esta restricción implica a `struct` y no se puede combinar ni con `struct`, ni con `new()`. |
+| `new()` | El tipo tiene un constructor público sin parámetros. Si se usa con otras restricciones, esta tendrá que ir la última. No se puede combinar ni con `struct`, ni con `unmanaged`. |
+| `Tipo` | El tipo ha de estar en la jerarquía del tipo indicado y no podrá ser nulo en un contexto *nullable*. |
+| `Tipo?` | El tipo ha de estar en la jerarquía del tipo indicado y también podrá ser nulo en un contexto *nullable*. |
+| `Interfaz` | El tipo ha de implementar la interfaz indicada y no podrá ser nulo en un contexto *nullable*. |
+| `Interfaz?` | El tipo ha de implementar la interfaz indicada y también podrá ser nulo en un contexto *nullable*. |
+| `T` | El tipo ha de ser subtipo del tipo asignado a otra variable de tipo. |
+
+### Tipos de entrada y de salida
+
+Sabemos que el lenguaje permite la covarianza y la contravarianza. Para lo primero podemos definir variables de tipo con el modificador `out` y para lo segundo tenemos el modificador `in`:
+
+```csharp
+using static System.Console;
+
+// Covarianza:
+var p1 = new Pila<Bar>();
+p1.Meter(new Bar { N = 1, M = 2 });
+IFuera<Foo> ff = p1;
+WriteLine(ff.Sacar());
+
+// Contravarianza:
+var p2 = new Pila<Foo>();
+IDentro<Bar> db = p2;
+db.Meter(new Bar { N = 3, M = 4 });
+WriteLine(p2.Sacar());
+
+record Foo(int N = 0);
+record Bar(int N = 0, int M = 0) : Foo(N);
+
+interface IFuera<out T> {
+    T Sacar ();
+}
+
+interface IDentro<in T> {
+    void Meter (T valor);
+}
+
+class Pila<T> : IFuera<T>, IDentro<T> {
+    private int tam;
+    private T[] mem;
+
+    public Pila (int t = 10) {
+        tam = 0;
+        mem = new T[t];
+    }
+
+    public void Meter (T valor) =>
+        mem[tam++] = valor;
+
+    public T Sacar () =>
+        mem[--tam];
+}
+```
+
+### Operadores especiales
+
+El operador `typeof(T)` permite obtener un objeto de tipo [`System.Type`](https://learn.microsoft.com/dotnet/api/system.type), que describe al tipo `T` mediante [reflexión](https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/reflection). Si queremos obtener el tipo de un objeto instanciado, podemos usar el método `GetType()` heredado de `object`. Con el operador `typeof` podemos obtener el tipo de una variable de tipo de un genérico también:
+
+```csharp
+using static System.Console;
+
+var v1 = new Foo<int>();
+WriteLine(v1.Igual<int>());    // True
+WriteLine(v1.Igual<string>()); // False
+
+class Foo<T> {
+    public T Info;
+    public bool Igual<TOtro> () {
+        return typeof(T) == typeof(TOtro);
+    }
+}
+```
+
+Como curiosidad, se puede usar `typeof` para obtener el tipo de un tipo genérico sin variables de tipo asignadas:
+
+```csharp
+using static System.Console;
+
+WriteLine(typeof(Foo<>));           // Foo`1[T]
+WriteLine(typeof(Foo<int>));        // Foo`1[System.Int32]
+WriteLine(typeof(Bar<,>));          // Bar`2[T1,T2]
+WriteLine(typeof(Bar<bool, byte>)); // Bar`2[System.Boolean, System.Byte]
+
+class Foo<T> { }
+class Bar<T1,T2> { }
+```
+
+> El espacio de nombres [`System.Reflection`](https://learn.microsoft.com/dotnet/api/system.reflection) tiene todos los tipos que permiten trabajar con la reflexión en el lenguaje. Es un tema apasionante y extenso, que por desgracia no se va a poder cubrir en estos apuntes. Pero para que nos hagamos una noción de sus posibilidades, además de poder inspeccionar toda la información relativa a los tipos, nos permite modificar en tiempo de ejecución la funcionalidad del programa, por ejemplo, creando nuevos tipos.
+
+El operador `default(T)` devuelve el valor por defecto para un tipo `T`. Se puede usar simplemente `default` cuando el compilador es capaz de inferir el tipo en la expresión, por ejemplo, cuando se declara una variable indicando su tipo. También se pueden usar variables de tipo con el operador:
+
+```csharp
+using static System.Console;
+
+var a = default(int);
+int b = default;
+
+Mostrar<int>();    // 0
+Mostrar<float>();  // 0
+Mostrar<bool>();   // False
+Mostrar<string>(); // null
+
+void Mostrar<T> () {
+    WriteLine(default(T)?.ToString() ?? "null");
+}
+```
+
+En cuanto a la herencia, podemos heredar de un tipo genérico. También podemos usar el tipo que estamos definiendo como un parámetro o restricción:
+
+```csharp
+class Foo<T> { }
+class Bar<T> where T : Bar<T> { }
+
+class FooInt : Foo<int> { }
+class Uno<T> : Foo<Uno<T>> { }
+class Dos<T1, T2> : Foo<T2> { }
+class Tres<T1, T2> : Foo<T1> { }
+class Cuatro : Foo<Cuatro> { }
+```
+
+Otra curiosidad es que podemos tener miembros estáticos en un tipo genérico. Por cada instanciación de tipo, el compilador creará una clase durante la compilación, para trabajar con ellas:
+
+```csharp
+using static System.Console;
+
+WriteLine(++Foo<int>.N);    // 1
+WriteLine(++Foo<string>.N); // 1
+WriteLine(++Foo<object>.N); // 1
+WriteLine(++Foo<string>.N); // 2
+WriteLine(++Foo<int>.N);    // 2
+
+class Foo<T> {
+    public static int N;
+}
+```
 
 ## Iteradores
 
