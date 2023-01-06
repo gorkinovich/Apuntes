@@ -2539,9 +2539,53 @@ Esto se podrá entender algo mejor al implementar tipos genéricos.
 
 ### Referencias locales
 
-La palabra clave `ref` tiene algunos usos especiales, para forzar el uso de referencias en lugar de valores.
+La palabra clave `ref` tiene algunos usos especiales, para forzar el uso de referencias en lugar de valores. Podemos modificar la declaración de una variable, o el tipo de retorno de una función, con `ref Tipo`:
 
-..TODO..
+```csharp
+using static System.Console;
+
+var foo = new Foo();
+WriteLine(foo); // 1 2 3 4 5
+
+ref int n = ref foo.Bar(2);
+n = 9;
+WriteLine(foo); // 1 2 9 4 5
+
+class Foo {
+    public int[] N = new[] { 1, 2, 3, 4, 5 };
+    private int M = 0;
+
+    public ref int Bar (int i) {
+        if (0 <= i && i < N.Length)
+            return ref N[i];
+        else
+            return ref M;
+    }
+
+    public override string ToString () {
+        var text = new System.Text.StringBuilder();
+        foreach (var item in N) {
+            text.Append($"{item} ");
+        }
+        return text.ToString();
+    }
+}
+```
+
+Para devolver un valor por referencia, necesitamos usar `return ref` para devolver el valor y usar `ref` como modificador a la invocación de la función. Dicho lo cual, no podremos devolver como referencia variables que estén dentro del ámbito del que se va a salir, porque serán eliminadas y tendríamos una referencia a la nada; o lo que es peor, una referencia a una región de memoria incontrolada, que podría provocar fallos de seguridad grave.
+
+> Técnicamente hablando esto es parecido a tener [punteros](https://learn.microsoft.com/dotnet/csharp/language-reference/unsafe-code), aunque con algunas limitaciones razonables, para que .NET se siga encargando de la gestión de la memoria de forma transparente.
+
+Se puede combinar `ref` con `readonly` de diferentes maneras, para impedir que se modifique la referencia y/o el valor:
+
+| Forma | Referencia | Valor |
+|:-----:|:----------:|:-----:|
+| `ref Tipo` | Sí | Sí |
+| `ref readonly Tipo` | Sí | No |
+| `readonly ref Tipo` | No | Sí |
+| `readonly ref readonly Tipo` | No | No |
+
+Existe la posibilidad de declarar una estructura como `ref struct`, pero en contra de lo que parecería intuitivo, esto obliga a que los objetos de dicho tipo sólo puedan almacenarse en la pila y no se puedan crear referencias a los mismos. Es una característica especial, que se añadió para crear los tipos [`System.Span<T>`](https://learn.microsoft.com/dotnet/api/system.span-1) y [`System.ReadOnlySpan<T>`](https://learn.microsoft.com/dotnet/api/system.readonlyspan-1).
 
 ## Genéricos
 
