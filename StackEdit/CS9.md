@@ -2150,6 +2150,74 @@ En este caso es recomendable asignar los valores manualmente en binario, para qu
 
 Como muestran los ejemplos, se pueden hacer operaciones con los valores enumerados, ya que por debajo no dejan de ser números enteros, pero sólo se permiten los operadores `=`, `==`, `!=`, `<`, `>`, `<=`, `>=`, `+`, `-`, `+=`, `-=`, `++` y `sizeof` para las enumeraciones normales, para las de tipo *flags* también se permiten los operadores `^`, `&`, `|` y `~`.
 
+### Tipos anónimos
+
+Los [tipos anónimos](https://learn.microsoft.com/dotnet/csharp/fundamentals/types/anonymous-types) son objetos creados que no pertenecen a un tipo definido previamente. Su sintaxis es:
+
+$$\texttt{new}\ \texttt{\char123}\ \mathit{nombre_1}\ \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]}\ \texttt{\char125}$$
+
+Por ejemplo:
+```csharp
+using static System.Console;
+
+var p = new { Nombre = "Tendo Akane", Edad = 16 };
+WriteLine($"{p.Nombre} ({p.Edad})");
+```
+
+### Tuplas
+
+Las [tuplas](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/value-tuples) son estructuras de datos, con un orden y número de componentes fijo. Para construir una tupla se utilizan los paréntesis, separando cada componente con comas:
+
+```csharp
+using static System.Console;
+
+(string, int) p1 = ("Saotome Ranma", 16);
+WriteLine($"{p1.Item1} ({p1.Item2})");
+
+var (a, b) = p1;
+WriteLine($"{a} ({b})");
+```
+
+Cuando se construye una tupla, se instancia un objeto de tipo [`System.ValueTuple`](https://learn.microsoft.com/dotnet/api/system.valuetuple), que son tipos por valor. Si queremos crear tuplas que sean tipos por referencia, tenemos el tipo [`System.Tuple`](https://learn.microsoft.com/dotnet/api/system.tuple). Hay que tener en cuenta que `ValueTuple` es mutable, mientras que `Tuple` es inmutable. Cuando se [deconstruye](https://learn.microsoft.com/dotnet/csharp/fundamentals/functional/deconstruct) una tupla, se invoca al método especial `Deconstruct` del tipo para extraer la información.
+
+También se puede poner nombre a los componentes de una tupla con:
+
+```csharp
+using static System.Console;
+
+(string nombre, int edad) p2 = ("Tatewaki Kuno", 17);
+WriteLine($"{p2.nombre} ({p2.edad})");
+
+var p3 = (Nombre: "Hibiki Ryoga", Edad: 16);
+WriteLine($"{p3.Nombre} ({p3.Edad})");
+```
+
+Como son tipos por valor, podemos pasar de una tupla sin nombres a una con:
+
+```csharp
+using static System.Console;
+
+var p4a = ("Kuonji Ukyo", 16);
+WriteLine($"{p4a.Item1} ({p4a.Item2})");
+
+(string Nombre, int Edad) p4b = p4a;
+WriteLine($"{p4b.Nombre} ({p4b.Edad})");
+```
+
+Las tuplas permiten el uso de los operadores `==` y `!=`, haciendo una comparación por valor, aunque esto no significa que cada componente se realice el mismo tipo de comparación:
+
+```csharp
+using static System.Console;
+
+var p5 = ("Tendo Nabiki", 17);
+var p6 = ("Tendo Nabiki", 17);
+WriteLine(p5 == p6); // True
+
+var p7 = (new { N = "Tendo Kasumi" }, 19);
+var p8 = (new { N = "Tendo Kasumi" }, 19);
+WriteLine(p7 == p8); // False
+```
+
 ## E/S por consola
 
 La entrada y salida por consola en C# se realiza con la clase estática [`Console`](https://learn.microsoft.com/dotnet/api/system.console). Es una clase muy completa para poder manejar la terminal, pudiendo cambiar la posición del cursor o los colores, entre otras cosas. Pero en esta sección nos vamos a centrar en las operaciones más básicas:
@@ -2404,9 +2472,28 @@ El operador `as` no permite su uso con estructuras, porque no aceptan `null` com
 
 Hay dos propiedades importantes en el tipo `Nullable<T>`. La primera es `HasValue`, de tipo `bool`, que devuelve si tiene valor real o no el objeto. El segundo es `Value`, de tipo `T`, que contendrá el valor real del objeto, siempre que `HasValue` sea `true`.
 
-### Tipos por valor nulos
+### Tipos por referencia nulos
 
-..TODO.. `!`
+Existe la opción `Nullable` en el compilador, que en caso de estar activada fuerza al compilador a comprobar que no se esté asignando el valor `null` a ningún tipo por referencia. También se puede activar o desactivar con las directivas:
+
+```csharp
+#nullable enable  // Activa el modo no nulo
+#nullable disable // Desactiva el modo no nulo
+#nullable restore // Restaura la configuración del proyecto
+```
+
+Si el compilador detecta que se podría estar asignando un valor nulo, lanzará un aviso al usuario. Si queremos evitar que salte dicho aviso, tenemos el operador `!`:
+
+```csharp
+#nullable enable
+string  a = default;  // Aviso CS8600
+string  b = default!; // Permitido
+string? c = default;  // Permitido
+```
+
+Con el operador `?`, aplicado a un tipo por referencia, se permite que la variable pueda ser nula sin usar el operador `!`. Sin embargo, los [tipos por referencia nulos](https://learn.microsoft.com/dotnet/csharp/language-reference/builtin-types/nullable-reference-types) no se pueden usar para heredar de ellos, ni para crear objetos con `new`, ni para acceder a miembros estáticos, ni tampoco  en comprobaciones de tipos.
+
+> A partir de **.NET 6**, la opción `Nullable` en nuevos proyectos está activada por defecto.
 
 ### Covarianza y contravarianza
 
