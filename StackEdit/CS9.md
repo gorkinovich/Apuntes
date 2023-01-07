@@ -2766,17 +2766,87 @@ class Foo<T> {
 }
 ```
 
-## Iteradores
+## Secuencias e iteradores
 
-..TODO..
+Dentro de la terminología del lenguaje, los enumeradores son objetos que recorren una secuencia de datos. Para ello, un contenedor de datos debe implementar la interfaz [`System.Collections.IEnumerable<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1), que tiene el método [`GetEnumerator()`](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1.getenumerator), que nos devuelve un objeto enumerador que implementa la interfaz [`System.Collections.IEnumerator<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1). Los miembros de esta última interfaz son:
 
+| Miembro | Tipo | Descripción |
+|:-------:|:----:|:------------|
+| `Current` | `T` | Da el elemento en la posición actual del recorrido. |
+| `Dispose` | `void ()` | Libera los recursos asociados, para cumplir con la interfaz `IDisposable`. |
+| `MoveNext` | `bool ()` | Avanza una posición en el recorrido actual, devolviendo `true` si puede avanzar y `false` si ha llegado al final del recorrido. |
+| `Reset` | `void ()` | Sitúa la posición actual en la posición previa al elemento inicial del recorrido. Es decir, después de resetear el objeto, será necesario utilizar `MoveNext()` para acceder al primer elemento. |
+
+> Hay que tener en cuenta, que al crearse el objeto enumerador, la posición a la que apunta es la previa al elemento inicial, como ocurría después de invocar a `Reset()`. Es por ello que el recorrido empieza siempre primero con un `MoveNext()` y después se usa `Current`.
+
+La sentencia `foreach` utiliza los enumeradores para recorrer los contenedores de datos automáticamente, por lo que no será necesario hacerlo de forma manual con `MoveNext()` y `Current`.
+
+En C# también podemos crear lo que denominan [iteradores](https://learn.microsoft.com/dotnet/csharp/iterators), que son como las funciones generadoras de Python, es decir, una función que devuelve una secuencia que depende de la ejecución de la misma. Para ello se usa la sentencia `yield`, cuya sintaxis es:
+ 
 $$\texttt{yield}\ \texttt{return}\ \mathit{expresi\acute{o}n} \texttt{;}$$
 
 $$\texttt{yield}\ \texttt{break} \texttt{;}$$
 
-..
+Con `yield return` se devuelve un valor para la secuencia y con `yield break` termina el recorrido del enumerador. Por ejemplo:
+
+```csharp
+using System.Collections.Generic;
+using static System.Console;
+
+foreach (var num in Range(1, 10)) {
+    Write($"{num} ");
+}
+WriteLine(); // 1 2 3 4 5 6 7 8 9
+
+IEnumerable<int> Range (int start, int limit) {
+    for (int i = start; i < limit; i++) {
+        yield return i;
+    }
+}
+```
+
+Para entender mejor `yield break`, veamos este ejemplo:
+
+```csharp
+using System.Collections.Generic;
+using static System.Console;
+
+foreach (var num in ListaTriangulo(1, 4)) {
+    Write($"{num} ");
+}
+WriteLine(); // 1 1 2 1 2 3
+
+foreach (var num in ListaBreak(1, 4)) {
+    Write($"{num} ");
+}
+WriteLine(); // 1
+
+IEnumerable<int> ListaTriangulo (int start, int limit) {
+    for (int i = start; i < limit; i++) {
+        for (int j = start; ; j++) {
+            yield return j;
+            if (j >= i) break;
+        }
+    }
+}
+
+IEnumerable<int> ListaBreak (int start, int limit) {
+    for (int i = start; i < limit; i++) {
+        for (int j = start; ; j++) {
+            yield return j;
+            if (j >= i) yield break;
+        }
+    }
+}
+```
+
+No se podrá usar `yield` en funciones cuyos parámetros tengan los modificadores `ref`, `in` o `out`, tampoco se puede usar en lambdas, funciones anónimas o en funciones con código `unsafe`.
+
+> Las funciones iteradoras pueden ser asíncronas, que se explican en la sección de concurrencia y paralelismo. 
 
 ## LINQ
+
+Dentro de [`System.Linq`](https://learn.microsoft.com/dotnet/api/system.linq) tenemos una serie de tipos que permiten al lenguaje aplicar consultas sobre estructuras de datos enumerables (`IEnumerable<T>`).
 
 ..TODO..
 
@@ -2790,4 +2860,8 @@ $$\texttt{await}\ \texttt{using}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \te
 
 $$\texttt{lock}\ \texttt{(} \mathit{variable} \texttt{)}\ \mathit{bloque}$$
 
-.. [`System.IAsyncDisposable`](https://learn.microsoft.com/dotnet/api/system.iasyncdisposable)
+..
+[`System.IAsyncDisposable`](https://learn.microsoft.com/dotnet/api/system.iasyncdisposable)
+[`System.Collections.IAsyncEnumerator<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerator-1)
+[`System.Collections.IAsyncEnumerable<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1)
+..
