@@ -376,7 +376,7 @@ WriteLine($"{a}, {b}"); // 0, 256
 
 ## Operadores
 
-En esta sección veremos por encima los operadores disponibles en el lenguaje. En algunos casos particulares se verán con más detalles en secciones posteriores.
+En esta sección veremos por encima los [operadores](https://learn.microsoft.com/dotnet/csharp/language-reference/operators/) disponibles en el lenguaje. En algunos casos particulares se verán con más detalles en secciones posteriores.
 
 ### Booleanos
 
@@ -591,7 +591,7 @@ Esta es la precedencia de mayor a menor de los operadores del lenguaje:
 
 ## Arrays
 
-Los arrays es un tipo de dato estructurado que permite declarar N elementos con un orden fijo, que se pueden acceder de forma directa mediante un índice numérico. Su sintaxis es:
+Los [arrays](https://learn.microsoft.com/dotnet/csharp/programming-guide/arrays/) es un tipo de dato estructurado que permite declarar N elementos con un orden fijo, que se pueden acceder de forma directa mediante un índice numérico. Su sintaxis es:
 
 $$\mathit{tipo} \texttt{[} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \textcolor{red}{]} \texttt{]} \textcolor{red}{[} \texttt{[} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \textcolor{red}{]} \texttt{]} \textcolor{red}{\dots} \texttt{[} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,} \textcolor{red}{]} \texttt{]} \textcolor{red}{]}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{inicializaci\acute{o}n_1} \textcolor{red}{]}$$
 
@@ -651,6 +651,20 @@ int[][] e = { new int[2] { 1, 2 }, new int[] { 3, 4, 5 } };
 ```
 
 De esta manera lo que estamos creando es un array de objetos arrays. Por lo tanto, la memoria de cada celda de la matriz no es continua, sino que está dividida en segmentos esparcidos por la memoria. Una ventaja que trae esta forma, es que podemos tener elementos de diferentes tamaños, cosa que con la forma compacta no se podría.
+
+> Además de los arrays, C# tiene diferentes tipos contenedores de datos, que se pueden encontrar en el espacio de nombres [`System.Collections.Generic`](https://learn.microsoft.com/dotnet/api/system.collections.generic) y en [`System.Collections`](https://learn.microsoft.com/dotnet/api/system.collections). Igual que hemos visto con los arrays, estos tipos de datos se pueden inicializar su contenido:
+> 
+> ```csharp
+> // Forma estándar para tipos con método Add():
+> var lista = new List<int> { 1, 2, 3 };
+> var dic1 = new Dictionary<int, string> {
+>     { 1, "uno" }, { 2, "dos" }, { 3, "tres" }
+> };
+> // Forma alternativa para tipos con indexadores:
+> var dic2 = new Dictionary<int, string> {
+>     [1] = "uno", [2] = "dos", [3] = "tres"
+> };
+> ```
 
 ## Funciones
 
@@ -2865,3 +2879,104 @@ $$\texttt{lock}\ \texttt{(} \mathit{variable} \texttt{)}\ \mathit{bloque}$$
 [`System.Collections.IAsyncEnumerator<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerator-1)
 [`System.Collections.IAsyncEnumerable<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1)
 ..
+
+## Biblioteca estándar
+
+Estos son los principales espacios de nombres de la [API de .NET](https://learn.microsoft.com/dotnet/api/):
+
+| Nombre | Descripción |
+|:-------|:------------|
+| [`System`](https://learn.microsoft.com/dotnet/api/system) | Tipos fundamentales del sistema. |
+| [`System.Buffers`](https://learn.microsoft.com/dotnet/api/system.buffers) | Tipos para buffers de memoria. |
+| [`System.Collections`](https://learn.microsoft.com/dotnet/api/system.collections) | Tipos para contenedores de objetos, tales como listas, colas, arrays de bits, tablas hash y diccionarios. |
+| [`System.Collections.Concurrent`](https://learn.microsoft.com/dotnet/api/system.collections.concurrent) | Tipos para contenedores de objetos que puedan ser usados de forma segura en sistemas con ejecución concurrente y/o paralela. |
+| [`System.Collections.Generic`](https://learn.microsoft.com/dotnet/api/system.collections.generic) | Tipos genéricos para contenedores de objetos, tales como listas, colas, pilas, diccionarios y conjuntos. |
+| [`System.Collections.Immutable`](https://learn.microsoft.com/dotnet/api/system.collections.immutable) | Tipos para contenedores inmutables de objetos. |
+| [`System.Collections.ObjectModel`](https://learn.microsoft.com/dotnet/api/system.collections.objectmodel) | Tipos para contenedores de objetos que sirva de base para modelos de datos en otras bibliotecas. |
+| [`System.Collections.Specialized`](https://learn.microsoft.com/dotnet/api/system.collections.specialized) | Tipos para contenedores especializados de objetos. |
+| [`System.ComponentModel`](https://learn.microsoft.com/dotnet/api/system.componentmodel) | Tipos que se utilizan para implementar el comportamiento en tiempo de ejecución y en tiempo de diseño de componentes y controles. |
+| [`System.Data`](https://learn.microsoft.com/dotnet/api/system.data) | Tipos para manejar datos de múltiples fuentes con la arquitectura ADO.NET. |
+| [`System.Data.Common`](https://learn.microsoft.com/dotnet/api/system.data.common) | Tipos para proveedores de datos para .NET. |
+| [`System.Data.SqlTypes`](https://learn.microsoft.com/dotnet/api/system.data.sqltypes) | Tipos para datos nativos en SQL Server. |
+| [`System.Diagnostics`](https://learn.microsoft.com/dotnet/api/system.diagnostics) | Tipos para interactuar con procesos del sistema, logs de eventos y medidores de rendimiento. |
+| [`System.Diagnostics.CodeAnalysis`](https://learn.microsoft.com/dotnet/api/system.diagnostics.codeanalysis) | Tipos para interactuar con herramientas de análisis de código. |
+| [`System.Diagnostics.Contracts`](https://learn.microsoft.com/dotnet/api/system.diagnostics.contracts) | Tipos para representar contratos de código, tales como precondiciones, postcondiciones e invariantes. |
+| [`System.Diagnostics.Metrics`](https://learn.microsoft.com/dotnet/api/system.diagnostics.metrics) | Tipos para realizar métricas en programas. |
+| [`System.Diagnostics.SymbolStore`](https://learn.microsoft.com/dotnet/api/system.diagnostics.symbolstore) | Tipos que permiten leer y escribir información simbólica de depuración. |
+| [`System.Diagnostics.Tracing`](https://learn.microsoft.com/dotnet/api/system.diagnostics.tracing) | Tipos para generar eventos de trazado en Windows (EWT). |
+| [`System.Dynamic`](https://learn.microsoft.com/dotnet/api/system.dynamic) | Tipos para dar soporte al entorno de ejecución de lenguajes dinámicos. |
+| [`System.Formats.Asn1`](https://learn.microsoft.com/dotnet/api/system.formats.asn1) | Tipos para el formato ASN.1 (Abstract Syntax Notation One). |
+| [`System.Formats.Tar`](https://learn.microsoft.com/dotnet/api/system.formats.tar) | Tipos para el formato TAR. |
+| [`System.Globalization`](https://learn.microsoft.com/dotnet/api/system.globalization) | Tipos para la localización de formatos y lenguaje. |
+| [`System.IO`](https://learn.microsoft.com/dotnet/api/system.io) | Tipos para manejar flujos de datos, ficheros y directorios. |
+| [`System.IO.Compression`](https://learn.microsoft.com/dotnet/api/system.io.compression) | Tipos para comprimir y descomprimir flujos de datos. |
+| [`System.IO.Pipes`](https://learn.microsoft.com/dotnet/api/system.io.pipes) | Tipos para comunicar procesos mediante tuberías. |
+| [`System.Linq`](https://learn.microsoft.com/dotnet/api/system.linq) | Tipos para realizar consultas con el lenguaje LINQ. |
+| [`System.Linq.Expressions`](https://learn.microsoft.com/dotnet/api/system.linq.expressions) | Tipos para representar expresiones del lenguaje como árboles de expresiones. |
+| [`System.Net`](https://learn.microsoft.com/dotnet/api/system.net) | Tipos para manejar diferentes protocolos de red modernos. |
+| [`System.Net.Http`](https://learn.microsoft.com/dotnet/api/system.net.http) | Tipos para manejar el protocolo HTTP. |
+| [`System.Net.Mail`](https://learn.microsoft.com/dotnet/api/system.net.mail) | Tipos para enviar emails con el protocolo SMTP. |
+| [`System.Net.NetworkInformation`](https://learn.microsoft.com/dotnet/api/system.net.networkinformation) | Tipos para obtener información sobre la red. |
+| [`System.Net.Security`](https://learn.microsoft.com/dotnet/api/system.net.security) | Tipos para manejar flujos de comunicación seguros. |
+| [`System.Net.Sockets`](https://learn.microsoft.com/dotnet/api/system.net.sockets) | Tipos para comunicarse con *sockets*. |
+| [`System.Net.WebSockets`](https://learn.microsoft.com/dotnet/api/system.net.websockets) | Tipos para comunicarse con *websockets*. |
+| [`System.Numerics`](https://learn.microsoft.com/dotnet/api/system.numerics) | Tipos para complementar los tipos primitivos numéricos del lenguaje. |
+| [`System.Reflection`](https://learn.microsoft.com/dotnet/api/system.reflection) | Tipos para inspeccionar y manipular en tiempo de ejecución los tipos del lenguaje. |
+| [`System.Reflection.Emit`](https://learn.microsoft.com/dotnet/api/system.reflection.emit) | Tipos para construir código en tiempo de ejecución en formato MSIL para ejecutarlo o guardarlo en disco. Estas herramientas están pensadas para motores de script y compiladores. |
+| [`System.Resources`](https://learn.microsoft.com/dotnet/api/system.resources) | Tipos para manejar ficheros de recursos con diferentes idiomas. |
+| [`System.Runtime`](https://learn.microsoft.com/dotnet/api/system.runtime) | Tipos para dar soporte al entorno de ejecución. |
+| [`System.Runtime.Remoting`](https://learn.microsoft.com/dotnet/api/system.runtime.remoting) | Tipos para crear y configurar aplicaciones distribuidas. |
+| [`System.Runtime.Serialization`](https://learn.microsoft.com/dotnet/api/system.runtime.serialization) | Tipos para serializar y deserializar objetos. |
+| [`System.Security`](https://learn.microsoft.com/dotnet/api/system.security) | Tipos para dar soporte a la seguridad y permisos de ejecución. |
+| [`System.Security.Cryptography`](https://learn.microsoft.com/dotnet/api/system.security.cryptography) | Tipos para manejar operaciones y servicios de criptografía. |
+| [`System.Text`](https://learn.microsoft.com/dotnet/api/system.text) | Tipos para codificar y decodificar cadenas de texto. |
+| [`System.Text.Encodings.Web`](https://learn.microsoft.com/dotnet/api/system.text.encodings.web) | Tipos para codificar texto a formato HTML, JavaScript y URL. |
+| [`System.Text.Json`](https://learn.microsoft.com/dotnet/api/system.text.json) | Tipos para serializar y deserializar en formato JSON. |
+| [`System.Text.Json.Nodes`](https://learn.microsoft.com/dotnet/api/system.text.json.nodes) | Tipos para manejar valores JSON en memoria con DOM. |
+| [`System.Text.Json.Serialization`](https://learn.microsoft.com/dotnet/api/system.text.json.serialization) | Tipos para serializar y deserializar objetos a formato JSON de forma personalizada para tipos de usuario. |
+| [`System.Text.RegularExpressions`](https://learn.microsoft.com/dotnet/api/system.text.regularexpressions) | Tipos para manejar expresiones regulares. |
+| [`System.Text.Unicode`](https://learn.microsoft.com/dotnet/api/system.text.unicode) | Tipos para manejar el formato Unicode. |
+| [`System.Threading`](https://learn.microsoft.com/dotnet/api/system.threading) | Tipos para dar soporte a la programación multihilo. |
+| [`System.Threading.Channels`](https://learn.microsoft.com/dotnet/api/system.threading.channels) | Tipos para manejar canales de comunicación entre hilos. |
+| [`System.Threading.Tasks`](https://learn.microsoft.com/dotnet/api/system.threading.tasks) | Tipos para trabajar de forma simple con código concurrente y asíncrono. |
+| [`System.Threading.Tasks.Dataflow`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.dataflow) | Tipos para programar en un modelo basado en actores, que soporta paso de mensajes para flujos de datos de grano grueso y canalización de tareas. |
+| [`System.Timers`](https://learn.microsoft.com/dotnet/api/system.timers) | Tipos para manejar temporizadores. |
+| [`System.Transactions`](https://learn.microsoft.com/dotnet/api/system.transactions) | Tipos para crear aplicaciones y gestores de recursos transaccionales. |
+| [`System.Xml`](https://learn.microsoft.com/dotnet/api/system.xml) | Tipos para procesar el formato XML. |
+| [`System.Xml.Linq`](https://learn.microsoft.com/dotnet/api/system.xml.linq) | Tipos para utilizar LINQ con el formato XML. |
+| [`System.Xml.Schema`](https://learn.microsoft.com/dotnet/api/system.xml.schema) | Tipos para dar soporte al lenguaje XSD (XML Schema Definition). |
+| [`System.Xml.Serialization`](https://learn.microsoft.com/dotnet/api/system.xml.serialization) | Tipos para serializar y deserializar en formato XML. |
+| [`System.Xml.XPath`](https://learn.microsoft.com/dotnet/api/system.xml.xpath) | Tipos para dar soporte a XQuery 1.0 y XPath 2.0. |
+| [`System.Xml.Xsl`](https://learn.microsoft.com/dotnet/api/system.xml.xsl) | Tipos para dar soporte a XSLT (Extensible Stylesheet Transformation). |
+
+También tenemos para la plataforma Windows estos espacios de nombres:
+
+| Nombre | Descripción |
+|:-------|:------------|
+| [`System.Windows`](https://learn.microsoft.com/dotnet/api/system.windows) | Tipos para dar soporte a WPF (Windows Presentation Foundation). |
+| [`System.Windows.Annotations`](https://learn.microsoft.com/dotnet/api/system.windows.annotations) | Tipos para hacer anotaciones a documentos mostrados por controles WPF. |
+| [`System.Windows.Automation`](https://learn.microsoft.com/dotnet/api/system.windows.automation) | Tipos para dar soporte a la automatización de aplicaciones WPF. |
+| [`System.Windows.Controls`](https://learn.microsoft.com/dotnet/api/system.windows.controls) | Tipos para utilizar controles con los que interactuar  en una aplicación WPF. |
+| [`System.Windows.Controls.Ribbon`](https://learn.microsoft.com/dotnet/api/system.windows.controls.ribbon) | Tipos para utilizar el control Microsoft Ribbon para WPF. |
+| [`System.Windows.Converters`](https://learn.microsoft.com/dotnet/api/system.windows.converters) | Tipos para convertir tipos durante la serialización en WPF. |
+| [`System.Windows.Data`](https://learn.microsoft.com/dotnet/api/system.windows.data) | Tipos para enlazar propiedades de una interfaz con fuentes de datos. |
+| [`System.Windows.Documents`](https://learn.microsoft.com/dotnet/api/system.windows.documents) | Tipos para dar soporte a diferentes formatos de documentos como XPS. |
+| [`System.Windows.Documents.Serialization`](https://learn.microsoft.com/dotnet/api/system.windows.documents.serialization) | Tipos para dar soporte a la serialización de diferentes formatos de documentos. |
+| [`System.Windows.Forms`](https://learn.microsoft.com/dotnet/api/system.windows.forms) | Tipos para usar el modelo antiguo de interfaz gráfica de Windows. Es más sencillo de usar que WPF, pero es menos potente y más limitado. |
+| [`System.Windows.Forms.Integration`](https://learn.microsoft.com/dotnet/api/system.windows.forms.integration) | Tipos para dar soporte a la comunicación entre controles de Windows Forms y WPF. |
+| [`System.Windows.Ink`](https://learn.microsoft.com/dotnet/api/system.windows.ink) | Tipos para dar soporte a dibujar con tinta en WPF. |
+| [`System.Windows.Input`](https://learn.microsoft.com/dotnet/api/system.windows.input) | Tipos para dar soporte a la entrada con dispositivos en WPF (ratón, teclado, lápiz digital, etcétera). |
+| [`System.Windows.Markup`](https://learn.microsoft.com/dotnet/api/system.windows.markup) | Tipos para dar soporte al formato XAML. |
+| [`System.Windows.Media`](https://learn.microsoft.com/dotnet/api/system.windows.media) | Tipos para dar soporte a contenido multimedia con aplicaciones WPF. |
+| [`System.Windows.Media.Animation`](https://learn.microsoft.com/dotnet/api/system.windows.media.animation) | Tipos para dar soporte a animaciones. |
+| [`System.Windows.Media.Converters`](https://learn.microsoft.com/dotnet/api/system.windows.media.converters) | Tipos para transformar datos al serializar al formato XAML. |
+| [`System.Windows.Media.Effects`](https://learn.microsoft.com/dotnet/api/system.windows.media.effects) | Tipos para aplicar efectos visuales a imágenes. |
+| [`System.Windows.Media.Imaging`](https://learn.microsoft.com/dotnet/api/system.windows.media.imaging) | Tipos para codificar y decodificar imágenes. |
+| [`System.Windows.Media.Media3D`](https://learn.microsoft.com/dotnet/api/system.windows.media.media3d) | Tipos para dar soporte al renderizado 3D en aplicaciones WPF. |
+| [`System.Windows.Media.Media3D.converters`](https://learn.microsoft.com/dotnet/api/system.windows.media.media3d.converters) | Tipos para transformar datos al serializar al formato XAML. |
+| [`System.Windows.Media.TextFormatting`](https://learn.microsoft.com/dotnet/api/system.windows.media.textformatting) | Tipos para dar formato visual a bajo nivel a texto enriquecido. |
+| [`System.Windows.Navigation`](https://learn.microsoft.com/dotnet/api/system.windows.navigation) | Tipos para dar soporte a la navegación entre ventanas. |
+| [`System.Windows.Resources`](https://learn.microsoft.com/dotnet/api/system.windows.resources) | Tipos de bajo nivel para dar soporte al uso de recursos en WPF. |
+| [`System.Windows.Shapes`](https://learn.microsoft.com/dotnet/api/system.windows.shapes) | Tipos para definir formas que poder usar con el código o con XAML. |
+| [`System.Windows.Shell`](https://learn.microsoft.com/dotnet/api/system.windows.shell) | Tipos para poder usar la barra de tareas de Windows. |
+| [`System.Windows.Threading`](https://learn.microsoft.com/dotnet/api/system.windows.threading) | Tipos para dar soporte multihilo a WPF. |
