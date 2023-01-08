@@ -2579,11 +2579,7 @@ class Foo {
     }
 
     public override string ToString () {
-        var text = new System.Text.StringBuilder();
-        foreach (var item in N) {
-            text.Append($"{item} ");
-        }
-        return text.ToString();
+        return string.Join(" ", N);
     }
 }
 ```
@@ -2860,7 +2856,173 @@ No se podrá usar `yield` en funciones cuyos parámetros tengan los modificadore
 
 ## LINQ
 
-Dentro de [`System.Linq`](https://learn.microsoft.com/dotnet/api/system.linq) tenemos una serie de tipos que permiten al lenguaje aplicar consultas sobre estructuras de datos enumerables (`IEnumerable<T>`).
+Dentro de [`System.Linq`](https://learn.microsoft.com/dotnet/api/system.linq) tenemos una serie de tipos que permiten al lenguaje aplicar consultas sobre estructuras de datos enumerables, por ejemplo, `IEnumerable<T>`.
+
+### Operaciones
+
+Hay varias categorías de operaciones, algunas tienen ejecución perezosa:
+
+| Categoría | Pereza | Descripción |
+|:---------:|:------:|:------------|
+| Filtrado | Sí | Devuelve un subconjunto de elementos que cumplan una condición. |
+| Proyección | Sí | Transforma un elemento en otro con una lambda. |
+| Unión (*Join*) | Sí | Une los elementos de una secuencia con otra, usando una estrategia *lookup* (agrupando elementos con una misma clave designada). |
+| Ordenación | Sí | Ordena los elementos de la secuencia. |
+| Agrupamiento | Sí | Agrupa la secuencia en subsecuencias. |
+| Conjunto | Sí | Realiza operaciones de conjunto utilizando dos secuencias. |
+| Elemento | No | Obtiene un único valor de la secuencia. |
+| Reducción | No | Ejecuta una operación sobre la secuencia para reducirla a un único valor. |
+| Cuantificación | No | Evalúa una operación sobre la secuencia para devolver `true` o `false`. |
+| Conversión: Importar | Sí | Convierte una secuencia no genérica en una genérica. |
+| Conversión: Exportar | No | Convierte una secuencia en un array, lista, diccionario o *lookup*, forzando la evaluación completa de la secuencia. |
+| Generación | Sí | Genera una secuencia simple. |
+
+Las clases principales que contienen estas operaciones, como métodos extensibles, son [`System.Linq.Enumerable`](https://learn.microsoft.com/dotnet/api/system.linq.enumerable), [`System.Linq.Queryable`](https://learn.microsoft.com/dotnet/api/system.linq.queryable) y [`System.Linq.ParallelQuery`](https://learn.microsoft.com/dotnet/api/system.linq.parallelquery). Mientras que `Enumerable` realiza operaciones sobre [`IEnumerable<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1), la clase `Queryable` aplica sus operaciones sobre la interfaz [`IQueryable<T>`](https://learn.microsoft.com/dotnet/api/system.linq.iqueryable-1). La principal diferencia es que las secuencias de tipo `IEnumerable<T>` trabajan con datos que están instanciados en la memoria, mientras que las de tipo `IQueryable<T>` pueden trabajar contra una base de datos sin cargar todos los datos en memoria previamente. El caso de `ParallelQuery` es para poder ejecutar consultas con ejecución en paralelo de secuencias de tipo `IEnumerable<T>`.
+
+..TODO..
+
+Las operaciones de *filtrado* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `Where` | . | `Where(x => x % 2 == 0)` |
+| `Take` | . | `S.` |
+| `Skip` | . | `S.` |
+| `TakeWhile` | . | `S.` |
+| `SkipWhile` | . | `S.` |
+| `TakeLast` | . | `S.` |
+| `SkipLast` | . | `S.` |
+| `Distinct` | . | `S.` |
+| `DistinctBy` | **C# 10:** . | `S.` |
+
+Las operaciones de *proyección* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `Select` | . | `S.` |
+| `SelectMany` | . | `S.` |
+
+Las operaciones de *unión (join)* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `Join` | . | `S.` |
+| `GroupJoin` | . | `S.` |
+| `Zip` | . | `S.` |
+
+Las operaciones de *ordenación* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `OrderBy` | . | `S.` |
+| `ThenBy` | . | `S.` |
+| `OrderByDescending` | . | `S.` |
+| `ThenByDescending` | . | `S.` |
+| `Reverse` | . | `S.` |
+| `Order` | **C# 11:** . | `S.` |
+| `OrderDescending` | **C# 11:** . | `S.` |
+
+Las operaciones de *agrupamiento* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `GroupBy` | . | `S.` |
+
+Las operaciones de *conjunto* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `Concat` | . | `S.` |
+| `Union` | . | `S.` |
+| `Intersect` | . | `S.` |
+| `Except` | . | `S.` |
+| `UnionBy` | **C# 10:** . | `S.` |
+| `IntersectBy` | **C# 10:** . | `S.` |
+| `ExceptBy` | **C# 10:** . | `S.` |
+
+
+Las operaciones de *elemento* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `First` | . | `S.` |
+| `FirstOrDefault` | . | `S.` |
+| `Last` | . | `S.` |
+| `LastOrDefault` | . | `S.` |
+| `Single` | Devuelve el único elemento que hay en la secuencia, o el único que cumple el predicado. Si no, lanza una excepción. | `S.Single()`<br/>`S.Single(x => x == 42)` |
+| `SingleOrDefault` | Devuelve el único elemento que hay en la secuencia, o el único que cumple el predicado. Si no, el valor por defecto. | `S.SingleOrDefault()`<br/>`S.SingleOrDefault(-42)`<br/>`S.SingleOrDefault(x => x == 42)`<br/>`S.SingleOrDefault(x => x == 42, -42)` |
+| `ElementAt` | Devuelve un elemento de la secuencia en una posición. Si no, lanza una excepción. | `S.ElementAt(1)`<br/>`S.ElementAt(^2)` |
+| `ElementAtOrDefault` | Devuelve un elemento de la secuencia en una posición. Si no, el valor por defecto para el tipo de los elementos. | `S.ElementAtOrDefault(1)`<br/>`S.ElementAtOrDefault(^2)` |
+| `DefaultIfEmpty` | Devuelve la secuencia si no está vacía. Si no, una secuencia con el valor por defecto como único elemento. | `S.DefaultIfEmpty()`<br/>`S.DefaultIfEmpty(42)` |
+
+Las operaciones de *reducción* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `Count` | Calcula el número de elementos que hay en una secuencia o cuantos cumplen un predicado. | `S.Count()`<br/>`S.Count(x => x > 0)` |
+| `LongCount` | Calcula el número de elementos que hay en una secuencia o cuantos cumplen un predicado. | `S.LongCount()`<br/>`S.LongCount(x => x > 0)` |
+| `Min` | Calcula el valor mínimo de una secuencia. | `S.Min()`<br/>`S.Min(x => x.Valor)` |
+| `Max` | Calcula el valor máximo de una secuencia. | `S.Max()`<br/>`S.Max(x => x.Valor)` |
+| `Sum` | Calcula la suma de una secuencia numérica. | `S.Sum()`<br/>`S.Sum(x => x.Num)` |
+| `Average` | Calcula la media de una secuencia numérica. | `S.Average()`<br/>`S.Average(x => x.Num)` |
+| `Aggregate` | Reduce una secuencia a un único valor utilizando una función transformadora. | `S.Aggregate(1, (accum, x) => accum * x)`<br/>`S.Aggregate((accum, x) => $"{accum}, {x}")` |
+| `MinBy` | **C# 10:** Devuelve el valor mínimo de una secuencia en base a una función selectora. | `S.MinBy(x => x.Clave)` |
+| `MaxBy` | **C# 10:** Devuelve el valor máximo de una secuencia en base a una función selectora. | `S.MaxBy(x => x.Clave)` |
+| `TryGetNonEnumeratedCount` | **C# 10:** Intenta determinar el número de elementos de la secuencia sin evaluarla entera. Si lo logra devuelve `true` y el tamaño en el parámetro de salida, si no `false`. | `S.TryGetNonEnumeratedCount(out n)` |
+
+Las operaciones de *cuantificación* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `Contains` | Comprueba si una secuencia contiene un elemento. | `S.Contains(0)` |
+| `Any` | Comprueba que la secuencia no esté vacía o que se cumpla un predicado para algún elemento. | `S.Any()`<br/>`S.Any(x => x  > 0)` |
+| `All` | Comprueba si una secuencia cumple un predicado para todos sus elementos. Si la secuencia está vacía también devolverá `true`. | `S.All(x => x  > 0)` |
+| `SequenceEqual` | Comprueba si una secuencia es igual a otra. | `S.SequenceEqual(S2)` |
+
+Las operaciones de *conversión (importar)* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `OfType` | Filtra el contenido de un `IEnumerable` para ajustarlo al tipo `IEnumerable<T>`. | `S.OfType<int>()` |
+| `Cast` | Aplica un *casting* sobre un `IEnumerable` para devolver un `IEnumerable<T>`. | `S.Cast<string>()` |
+
+Las operaciones de *conversión (exportar)* son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `ToArray` | Convierte la secuencia al tipo `T[]`. | `S.ToArray()` |
+| `ToList` | Convierte la secuencia al tipo `List<T>` de `System.Collections.Generic`. | `S.ToList()` |
+| `ToDictionary` | Convierte la secuencia al tipo `Dictionary<TKey,TElement>` de `System.Collections.Generic`. | `S.ToDictionary(x => x.Clave)`<br/>`S.ToDictionary(x => x.Clave, x => x.Elemento)` |
+| `ToLookup` | Convierte la secuencia al tipo `S.ILookup<TKey,TElement>` de `System.Linq`. | `ToLookup(x => x.Clave)`<br/>`S.ToLookup(x => x.Clave, x => x.Elemento)` |
+| `ToHashSet` | Convierte la secuencia al tipo `S.HashSet<T>` de `System.Collections.Generic`. | `S.ToHashSet()` 
+| `AsEnumerable` | **Enumerable:** Convierte la secuencia al tipo `IEnumerable<T>`. | `S.AsEnumerable()` |
+| `AsQueryable` | **Queryable:** Convierte la secuencia al tipo `IQueryable<T>`. | `S.AsQueryable()` |
+
+Las operaciones de *generación* son:
+
+| Método | Descripción | Parámetros | Ejemplos |
+|:------:|:------------|:-----------|:---------|
+| `Empty` | Crea una secuencia vacía del tipo indicado. | - | `Enumerable.Empty<float>()` |
+| `Range` | Crea una secuencia de números sucesivos. | `start`: Número inicial.<br/>`count`: Número de elementos. | `Enumerable.Range(1, 10)` |
+| `Repeat` | Crea una secuencia de elementos repetidos. | `element`: Elemento a repetir.<br/>`count`: Número de repeticiones. | `Enumerable.Repeat('Ñ', 6)` |
+
+Otras operaciones disponibles son:
+
+| Método | Descripción | Ejemplos |
+|:------:|:------------|:---------|
+| `Append` | Añade un elemento al final de la secuencia, sin modificar la secuencia original. | `S.Append('Z')` |
+| `Prepend` | Añade un elemento al inicio de la secuencia, sin modificar la secuencia original. | `S.Prepend('A')` |
+| `Chunk` | Divide la secuencia en arrays de un tamaño máximo indicado. | `S.Chunk(5)` |
+
+En los ejemplos de las tablas, `S` representa un objeto secuencia. Muchas de estas operaciones devuelven una secuencia, por lo que se pueden encadenar varias operaciones, para realizar transformaciones más complejas:
+
+```csharp
+
+```
+
+> Muchas de las operaciones necesitan que el tipo de los elementos tenga ciertas interfaces de comparación implementadas. Si no fuera el caso, se puede pasar como parámetro un objeto que implemente la interfaz [`IComparer<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.icomparer-1) o [`IEqualityComparer<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1).
+
+### Consultas
 
 ..TODO..
 
@@ -2980,3 +3142,4 @@ También tenemos para la plataforma Windows estos espacios de nombres:
 | [`System.Windows.Shapes`](https://learn.microsoft.com/dotnet/api/system.windows.shapes) | Tipos para definir formas que poder usar con el código o con XAML. |
 | [`System.Windows.Shell`](https://learn.microsoft.com/dotnet/api/system.windows.shell) | Tipos para poder usar la barra de tareas de Windows. |
 | [`System.Windows.Threading`](https://learn.microsoft.com/dotnet/api/system.windows.threading) | Tipos para dar soporte multihilo a WPF. |
+
