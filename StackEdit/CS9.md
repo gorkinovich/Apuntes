@@ -2879,124 +2879,121 @@ Hay varias categorías de operaciones, algunas tienen ejecución perezosa:
 
 Las clases principales que contienen estas operaciones, como métodos extensibles, son [`System.Linq.Enumerable`](https://learn.microsoft.com/dotnet/api/system.linq.enumerable), [`System.Linq.Queryable`](https://learn.microsoft.com/dotnet/api/system.linq.queryable) y [`System.Linq.ParallelQuery`](https://learn.microsoft.com/dotnet/api/system.linq.parallelquery). Mientras que `Enumerable` realiza operaciones sobre [`IEnumerable<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1), la clase `Queryable` aplica sus operaciones sobre la interfaz [`IQueryable<T>`](https://learn.microsoft.com/dotnet/api/system.linq.iqueryable-1). La principal diferencia es que las secuencias de tipo `IEnumerable<T>` trabajan con datos que están instanciados en la memoria, mientras que las de tipo `IQueryable<T>` pueden trabajar contra una base de datos sin cargar todos los datos en memoria previamente. El caso de `ParallelQuery` es para poder ejecutar consultas con ejecución en paralelo de secuencias de tipo `IEnumerable<T>`.
 
-..TODO..
-
 Las operaciones de *filtrado* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `Where` | . | `Where(x => x % 2 == 0)` |
-| `Take` | . | `S.` |
-| `Skip` | . | `S.` |
-| `TakeWhile` | . | `S.` |
-| `SkipWhile` | . | `S.` |
-| `TakeLast` | . | `S.` |
-| `SkipLast` | . | `S.` |
-| `Distinct` | . | `S.` |
-| `DistinctBy` | **C# 10:** . | `S.` |
+| `Where` | Filtra una secuencia en base a un predicado. | `X.Where(x => x % 2 == 0)`<br/>`X.Where((x, i) => x > i)` |
+| `Take` | Devuelve una subsecuencia de elementos, tomando los N primeros elementos o un rango de ellos. | `X.Take(5)`<br/>`X.Take(4..8)` |
+| `Skip` | Devuelve una subsecuencia de elementos, saltándose los N primeros elementos. | `X.Skip(5)` |
+| `TakeWhile` | Devuelve una subsecuencia de elementos, tomando los N primeros elementos que cumplan un predicado. | `X.TakeWhile(x => x % 2 == 0)`<br/>`X.TakeWhile((x, i) => x > i)` |
+| `SkipWhile` | Devuelve una subsecuencia de elementos, saltándose los N primeros elementos que cumplan un predicado. | `X.SkipWhile(x => x % 2 == 0)`<br/>`X.SkipWhile((x, i) => x > i)` |
+| `TakeLast` | Devuelve una subsecuencia de elementos, tomando los N últimos elementos. | `X.TakeLast(5)` |
+| `SkipLast` | Devuelve una subsecuencia de elementos, saltándose los N últimos elementos. | `X.SkipLast(5)` |
+| `Distinct` | Devuelve una secuencia eliminando los duplicados. | `X.Distinct()` |
+| `DistinctBy` | **C# 10:** Devuelve una secuencia eliminando los duplicados en base a una función selectora. | `X.DistinctBy(x => x.Clave)` |
 
 Las operaciones de *proyección* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `Select` | . | `S.` |
-| `SelectMany` | . | `S.` |
+| `Select` | Transforma cada elemento de una secuencia en otro objeto. | `X.Select(x => x)`<br/>`X.Select((x, i) => (i, x))` |
+| `SelectMany` | Una versión transforma cada elemento de una secuencia en otra secuencia y la aplana en una secuencia única. La otra versión combina el elemento original con cada valor de la secuencia devuelta. | `X.SelectMany(x => x.Y)`<br/>`X.SelectMany((x, i) => x.Y)`<br/>`X.SelectMany(x => x.Y, (x, y) => (x, y))`<br/>`X.SelectMany((x, i) => x.Y, (x, y) => (x, y))` |
 
 Las operaciones de *unión (join)* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `Join` | . | `S.` |
-| `GroupJoin` | . | `S.` |
-| `Zip` | . | `S.` |
+| `Join` | Une los elementos de una secuencia con otra (*inner join*) en base a una función selectora, para cada secuencia, y con otra función une cada par de elementos en un único objeto. | `X.GroupJoin(Y, x => x.Clave, y => y.Clave, (x, y) => (x, y))` |
+| `GroupJoin` | Ejecuta una *inner join*, como con `Join`, pero en lugar de unir los elementos dos a dos, agrupa los elementos de la segunda secuencia en una subsecuencia. | `X.GroupJoin(Y, x => x.Clave, y => y.Clave, (x, ys) => (x, ys))` |
+| `Zip` | Une dos o tres secuencias en un solo objeto, por defecto una tupla. | `X.Zip(Y)`<br/>`X.Zip(Y, Z)`<br/>`X.Zip(Y, (x, y) => (x, y))` |
 
 Las operaciones de *ordenación* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `OrderBy` | . | `S.` |
-| `ThenBy` | . | `S.` |
-| `OrderByDescending` | . | `S.` |
-| `ThenByDescending` | . | `S.` |
-| `Reverse` | . | `S.` |
-| `Order` | **C# 11:** . | `S.` |
-| `OrderDescending` | **C# 11:** . | `S.` |
+| `OrderBy` | Ordena los elementos de una secuencia en orden ascendiente en base a una función selectora. | `X.OrderBy(x => x.Clave)` |
+| `ThenBy` | Añade otro factor de ordenación ascendiente a los elementos de una secuencia en base a una función selectora. | `X.ThenBy(x => x.Clave)` |
+| `OrderByDescending` | Ordena los elementos de una secuencia en orden descendiente en base a una función selectora. | `X.OrderByDescending(x => x.Clave)` |
+| `ThenByDescending` | Añade otro factor de ordenación descendiente a los elementos de una secuencia en base a una función selectora. | `X.ThenByDescending(x => x.Clave)` |
+| `Reverse` | Invierte el orden de los elementos de una secuencia. | `X.Reverse()` |
+| `Order` | **C# 11:** Ordena los elementos de una secuencia en orden ascendiente. | `X.Order()` |
+| `OrderDescending` | **C# 11:** Ordena los elementos de una secuencia en orden descendiente. | `X.OrderDescending()` |
 
 Las operaciones de *agrupamiento* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `GroupBy` | . | `S.` |
+| `GroupBy` | Agrupa los elementos de una secuencia en base a una función selectora. También se puede indicar los elementos que agrupar, y la forma de agruparlos, con sus respectivas funciones. | `X.GroupBy(x => x.Clave)`<br/>`X.GroupBy(x => x.Clave, (clave, items) => items)`<br/>`X.GroupBy(x => x.Clave, x => x.Items)`<br/>`X.GroupBy(x => x.Clave, x => x.Items, (clave, items) => items)` |
 
 Las operaciones de *conjunto* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `Concat` | . | `S.` |
-| `Union` | . | `S.` |
-| `Intersect` | . | `S.` |
-| `Except` | . | `S.` |
-| `UnionBy` | **C# 10:** . | `S.` |
-| `IntersectBy` | **C# 10:** . | `S.` |
-| `ExceptBy` | **C# 10:** . | `S.` |
-
+| `Concat` | Devuelve la concatenación de dos secuencias. | `X.Concat(Y)` |
+| `Union` | Devuelve la unión entre dos secuencias. | `X.Union(Y)` |
+| `Intersect` | Devuelve la intersección entre dos secuencias. | `X.Intersect(Y)` |
+| `Except` | Devuelve la diferencia entre dos secuencias. | `X.Except(Y)` |
+| `UnionBy` | **C# 10:** Devuelve la unión entre dos secuencias en base a una función selectora. | `X.UnionBy(Y, xy => xy.Clave)` |
+| `IntersectBy` | **C# 10:** Devuelve la intersección entre dos secuencias en base a una función selectora. | `X.IntersectBy(Y, xy => xy.Clave)` |
+| `ExceptBy` | **C# 10:** Devuelve la diferencia entre dos secuencias en base a una función selectora. | `X.ExceptBy(Y, xy => xy.Clave)` |
 
 Las operaciones de *elemento* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `First` | . | `S.` |
-| `FirstOrDefault` | . | `S.` |
-| `Last` | . | `S.` |
-| `LastOrDefault` | . | `S.` |
-| `Single` | Devuelve el único elemento que hay en la secuencia, o el único que cumple el predicado. Si no, lanza una excepción. | `S.Single()`<br/>`S.Single(x => x == 42)` |
-| `SingleOrDefault` | Devuelve el único elemento que hay en la secuencia, o el único que cumple el predicado. Si no, el valor por defecto. | `S.SingleOrDefault()`<br/>`S.SingleOrDefault(-42)`<br/>`S.SingleOrDefault(x => x == 42)`<br/>`S.SingleOrDefault(x => x == 42, -42)` |
-| `ElementAt` | Devuelve un elemento de la secuencia en una posición. Si no, lanza una excepción. | `S.ElementAt(1)`<br/>`S.ElementAt(^2)` |
-| `ElementAtOrDefault` | Devuelve un elemento de la secuencia en una posición. Si no, el valor por defecto para el tipo de los elementos. | `S.ElementAtOrDefault(1)`<br/>`S.ElementAtOrDefault(^2)` |
-| `DefaultIfEmpty` | Devuelve la secuencia si no está vacía. Si no, una secuencia con el valor por defecto como único elemento. | `S.DefaultIfEmpty()`<br/>`S.DefaultIfEmpty(42)` |
+| `First` | Devuelve el primer elemento que hay en la secuencia, o el primero que cumple el predicado. Si no, lanza una excepción. | `X.First()`<br/>`X.First(x => x == 42)` |
+| `FirstOrDefault` | Devuelve el primer elemento que hay en la secuencia, o el primero que cumple el predicado. Si no, el valor por defecto. | `X.FirstOrDefault()`<br/>`X.FirstOrDefault(-42)`<br/>`X.FirstOrDefault(x => x == 42)`<br/>`X.FirstOrDefault(x => x == 42, -42)` |
+| `Last` | Devuelve el último elemento que hay en la secuencia, o el último que cumple el predicado. Si no, lanza una excepción. | `X.Last()`<br/>`X.Last(x => x == 42)` |
+| `LastOrDefault` | Devuelve el último elemento que hay en la secuencia, o el último que cumple el predicado. Si no, el valor por defecto. | `X.LastOrDefault()`<br/>`X.LastOrDefault(-42)`<br/>`X.LastOrDefault(x => x == 42)`<br/>`X.LastOrDefault(x => x == 42, -42)` |
+| `Single` | Devuelve el único elemento que hay en la secuencia, o el único que cumple el predicado. Si no, lanza una excepción. | `X.Single()`<br/>`X.Single(x => x == 42)` |
+| `SingleOrDefault` | Devuelve el único elemento que hay en la secuencia, o el único que cumple el predicado. Si no, el valor por defecto. | `X.SingleOrDefault()`<br/>`X.SingleOrDefault(-42)`<br/>`X.SingleOrDefault(x => x == 42)`<br/>`X.SingleOrDefault(x => x == 42, -42)` |
+| `ElementAt` | Devuelve un elemento de la secuencia en una posición. Si no, lanza una excepción. | `X.ElementAt(1)`<br/>`X.ElementAt(^2)` |
+| `ElementAtOrDefault` | Devuelve un elemento de la secuencia en una posición. Si no, el valor por defecto para el tipo de los elementos. | `X.ElementAtOrDefault(1)`<br/>`X.ElementAtOrDefault(^2)` |
+| `DefaultIfEmpty` | Devuelve la secuencia si no está vacía. Si no, una secuencia con el valor por defecto como único elemento. | `X.DefaultIfEmpty()`<br/>`X.DefaultIfEmpty(42)` |
 
 Las operaciones de *reducción* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `Count` | Calcula el número de elementos que hay en una secuencia o cuantos cumplen un predicado. | `S.Count()`<br/>`S.Count(x => x > 0)` |
-| `LongCount` | Calcula el número de elementos que hay en una secuencia o cuantos cumplen un predicado. | `S.LongCount()`<br/>`S.LongCount(x => x > 0)` |
-| `Min` | Calcula el valor mínimo de una secuencia. | `S.Min()`<br/>`S.Min(x => x.Valor)` |
-| `Max` | Calcula el valor máximo de una secuencia. | `S.Max()`<br/>`S.Max(x => x.Valor)` |
-| `Sum` | Calcula la suma de una secuencia numérica. | `S.Sum()`<br/>`S.Sum(x => x.Num)` |
-| `Average` | Calcula la media de una secuencia numérica. | `S.Average()`<br/>`S.Average(x => x.Num)` |
-| `Aggregate` | Reduce una secuencia a un único valor utilizando una función transformadora. | `S.Aggregate(1, (accum, x) => accum * x)`<br/>`S.Aggregate((accum, x) => $"{accum}, {x}")` |
-| `MinBy` | **C# 10:** Devuelve el valor mínimo de una secuencia en base a una función selectora. | `S.MinBy(x => x.Clave)` |
-| `MaxBy` | **C# 10:** Devuelve el valor máximo de una secuencia en base a una función selectora. | `S.MaxBy(x => x.Clave)` |
-| `TryGetNonEnumeratedCount` | **C# 10:** Intenta determinar el número de elementos de la secuencia sin evaluarla entera. Si lo logra devuelve `true` y el tamaño en el parámetro de salida, si no `false`. | `S.TryGetNonEnumeratedCount(out n)` |
+| `Count` | Calcula el número de elementos que hay en una secuencia o cuantos cumplen un predicado. | `X.Count()`<br/>`X.Count(x => x > 0)` |
+| `LongCount` | Calcula el número de elementos que hay en una secuencia o cuantos cumplen un predicado. | `X.LongCount()`<br/>`X.LongCount(x => x > 0)` |
+| `Min` | Calcula el valor mínimo de una secuencia. | `X.Min()`<br/>`X.Min(x => x.Valor)` |
+| `Max` | Calcula el valor máximo de una secuencia. | `X.Max()`<br/>`X.Max(x => x.Valor)` |
+| `Sum` | Calcula la suma de una secuencia numérica. | `X.Sum()`<br/>`X.Sum(x => x.Num)` |
+| `Average` | Calcula la media de una secuencia numérica. | `X.Average()`<br/>`X.Average(x => x.Num)` |
+| `Aggregate` | Reduce una secuencia a un único valor utilizando una función transformadora. | `X.Aggregate(1, (accum, x) => accum * x)`<br/>`X.Aggregate((accum, x) => $"{accum}, {x}")` |
+| `MinBy` | **C# 10:** Devuelve el valor mínimo de una secuencia en base a una función selectora. | `X.MinBy(x => x.Clave)` |
+| `MaxBy` | **C# 10:** Devuelve el valor máximo de una secuencia en base a una función selectora. | `X.MaxBy(x => x.Clave)` |
+| `TryGetNonEnumeratedCount` | **C# 10:** Intenta determinar el número de elementos de la secuencia sin evaluarla entera. Si lo logra devuelve `true` y el tamaño en el parámetro de salida, si no `false`. | `X.TryGetNonEnumeratedCount(out n)` |
 
 Las operaciones de *cuantificación* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `Contains` | Comprueba si una secuencia contiene un elemento. | `S.Contains(0)` |
-| `Any` | Comprueba que la secuencia no esté vacía o que se cumpla un predicado para algún elemento. | `S.Any()`<br/>`S.Any(x => x  > 0)` |
-| `All` | Comprueba si una secuencia cumple un predicado para todos sus elementos. Si la secuencia está vacía también devolverá `true`. | `S.All(x => x  > 0)` |
-| `SequenceEqual` | Comprueba si una secuencia es igual a otra. | `S.SequenceEqual(S2)` |
+| `Contains` | Comprueba si una secuencia contiene un elemento. | `X.Contains(0)` |
+| `Any` | Comprueba que la secuencia no esté vacía o que se cumpla un predicado para algún elemento. | `X.Any()`<br/>`X.Any(x => x  > 0)` |
+| `All` | Comprueba si una secuencia cumple un predicado para todos sus elementos. Si la secuencia está vacía también devolverá `true`. | `X.All(x => x  > 0)` |
+| `SequenceEqual` | Comprueba si una secuencia es igual a otra. | `X.SequenceEqual(Y)` |
 
 Las operaciones de *conversión (importar)* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `OfType` | Filtra el contenido de un `IEnumerable` para ajustarlo al tipo `IEnumerable<T>`. | `S.OfType<int>()` |
-| `Cast` | Aplica un *casting* sobre un `IEnumerable` para devolver un `IEnumerable<T>`. | `S.Cast<string>()` |
+| `OfType` | Filtra el contenido de un `IEnumerable` para ajustarlo al tipo `IEnumerable<T>`. | `X.OfType<int>()` |
+| `Cast` | Aplica un *casting* sobre un `IEnumerable` para devolver un `IEnumerable<T>`. | `X.Cast<string>()` |
 
 Las operaciones de *conversión (exportar)* son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `ToArray` | Convierte la secuencia al tipo `T[]`. | `S.ToArray()` |
-| `ToList` | Convierte la secuencia al tipo `List<T>` de `System.Collections.Generic`. | `S.ToList()` |
-| `ToDictionary` | Convierte la secuencia al tipo `Dictionary<TKey,TElement>` de `System.Collections.Generic`. | `S.ToDictionary(x => x.Clave)`<br/>`S.ToDictionary(x => x.Clave, x => x.Elemento)` |
-| `ToLookup` | Convierte la secuencia al tipo `S.ILookup<TKey,TElement>` de `System.Linq`. | `ToLookup(x => x.Clave)`<br/>`S.ToLookup(x => x.Clave, x => x.Elemento)` |
-| `ToHashSet` | Convierte la secuencia al tipo `S.HashSet<T>` de `System.Collections.Generic`. | `S.ToHashSet()` 
-| `AsEnumerable` | **Enumerable:** Convierte la secuencia al tipo `IEnumerable<T>`. | `S.AsEnumerable()` |
-| `AsQueryable` | **Queryable:** Convierte la secuencia al tipo `IQueryable<T>`. | `S.AsQueryable()` |
+| `ToArray` | Convierte la secuencia al tipo `T[]`. | `X.ToArray()` |
+| `ToList` | Convierte la secuencia al tipo `List<T>` de `System.Collections.Generic`. | `X.ToList()` |
+| `ToDictionary` | Convierte la secuencia al tipo `Dictionary<TKey,TElement>` de `System.Collections.Generic`. | `X.ToDictionary(x => x.Clave)`<br/>`X.ToDictionary(x => x.Clave, x => x.Elemento)` |
+| `ToLookup` | Convierte la secuencia al tipo `X.ILookup<TKey,TElement>` de `System.Linq`. | `ToLookup(x => x.Clave)`<br/>`X.ToLookup(x => x.Clave, x => x.Elemento)` |
+| `ToHashSet` | Convierte la secuencia al tipo `X.HashSet<T>` de `System.Collections.Generic`. | `X.ToHashSet()` 
+| `AsEnumerable` | **Enumerable:** Convierte la secuencia al tipo `IEnumerable<T>`. | `X.AsEnumerable()` |
+| `AsQueryable` | **Queryable:** Convierte la secuencia al tipo `IQueryable<T>`. | `X.AsQueryable()` |
 
 Las operaciones de *generación* son:
 
@@ -3010,14 +3007,23 @@ Otras operaciones disponibles son:
 
 | Método | Descripción | Ejemplos |
 |:------:|:------------|:---------|
-| `Append` | Añade un elemento al final de la secuencia, sin modificar la secuencia original. | `S.Append('Z')` |
-| `Prepend` | Añade un elemento al inicio de la secuencia, sin modificar la secuencia original. | `S.Prepend('A')` |
-| `Chunk` | Divide la secuencia en arrays de un tamaño máximo indicado. | `S.Chunk(5)` |
+| `Append` | Añade un elemento al final de la secuencia, sin modificar la secuencia original. | `X.Append('Z')` |
+| `Prepend` | Añade un elemento al inicio de la secuencia, sin modificar la secuencia original. | `X.Prepend('A')` |
+| `Chunk` | Divide la secuencia en arrays de un tamaño máximo indicado. | `X.Chunk(5)` |
 
-En los ejemplos de las tablas, `S` representa un objeto secuencia. Muchas de estas operaciones devuelven una secuencia, por lo que se pueden encadenar varias operaciones, para realizar transformaciones más complejas:
+En los ejemplos de las tablas, `X`, `Y` y `Z`, representan un objeto secuencia. Muchas de estas operaciones devuelven una secuencia, por lo que se pueden encadenar varias operaciones, para realizar transformaciones más complejas:
 
 ```csharp
+using System.Linq;
+using static System.Console;
 
+var foo = Enumerable.Range(1, 10)
+                    .SelectMany(x => Enumerable.Range(1, x),
+                                (x, y) => x * y)
+                    .Where(x => x % 2 == 0)
+                    .Distinct()
+                    .OrderBy(x => x);
+WriteLine(string.Join(", ", foo));
 ```
 
 > Muchas de las operaciones necesitan que el tipo de los elementos tenga ciertas interfaces de comparación implementadas. Si no fuera el caso, se puede pasar como parámetro un objeto que implemente la interfaz [`IComparer<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.icomparer-1) o [`IEqualityComparer<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iequalitycomparer-1).
