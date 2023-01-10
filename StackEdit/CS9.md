@@ -3030,7 +3030,35 @@ WriteLine(string.Join(", ", foo));
 
 ### Consultas
 
-..TODO..
+Otra forma alternativa de usar LINQ es mediante la sintaxis de [consultas](https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/linq/introduction-to-linq-queries) similares al lenguaje SQL, que utiliza las siguientes palabras clave:
+
+| Operación | Función | Descripción | Sintaxis |
+|:---------:|:-------:|:------------|:---------|
+| `from` | - | Recorre una secuencia de datos. | `from variable in secuencia` |
+| `let` | - | Añade una variable nueva. | `let variable = expresión` |
+| `where` | `Where()` | Filtra los elementos. | `where condición` |
+| `orderby` | `OrderBy()`<br/>`ThenBy()`<br/>`OrderByDescending()`<br/>`ThenByDescending()` | Ordena los elementos. Se pueden indicar varios niveles de ordenación separados por comas. | `orderby expresión`<br/>`orderby expresión ascending`<br/>`orderby expresión descending` |
+| `join` | `Join()` | Une elementos de dos secuencias en base a una clave. | `join variable in secuencia on clave2 equals clave` |
+| `join` | `GroupJoin()` | Agrupa una secuencia en base a una clave exterior. | `join variable in secuencia on clave2 equals clave into variable` |
+| `select` | `Select()` | Transforma los elementos con una proyección. | `select expresión` |
+| `group` | `GroupBy()` | Agrupa elementos en base a una clave. | `group elemento by clave` |
+| `into` | - | Asigna el resultado actual de la consulta en una nueva variable. | `into variable` |
+
+La sintaxis de las consultas LINQ está un poco más restringida que mediante el uso de funciones. Se ha de empezar con uno o varios `from`, seguidos de una o varias cláusulas `let`, `join`, `orderby`, `where`, sin importar el orden. En la tercera fase se ha de utilizar una cláusula `select` o `group`, que podrá terminar la consulta o derivar su resultado a un `into` para poder añadir cláusulas de fases anteriores. Por ejemplo:
+
+```csharp
+using System.Linq;
+using static System.Console;
+
+var bar = from x in Enumerable.Range(1, 10)
+          from y in Enumerable.Range(1, x)
+          let z = x * y
+          where z % 2 == 0
+          group z by z into zs
+          orderby zs.First()
+          select zs.First();
+WriteLine(string.Join(", ", bar));
+```
 
 ## Concurrencia y paralelismo
 
