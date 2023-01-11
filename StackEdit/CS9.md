@@ -3062,19 +3062,169 @@ WriteLine(string.Join(", ", bar));
 
 ## Concurrencia y paralelismo
 
-..TODO..
+### Tareas
 
-$$\texttt{await}\ \texttt{foreach}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{in}\ \mathit{contenedor} \texttt{)}\ \mathit{bloque}$$
+Con las palabras claves [`async`](https://learn.microsoft.com/dotnet/csharp/language-reference/keywords/async) y [`await`](https://learn.microsoft.com/dotnet/csharp/language-reference/operators/await) se puede incorporar [programación asíncrona](https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/async/) en los programas. Esto permite que se ejecute código sin bloquear el hilo principal a la espera de los resultados. Para lograr esto tenemos los tipos [`Task`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task) y [`Task<T>`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1) en el espacio de nombres [`System.Threading.Tasks`](https://learn.microsoft.com/dotnet/api/system.threading.tasks), que encapsulan lo que es una tarea a ejecutar de forma asíncrona.
+
+El modificador `async` se puede aplicar a funciones y a expresiones lambda, para convertir dicha función en código asíncrono. No obstante, para que realmente pueda ser asíncrona, requiere el uso del operador `await` en su interior, que indica al programa que tiene que esperar a que se termine de completar la tarea asíncrona indicada. Por ejemplo:
+
+```csharp
+using System.Linq;
+using System.Threading.Tasks;
+using static System.Console;
+
+WriteLine("(Iniciando tareas)");
+var random = new System.Random();
+var tareas = Enumerable.Range(0, 5)
+                       .Select(i => Tarea(i, random.Next(100, 500)))
+                       .ToArray();
+WriteLine("(Esperando tareas)");
+Task.WaitAll(tareas);
+WriteLine("(Tareas terminadas)");
+
+async Task Tarea (int i, int ms) {
+    WriteLine($"Tarea {i} iniciada.");
+    await Task.Delay(ms);
+    WriteLine($"Tarea {i} terminada.");
+}
+```
+
+Hay algunas limitaciones para que una función sea `async`. Los [tipos de retorno](https://learn.microsoft.com/dotnet/csharp/programming-guide/concepts/async/async-return-types) de la función han de estar comprendidos en: [`Task`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task), [`Task<T>`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1), [`IAsyncEnumerable<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1), `void` para eventos, y tipos con el método `GetAwaiter()` (por ejemplo, [`ValueTask`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask) o [`ValueTask<T>`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.valuetask-1)). Tampoco podrá tener parámetros con los modificadores `ref`, `out` e `in`. Si queremos hacer asíncrono el método `Main`, tendrá que tener como tipo de retorno `Task` o `Task<int>`.
+
+En el caso de que la función devuelva un valor con `Task<T>`, el operador `await` se encargará de obtenerlo, consultando la propiedad `Result` del tipo, para asignarlo a una variable. Luego en la clase `Task`, los principales miembros disponibles son:
+
+| Miembro | Descripción |
+|:-------:|:------------|
+| `Exception` | Excepción lanzada durante la ejecución de la tarea, si esta termina prematuramente. Si no, devuelve `null`. |
+| `Id` | El ID de la tarea. |
+| `IsCanceled` | Indica si la tarea ha sido cancelada. |
+| `IsCompleted` | Indica si la tarea ha sido completada, independientemente de si ha tenido éxito o no. |
+| `IsCompletedSuccessfully` | Indica si la tarea ha sido completada con éxito. |
+| `IsFaulted` | Indica si la tarea ha terminado por una excepción. |
+| `Status` | Devuelve el estado de la tarea con el tipo `TaskStatus`, cuyos valores son: `Canceled`, `Created`, `Faulted`, `RanToCompletion`, `Running`, `WaitingForActivation`, `WaitingForChildrenToComplete`, `WaitingToRun`. |
+| `ContinueWith(Task<Task>)`<br/>`ContinueWith<T>(Func<Task,T>)` | Crea una continuación para ser ejecutada asíncronamente cuando la tarea sea completada. |
+| `Dispose()` | Libera todos los recursos usados por el objeto que ejecuta la tarea (la instancia de `Task)`. |
+| `RunSynchronously()` | Ejecuta la tarea de forma síncrona dentro del planificador actual. |
+| `Start()` | Inicia la ejecución de la tarea, siendo gestionada por el planificador actual. |
+| `Wait()` | Espera a que se complete la ejecución de la tarea. |
+| `WaitAsync(CancellationToken)`<br/>`WaitAsync(TimeSpan)` | Devuelve una tarea que terminará cuando la tarea actual termine o se indique una señal de cancelación o haya transcurrido un tiempo de espera. |
+
+Entre los principales miembros estáticos de la clase `Task` tenemos:
+
+| Miembro | Descripción |
+|:-------:|:------------|
+| `CurrentId` | El ID de la tarea actual en ejecución. |
+| `Delay(int)` | Crea una tarea que se completa tras un tiempo de espera. |
+| `FromCanceled(CancellationToken)`<br/>`FromCanceled<T>(CancellationToken)` | Crea una tarea que se completa debido a una señal de cancelación. |
+| `FromException(Exception)`<br/>`FromException<T>(Exception)` | Crea una tarea que se completa debido a una excepción lanzada. |
+| `FromResult<T>(T) ` | Crea una tarea que se completa con éxito con un resultado determinado. |
+| `Run(Action)`<br/>`Run<T>(Func<T>)` | Crea una tarea para añadirla a la cola de ejecuciones y la devuelve. |
+| `WaitAll(Task[])` | Espera a que se complete la ejecución de un grupo de tareas. |
+| `WaitAny(Task[])` | Espera a que se complete la ejecución de alguna tarea en el grupo indicado. |
+| `WhenAll(IEnumerable<Task>)`<br/>`WhenAll<T>(IEnumerable<Task<T>>)` | Crea una tarea que se completa cuando todas las tareas de un grupo se completen. |
+| `WhenAny(IEnumerable<Task>)`<br/>`WhenAny<T>(IEnumerable<Task<T>>)` | Crea una tarea que se completa cuando se complete alguna de las tareas en el grupo. |
+| `Yield()` | Crea una tarea asíncrona que retorna cuando se utiliza el operador `await`. |
+
+Cuando se quiere usar una operación de espera con tareas, es preferible usar una versión que pueda usar `await`, ya que así la ejecución actual es suspendida hasta obtener el resultado, pudiendo así ejecutar otras cosas mientras. Por ello se recomienda que:
+
+| Caso | Bloqueo | Espera |
+|:----:|:-------:|:------:|
+| Resultado | `Task.Wait` o `Task.Result` | `await` |
+| Esperar a una | `Task.WaitAny` | `await Task.WhenAny` |
+| Esperar a todas | `Task.WaitAll` | `await Task.WhenAll` |
+| Esperar un tiempo | `Thread.Sleep` | `await Task.Delay` |
+
+También se puede utilizar `await` con las sentencias:
 
 $$\texttt{await}\ \texttt{using}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \texttt{)}\ \mathit{bloque}$$
 
+$$\texttt{await}\ \texttt{foreach}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{in}\ \mathit{contenedor} \texttt{)}\ \mathit{bloque}$$
+
+La primera nos permite liberar recursos de forma asíncrona, que deberán implementar la interfaz [`System.IAsyncDisposable`](https://learn.microsoft.com/dotnet/api/system.iasyncdisposable). La segunda nos permite recorrer una secuencia que se genera de forma asíncrona, que deberá implementar la interfaz [`System.Collections.IAsyncEnumerable<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1), que devuelve un objeto de tipo [`System.Collections.IAsyncEnumerator<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerator-1) con `GetAsyncEnumerator()`. Por ejemplo:
+
+```csharp
+using System;
+using System.IO;
+using System.Collections.Generic;
+
+var texto = @"En un lugar de la Mancha, de cuyo nombre no quiero 
+              acordarme, no ha mucho tiempo que vivía un hidalgo
+              de los de lanza en astillero, adarga antigua, rocín
+              flaco y galgo corredor.";
+
+await foreach (var palabra in Palabras(texto)) {
+    Console.Write(palabra + " ");
+}
+
+async IAsyncEnumerable<string> Palabras (string datos) {
+    using var lector = new StringReader(datos);
+    string cadena;
+    do {
+        cadena = await lector.ReadLineAsync();
+        if (cadena != null) {
+            foreach (var palabra in cadena.Split(' ', StringSplitOptions.RemoveEmptyEntries)) {
+                yield return palabra;
+            }
+        }
+    } while (cadena != null);
+}
+```
+
+Por último, tenemos la clase estática [`Parallel`](https://learn.microsoft.com/dotnet/api/system.threading.tasks.parallel) que permite ejecutar bucles de forma paralela de forma sencilla. Para ello tiene los métodos `For`, `ForEach` y `ForEachAsync`. Por ejemplo:
+
+```csharp
+using System.Threading;
+using System.Threading.Tasks;
+using static System.Console;
+
+var random = new System.Random();
+Parallel.For(0, 5, i => {
+    WriteLine($"Tarea {i} iniciada.");
+    Thread.Sleep(random.Next(100, 500));
+    WriteLine($"Tarea {i} terminada.");
+});
+```
+
+### Hilos
+
+En el hipotético caso de que necesitemos cosas más avanzadas para trabajar, en el espacio de nombres [`System.Threading`](https://learn.microsoft.com/dotnet/api/system.threading) tenemos tipos para crear y manejar hilos en programas. La clase principal es [`Thread`](https://learn.microsoft.com/dotnet/api/system.threading.thread), que encapsula un hilo de ejecución en la aplicación. Por ejemplo:
+
+```csharp
+using System.Linq;
+using System.Threading;
+using static System.Console;
+
+var random = new System.Random();
+var tareas = Enumerable.Range(0, 5).Select(Crear).ToArray();
+
+Estado(tareas);
+Thread.Sleep(1000);
+Estado(tareas);
+
+void Estado (Thread[] tareas) =>
+    WriteLine(string.Join(", ", tareas.Select((x, i) => $"{i}={x.IsAlive}")));
+
+Thread Crear (int i) {
+    var hilo = new Thread(Tarea);
+    hilo.Start((i, random.Next(100, 500)));
+    return hilo;
+}
+
+void Tarea (object datos) {
+    (int i, int ms) = ((int, int)) datos;
+    WriteLine($"Tarea {i} iniciada.");
+    Thread.Sleep(ms);
+    WriteLine($"Tarea {i} terminada.");
+}
+```
+
+Luego tenemos clases como [`Mutex`](https://learn.microsoft.com/dotnet/api/system.threading.mutex), [`Semaphore`](https://learn.microsoft.com/dotnet/api/system.threading.semaphore) o [`Monitor`](https://learn.microsoft.com/dotnet/api/system.threading.monitor), que permiten incorporar mecanismos de bloqueo para acceder a determinadas partes de código de forma ordenada.
+
+También está la sentencia `lock` para garantizar la exclusión mutua al acceder a un recurso del programa. Su sintaxis es:
+
 $$\texttt{lock}\ \texttt{(} \mathit{variable} \texttt{)}\ \mathit{bloque}$$
 
-..
-[`System.IAsyncDisposable`](https://learn.microsoft.com/dotnet/api/system.iasyncdisposable)
-[`System.Collections.IAsyncEnumerator<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerator-1)
-[`System.Collections.IAsyncEnumerable<T>`](https://learn.microsoft.com/dotnet/api/system.collections.generic.iasyncenumerable-1)
-..
+Internamente utiliza un `Monitor` para realizar la tarea, por lo que la variable ha de ser un tipo por referencia.
 
 ## Biblioteca estándar
 
