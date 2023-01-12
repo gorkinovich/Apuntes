@@ -112,7 +112,7 @@ La base puede ser un valor dentro del intervalo $[2,36]$ y por defecto es `10`. 
 
 También podemos definir **números reales** o de **coma flotante**:
 
-$$\textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \texttt{.} \mathit{d\acute{\imath}gitos} \textcolor{red}{[} \textcolor{red}{\\{} \texttt{e} \textcolor{red}{|} \texttt{E} \textcolor{red}{\\{} \textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{]}$$
+$$\textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \texttt{.} \mathit{d\acute{\imath}gitos} \textcolor{red}{[} \textcolor{red}{\\{} \texttt{e} \textcolor{red}{|} \texttt{E} \textcolor{red}{\\}} \textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{]}$$
 
 Por ejemplo: `0.64341054629`, `2.718281828459045`, `3.141592653589793`.
 
