@@ -6,6 +6,7 @@ Este repositorio es una colección de apuntes de programación para aprender dif
 - [Commodore 64](https://github.com/gorkinovich/Apuntes/blob/main/C64.md) ([HTML](https://gorkinovich.github.io/learn/C64.html))
 	- [Lenguaje BASIC V2](https://github.com/gorkinovich/Apuntes/blob/main/C64bas.md) ([HTML](https://gorkinovich.github.io/learn/C64bas.html))
 	- [Mapa de memoria](https://github.com/gorkinovich/Apuntes/blob/main/C64mm.md) ([HTML](https://gorkinovich.github.io/learn/C64mm.html))
+- [C# 9.0](https://github.com/gorkinovich/Apuntes/blob/main/CS9.md) ([HTML](https://gorkinovich.github.io/learn/CS9.html))
 - [Erlang](https://github.com/gorkinovich/Apuntes/blob/main/Erlang.md) ([HTML](https://gorkinovich.github.io/learn/Erlang.html))
 - [Python 3](https://github.com/gorkinovich/Apuntes/blob/main/Python.md) ([HTML](https://gorkinovich.github.io/learn/Python.html))
 
