@@ -1302,7 +1302,7 @@ Podemos tener parámetros opcionales y combinarlo con la inicialización de obje
 
 El segundo método especial es el destructor de la clase, que es la función que se invoca cuando el objeto va a ser eliminado de la memoria por el recolector de basura. Su sintaxis es:
 
-$$\texttt{\\~} \mathit{nombre} \texttt{(} \texttt{)} \textcolor{red}{\\{} \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{\\}}$$
+$$\texttt{\\~{}} \mathit{nombre} \texttt{(} \texttt{)} \textcolor{red}{\\{} \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{|} \texttt{=>}\ \mathit{expresi\acute{o}n} \texttt{;} \textcolor{red}{\\}}$$
 
 No tiene ni modificadores (excepto `unsafe`, para manejar punteros), ni parámetros, ni tampoco se puede invocar. Esto es porque en realidad el compilador transforma esta función al siguiente código:
 
