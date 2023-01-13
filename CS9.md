@@ -1033,10 +1033,11 @@ $$\begin{array}{l}
 \\\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_1}\ \textcolor{red}{[} \mathit{nombre_1} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \texttt{(} \mathit{condici\acute{o}n_1} \texttt{)} \textcolor{red}{]} \texttt{\\{}\ \mathit{expresiones_1}\ \texttt{\\}} \textcolor{red}{]}
 \\\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
 \\\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_n}\ \textcolor{red}{[} \mathit{nombre_n} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{when}\ \texttt{(} \mathit{condici\acute{o}n_n} \texttt{)} \textcolor{red}{]} \texttt{\\{}\ \mathit{expresiones_n}\ \texttt{\\}} \textcolor{red}{]}
-\\\\[0.5em] \textcolor{red}{[} \texttt{finally}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{]}
+\\\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{\\{}\ \mathit{expresiones_c}\ \texttt{\\}} \textcolor{red}{]}
+\\\\[0.5em] \textcolor{red}{[} \texttt{finally}\ \texttt{\\{}\ \mathit{expresiones_f}\ \texttt{\\}} \textcolor{red}{]}
 \end{array}$$
 
-Hay que tener en cuenta que `try` debe ir acompañado al menos de un `catch` o un `finally`. En caso de lanzarse una excepción, se comprobará en el orden que están definidas las cláusulas `catch`, para ejecutar el bloque de expresiones que primero encaje con el error recibido, siempre que se cumpla la condición asociada en su `when` de estar definido. Esto significa que el orden importa, por lo que si la primera es un `catch (Exception)`, todas las que vengan después quedarán tapadas por esta primera, ya que es el modelo más genérico para capturar excepciones. Dentro de un `catch` se puede usar `throw;`, que relanza la última excepción capturada.
+Hay que tener en cuenta que `try` debe ir acompañado al menos de un `catch` o un `finally`. En caso de lanzarse una excepción, se comprobará en el orden que están definidas las cláusulas `catch`, para ejecutar el bloque de expresiones que primero encaje con el error recibido, siempre que se cumpla la condición asociada en su `when` de estar definido. Esto significa que el orden importa, por lo que si la primera es un `catch (Exception)`, todas las que vengan después quedarán tapadas por esta primera, ya que es el modelo más genérico para capturar excepciones. La forma `catch {}` equivale a `catch (Exception) {}` y por ello debe ir al final del todo, antes del `finally`. Dentro de un `catch` se puede usar `throw;`, que relanza la última excepción capturada.
 
 La cláusula `finally` es un bloque de código que se ejecutará sin importar si se produce o no una excepción. Es una salvaguarda para poder ejecutar código que necesitemos para limpiar recursos sin liberar, por ejemplo.
 
