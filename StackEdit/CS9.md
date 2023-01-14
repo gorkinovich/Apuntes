@@ -1698,7 +1698,7 @@ Se pueden sobrecargar los siguientes operadores del lenguaje:
 | Operadores | Aridad | Anotaciones |
 |:----------:|:------:|:------------|
 | `+`, `-`, `!`, `~`, `++`, `--`, `true`, `false` | Unaria | `true` y `false` deben sobrecargarse de forma conjunta. |
-| `+`, `-`, `*`, `/`, `%`, `&`, `|`, `^`, `<<`, `>>` | Binaria |  |
+| `+`, `-`, `*`, `/`, `%`, `&`, `|`, `^`, `<<`, `>>` | Binaria | Los operadores `&&` y `||` se sobrecargan de forma implícita con `&` y `|` respectivamente. |
 | `==`, `!=`, `<`, `>`, `<=`, `>=` | Binaria | `==` con `!=`, `<` con `>` y `<=` con `>=`, deben sobrecargarse de forma conjunta. |
 
 Para [definir la sobrecarga](https://learn.microsoft.com/dotnet/csharp/language-reference/operators/operator-overloading) se ha de crear una función estática, que utilice la palabra clave `operator` seguida del operador, para luego tener los parámetros (uno o dos) a los que se va a aplicar la operación:
