@@ -64,8 +64,8 @@ namespace StackEdit {
         static IOperation CreateOperation (string[] args) {
             // Get the possible arguments of the command:
             var option = args.ElementAtOrDefault(0)?.ToLower();
-            var input = args.ElementAtOrDefault(1)?.ToLower();
-            var output = args.ElementAtOrDefault(2)?.ToLower();
+            var input = args.ElementAtOrDefault(1);
+            var output = args.ElementAtOrDefault(2);
             // Check and make the operation to execute:
             IOperation result = GitHubOperation.Make(option, input, output);
             if (result != null) {
