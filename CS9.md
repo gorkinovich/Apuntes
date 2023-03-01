@@ -193,8 +193,8 @@ Los prefijos validos son:
 | Prefijos | Tipo | Dígitos |
 |:--------:|:----:|:-------:|
 | - | Decimal | `0`-`9` |
-| `0b`, `OB` | Binario | `0`-`1` |
-| `0x`, `OX` | Hexadecimal | `0`-`9`, `A`-`F`, `a`-`f` |
+| `0b`, `0B` | Binario | `0`-`1` |
+| `0x`, `0X` | Hexadecimal | `0`-`9`, `A`-`F`, `a`-`f` |
 
 Los sufijos validos son:
 
