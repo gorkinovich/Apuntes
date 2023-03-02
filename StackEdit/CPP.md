@@ -50,6 +50,8 @@ La sintaxis para definir números enteros es la siguiente:
 
 $$\textcolor{red}{[} \mathit{prefijo} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{[} \mathit{sufijo} \textcolor{red}{]}$$
 
+> Desde el estándar 14 se puede utilizar la comilla simple (`'`) para separar grupos de dígitos, como una especie de separador de millares arbitrario. A la hora de compilar el carácter es ignorado, por lo que es meramente estético.
+
 Los prefijos validos son:
 
 | Prefijos | Tipo | Dígitos |
@@ -102,19 +104,70 @@ Se puede convertir sin pérdida cuando se asigna un entero de un tipo a uno más
 
 En la cabecera [`cstdint`](https://en.cppreference.com/w/cpp/header/cstdint) se incorporan una serie de alias para los tipos enteros, así como algunas macros que definen los límites numéricos de cada tamaño. Con `int8_t`, `int16_t`, `int32_t` e `int64_t`, podemos definir variables enteras con signo de un tamaño fijo, sin preocuparnos de la plataforma. Con `uint8_t`, `uint16_t`, `uint32_t` y `uint64_t`, podemos hacer lo mismo pero para enteros sin signo. También con la cabecera [`limits`](https://en.cppreference.com/w/cpp/header/limits) tenemos herramientas para comprobar propiedades sobre cualquier tipo tipo numérico.
 
-> Desde el estándar 14 se puede utilizar la comilla simple (`'`) para separar grupos de dígitos, como una especie de separador de millares arbitrario. A la hora de compilar el carácter es ignorado, por lo que es meramente estético.
-
 ### Números reales
 
-..
+La sintaxis para definir números reales es la siguiente:
+
+$$\mathit{d\acute{\imath}gitos} \textcolor{red}{[} \texttt{.} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \textcolor{red}{\char123} \texttt{e} \textcolor{red}{|} \texttt{E} \textcolor{red}{\char125} \textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \mathit{sufijo} \textcolor{red}{]}$$
+
+> Desde el estándar 17 se puede usar el prefijo `0x` o `0X` para usar dígitos hexadecimales al definir un número real. Sin embargo, para indicar el exponente se utiliza `p` o `P`, en lugar de `e` y `E`. Por ejemplo, `0x1EFp2`.
+
+Los sufijos validos son:
+
+| Prefijos | Tipo | Tamaño | Descripción |
+|:--------:|:----:|:------:|:------------|
+| - | `double` | 64 | Real doble. |
+| `f`, `f` | `float` | 32 | Real simple. |
+| `l`, `L` | `long double` | 128 | Real doble largo. |
+
+> El tipo `long double` ocupa 128 bits en arquitecturas de 64 bits, siguiendo el estándar [IEEE 754](https://en.wikipedia.org/wiki/IEEE_754), pero tradicionalmente en las de 32 bits este tipo ocupaba 80 bits, siguiendo el formato de [precisión extendida](https://en.wikipedia.org/wiki/Extended_precision).
 
 ### Caracteres
 
-..
+La sintaxis para definir caracteres es la siguiente:
+
+$$\textcolor{red}{[} \mathit{prefijo} \textcolor{red}{]} \texttt{'} \textcolor{red}{\char123} \mathit{letra} \textcolor{red}{|} \mathit{secuencia\ de\ escape} \textcolor{red}{\char125} \texttt{'}$$
+
+Las [secuencias de escape](https://en.cppreference.com/w/cpp/language/escape) disponibles son:
+
+| Secuencia | Significado | Secuencia | Significado |
+|:---------:|:------------|:---------:|:------------|
+| `\'` | Comilla simple. | `\"` | Comilla doble. |
+| `\?` | Interrogación. | `\\` | Barra invertida. |
+| `\a` | Alarma. | `\b` | Retroceso. |
+| `\f` | Alimentación. | `\n` | Nueva línea. |
+| `\r` | Retroceso de línea. | `\t` | Tabulación horizontal. |
+| `\v` | Tabulación vertical. | `\0` | Carácter nulo. |
+| `\###` | Carácter octal. | `\x##`<br/>`\x####` | Carácter hexadecimal. |
+| `\u####` | Carácter Unicode (UTF-16). | `\U########` | Carácter Unicode (UTF-32). |
+
+Los prefijos validos son:
+
+| Prefijos | Tipo | Descripción |
+|:--------:|:----:|:------------|
+| - | `char` | Carácter normal. |
+| `u8` | `char8_t` | Carácter UTF-8. |
+| `u` | `char16_t` | Carácter UTF-16. |
+| `U` | `char32_t` | Carácter UTF-32. |
+| `L` | `wchar_t` | Carácter Unicode (UTF-16 en Windows y UTF-32 en Unix/Linux). |
 
 ### Cadenas de texto
 
-..
+La sintaxis para definir cadenas de texto es la siguiente:
+
+$$\textcolor{red}{[} \mathit{prefijo} \textcolor{red}{]} \texttt{"} \mathit{caracteres} \texttt{"}$$
+
+Los prefijos validos son:
+
+| Prefijos | Elementos | Descripción |
+|:--------:|:---------:|:------------|
+| - | `char` | Carácter normal. |
+| `u8` | `char8_t` | Carácter UTF-8. |
+| `u` | `char16_t` | Carácter UTF-16. |
+| `U` | `char32_t` | Carácter UTF-32. |
+| `L` | `wchar_t` | Carácter Unicode (UTF-16 en Windows y UTF-32 en Unix/Linux). |
+
+> Las cadenas de texto como tal no existe como tipos básicos del lenguaje, es necesario usar arrays (`char []`) y punteros (`char *`) para almacenar una cadena de texto. Dicho lo cual, la biblioteca estándar tiene el tipo [`std::string`](https://en.cppreference.com/w/cpp/string/basic_string) para almacenar cadenas y trabajar con ellas de forma cómoda.
 
 ### Booleanos
 
@@ -131,6 +184,12 @@ Un puntero es un tipo de valor que nos indica una dirección de memoria donde es
 > Internamente equivale al valor cero y sustituye a la histórica macro `NULL`, para ayudar al compilador con las conversiones. El tipo `std::nullptr_t` representa los punteros nulos en el estándar y tiene el mismo tamaño que el tipo `void *`.
 
 ## Variables
+
+Las variables, como todas las definiciones, requieren de un nombre identificador para poder trabajar con ellas. Un identificador se compone de una sucesión de letras (mayúsculas y minúsculas), dígitos (`0`-`9`) y/o el guion bajo (`_`), que no debe comenzar por dígito. No se podrán usar las [palabras reservadas](https://en.cppreference.com/w/cpp/keyword) del lenguaje como identificadores.
+
+La sintaxis básica para definir variables es la siguiente:
+
+$$\mathit{tipo}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{;}$$
 
 ..
 
