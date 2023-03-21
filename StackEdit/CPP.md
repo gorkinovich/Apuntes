@@ -42,7 +42,7 @@ En este caso la función `main` devuelve un valor entero, donde `0` indica que n
 
 > Existen diferentes compiladores, como el de [MSVC](https://learn.microsoft.com/cpp/build/reference/c-cpp-building-reference) o el [GCC](https://gcc.gnu.org/), que tienen una cantidad considerable de opciones que no vamos a documentar aquí. Lo más fácil es utilizar un IDE, que se encargue de gestionar la compilación.
 
-## Literales
+## Literales y tipos básicos
 
 ### Números enteros
 
@@ -183,7 +183,7 @@ Un puntero es un tipo de valor que nos indica una dirección de memoria donde es
 
 > Internamente equivale al valor cero y sustituye a la histórica macro `NULL`, para ayudar al compilador con las conversiones. El tipo `std::nullptr_t` representa los punteros nulos en el estándar y tiene el mismo tamaño que el tipo `void *`.
 
-## Variables
+## Variables y valores
 
 Las variables, como todas las definiciones, requieren de un nombre identificador para poder trabajar con ellas. Un identificador se compone de una sucesión de letras (mayúsculas y minúsculas), dígitos (`0`-`9`) y/o el guion bajo (`_`), que no debe comenzar por dígito. No se podrán usar las [palabras reservadas](https://en.cppreference.com/w/cpp/keyword) del lenguaje como identificadores.
 
@@ -191,11 +191,57 @@ La sintaxis básica para definir variables es la siguiente:
 
 $$\mathit{tipo}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{;}$$
 
-..
+Con la palabra clave `auto` se indica al compilador que infiera el tipo para la variable en base a la expresión que inicializa su valor:
+
+$$\texttt{auto}\ \mathit{nombre_1}\ \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{;}$$
+
+Cada *nombre* representa una dirección en la memoria, donde se almacena el valor resultante de evaluar la *expresión* que se le asigne a la variable, ya sea en la inicialización o con el operador asignación (`=`). Por ejemplo:
+
+```cpp
+// Fichero: variables.cpp
+#include<iostream>
+
+void main () {
+	int a = 1, b = 2;
+	auto c = 3.14;
+	std::cout << a << ", " << b << ", " << c << "\n"; // 1, 2, 3.14
+	b = 4;
+	std::cout << a << ", " << b << ", " << c << "\n"; // 1, 4, 3.14
+}
+```
 
 ### Arrays
 
-..
+Los arrays son bloques de memoria que contienen un número fijo de elementos, a los que se acceden de forma indexada. La sintaxis básica para definir arrays es la siguiente:
+
+$$\mathit{tipo}\ \mathit{nombre} \texttt{[} \textcolor{red}{[} \mathit{tam_1} \textcolor{red}{]} \texttt{]} \textcolor{red}{[} \texttt{[} \mathit{tam_2} \texttt{]} \textcolor{red}{\dots} \texttt{[} \mathit{tam_n} \texttt{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{=}\ \texttt{\char123}\ \mathit{valores}\ \texttt{\char125} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
+
+Entre corchetes indicamos el *tamaño* de cada dimensión del array, pudiendo inicializar el contenido con una serie de *valores*. Se puede omitir el tamaño de la primera dimensión si se inicializa la variable. Por ejemplo:
+
+```cpp
+// Fichero: arrays.cpp
+#include<iostream>
+
+void main () {
+	int a[2];
+	a[0] = 1;
+	a[1] = 2;
+	std::cout << a[0] << ", " << a[1] << "\n"; // 1, 2
+
+	char b[] = "Hola"; // char b[5]
+	std::cout << b << "\n"; // Hola
+
+	int c[][2] = { {1, 2}, {3, 4} }; // int c[2][2]
+	std::cout << c[0][0] << ", " << c[0][1] << "\n"; // 1, 2
+	std::cout << c[1][0] << ", " << c[1][1] << "\n"; // 3, 4
+
+	char d[][20] = { "inicio", "final" }; // char d[2][20]
+	std::cout << d[0] << "\n"; // inicio
+	std::cout << d[1] << "\n"; // final
+}
+```
+
+Hay que tener en cuenta que la primera posición en un array es el índice cero, la segunda el índice uno y así sucesivamente. Los arrays conforman un bloque contiguo en la memoria del programa, donde se almacenan los valores, calculando su posición en la memoria mediante los índices utilizados. Al inicializar un array no es requisito inicializar todos los valores del segmento de memoria, pero sí es requisito que no excedan en número de elementos.
 
 ### Punteros
 
@@ -308,7 +354,6 @@ $$\mathit{tipo}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expre
 ### Concurrencia
 
 ..
-
 
 ```cpp
 // Fichero: .cpp
