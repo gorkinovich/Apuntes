@@ -195,7 +195,7 @@ Con la palabra clave `auto` se indica al compilador que infiera el tipo para la 
 
 $$\texttt{auto}\ \mathit{nombre_1}\ \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{;}$$
 
-Cada *nombre* representa una dirección en la memoria, donde se almacena el valor resultante de evaluar la *expresión* que se le asigne a la variable, ya sea en la inicialización o con el operador asignación (`=`). Por ejemplo:
+Cada *nombre* representa una dirección en la memoria, donde se almacena el valor resultante de evaluar la *expresión* que se le asigne a la variable, ya sea en la inicialización o con el operador asignación (`=`). El tipo le indica al compilador el tamaño que ocupan los valores con los que vamos a trabajar, para acceder a su estructura interna de forma correcta. Por ejemplo:
 
 ```cpp
 // Fichero: variables.cpp
@@ -245,27 +245,93 @@ Hay que tener en cuenta que la primera posición en un array es el índice cero,
 
 ### Punteros
 
-..
+Al usar el `*`, a continuación de un tipo, modificamos su significado para convertir dicha variable en un puntero. Un puntero es un tipo de variable que apunta a otro lugar de la memoria y por lo tanto lo que almacena es una dirección de memoria. Con el operador `&` podemos obtener la dirección de memoria de cualquier variable, mientras que con el operador `*` accedemos al contenido apuntado. Por ejemplo:
 
 ```cpp
 // Fichero: punteros.cpp
 #include<iostream>
 
 void main () {
+	int a = 24;
+	std::cout << a << "\n"; // 24
+
+	int * b = &a;
+	*b = 42;
+	std::cout << a << "\n"; // 42
 }
 ```
 
+Con un puntero se puede acceder a un array de valores, de hecho un tipo común de las cadenas de texto es `char *`. Para recorrer los elementos de un array apuntado por un vector se puede utilizar el operador de indexación `[]`, o se puede usar la aritmética de punteros, que no es muy recomendable. Se puede definir punteros de punteros, por si necesitamos hacer una tabla de elementos. Por ejemplo:
+
+```cpp
+// Fichero: parrays.cpp
+#include<iostream>
+
+void main () {
+	char c[] = "cadena";
+	char * d = c;
+
+	std::cout << d[2] << "\n"; // d
+	std::cout << *(d+2) << "\n"; // d
+}
+```
+
+La utilidad fundamental de los punteros es que con el operador `new` podemos reservar memoria del sistema, para almacenar un nuevo valor, y con `delete` borrar dicha memoria reservada. Por ejemplo:
+
+```cpp
+// Fichero: memoria.cpp
+#include<iostream>
+
+void main () {
+	int * a = new int { 8 };
+	std::cout << *a << "\n"; // 8
+	delete a;
+
+	int * b = new int[5] { 5, 4, 3, 2, 1 };
+	std::cout << b[2] << "\n"; // 3
+	delete[] b;
+
+	int ** c = new int*[2] {
+		new int[3] { 1, 2, 3 },
+		new int[4] { 4, 5, 6, 7 }
+	};
+	std::cout << c[0][2] << "\n"; // 3
+	std::cout << c[1][3] << "\n"; // 7
+	delete[] c[0];
+	delete[] c[1];
+	delete[] c;
+}
+```
+
+Con `new` se reserva un elemento, mientras que con `new[]` se reservan un número arbitrario de elementos. Por ello hay que utilizar `delete[]` cuando se haya usado `new[]`, para garantizar la correcta eliminación del bloque de memoria reservado. Otro aspecto relevante del ejemplo, es que con `{}` podemos opcionalmente indicar los valores con los que inicializar el bloque reservado de memoria.
+
+> Los punteros son una característica de bajo nivel, que requiere ser metódico y cuidadoso, para evitar que los programas tengan [fugas de memoria](https://es.wikipedia.org/wiki/Fuga_de_memoria) y terminen fallando. Por ello no son muy populares entre el programador común, haciendo que muchos lenguajes dispongan de abstracciones como los [punteros inteligentes](https://es.wikipedia.org/wiki/Puntero_inteligente) y la gestión de memoria automática con [recolectores de basura](https://es.wikipedia.org/wiki/Recolector_de_basura). Sin embargo, la librería estándar de C++ incorpora punteros inteligentes como [`std::shared_ptr`](https://en.cppreference.com/w/cpp/memory/shared_ptr) y [`std::unique_ptr`](https://en.cppreference.com/w/cpp/memory/unique_ptr), que veremos más adelante.
+
 ### Referencias
 
-..
+Debido al poco cariño que la gente le tiene a los punteros, se introdujo en C++ el modificador `&` para convertir una variable en una referencia a otra variable. Esencialmente es un puntero con ciertas limitaciones y ventajas. Por ejemplo:
 
 ```cpp
 // Fichero: referencias.cpp
 #include<iostream>
 
 void main () {
+	int a { 8 };
+	int b[] { 5, 4, 3, 2, 1 };
+	int c[][3] { { 1, 2, 3 }, { 4, 5, 6 } };
+
+	auto & ra = a; // int & ra = a;
+	auto & rb = b; // int (& rb)[5] = b;
+	auto & rc = c; // int (& rc)[2][3] = c;
+
+	std::cout << ra << "\n"; // 8
+	std::cout << rb[2] << "\n"; // 3
+	std::cout << rc[0][0] << "\n"; // 1
+	std::cout << rc[1][1] << "\n"; // 5
 }
 ```
+
+La principal ventaja es que su uso es más sencillo, porque no requiere del operador `*` para acceder al contenido al que hace referencia. Como desventajas, la primera es que no se puede declarar una referencia sin inicializar su valor. Otra desventaja es que no se le puede asignar directamente el resultado de reservar memoria con `new`, porque no están las referencias pensadas para estas tareas. Si usamos el operador `&` con una variable referencia, nos dará la dirección de memoria de la variable que referencia.
 
 ### Constantes
 
