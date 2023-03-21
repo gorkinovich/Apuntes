@@ -247,13 +247,63 @@ Hay que tener en cuenta que la primera posición en un array es el índice cero,
 
 ..
 
+```cpp
+// Fichero: punteros.cpp
+#include<iostream>
+
+void main () {
+}
+```
+
 ### Referencias
 
 ..
 
+```cpp
+// Fichero: referencias.cpp
+#include<iostream>
+
+void main () {
+}
+```
+
 ### Constantes
 
-..
+Una constante es un valor que no va a cambiar durante la ejecución del programa. La sintaxis básica para definir constantes es la siguiente:
+
+$$\texttt{const}\ \mathit{tipo}\ \mathit{nombre_1}\ \texttt{=}\ \mathit{literal_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \texttt{=}\ \mathit{literal_n} \textcolor{red}{]} \texttt{;}$$
+
+Para el compilador una constante es una variable capada, que no puede ser reasignada. Se puede utilizar `auto` para inferir el *tipo* en tiempo de compilación. Por ejemplo:
+
+```cpp
+// Fichero: constantes.cpp
+#include<iostream>
+
+void main () {
+	const auto a = 123; // const int a
+	std::cout << a << "\n"; // 123
+
+	const auto b = "hola"; // const char * const b
+	std::cout << b << "\n"; // hola
+	// Ilegal: b[0] = 'H';
+	// Ilegal: b = "Hola";
+
+	const char * c = "hola";
+	std::cout << c << "\n"; // hola
+	// Ilegal: c[0] = 'H';
+	c = "Hola";
+	std::cout << c << "\n"; // Hola
+
+	char cadena[] = "hola";
+	char * const d = cadena;
+	std::cout << d << "\n"; // hola
+	d[0] = 'H';
+	// Ilegal: d = "Hola";
+	std::cout << d << "\n"; // Hola
+}
+```
+
+Con tipos normales o referencias, una constante no puede cambiar el contenido del valor asignado. Pero con punteros, dependiendo de la posición donde se use `const`, si se puede llegar a cambiar el contenido de un valor asignado. Por ejemplo, `const char *` significa que no se puede modificar el contenido apuntado por la variable, pero sí se puede cambiar a dónde apunta la variable. Mientras que `char * const` lo que impide es cambiar el valor al que apunta la variable. Es un matiz importante a tener en cuenta, aunque no es habitual tener que lidiar con el segundo caso, pero sí con el primero.
 
 ## Operadores
 
@@ -357,5 +407,9 @@ Hay que tener en cuenta que la primera posición en un array es el índice cero,
 
 ```cpp
 // Fichero: .cpp
+#include<iostream>
+
+void main () {
+}
 ```
 
