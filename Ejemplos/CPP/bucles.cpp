@@ -3,7 +3,7 @@
 
 void main () {
 	const int SIZE = 4;
-	int nums[SIZE] { 1, 2, 3, 4 };
+	int nums[SIZE] = { 1, 2, 3, 4 };
 	std::string respuesta;
 	do {
 		int i = 0;
@@ -28,6 +28,5 @@ void main () {
 
 		std::cout << "¿Salir? (S/N) ";
 		std::cin >> respuesta;
-
 	} while (respuesta != "s" && respuesta != "S");
 }

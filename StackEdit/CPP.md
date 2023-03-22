@@ -565,7 +565,224 @@ Estos son operadores que no entran en las demás categorías antes expuestas:
 
 ## Sentencias
 
-..
+### Condicionales
+
+La primera sentencia de control es el `if`-`else`, cuya sintaxis es la siguiente:
+
+$$\texttt{if}\ \texttt{(} \mathit{condici\acute{o}n} \texttt{)}\ \mathit{bloque_{true}}\ \textcolor{red}{[} \texttt{else}\ \mathit{bloque_{false}} \textcolor{red}{]}$$
+
+Un bloque puede ser una sentencia terminada con punto y coma (`expresión;`) o un bloque de sentencias delimitado por llaves (`{ expresiones }`). Si la condición se evalúa a `true`, se ejecutará el primer bloque, si no se ejecutará el segundo si está definido. Por ejemplo:
+
+```cpp
+// Fichero: ifelse.cpp
+#include<iostream>
+
+void main () {
+	int a, b;
+	std::cout << "A = ";
+	std::cin  >> a;
+	std::cout << "B = ";
+	std::cin  >> b;
+
+	if (a == b) {
+		std::cout << "A y B son iguales.\n";
+	} else if (a < b) {
+		std::cout << "A es menor que B.\n";
+	} else {
+		std::cout << "A es mayor que B.\n";
+	}
+}
+```
+
+> En el ejemplo vemos el objeto `std::cin`, que nos permite introducir por consola un valor y almacenarlo en una variable. Téngase en cuenta que este objeto no reserva automáticamente memoria, por lo que para introducir una cadena de texto se requiere tener reservado previamente el espacio necesario o utilizar tipos como `std::string`.
+
+Desde el estándar del 17 se puede introducir antes de la condición, separado con un punto y coma, una expresión de inicialización. Por ejemplo:
+
+```cpp
+// Fichero: ifinit.cpp
+#include <string>
+#include <iostream>
+
+void main () {
+	std::string nombre;
+	std::cout << "Nombre: ";
+	if (std::cin >> nombre; !nombre.empty()) {
+		std::cout << "Hola, " << nombre << ".\n";
+	}
+}
+```
+
+La sentencia de control `switch` permite evaluar una expresión y ejecutar un bloque dependiendo del valor obtenido. Su sintaxis es:
+
+$$\begin{array}{l}
+\texttt{switch}\ \texttt{(} \mathit{expresi\acute{o}n} \texttt{)}\ \texttt{\char123}
+\\[0.5em] \qquad \textcolor{red}{[} \texttt{case}\ \mathit{literal_1} \texttt{:}\ \mathit{expresiones_1} \textcolor{red}{]}
+\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \qquad \textcolor{red}{[} \texttt{case}\ \mathit{literal_n} \texttt{:}\ \mathit{expresiones_n} \textcolor{red}{]}
+\\[0.5em] \qquad \textcolor{red}{[} \texttt{default:}\ \mathit{expresiones} \textcolor{red}{]}
+\\[0.5em] \texttt{\char125}
+\end{array}$$
+
+Dependiendo del valor de la *expresión*, se va buscando en orden una cláusula `case` donde encaje su valor. La primera que encaje será el punto de entrada de la ejecución, ejecutando sus expresiones hasta encontrar la sentencia `break` al final de dicho bloque, pues de lo contrario saltaría a ejecutar el cuerpo de la siguiente cláusula. Si no se encaja con ninguna cláusula, se ejecutará la cláusula `default` de estar definida. Por ejemplo:
+
+```cpp
+// Fichero: switch.cpp
+#include<iostream>
+
+void main () {
+	int a;
+	std::cout << "> ";
+	std::cin  >> a;
+
+	switch (a) {
+	case 5:  std::cout << "Cinco.\n";
+	case 4:  std::cout << "Cuatro.\n";
+	case 3:  std::cout << "Tres.\n";
+	case 2:  std::cout << "Dos.\n";
+	case 1:  std::cout << "Uno.\n";
+	case 0:  std::cout << "Cero.\n";
+			 break;
+	default: std::cout << "Indefinido.\n";
+	}
+}
+```
+
+### Bucles
+
+La sentencia de control `while` permite ejecutar un bloque de código mientras se cumpla una condición. Su sintaxis es:
+
+$$\texttt{while}\ \texttt{(} \mathit{condici\acute{o}n} \texttt{)}\ \mathit{bloque}$$
+
+Con la sentencia `do`-`while` podremos hacer lo mismo que con la anterior, con la diferencia de que siempre se ejecutará al menos una vez el bloque de código. Su sintaxis es:
+
+$$\texttt{do}\ \mathit{bloque}\ \texttt{while}\ \texttt{(} \mathit{condici\acute{o}n} \texttt{)} \texttt{;}$$
+
+Si queremos ejecutar el código un número determinado de veces, con la sentencia `for` podremos hacerlo con la siguiente sintaxis:
+
+$$\texttt{for}\ \texttt{(} \textcolor{red}{[} \mathit{inicio} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{[} \mathit{condici\acute{o}n} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{[} \mathit{incremento} \textcolor{red}{]} \texttt{)}\ \mathit{bloque}$$
+
+Donde *inicio* son las expresiones, separadas por comas, que se ejecutan antes de entrar en el bucle. Normalmente se utiliza el inicio para declarar las variables contadoras del bucle. Con *condición*, en cada iteración del bucle, se controla al inicio de cada vuelta si se ha de ejecutar o no. Y con *incremento* tenemos las expresiones que se ejecutan al final de cada iteración, que habitualmente se usan para incrementar los contadores.
+
+Existe una variante del bucle `for` que nos permite recorrer los elementos de un contenedor de datos, tales como los arrays por ejemplo. Su sintaxis es:
+
+$$\texttt{for}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{:}\ \mathit{contenedor} \texttt{)}\ \mathit{bloque}$$
+
+De forma similar a lo que vimos con el `if`, desde el estándar del 20 se puede introducir, separado con un punto y coma, una expresión de inicialización en los bucles `for` para contenedores.
+
+Con este ejemplo podremos ver en acción los diferentes tipos de bucles:
+
+```cpp
+// Fichero: bucles.cpp
+#include <string>
+#include <iostream>
+
+void main () {
+	const int SIZE = 4;
+	int nums[SIZE] = { 1, 2, 3, 4 };
+	std::string respuesta;
+	do {
+		int i = 0;
+		std::cout << "While: ";
+		while (i < SIZE) {
+			std::cout << nums[i] << " ";
+			++i;
+		}
+		std::cout << "\n";
+
+		std::cout << "For: ";
+		for (int j = 0; j < SIZE; j++) {
+			std::cout << nums[j] << " ";
+		}
+		std::cout << "\n";
+
+		std::cout << "For each: ";
+		for (auto n : nums) {
+			std::cout << n << " ";
+		}
+		std::cout << "\n";
+
+		std::cout << "¿Salir? (S/N) ";
+		std::cin >> respuesta;
+	} while (respuesta != "s" && respuesta != "S");
+}
+```
+
+### Saltos y retornos
+
+La primera sentencia de salto es `return`, que se utiliza para salir de una función, devolviendo un valor de forma opcional. Su sintaxis es:
+
+$$\texttt{return}\ \textcolor{red}{[} \mathit{expresi\acute{o}n} \textcolor{red}{]} \texttt{;}$$
+
+Después están `break` y `continue`. La primera se utiliza en bucles, o sentencias `switch`, para salir fuera de dicha sentencia que la contiene. La segunda se utiliza en bucles y, en lugar de salir de este, lo que provoca es un salto a la siguiente iteración del bucle. Su sintaxis es:
+
+$$\texttt{break} \texttt{;}$$
+
+$$\texttt{continue} \texttt{;}$$
+
+Para entenderlo mejor, veamos el siguiente ejemplo:
+
+```cpp
+// Fichero: saltos.cpp
+#include<iostream>
+
+void main () {
+	int xs[] = {
+		1, 2, 3, 4, 5, 6, 7, 0, 8, 9
+	};
+
+	for (auto x : xs) {
+		if (x == 0) break;
+		if (x % 2 == 0) continue;
+		std::cout << x << " ";
+	}
+	std::cout << "\n";
+	// 1 3 5 7
+}
+```
+
+Por último está el demonio de la programación estructurada, la sentencia maldita, la portadora de grandes tormentos de ofuscación, la que no debería ser nombrada. La sentencia `goto` se utiliza para hacer un salto incondicional a otra parte del código, que se identifica con una etiqueta. La sintaxis de esta herejía es:
+
+$$\mathit{etiqueta} \texttt{:}$$
+
+$$\texttt{goto}\ \mathit{etiqueta} \texttt{;}$$
+
+El uso de `goto` no se recomienda en absoluto, ya que puede derivar en muy malas prácticas de programación. Su uso debe estar muy justificado y es preferible utilizar otras opciones antes.
+
+### Excepciones
+
+Las excepciones es un mecanismo del lenguaje para gestionar los errores en nuestros programas. Cuando algo falle de forma inesperada, podemos lanzar una excepción con la siguiente sintaxis:
+
+$$\texttt{throw}\ \textcolor{red}{[} \mathit{excepci\acute{o}n} \textcolor{red}{]} \texttt{;}$$
+
+Donde *excepción* debe ser una expresión que devuelva un valor. La biblioteca estándar dispone de la clase base [`std::exception`](https://en.cppreference.com/w/cpp/error/exception) para representar excepciones, pero el lenguaje permite lanzar todo tipo de valores.
+
+Una vez lanzada la excepción, por nosotros o por el sistema, tendremos que capturarla con la sentencia `try`-`catch`, cuya sintaxis es:
+
+$$\begin{array}{l}
+\texttt{try}\ \texttt{\char123}\ \mathit{expresiones_0}\ \texttt{\char125}
+\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_1}\ \textcolor{red}{[} \mathit{nombre_1} \textcolor{red}{]} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones_1}\ \texttt{\char125} \textcolor{red}{]}
+\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_n}\ \textcolor{red}{[} \mathit{nombre_n} \textcolor{red}{]} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones_n}\ \texttt{\char125} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(...)}\ \texttt{\char123}\ \mathit{expresiones_c}\ \texttt{\char125} \textcolor{red}{]}
+\end{array}$$
+
+Hay que tener en cuenta que `try` debe ir acompañado al menos de un `catch`. En caso de lanzarse una excepción, se comprobará en el orden que están definidas las cláusulas `catch`, para ejecutar el bloque de expresiones que primero encaje con el error recibido. Esto significa que el orden importa, por lo que si la primera es un `catch (...)`, todas las que vengan después quedarán tapadas por esta primera, ya que es el modelo más genérico para capturar excepciones. Dentro de un `catch` se puede usar `throw;`, que relanza la última excepción capturada.
+
+En este ejemplo podemos ver un manejo básico de las excepciones:
+
+```cpp
+// Fichero: excepciones.cpp
+#include<iostream>
+
+void main () {
+	try {
+		throw 42;
+		std::cout << "Todo fue bien\n";
+	} catch (...) {
+		std::cout << "Error inesperado\n";
+	}
+}
+```
 
 ## Funciones
 
