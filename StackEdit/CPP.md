@@ -373,27 +373,195 @@ Con tipos normales o referencias, una constante no puede cambiar el contenido de
 
 ## Operadores
 
-..
+Esta es la precedencia de mayor a menor de los operadores del lenguaje:
+
+| Nivel | Operadores | Descripción | Asociatividad |
+|:------|:----------:|:-----------:|:-------------:|
+| 1 | `x::y` | Resolución de ámbito | Izquierda |
+| 2 | `x++`, `x--`<br/>`T(x)`, `T{x}`<br/>`x(y)`<br/>`x[y]`<br/>`x.y`, `x->y` | Incremento/decremento postfijo<br/>Casting funcional<br/>Llamada a función<br/>Acceso indexado<br/>Acceso a miembro | Izquierda |
+| 3 | `++x`, `--x`<br/>`+x`, `-x`<br/>`!x`, `~x`<br/>`(T)x`<br/>`*x`<br/>`&x`<br/>`sizeof(x)`<br/>`co_await x`<br/>`new`, `new[]`<br/>`delete`, `delete[]` | Incremento/decremento prefijo<br/>Signo positivo/negativo<br/>Negación lógica/binaria<br/>Casting clásico<br/>Contenido apuntado<br/>Dirección de<br/>Tamaño de<br/>Espera de corrutina<br/>Reservar memoria<br/>Eliminar memoria | Derecha |
+| 4 | `x.*y`, `x->*y` | Puntero a miembro | Izquierda |
+| 5 | `x * y`, `x / y`, `x % y` | Multiplicación, división y resto | Izquierda |
+| 6 | `x + y`, `x – y` | Suma y resta | Izquierda |
+| 7 | `x << y`, `x >> y` | Desplazamiento a la izquierda/derecha | Izquierda |
+| 8 | `x <=> y` | Comparación por diferencia | Izquierda |
+| 9 | `x < y`, `x <= y`, `x > y`, `x >= y` | Menor, menor o igual, mayor y mayor o igual | Izquierda |
+| 10 | `x == y`, `x != y` | Igual y distinto | Izquierda |
+| 11 | `x & y` | Conjunción binaria | Izquierda |
+| 12 | `x ^ y` | Disyunción exclusiva binaria | Izquierda |
+| 13 | `x | y` | Disyunción binaria | Izquierda |
+| 14 | `x && y` | Conjunción booleana | Izquierda |
+| 15 | `x || y` | Disyunción booleana | Izquierda |
+| 16 | `x ? y : z`<br/>`throw x`<br/>`co_yield x`<br/>`x = y`<br/>`x += y`, `x -= y`, `x *= y`, `x /= y`, `x %= y`, `x &= y`, `x |= y`, `x ^= y`, `x <<= y`, `x >>= y` | Condicional<br/>Lanzar excepción<br/>Lanzar valor<br/>Asignación<br/>Asignación compuesta | Derecha |
+| 17 | `x, y` | Coma | Izquierda |
+
+Donde `x`, `y` y `z` son expresiones, y `T` es un tipo.
 
 ### Booleanos
 
-..
+El primer bloque de operadores booleanos son los de comparación:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X == Y` | `X` es igual a `Y`. |
+| `X != Y` | `X` no es igual a `Y`. |
+| `X <= Y` | `X` es menor o igual que `Y`. |
+| `X < Y` | `X` es menor que `Y`. |
+| `X >= Y` | `X` es mayor o igual que `Y`. |
+| `X > Y` | `X` es mayor que `Y`. |
+| `X <=> Y` | Resultado de `X - Y`. |
+
+El primer bloque de operadores booleanos son los lógicos:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `!X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de `X`. |
+| `X && Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
+| `X || Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
+
+Estos operadores nos permiten componer condiciones más complejas. Para entenderlos mejor aquí tenemos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
+
+|   `X`   |   `Y`   |  `!X`   |  `!Y`   | `X && Y`  | `X || Y` |
+|:-------:|:-------:|:-------:|:-------:|:---------:|:--------:|
+| `true`  | `true`  | `false` | `false` |  `true`   | `true`   |
+| `false` | `true`  | `true`  | `false` |  `false`  | `true`   |
+| `true`  | `false` | `false` | `true`  |  `false`  | `true`   |
+| `false` | `false` | `true`  | `true`  |  `false`  | `false`  |
+
+Los operadores de conjunción y disyunción funcionan por [cortocircuito](https://es.wikipedia.org/wiki/Evaluaci%C3%B3n_de_cortocircuito), por lo que si el operando izquierdo es suficiente para determinar el resultado, no se evaluará el operando derecho. Es decir, si `X` es `false` en una conjunción, el resultado será `false`, pero si es `true` en una disyunción, el resultado será `true`.
+
+Por último, existe el operador condicional ternario `C ? T : F`, donde se evalúa la condición `C` y si esta es cierta, se devuelve el valor de la expresión `T`, si es falsa se devuelve el valor de `F`.
 
 ### Aritméticos
 
-..
+El primer bloque de operadores numéricos es el de los aritméticos:
 
-### Punteros
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `+X` | Signo positivo. |
+| `-X` | Signo negativo. |
+| `X + Y` | Suma: `X` más `Y`. |
+| `X - Y` | Resta: `X` menos `Y`. |
+| `X * Y` | Multiplicación: `X` por `Y`. |
+| `X / Y` | División: `X` entre `Y`. |
+| `X % Y` | Resto de dividir `X` entre `Y`. |
+| `++X`, `X++` | Incremento prefijo y postfijo. |
+| `--X`, `X--` | Decremento prefijo y postfijo. |
 
-..
+La diferencia entre el incremento, o decremento, prefijo y postfijo radica en que la versión postfija devuelve el valor de `X` previo al cambio. Con la versión prefija se realiza el cambio y entonces se devuelve el valor de `X`:
+
+```cpp
+// Fichero: incremento.cpp
+#include<iostream>
+
+void main () {
+	int x = 1;
+	std::cout << ++x << "\n"; // 2
+	std::cout << x++ << "\n"; // 2
+	std::cout << x   << "\n"; // 3
+}
+```
+
+El segundo bloque son los operadores a nivel de bits:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de `X`. |
+| `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
+| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
+| `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de `X` con `Y`. |
+| `X << Y` | Desplazamiento a la izquierda `Y` bits de `X`. |
+| `X >> Y` | Desplazamiento a la derecha `Y` bits de `X`. |
+
+De modo similar a los operadores lógicos, están son sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
+
+| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X | Y` | `X ^ Y` |
+|:---:|:---:|:----:|:----:|:-------:|:-------:|:-------:|
+| `1` | `1` |  `0` |  `0` |   `1`   |   `1`   |   `0`   |
+| `0` | `1` |  `1` |  `0` |   `0`   |   `1`   |   `1`   |
+| `1` | `0` |  `0` |  `1` |   `0`   |   `1`   |   `1`   |
+| `0` | `0` |  `1` |  `1` |   `0`   |   `0`   |   `0`   |
 
 ### Asignación
 
-..
+Estos son los operadores de asignación disponibles:
 
-### Precedencia
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X = Y` | Asigna `Y` a `X`. |
+| `X += Y` | Equivale a `X = X + Y`. |
+| `X -= Y` | Equivale a `X = X - Y`. |
+| `X *= Y` | Equivale a `X = X * Y`. |
+| `X /= Y` | Equivale a `X = X / Y`. |
+| `X %= Y` | Equivale a `X = X % Y`. |
+| `X &= Y` | Equivale a `X = X & Y`. |
+| `X |= Y` | Equivale a `X = X | Y`. |
+| `X ^= Y` | Equivale a `X = X ^ Y`. |
+| `X <<= Y` | Equivale a `X = X << Y`. |
+| `X >>= Y` | Equivale a `X = X >> Y`. |
 
-..
+### Acceso
+
+Estos son los operadores para acceder a miembros:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X::Y` | Acceso al miembro `Y` del espacio de nombres `X`. |
+| `X.Y` | Acceso al miembro `Y` de `X`. |
+| `X[Y]` | Acceso al elemento `Y` en `X`. |
+
+### Punteros
+
+El primer bloque son operadores básicos para manipular punteros:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X->Y` | Acceso al miembro `Y` del puntero `X`. |
+| `&X` | Dirección de `X` en la memoria. |
+| `*X` | Contenido apuntado por `X` en la memoria. |
+| `X.*Y` | Acceso al contenido apuntado por el miembro `Y` de `X`. |
+| `X->*Y` | Acceso al contenido apuntado por el miembro `Y` del puntero `X`. |
+
+El segundo bloque son los operadores para manipular la memoria:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `new T` | Reserva memoria para almacenar un valor del tipo `T`. |
+| `new T(Args)` | Reserva memoria para almacenar un valor del tipo `T`, pasándole una serie de argumentos para construirlo. |
+| `new T[]` | Reserva memoria para almacenar un array del tipo `T`. |
+| `delete X` | Libera el espacio reservado para el valor apuntado por `X`. |
+| `delete[] X` | Libera el espacio reservado para el array apuntado por `X`. |
+
+### Conversiones
+
+El siguiente bloque son operadores para convertir tipos:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `(T)X` | *Casting* para convertir el resultado de `X` al tipo `T`. |
+| `T(X)`<br/>`T{X}` | *Casting* funcional para convertir el resultado de `X` al tipo `T`. |
+
+Estos operadores normalmente se utilizan con punteros y referencias, pero también se pueden usar con tipos básicos para forzar conversiones que requieran ser explícitas. Para hacer punteros genéricos en C, se solía utilizar el tipo `void *`, para después hacer un *casting* al tipo oportuno. Con C++ lo recomendable es usar jerarquías de tipos, para aprovechar el polimorfismo y usar algunos de los *casting* funcionales que ofrece el lenguaje:
+
+| Casting | Descripción |
+|:-------:|:------------|
+| `static_cast<T>(X)` | Convierte el resultado de `X` al tipo `T` sin ninguna comprobación en tiempo de ejecución. Sin embargo, el compilador realiza algunas comprobaciones para evitar algunos errores de ejecución. |
+| `dynamic_cast<T>(X)` | Convierte el resultado de `X` al tipo `T` con una comprobación en tiempo de ejecución, si esta falla se devuelve `nullptr` cuando el tipo es un puntero, o se lanza la excepción [`std::bad_cast`](https://en.cppreference.com/w/cpp/types/bad_cast) en el resto de casos. Sólo se puede usar con tipos dentro de una misma jerarquía. Para convertir una clase base a una hija, la base ha de tener algún método virtual. |
+| `reinterpret_cast<T>(X)` | Convierte el resultado de `X` al tipo `T` sin ninguna comprobación en tiempo de ejecución. Es esencialmente un *casting* al estilo C para punteros. |
+| `const_cast<T>(X)` | Convierte el resultado de `X` al tipo `T` para eliminar el modificador `const` o añadirlo. |
+
+### Especiales
+
+Estos son operadores que no entran en las demás categorías antes expuestas:
+
+| Operación | Descripción |
+|:---------:|:-----------:|
+| `X, Y` | Ejecuta la expresión `X` y después la expresión `Y`. |
+| `F(Args)` | Invocación de la función `F` con una serie de argumentos. |
+| `sizeof(X)` | Da el tamaño que ocupa en memoria la expresión `X`. |
+| `throw x` | Lanza el valor de `X` como una excepción. |
+| `co_await X` | Espera asíncrona para el resultado de la corrutina `X`. |
+| `co_yield X` | Lanza el valor `X` en una corrutina generadora. |
 
 ## Sentencias
 
