@@ -1,4 +1,5 @@
-﻿# C++
+﻿
+# C++
 
 [C++](https://isocpp.org/) es un lenguaje de propósito general creado por Bjarne Stroustrup en los años 80. Es un lenguaje multiparadigma de tipado estático, que compila a código máquina, por lo que sus ejecutables no son portables pero su código si puede serlo. Estos son algunos enlaces de interés:
 
@@ -8,7 +9,7 @@
 + [Visual Studio](https://visualstudio.microsoft.com/): Entorno de desarrollo para programar.
 + [Wikipedia Inglesa](https://en.wikipedia.org/wiki/C++): Artículo general sobre el lenguaje.
 
-Para este documento vamos a utilizar la versión 20 del estándar, cuya implementación ya está suficientemente extendida entre los principales compiladores del mercado.
+Para este documento vamos a utilizar la versión C++20 del estándar, cuya implementación ya está suficientemente extendida entre los principales compiladores del mercado.
 
 ## Hola mundo
 
@@ -50,7 +51,7 @@ La sintaxis para definir números enteros es la siguiente:
 
 $$\textcolor{red}{[} \mathit{prefijo} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{[} \mathit{sufijo} \textcolor{red}{]}$$
 
-> Desde el estándar 14 se puede utilizar la comilla simple (`'`) para separar grupos de dígitos, como una especie de separador de millares arbitrario. A la hora de compilar el carácter es ignorado, por lo que es meramente estético.
+> Desde C++14 se puede utilizar la comilla simple (`'`) para separar grupos de dígitos, como una especie de separador de millares arbitrario. A la hora de compilar el carácter es ignorado, por lo que es meramente estético.
 
 Los prefijos validos son:
 
@@ -110,7 +111,7 @@ La sintaxis para definir números reales es la siguiente:
 
 $$\mathit{d\acute{\imath}gitos} \textcolor{red}{[} \texttt{.} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \textcolor{red}{\char123} \texttt{e} \textcolor{red}{|} \texttt{E} \textcolor{red}{\char125} \textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \mathit{sufijo} \textcolor{red}{]}$$
 
-> Desde el estándar 17 se puede usar el prefijo `0x` o `0X` para usar dígitos hexadecimales al definir un número real. Sin embargo, para indicar el exponente se utiliza `p` o `P`, en lugar de `e` y `E`. Por ejemplo, `0x1EFp2`.
+> Desde C++17 se puede usar el prefijo `0x` o `0X` para usar dígitos hexadecimales al definir un número real. Sin embargo, para indicar el exponente se utiliza `p` o `P`, en lugar de `e` y `E`. Por ejemplo, `0x1EFp2`.
 
 Los sufijos validos son:
 
@@ -189,11 +190,11 @@ Las variables, como todas las definiciones, requieren de un nombre identificador
 
 La sintaxis básica para definir variables es la siguiente:
 
-$$\mathit{tipo}\ \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{;}$$
+$$\mathit{tipo}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]} \texttt{;}$$
 
 Con la palabra clave `auto` se indica al compilador que infiera el tipo para la variable en base a la expresión que inicializa su valor:
 
-$$\texttt{auto}\ \mathit{nombre_1}\ \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{;}$$
+$$\texttt{auto}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]} \texttt{;}$$
 
 Cada *nombre* representa una dirección en la memoria, donde se almacena el valor resultante de evaluar la *expresión* que se le asigne a la variable, ya sea en la inicialización o con el operador asignación (`=`). El tipo le indica al compilador el tamaño que ocupan los valores con los que vamos a trabajar, para acceder a su estructura interna de forma correcta. Por ejemplo:
 
@@ -337,7 +338,7 @@ La principal ventaja es que su uso es más sencillo, porque no requiere del oper
 
 Una constante es un valor que no va a cambiar durante la ejecución del programa. La sintaxis básica para definir constantes es la siguiente:
 
-$$\texttt{const}\ \mathit{tipo}\ \mathit{nombre_1}\ \texttt{=}\ \mathit{expresi\acute{o}n_1} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \texttt{=}\ \mathit{expresi\acute{o}n_n} \textcolor{red}{]} \texttt{;}$$
+$$\texttt{const}\ \mathit{tipo}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]} \texttt{;}$$
 
 Para el compilador una constante es una variable capada, que no puede ser reasignada. Se puede utilizar `auto` para inferir el *tipo* en tiempo de compilación. Por ejemplo:
 
@@ -596,7 +597,7 @@ void main () {
 
 > En el ejemplo vemos el objeto `std::cin`, que nos permite introducir por consola un valor y almacenarlo en una variable. Téngase en cuenta que este objeto no reserva automáticamente memoria, por lo que para introducir una cadena de texto se requiere tener reservado previamente el espacio necesario o utilizar tipos como `std::string`.
 
-Desde el estándar del 17 se puede introducir antes de la condición, separado con un punto y coma, una expresión de inicialización. Por ejemplo:
+Desde C++17 se puede introducir antes de la condición, separado con un punto y coma, una expresión de inicialización. Por ejemplo:
 
 ```cpp
 // Fichero: ifinit.cpp
@@ -667,7 +668,7 @@ Existe una variante del bucle `for` que nos permite recorrer los elementos de un
 
 $$\texttt{for}\ \texttt{(} \mathit{tipo}\ \mathit{nombre}\ \texttt{:}\ \mathit{contenedor} \texttt{)}\ \mathit{bloque}$$
 
-De forma similar a lo que vimos con el `if`, desde el estándar del 20 se puede introducir, separado con un punto y coma, una expresión de inicialización en los bucles `for` para contenedores.
+De forma similar a lo que vimos con el `if`, desde C++20 se puede introducir, separado con un punto y coma, una expresión de inicialización en los bucles `for` para contenedores.
 
 Con este ejemplo podremos ver en acción los diferentes tipos de bucles:
 
@@ -786,7 +787,72 @@ void main () {
 
 ## Funciones
 
-..
+Una función es un bloque de código con nombre, que podemos parametrizar, para obtener diferentes resultados. Para definir una se utiliza la siguiente sintaxis:
+
+$$\mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+Una función tiene un tipo de retorno, pero si no devuelve nada usará `void` como tipo del resultado. También se permite usar `auto` como tipo de retorno, para inferir el tipo en tiempo de compilación. Luego se puede tener entre cero y N parámetros, cuya sintaxis es:
+
+$$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]}$$
+
+Se puede, por herencia de C, usar `void` para indicar que no tiene parámetros, pero lo normal es no poner nada entre los paréntesis. También podemos usar `auto` como tipo de un parámetro, para inferir su tipo con el compilador. El lenguaje permite definir valores por defecto para los parámetros, pero sólo si el parámetro tiene un nombre y los parámetros a continuación también tienen valores por defecto.
+
+La firma de una función corresponde a toda la definición previa al cuerpo de la misma, definido con `{ expresiones }`. Si necesitamos utilizar la función en un lugar del proyecto donde no está definida, podremos declararla usando la firma de la función, sin el cuerpo, terminando la sentencia con un punto y coma. Por ejemplo:
+
+```cpp
+// Declaración:
+int suma (int, int);
+
+// Definición:
+int suma (int a, int b) {
+    return a + b;
+}
+```
+
+En cuanto a los *modificadores* disponibles, para funciones que no son miembros de un tipo, son los que indican si la función está libre de excepciones o no:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `noexcept`<br/>`noexcept(true)` | La función no lanza excepciones. |
+| `noexcept(false)` | La función lanza excepciones. |
+| `throw()`<br/>`throw(tipos)` | La función lanza excepciones.<br/> (**Nota:** deprecado en C++17 y eliminado en C++20.) |
+
+> Disponemos del operador `noexcept(X)` para saber si la expresión `X` no lanza excepciones, devolviendo como resultado un booleano.
+
+Con el sufijo `-> tipo` indicamos el tipo de retorno de la función y requiere el uso de `auto`. Se utiliza esta herramienta para dar información al compilador de lo que tiene que inferir. Lo habitual es usar este mecanismo en conjunción con plantillas y el operador [`decltype(X)`](https://en.cppreference.com/w/cpp/language/decltype), que infiere el tipo para una entidad o expresión.
+
+La elipsis `...` sirve para crear funciones con un número variable de argumentos en su llamada. Se añade al final de la lista de parámetros, pudiendo separarlo opcionalmente con una coma por compatibilidad con C. Su uso no impide usar valores por defecto para los parámetros anteriores. Para poder usar este tipo de parámetros, es necesario utilizar la cabecera [`cstdarg`](https://en.cppreference.com/w/cpp/header/cstdarg), que dispone de los siguientes elementos:
+
+| Elemento | Descripción |
+|:--------:|:------------|
+| `std::va_list` | Estructura para almacenar los argumentos variables. |
+| `va_start(L, N)` | Carga en la lista `L` un número `N` de argumentos. |
+| `va_copy(LD, LS)` | Copia en la lista `LD` el contenido de `LS`. |
+| `va_arg(L, T)` | Devuelve el siguiente argumento en la lista `L`, indicando su tipo con `T`. |
+| `va_end(L)` | Elimina la lista `L` de argumentos. |
+
+Por ejemplo:
+
+```cpp
+// Fichero: varargs.cpp
+#include <cstdarg>
+#include <iostream>
+
+int sum (int n, ...) {
+	int r = 0;
+	std::va_list args;
+	va_start(args, n);
+	for (int i = 0; i < n; i++) {
+		r += va_arg(args, int);
+	}
+	va_end(args);
+	return r;
+}
+
+void main () {
+	std::cout << sum(4, 1, 2, 3, 4) << "\n"; // 10
+}
+```
 
 ## Lambdas
 
