@@ -797,6 +797,8 @@ $$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \mathit{tipo}\ \textcolo
 
 Se puede, por herencia de C, usar `void` para indicar que no tiene parámetros, pero lo normal es no poner nada entre los paréntesis. También podemos usar `auto` como tipo de un parámetro, para inferir su tipo con el compilador. El lenguaje permite definir valores por defecto para los parámetros, pero sólo si el parámetro tiene un nombre y los parámetros a continuación también tienen valores por defecto.
 
+> C++ es un lenguaje que permite polimorfismo, por lo que podemos tener dos funciones definidas con el mismo nombre, siempre que varíen los parámetros de su definición. Por lo que podemos tener `void foo ()`, `void foo (int)` y `char foo (bool)` al mismo tiempo sin problemas. A la hora de invocar la función, dependiendo del tipo del argumento se elegirá una función u otra.
+
 La firma de una función corresponde a toda la definición previa al cuerpo de la misma, definido con `{ expresiones }`. Si necesitamos utilizar la función en un lugar del proyecto donde no está definida, podremos declararla usando la firma de la función, sin el cuerpo, terminando la sentencia con un punto y coma. Por ejemplo:
 
 ```cpp
@@ -820,6 +822,8 @@ En cuanto a los *modificadores* disponibles, para funciones que no son miembros 
 > Disponemos del operador `noexcept(X)` para saber si la expresión `X` no lanza excepciones, devolviendo como resultado un booleano.
 
 Con el sufijo `-> tipo` indicamos el tipo de retorno de la función y requiere el uso de `auto`. Se utiliza esta herramienta para dar información al compilador de lo que tiene que inferir. Lo habitual es usar este mecanismo en conjunción con plantillas y el operador [`decltype(X)`](https://en.cppreference.com/w/cpp/language/decltype), que infiere el tipo para una entidad o expresión.
+
+Existe el prefijo [`inline`](https://en.cppreference.com/w/cpp/language/inline), que permite indicar al compilador que debe insertar el código de la función en los puntos del programa donde es invocada. El compilador no siempre podrá insertar el código, por lo que es una recomendación que el programador da para la optimización del programa.
 
 La elipsis `...` sirve para crear funciones con un número variable de argumentos en su llamada. Se añade al final de la lista de parámetros, pudiendo separarlo opcionalmente con una coma por compatibilidad con C. Su uso no impide usar valores por defecto para los parámetros anteriores. Para poder usar este tipo de parámetros, es necesario utilizar la cabecera [`cstdarg`](https://en.cppreference.com/w/cpp/header/cstdarg), que dispone de los siguientes elementos:
 
