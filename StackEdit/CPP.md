@@ -1,5 +1,4 @@
-﻿
-# C++
+﻿# C++
 
 [C++](https://isocpp.org/) es un lenguaje de propósito general creado por Bjarne Stroustrup en los años 80. Es un lenguaje multiparadigma de tipado estático, que compila a código máquina, por lo que sus ejecutables no son portables pero su código si puede serlo. Estos son algunos enlaces de interés:
 
@@ -787,7 +786,7 @@ void main () {
 
 ## Funciones
 
-Una función es un bloque de código con nombre, que podemos parametrizar, para obtener diferentes resultados. Para definir una se utiliza la siguiente sintaxis:
+Una [función](https://en.cppreference.com/w/cpp/language/function) es un bloque de código con nombre, que podemos parametrizar, para obtener diferentes resultados. Para definir una se utiliza la siguiente sintaxis:
 
 $$\mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
 
@@ -860,7 +859,44 @@ void main () {
 
 ## Lambdas
 
-..
+Las [expresiones lambda](https://en.cppreference.com/w/cpp/language/lambda) es una forma de definir una función sin nombre. Son bien conocidas en el mundo de la programación funcional. Se utilizan mucho para procesar datos en contenedores de la biblioteca estándar, de los que veremos ejemplos más adelante.
+
+La sintaxis básica para definir una lambda es la siguiente:
+
+$$\texttt{[} \mathit{capturas} \texttt{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+En cuanto a los *parámetros* se usa las mismas reglas que las funciones normales para su definición. Pero antes, tenemos las *capturas*, que es una lista de variables sobre las que vamos a hacer el cierre (*closure*), para poder usarlas en el cuerpo de la lambda. Hay que tener en cuenta que las lambdas se traducen en objetos de la clase [`std::function`](https://en.cppreference.com/w/cpp/utility/functional/function), por lo que se pueden devolver como resultados de una función y por ello hay que gestionar cómo se cierran las variables. Para ello esta lista de cero o más variables, separadas por comas, podrán declararse con la siguiente sintaxis:
+
+$$\textcolor{red}{\char123} \texttt{\&}\ \textcolor{red}{|}\ \texttt{=}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{*} \textcolor{red}{]} \texttt{this}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{\&} \textcolor{red}{]} \mathit{nombre}\ \textcolor{red}{[} \mathit{inicializaci\acute{o}n} \textcolor{red}{|} \texttt{...} \textcolor{red}{]}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{\&} \textcolor{red}{]} \texttt{...} \mathit{nombre}\ \mathit{inicializaci\acute{o}n} \textcolor{red}{\char125}$$
+
+Con `&` se capturan por referencia todas las variables utilizadas en el cuerpo de la lambda que estén en el ámbito de la misma, mientras que con `=` se capturan por copia. Con `this` se capturan por referencia los miembros del objeto del que es miembro la función donde se ha declarado la expresión lambda, pero con `*this` se capturan por copia. Luego podemos indicar el *nombre* de las variables que queremos capturar, ya sea por copia o por referencia con `&`. La elipsis `...` se utiliza para el [pack de expansión](https://en.cppreference.com/w/cpp/language/parameter_pack) de variables en plantillas, que explicaremos más adelante.
+
+Hay que tener en cuenta, que con el cierre de las variables lo que se está haciendo es crear una nueva variable con el mismo nombre, que será una propiedad del objeto función que se está construyendo. Por eso podemos modificar la inicialización de dichas propiedades con las siguientes formas:
+
+| Forma | Descripción |
+|:-----:|:------------|
+| `= expresión` | Se inicializa con el valor de la expresión, que también puede ser una lista de expresiones entre llaves. |
+| `(expresiones)` | Lista de valores entre paréntesis. |
+| `{expresiones}` | Lista de valores entre llaves. |
+| `{miembros}` | Lista de valores asignados a los miembros del tipo, con la forma `.miembro = expresión`. Los miembros que se declaren en la lista, tienen que estar en el orden en el que han sido definidos en el tipo o no compilará el código. |
+
+En cuanto a los *modificadores* disponibles, tenemos un grupo opcional que especifica el comportamiento general de la lambda:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `mutable` | Permite al cuerpo de la función a modificar las variables capturadas por copia e invocar sus métodos no constantes, ya que por defecto la copia se asume como `const`. |
+| `constexpr` | Define la lambda como una función `constexpr`. |
+| `consteval` | Define la lambda como una función `consteval`. No se pueden utilizar `consteval` y `constexpr` al mismo tiempo. |
+
+Después viene, de forma también opcional, el modificador de comportamiento de excepciones:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `noexcept`<br/>`noexcept(true)` | La función no lanza excepciones. |
+| `noexcept(false)` | La función lanza excepciones. |
+| `throw()`<br/>`throw(tipos)` | La función lanza excepciones.<br/> (**Nota:** deprecado en C++17 y eliminado en C++20.) |
+
+A continuación está `-> tipo`, para indicar el tipo de retorno de la función lambda, por si queremos hacerlo explícito en lugar de dejar al compilador inferirlo en base a las expresiones `return` del cuerpo de la misma.
 
 ## Clases
 
@@ -879,6 +915,14 @@ void main () {
 ..
 
 ## Plantillas
+
+..
+
+### Lambdas
+
+..
+
+$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
 
 ..
 
