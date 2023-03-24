@@ -279,6 +279,7 @@ namespace StackEdit {
             (@"\char35", @"\\#"),
             (@"\char36", @"\\$"),
             (@"\char37", @"\\%"),
+            (@"\char38", @"\\&"),
             (@"\char123", @"\\{"),
             (@"\char125", @"\\}"),
             (@"\texttt{\textasciitilde}", @"\texttt{\\~{}}\")
