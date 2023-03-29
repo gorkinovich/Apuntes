@@ -12,7 +12,7 @@ Para este documento vamos a utilizar la versión C++20 del estándar, cuya imple
 
 ## Hola mundo
 
-El código que se compila va en ficheros `.cpp`, por ejemplo:
+El código que se compila va en ficheros `.cpp`, también conocidos como unidades de compilación, por ejemplo:
 
 ```cpp
 // Fichero: hola.cpp
@@ -41,6 +41,34 @@ int main (int argc, char ** argv) {
 En este caso la función `main` devuelve un valor entero, donde `0` indica que no ha habido ningún error, y recibe una serie de argumentos, donde `argc` es el número de argumentos recibido y `argv` los argumentos como cadenas de texto. Las cadenas de texto estándar de C, son segmentos de memoria que terminan con el valor `0` (no confundirlo con el carácter cero). En el ejemplo mostramos el número de argumentos y con la sentencia `for` vamos mostrando cada argumento por pantalla. Otra variantes de `main` es `int main ()`, que devuelve un valor entero, pero no recibe argumentos.
 
 > Existen diferentes compiladores, como el de [MSVC](https://learn.microsoft.com/cpp/build/reference/c-cpp-building-reference) o el [GCC](https://gcc.gnu.org/), que tienen una cantidad considerable de opciones que no vamos a documentar aquí. Lo más fácil es utilizar un IDE, que se encargue de gestionar la compilación.
+
+## Nombres
+
+Para poder usar aquello que vamos a definir, necesitamos de nombres identificadores. Un identificador se compone de una sucesión de letras (mayúsculas y minúsculas), dígitos (`0`-`9`) y/o el guion bajo (`_`), que no debe comenzar por dígito. No se podrán usar las [palabras reservadas](https://en.cppreference.com/w/cpp/keyword) del lenguaje como identificadores.
+
+Además, el lenguaje nos permite crear espacios de nombres, donde agrupar conjuntos de definiciones. Por ejemplo, `std` es el espacio de nombres donde se encuentran las definiciones de la biblioteca estándar. Para acceder al contenido de uno se usa el operador `::`, por ejemplo, `std::cout` es el nombre cualificado para acceder a la definición `cout` dentro de `std`.
+
+La sintaxis básica para definir un espacio de nombres es la siguiente:
+
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \texttt{namespace}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}$$
+
+La palabra clave `inline` incluye las definiciones dentro del espacio de nombres que contenga al espacio definido. Si no se incluye un nombre identificador, el ámbito de sus miembros se circunscribe a la unidad de compilación.
+
+Alternativamente, podemos definir espacios de nombre de la siguiente manera para no tener que anidarlos manualmente:
+
+$$\texttt{namespace}\ \mathit{nombre_1} \textcolor{red}{[} \texttt{::}\ \textcolor{red}{\cdots}\ \texttt{::}\ \textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \mathit{nombre_n} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}$$
+
+Existe la posibilidad de utilizar los miembros de un espacio de nombres, en una unidad de compilación, sin tener que utilizar su nombre cualificado. Para ello se utiliza la sintaxis:
+
+$$\texttt{using}\ \texttt{namespace}\ \mathit{nombre_1} \textcolor{red}{[} \texttt{::} \textcolor{red}{\cdots} \texttt{::} \mathit{nombre_n} \textcolor{red}{]} \texttt{;}$$
+
+Si sólo queremos incorporar un miembro determinado usaremos la siguiente sintaxis:
+
+$$\texttt{using}\ \mathit{nombre_1} \textcolor{red}{[} \texttt{::} \textcolor{red}{\cdots} \texttt{::} \mathit{nombre_n} \textcolor{red}{]} \texttt{::} \mathit{miembro} \texttt{;}$$
+
+Si queremos crear un alias para un espacio de nombres tenemos la siguiente sintaxis:
+
+$$\texttt{namespace}\ \mathit{nombre}\ \texttt{=}\ \mathit{nombre_1} \textcolor{red}{[} \texttt{::} \textcolor{red}{\cdots} \texttt{::} \mathit{nombre_n} \textcolor{red}{]} \texttt{;}$$
 
 ## Literales y tipos básicos
 
@@ -183,11 +211,9 @@ Un puntero es un tipo de valor que nos indica una dirección de memoria donde es
 
 > Internamente equivale al valor cero y sustituye a la histórica macro `NULL`, para ayudar al compilador con las conversiones. El tipo `std::nullptr_t` representa los punteros nulos en el estándar y tiene el mismo tamaño que el tipo `void *`.
 
-## Variables y valores
+## Variables
 
-Las variables, como todas las definiciones, requieren de un nombre identificador para poder trabajar con ellas. Un identificador se compone de una sucesión de letras (mayúsculas y minúsculas), dígitos (`0`-`9`) y/o el guion bajo (`_`), que no debe comenzar por dígito. No se podrán usar las [palabras reservadas](https://en.cppreference.com/w/cpp/keyword) del lenguaje como identificadores.
-
-La sintaxis básica para definir variables es la siguiente:
+Una variable es un valor con nombre que puede variar durante la ejecución del programa. La sintaxis básica para definir variables es la siguiente:
 
 $$\mathit{tipo}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]} \texttt{;}$$
 
@@ -897,6 +923,10 @@ Después viene, de forma también opcional, el modificador de comportamiento de 
 | `throw()`<br/>`throw(tipos)` | La función lanza excepciones.<br/> (**Nota:** deprecado en C++17 y eliminado en C++20.) |
 
 A continuación está `-> tipo`, para indicar el tipo de retorno de la función lambda, por si queremos hacerlo explícito en lugar de dejar al compilador inferirlo en base a las expresiones `return` del cuerpo de la misma.
+
+## Tipos avanzados
+
+..
 
 ## Clases
 
