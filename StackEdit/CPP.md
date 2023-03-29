@@ -42,7 +42,7 @@ En este caso la función `main` devuelve un valor entero, donde `0` indica que n
 
 > Existen diferentes compiladores, como el de [MSVC](https://learn.microsoft.com/cpp/build/reference/c-cpp-building-reference) o el [GCC](https://gcc.gnu.org/), que tienen una cantidad considerable de opciones que no vamos a documentar aquí. Lo más fácil es utilizar un IDE, que se encargue de gestionar la compilación.
 
-## Nombres
+## Nombres y espacios
 
 Para poder usar aquello que vamos a definir, necesitamos de nombres identificadores. Un identificador se compone de una sucesión de letras (mayúsculas y minúsculas), dígitos (`0`-`9`) y/o el guion bajo (`_`), que no debe comenzar por dígito. No se podrán usar las [palabras reservadas](https://en.cppreference.com/w/cpp/keyword) del lenguaje como identificadores.
 
@@ -926,21 +926,19 @@ A continuación está `-> tipo`, para indicar el tipo de retorno de la función 
 
 ## Tipos avanzados
 
-..
-
-## Clases
+### Clases
 
 ..
 
-## Estructuras
+### Estructuras
 
 ..
 
-## Enumeraciones
+### Enumeraciones
 
 ..
 
-## Uniones
+### Uniones
 
 ..
 
@@ -948,7 +946,7 @@ A continuación está `-> tipo`, para indicar el tipo de retorno de la función 
 
 ..
 
-### Lambdas
+### Lambdas genéricas
 
 ..
 
@@ -956,9 +954,127 @@ $$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit
 
 ..
 
-## Módulos
+## Definiciones avanzadas
+
+### Usando `constexpr`
 
 ..
+
+### Usando `consteval`
+
+..
+
+### Usando `inline`
+
+..
+
+## Preprocesador
+
+El [preprocesado](https://en.cppreference.com/w/cpp/preprocessor) es la etapa inicial de la compilación, que realiza sustituciones de texto.
+
+### Macros
+
+La directiva más básica es definir [macros](https://en.cppreference.com/w/cpp/preprocessor/replace), que consiste en un identificador que se va a sustituir por un texto determinado. Para ello se usa la siguiente sintaxis:
+
+$$\texttt{\char35define}\ \mathit{nombre}\ \textcolor{red}{[} \mathit{texto} \textcolor{red}{]}$$
+
+El texto es opcional, porque podemos simplemente definir una macro para hacer comprobaciones condicionales, que se verán en la siguiente sección. Si queremos eliminar una macro usaremos la directiva:
+
+$$\texttt{\char35undef}\ \mathit{nombre}$$
+
+Aunque no es recomendable, se pueden definir macros con parámetros con la directiva:
+
+$$\texttt{\char35define}\ \mathit{nombre} \texttt{(} \textcolor{red}{\char123} \mathit{par\acute{a}metros} \textcolor{red}{[} \texttt{,}\ \texttt{...} \textcolor{red}{]} \textcolor{red}{|} \texttt{...} \textcolor{red}{\char125} \texttt{)}\ \textcolor{red}{[} \mathit{texto} \textcolor{red}{]}$$
+
+Los parámetros es una lista separada por comas de nombres. La elipsis `...` se utiliza para crear macros que tengan un número arbitrario de argumentos en sus usos. Para este último caso se utiliza las macros:
++ `__VA_OPT__(texto)`: Que añade el texto indicado si la lista de argumentos arbitrario no está vacía.
++ `__VA_ARGS__`: Añade los argumentos arbitrarios separados por comas.
+
+Finalmente, tenemos un par de operadores para los parámetros de las macros. Usando el operador `#` con un parámetro, este se convertirá en un literal de cadena de texto. Con el operador `##` tomará el parámetro y lo concatenará al texto al que esté a su izquierda.
+
+### Condicionales
+
+Estas son las directivas [condicionales](https://en.cppreference.com/w/cpp/preprocessor/conditional) del preprocesador:
+
+| Directiva | Descripción |
+|:---------:|:------------|
+| `#ifdef nombre` | Si está definida la macro `nombre` se procesa el bloque siguiente. |
+| `#ifndef nombre` | Si no está definida la macro `nombre` se procesa el bloque siguiente. |
+| `#if expresión` | Si es cierta la `expresión` se procesa el bloque siguiente. |
+| `#elif expresión` | Si no son ciertas las condiciones anteriores, pero sí lo es la `expresión` se procesa el bloque siguiente. |
+| `#else` | Si no son ciertas las condiciones anteriores se procesa el bloque siguiente. |
+| `#endif` | Cierra el bloque de directivas condicionales. |
+
+### Ficheros
+
+Para [incluir ficheros](https://en.cppreference.com/w/cpp/preprocessor/include) dentro de otro, tenemos las siguientes directivas:
+
+| Directiva | Descripción |
+|:---------:|:------------|
+| `#include <fichero>` | Incluye un fichero que buscará en las rutas de librerías indicadas al compilar. |
+| `#include "fichero"` | Incluye un fichero que buscará en el directorio actual. |
+
+El fichero puede ser una ruta, cuando se use la forma con comillas.
+
+## Módulos
+
+Para organizar un proyecto, se divide en unidades de compilación el código, que son ficheros `.cpp`. El método clásico, si queremos acceder a las definiciones de dichas unidades, consiste en definir una cabecera `.h` o `.hpp`, que contenga definiciones y firmas de funciones. Por ejemplo:
+
+```cpp
+// Fichero: tools.hpp
+#ifndef __TOOLS_H__
+#define __TOOLS_H__
+
+int inc (int);
+
+#endif
+```
+
+```cpp
+// Fichero: tools.cpp
+#include "tools.hpp"
+
+int inc (int x) {
+    return x + 1;
+}
+```
+
+```cpp
+// Fichero: main.cpp
+#include<iostream>
+#include<tools.hpp>
+
+void main () {
+    std::cout << inc(1) << "\n";
+}
+```
+
+Pero con C++20 se incluye la posibilidad de definir [módulos](https://en.cppreference.com/w/cpp/language/modules), para facilitar la definición de unidades de compilación y su acceso. Para ello tenemos las expresiones `export` e `import`, la primera para exportar definiciones y la segunda para importar módulos o cabeceras.
+
+..
+
+Por ejemplo, aplicado al anterior ejemplo:
+
+```cpp
+// Fichero: tools.cpp
+export module tools;
+export int inc (int);
+module : private;
+
+int inc (int x) {
+    return x + 1;
+}
+```
+
+```cpp
+// Fichero: main.cpp
+import <iostream>;
+import tools;
+
+void main () {
+    std::cout << inc(1) << "\n";
+}
+```
 
 ## Biblioteca estándar
 
