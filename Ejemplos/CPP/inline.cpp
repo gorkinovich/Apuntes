@@ -1,9 +1,9 @@
 #include<iostream>
 
 inline void foo (int a, int b) {
-	std::cout << a << " + " << b << " = " << a + b << "\n";
+    std::cout << a << " + " << b << " = " << a + b << "\n";
 }
 
-void main () {
-	foo(2 , 3);
+int main () {
+    foo(2 , 3);
 }
