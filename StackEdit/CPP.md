@@ -46,7 +46,7 @@ En este caso la función `main` devuelve un valor entero, donde `0` indica que n
 
 Para poder usar aquello que vamos a definir, necesitamos de nombres identificadores. Un identificador se compone de una sucesión de letras (mayúsculas y minúsculas), dígitos (`0`-`9`) y/o el guion bajo (`_`), que no debe comenzar por dígito. No se podrán usar las [palabras reservadas](https://en.cppreference.com/w/cpp/keyword) del lenguaje como identificadores.
 
-Además, el lenguaje nos permite crear espacios de nombres, donde agrupar conjuntos de definiciones. Por ejemplo, `std` es el espacio de nombres donde se encuentran las definiciones de la biblioteca estándar. Para acceder al contenido de uno se usa el operador `::`, por ejemplo, `std::cout` es el nombre cualificado para acceder a la definición `cout` dentro de `std`.
+Además, el lenguaje nos permite crear espacios de nombres, donde agrupar conjuntos de definiciones. Por ejemplo, `std` es el espacio de nombres donde se encuentran las definiciones de la biblioteca estándar. Para acceder al contenido de uno se usa el operador `::`, por ejemplo, `std::cout` es el nombre cualificado para acceder a la definición `cout` dentro de `std`. La forma `::miembro` hace referencia a miembros que están en el espacio de nombres global a todos.
 
 La sintaxis básica para definir un espacio de nombres es la siguiente:
 
@@ -954,19 +954,42 @@ $$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit
 
 ..
 
-## Definiciones avanzadas
+## Corrutinas
 
-### Usando `constexpr`
-
-..
-
-### Usando `consteval`
+Las [corrutinas](https://en.cppreference.com/w/cpp/language/coroutines) son funciones que permiten la ejecución de código asíncrono, sin detener la ejecución de la función que las invoca.
 
 ..
 
-### Usando `inline`
+## Opciones avanzadas
 
-..
+### Ejecución al compilar
+
+La palabra clave [`constexpr`](https://en.cppreference.com/w/cpp/language/constexpr) es un modificador para recomendar al compilador que ejecute la expresión siguiente en tiempo de compilación. Hay una serie de restricciones en el estándar para que efectivamente se pueda ejecutar la expresión con el compilador, pero en términos generales podemos usar literales o variables inicializadas con literales.
+
+Se puede definir funciones como `constexpr`, pero tiene todavía más limitaciones que los otros tipos de expresiones. Por ejemplo, no puede ser una función virtual, ni una corrutina, entre muchas otras limitaciones. En caso de necesitar forzar al compilador a ejecutarlo, usaremos la palabra clave [`consteval`](https://en.cppreference.com/w/cpp/language/consteval), que hará fallar la compilación si no puede ejecutar. Hay que tener en cuenta que `consteval` puede llegar a ser más estricto que `constexpr`.
+
+Por último, podemos ejecutar sentencias [condicionales](https://en.cppreference.com/w/cpp/language/if) con `if constexpr (condición)`, haciendo que se compile sólo uno de los dos bloques de la sentencia, dependiendo de si es cierta o falsa la condición. Con C++23 se incorpora `consteval` a las sentencias condicionales.
+
+### Insertando funciones
+
+La palabra clave [`inline`](https://en.cppreference.com/w/cpp/language/inline), permite indicar al compilador que debe intentar insertar el cuerpo de la misma en aquellos puntos donde es invocada. Es una recomendación para el compilador, que se usa como optimización en cuanto a la ejecución, pero como contrapartida aumenta el tamaño del programa compilado.
+
+Esta palabra se usa como un modificador que va al inicio de la definición de una función, es decir, antes del tipo de retorno de la función. Por ejemplo:
+
+```cpp
+// Fichero: inline.cpp
+#include<iostream>
+
+inline void foo (int a, int b) {
+	std::cout << a << " + " << b << " = " << a + b << "\n";
+}
+
+void main () {
+	foo(2 , 3);
+}
+```
+
+> Las funciones cuyo cuerpo es definido dentro de la declaración de un `class`, `struct` o `union`, son tratadas como funciones `inline` por defecto, así como las funciones con `delete`. También se asume implícitamente como `inline` aquellas funciones con `constexpr`.
 
 ## Preprocesador
 
@@ -1051,9 +1074,23 @@ void main () {
 
 Pero con C++20 se incluye la posibilidad de definir [módulos](https://en.cppreference.com/w/cpp/language/modules), para facilitar la definición de unidades de compilación y su acceso. Para ello tenemos las expresiones `export` e `import`, la primera para exportar definiciones y la segunda para importar módulos o cabeceras.
 
-..
+Para crear un módulo primero hay que definirlo y a continuación definir qué se va a exportar con el módulo. La sintaxis para definirlo es la siguiente:
 
-Por ejemplo, aplicado al anterior ejemplo:
+$$\texttt{export}\ \texttt{module}\ \mathit{identificador} \texttt{;}$$
+
+El identificador es una serie de nombres separados por `:`, para construir un nombre cualificado para el módulo. La sintaxis para exportar definiciones en el módulo es la siguiente:
+
+$$\texttt{export}\ \textcolor{red}{\char123}\ \mathit{definici\acute{o}n}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}\ \textcolor{red}{\char125}$$
+
+En caso de necesitar usar directivas del preprocesador, antes de declarar el módulo, hay que utilizar el módulo global con `module;`, para utilizar las directivas y después ya declarar el módulo. Otro aspecto de la definición de módulos es `module : private;`, que inicia la sección privada que no va a formar parte de la construcción del módulo por parte del compilador. Hay que entender que la parte pública del módulo sería una suerte de cabecera de la unidad de compilación, por lo que modificar cualquier cosa en ella, exportada o no, provoca que se recompilen todas las unidades de compilación que utilicen el módulo. Esto no ocurre con la parte privada del módulo.
+
+Para importar módulos utilizamos la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{export} \textcolor{red}{]}\ \texttt{import}\ \mathit{identificador} \texttt{;}$$
+
+El identificador puede ser un nombre cualificado de módulo, así como una cabecera usando `<fichero>` o `"fichero"`. Si se utiliza la palabra clave `export`, al importar el módulo actual se importará también el módulo importado con `export import`.
+
+Para entenderlo mejor, veamos el anterior ejemplo como un módulo:
 
 ```cpp
 // Fichero: tools.cpp
