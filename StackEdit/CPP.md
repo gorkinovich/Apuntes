@@ -1,4 +1,5 @@
-﻿# C++
+﻿
+# C++
 
 [C++](https://isocpp.org/) es un lenguaje de propósito general creado por Bjarne Stroustrup en los años 80. Es un lenguaje multiparadigma de tipado estático, que compila a código máquina, por lo que sus ejecutables no son portables pero su código si puede serlo. Estos son algunos enlaces de interés:
 
@@ -18,27 +19,31 @@ El código que se compila va en ficheros `.cpp`, también conocidos como unidade
 // Fichero: hola.cpp
 #include<iostream>
 
-void main () {
+int main () {
     std::cout << "Hola mundo\n";
 }
 ```
 
-Para poner comentarios de una sola línea usamos `//`, si se quiere usar varias líneas se hace con `/*` `*/`. La directiva `#include` indica al preprocesador del compilador que incluya el contenido de otro fichero en esa posición. En el caso del ejemplo incluye la cabecera [`iostream`](https://en.cppreference.com/w/cpp/header/iostream), que contiene definiciones para trabajar con flujos de entrada y salida. Las cabeceras son ficheros, que normalmente tienen la extensión `.hpp` o `.h`, que contienen definiciones cuyo código está en otro fichero `.cpp` o en una biblioteca ya compilada (`.dll`, `.lib`, `.so`). Después tenemos la función `main`, que es la entrada al programa y en ella mandamos a la terminal una cadena de texto usando el objeto `std::cout`. Existen otras variantes de la función `main`:
+Para poner comentarios de una sola línea usamos `//`, si se quiere usar varias líneas se hace con `/*` `*/`. La directiva `#include` indica al preprocesador del compilador que incluya el contenido de otro fichero en esa posición. En el caso del ejemplo incluye la cabecera [`iostream`](https://en.cppreference.com/w/cpp/header/iostream), que contiene definiciones para trabajar con flujos de entrada y salida. Las cabeceras son ficheros, que normalmente tienen la extensión `.hpp` o `.h`, que contienen definiciones cuyo código está en otro fichero `.cpp` o en una biblioteca ya compilada (`.dll`, `.lib`, `.so`). Después tenemos la función `main`, que es la entrada al programa y en ella mandamos a la terminal una cadena de texto usando el objeto `std::cout`.
+
+> La función `main` es la única que permite omitir devolver un valor con `return`. Si se omite esta operación, por defecto el compilador hará que el programa devuelva el valor `0`.
+
+Existen otra variante de la función `main`:
 
 ```cpp
 // Fichero: holarg.cpp
 #include<iostream>
 
 int main (int argc, char ** argv) {
-	std::cout << "Argumentos: " << argc << "\n";
-	for (int i = 0; i < argc; i++) {
-		std::cout << i << ": " << argv[i] << "\n";
-	}
+    std::cout << "Argumentos: " << argc << "\n";
+    for (int i = 0; i < argc; i++) {
+        std::cout << i << ": " << argv[i] << "\n";
+    }
     return 0;
 }
 ```
 
-En este caso la función `main` devuelve un valor entero, donde `0` indica que no ha habido ningún error, y recibe una serie de argumentos, donde `argc` es el número de argumentos recibido y `argv` los argumentos como cadenas de texto. Las cadenas de texto estándar de C, son segmentos de memoria que terminan con el valor `0` (no confundirlo con el carácter cero). En el ejemplo mostramos el número de argumentos y con la sentencia `for` vamos mostrando cada argumento por pantalla. Otra variantes de `main` es `int main ()`, que devuelve un valor entero, pero no recibe argumentos.
+En este caso la función `main` devuelve un valor entero, donde `0` indica que no ha habido ningún error, y recibe una serie de argumentos, donde `argc` es el número de argumentos recibido y `argv` los argumentos como cadenas de texto. Las cadenas de texto estándar de C, son segmentos de memoria que terminan con el valor `0` (no confundirlo con el carácter cero). En el ejemplo mostramos el número de argumentos y con la sentencia `for` vamos mostrando cada argumento por pantalla.
 
 > Existen diferentes compiladores, como el de [MSVC](https://learn.microsoft.com/cpp/build/reference/c-cpp-building-reference) o el [GCC](https://gcc.gnu.org/), que tienen una cantidad considerable de opciones que no vamos a documentar aquí. Lo más fácil es utilizar un IDE, que se encargue de gestionar la compilación.
 
@@ -215,11 +220,11 @@ Un puntero es un tipo de valor que nos indica una dirección de memoria donde es
 
 Una variable es un valor con nombre que puede variar durante la ejecución del programa. La sintaxis básica para definir variables es la siguiente:
 
-$$\mathit{tipo}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]} \texttt{;}$$
+$$\mathit{tipo}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
 
 Con la palabra clave `auto` se indica al compilador que infiera el tipo para la variable en base a la expresión que inicializa su valor:
 
-$$\texttt{auto}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]} \texttt{;}$$
+$$\texttt{auto}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
 
 Cada *nombre* representa una dirección en la memoria, donde se almacena el valor resultante de evaluar la *expresión* que se le asigne a la variable, ya sea en la inicialización o con el operador asignación (`=`). El tipo le indica al compilador el tamaño que ocupan los valores con los que vamos a trabajar, para acceder a su estructura interna de forma correcta. Por ejemplo:
 
@@ -227,12 +232,12 @@ Cada *nombre* representa una dirección en la memoria, donde se almacena el valo
 // Fichero: variables.cpp
 #include<iostream>
 
-void main () {
-	int a = 1, b = 2;
-	auto c = 3.14;
-	std::cout << a << ", " << b << ", " << c << "\n"; // 1, 2, 3.14
-	b = 4;
-	std::cout << a << ", " << b << ", " << c << "\n"; // 1, 4, 3.14
+int main () {
+    int a = 1, b = 2;
+    auto c = 3.14;
+    std::cout << a << ", " << b << ", " << c << "\n"; // 1, 2, 3.14
+    b = 4;
+    std::cout << a << ", " << b << ", " << c << "\n"; // 1, 4, 3.14
 }
 ```
 
@@ -248,22 +253,22 @@ Entre corchetes indicamos el *tamaño* de cada dimensión del array, pudiendo in
 // Fichero: arrays.cpp
 #include<iostream>
 
-void main () {
-	int a[2];
-	a[0] = 1;
-	a[1] = 2;
-	std::cout << a[0] << ", " << a[1] << "\n"; // 1, 2
+int main () {
+    int a[2];
+    a[0] = 1;
+    a[1] = 2;
+    std::cout << a[0] << ", " << a[1] << "\n"; // 1, 2
 
-	char b[] = "Hola"; // char b[5]
-	std::cout << b << "\n"; // Hola
+    char b[] = "Hola"; // char b[5]
+    std::cout << b << "\n"; // Hola
 
-	int c[][2] = { {1, 2}, {3, 4} }; // int c[2][2]
-	std::cout << c[0][0] << ", " << c[0][1] << "\n"; // 1, 2
-	std::cout << c[1][0] << ", " << c[1][1] << "\n"; // 3, 4
+    int c[][2] = { {1, 2}, {3, 4} }; // int c[2][2]
+    std::cout << c[0][0] << ", " << c[0][1] << "\n"; // 1, 2
+    std::cout << c[1][0] << ", " << c[1][1] << "\n"; // 3, 4
 
-	char d[][20] = { "inicio", "final" }; // char d[2][20]
-	std::cout << d[0] << "\n"; // inicio
-	std::cout << d[1] << "\n"; // final
+    char d[][20] = { "inicio", "final" }; // char d[2][20]
+    std::cout << d[0] << "\n"; // inicio
+    std::cout << d[1] << "\n"; // final
 }
 ```
 
@@ -277,13 +282,13 @@ Al usar el `*`, a continuación de un tipo, modificamos su significado para conv
 // Fichero: punteros.cpp
 #include<iostream>
 
-void main () {
-	int a = 24;
-	std::cout << a << "\n"; // 24
+int main () {
+    int a = 24;
+    std::cout << a << "\n"; // 24
 
-	int * b = &a;
-	*b = 42;
-	std::cout << a << "\n"; // 42
+    int * b = &a;
+    *b = 42;
+    std::cout << a << "\n"; // 42
 }
 ```
 
@@ -293,12 +298,12 @@ Con un puntero se puede acceder a un array de valores, de hecho un tipo común d
 // Fichero: parrays.cpp
 #include<iostream>
 
-void main () {
-	char c[] = "cadena";
-	char * d = c;
+int main () {
+    char c[] = "cadena";
+    char * d = c;
 
-	std::cout << d[2] << "\n"; // d
-	std::cout << *(d+2) << "\n"; // d
+    std::cout << d[2] << "\n"; // d
+    std::cout << *(d+2) << "\n"; // d
 }
 ```
 
@@ -308,24 +313,24 @@ La utilidad fundamental de los punteros es que con el operador `new` podemos res
 // Fichero: memoria.cpp
 #include<iostream>
 
-void main () {
-	int * a = new int { 8 };
-	std::cout << *a << "\n"; // 8
-	delete a;
+int main () {
+    int * a = new int { 8 };
+    std::cout << *a << "\n"; // 8
+    delete a;
 
-	int * b = new int[5] { 5, 4, 3, 2, 1 };
-	std::cout << b[2] << "\n"; // 3
-	delete[] b;
+    int * b = new int[5] { 5, 4, 3, 2, 1 };
+    std::cout << b[2] << "\n"; // 3
+    delete[] b;
 
-	int ** c = new int*[2] {
-		new int[3] { 1, 2, 3 },
-		new int[4] { 4, 5, 6, 7 }
-	};
-	std::cout << c[0][2] << "\n"; // 3
-	std::cout << c[1][3] << "\n"; // 7
-	delete[] c[0];
-	delete[] c[1];
-	delete[] c;
+    int ** c = new int*[2] {
+        new int[3] { 1, 2, 3 },
+        new int[4] { 4, 5, 6, 7 }
+    };
+    std::cout << c[0][2] << "\n"; // 3
+    std::cout << c[1][3] << "\n"; // 7
+    delete[] c[0];
+    delete[] c[1];
+    delete[] c;
 }
 ```
 
@@ -341,19 +346,19 @@ Debido al poco cariño que la gente le tiene a los punteros, se introdujo en C++
 // Fichero: referencias.cpp
 #include<iostream>
 
-void main () {
-	int a { 8 };
-	int b[] { 5, 4, 3, 2, 1 };
-	int c[][3] { { 1, 2, 3 }, { 4, 5, 6 } };
+int main () {
+    int a { 8 };
+    int b[] { 5, 4, 3, 2, 1 };
+    int c[][3] { { 1, 2, 3 }, { 4, 5, 6 } };
 
-	auto & ra = a; // int & ra = a;
-	auto & rb = b; // int (& rb)[5] = b;
-	auto & rc = c; // int (& rc)[2][3] = c;
+    auto & ra = a; // int & ra = a;
+    auto & rb = b; // int (& rb)[5] = b;
+    auto & rc = c; // int (& rc)[2][3] = c;
 
-	std::cout << ra << "\n"; // 8
-	std::cout << rb[2] << "\n"; // 3
-	std::cout << rc[0][0] << "\n"; // 1
-	std::cout << rc[1][1] << "\n"; // 5
+    std::cout << ra << "\n"; // 8
+    std::cout << rb[2] << "\n"; // 3
+    std::cout << rc[0][0] << "\n"; // 1
+    std::cout << rc[1][1] << "\n"; // 5
 }
 ```
 
@@ -363,7 +368,7 @@ La principal ventaja es que su uso es más sencillo, porque no requiere del oper
 
 Una constante es un valor que no va a cambiar durante la ejecución del programa. La sintaxis básica para definir constantes es la siguiente:
 
-$$\texttt{const}\ \mathit{tipo}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]} \texttt{;}$$
+$$\texttt{const}\ \mathit{tipo}\ \mathit{nombre}\ \texttt{=}\ \mathit{expresi\acute{o}n} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
 
 Para el compilador una constante es una variable capada, que no puede ser reasignada. Se puede utilizar `auto` para inferir el *tipo* en tiempo de compilación. Por ejemplo:
 
@@ -371,27 +376,27 @@ Para el compilador una constante es una variable capada, que no puede ser reasig
 // Fichero: constantes.cpp
 #include<iostream>
 
-void main () {
-	const auto a = 123; // const int a
-	std::cout << a << "\n"; // 123
+int main () {
+    const auto a = 123; // const int a
+    std::cout << a << "\n"; // 123
 
-	const auto b = "hola"; // const char * const b
-	std::cout << b << "\n"; // hola
-	// Ilegal: b[0] = 'H';
-	// Ilegal: b = "Hola";
+    const auto b = "hola"; // const char * const b
+    std::cout << b << "\n"; // hola
+    // Ilegal: b[0] = 'H';
+    // Ilegal: b = "Hola";
 
-	const char * c = "hola";
-	std::cout << c << "\n"; // hola
-	// Ilegal: c[0] = 'H';
-	c = "Hola";
-	std::cout << c << "\n"; // Hola
+    const char * c = "hola";
+    std::cout << c << "\n"; // hola
+    // Ilegal: c[0] = 'H';
+    c = "Hola";
+    std::cout << c << "\n"; // Hola
 
-	char cadena[] = "hola";
-	char * const d = cadena;
-	std::cout << d << "\n"; // hola
-	d[0] = 'H';
-	// Ilegal: d = "Hola";
-	std::cout << d << "\n"; // Hola
+    char cadena[] = "hola";
+    char * const d = cadena;
+    std::cout << d << "\n"; // hola
+    d[0] = 'H';
+    // Ilegal: d = "Hola";
+    std::cout << d << "\n"; // Hola
 }
 ```
 
@@ -480,11 +485,11 @@ La diferencia entre el incremento, o decremento, prefijo y postfijo radica en qu
 // Fichero: incremento.cpp
 #include<iostream>
 
-void main () {
-	int x = 1;
-	std::cout << ++x << "\n"; // 2
-	std::cout << x++ << "\n"; // 2
-	std::cout << x   << "\n"; // 3
+int main () {
+    int x = 1;
+    std::cout << ++x << "\n"; // 2
+    std::cout << x++ << "\n"; // 2
+    std::cout << x   << "\n"; // 3
 }
 ```
 
@@ -603,20 +608,20 @@ Un bloque puede ser una sentencia terminada con punto y coma (`expresión;`) o u
 // Fichero: ifelse.cpp
 #include<iostream>
 
-void main () {
-	int a, b;
-	std::cout << "A = ";
-	std::cin  >> a;
-	std::cout << "B = ";
-	std::cin  >> b;
+int main () {
+    int a, b;
+    std::cout << "A = ";
+    std::cin  >> a;
+    std::cout << "B = ";
+    std::cin  >> b;
 
-	if (a == b) {
-		std::cout << "A y B son iguales.\n";
-	} else if (a < b) {
-		std::cout << "A es menor que B.\n";
-	} else {
-		std::cout << "A es mayor que B.\n";
-	}
+    if (a == b) {
+        std::cout << "A y B son iguales.\n";
+    } else if (a < b) {
+        std::cout << "A es menor que B.\n";
+    } else {
+        std::cout << "A es mayor que B.\n";
+    }
 }
 ```
 
@@ -629,12 +634,12 @@ Desde C++17 se puede introducir antes de la condición, separado con un punto y 
 #include <string>
 #include <iostream>
 
-void main () {
-	std::string nombre;
-	std::cout << "Nombre: ";
-	if (std::cin >> nombre; !nombre.empty()) {
-		std::cout << "Hola, " << nombre << ".\n";
-	}
+int main () {
+    std::string nombre;
+    std::cout << "Nombre: ";
+    if (std::cin >> nombre; !nombre.empty()) {
+        std::cout << "Hola, " << nombre << ".\n";
+    }
 }
 ```
 
@@ -655,21 +660,21 @@ Dependiendo del valor de la *expresión*, se va buscando en orden una cláusula 
 // Fichero: switch.cpp
 #include<iostream>
 
-void main () {
-	int a;
-	std::cout << "> ";
-	std::cin  >> a;
+int main () {
+    int a;
+    std::cout << "> ";
+    std::cin  >> a;
 
-	switch (a) {
-	case 5:  std::cout << "Cinco.\n";
-	case 4:  std::cout << "Cuatro.\n";
-	case 3:  std::cout << "Tres.\n";
-	case 2:  std::cout << "Dos.\n";
-	case 1:  std::cout << "Uno.\n";
-	case 0:  std::cout << "Cero.\n";
-			 break;
-	default: std::cout << "Indefinido.\n";
-	}
+    switch (a) {
+    case 5:  std::cout << "Cinco.\n";
+    case 4:  std::cout << "Cuatro.\n";
+    case 3:  std::cout << "Tres.\n";
+    case 2:  std::cout << "Dos.\n";
+    case 1:  std::cout << "Uno.\n";
+    case 0:  std::cout << "Cero.\n";
+             break;
+    default: std::cout << "Indefinido.\n";
+    }
 }
 ```
 
@@ -702,34 +707,34 @@ Con este ejemplo podremos ver en acción los diferentes tipos de bucles:
 #include <string>
 #include <iostream>
 
-void main () {
-	const int SIZE = 4;
-	int nums[SIZE] = { 1, 2, 3, 4 };
-	std::string respuesta;
-	do {
-		int i = 0;
-		std::cout << "While: ";
-		while (i < SIZE) {
-			std::cout << nums[i] << " ";
-			++i;
-		}
-		std::cout << "\n";
+int main () {
+    const int SIZE = 4;
+    int nums[SIZE] = { 1, 2, 3, 4 };
+    std::string respuesta;
+    do {
+        int i = 0;
+        std::cout << "While: ";
+        while (i < SIZE) {
+            std::cout << nums[i] << " ";
+            ++i;
+        }
+        std::cout << "\n";
 
-		std::cout << "For: ";
-		for (int j = 0; j < SIZE; j++) {
-			std::cout << nums[j] << " ";
-		}
-		std::cout << "\n";
+        std::cout << "For: ";
+        for (int j = 0; j < SIZE; j++) {
+            std::cout << nums[j] << " ";
+        }
+        std::cout << "\n";
 
-		std::cout << "For each: ";
-		for (auto n : nums) {
-			std::cout << n << " ";
-		}
-		std::cout << "\n";
+        std::cout << "For each: ";
+        for (auto n : nums) {
+            std::cout << n << " ";
+        }
+        std::cout << "\n";
 
-		std::cout << "¿Salir? (S/N) ";
-		std::cin >> respuesta;
-	} while (respuesta != "s" && respuesta != "S");
+        std::cout << "¿Salir? (S/N) ";
+        std::cin >> respuesta;
+    } while (respuesta != "s" && respuesta != "S");
 }
 ```
 
@@ -751,18 +756,18 @@ Para entenderlo mejor, veamos el siguiente ejemplo:
 // Fichero: saltos.cpp
 #include<iostream>
 
-void main () {
-	int xs[] = {
-		1, 2, 3, 4, 5, 6, 7, 0, 8, 9
-	};
+int main () {
+    int xs[] = {
+        1, 2, 3, 4, 5, 6, 7, 0, 8, 9
+    };
 
-	for (auto x : xs) {
-		if (x == 0) break;
-		if (x % 2 == 0) continue;
-		std::cout << x << " ";
-	}
-	std::cout << "\n";
-	// 1 3 5 7
+    for (auto x : xs) {
+        if (x == 0) break;
+        if (x % 2 == 0) continue;
+        std::cout << x << " ";
+    }
+    std::cout << "\n";
+    // 1 3 5 7
 }
 ```
 
@@ -800,13 +805,13 @@ En este ejemplo podemos ver un manejo básico de las excepciones:
 // Fichero: excepciones.cpp
 #include<iostream>
 
-void main () {
-	try {
-		throw 42;
-		std::cout << "Todo fue bien\n";
-	} catch (...) {
-		std::cout << "Error inesperado\n";
-	}
+int main () {
+    try {
+        throw 42;
+        std::cout << "Todo fue bien\n";
+    } catch (...) {
+        std::cout << "Error inesperado\n";
+    }
 }
 ```
 
@@ -818,7 +823,7 @@ $$\mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute
 
 Una función tiene un tipo de retorno, pero si no devuelve nada usará `void` como tipo del resultado. También se permite usar `auto` como tipo de retorno, para inferir el tipo en tiempo de compilación. Luego se puede tener entre cero y N parámetros, cuya sintaxis es:
 
-$$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots} \textcolor{red}{]}$$
+$$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor} \textcolor{red}{]} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]}$$
 
 Se puede, por herencia de C, usar `void` para indicar que no tiene parámetros, pero lo normal es no poner nada entre los paréntesis. También podemos usar `auto` como tipo de un parámetro, para inferir su tipo con el compilador. El lenguaje permite definir valores por defecto para los parámetros, pero sólo si el parámetro tiene un nombre y los parámetros a continuación también tienen valores por defecto.
 
@@ -868,18 +873,18 @@ Por ejemplo:
 #include <iostream>
 
 int sum (int n, ...) {
-	int r = 0;
-	std::va_list args;
-	va_start(args, n);
-	for (int i = 0; i < n; i++) {
-		r += va_arg(args, int);
-	}
-	va_end(args);
-	return r;
+    int r = 0;
+    std::va_list args;
+    va_start(args, n);
+    for (int i = 0; i < n; i++) {
+        r += va_arg(args, int);
+    }
+    va_end(args);
+    return r;
 }
 
-void main () {
-	std::cout << sum(4, 1, 2, 3, 4) << "\n"; // 10
+int main () {
+    std::cout << sum(4, 1, 2, 3, 4) << "\n"; // 10
 }
 ```
 
@@ -897,7 +902,7 @@ $$\textcolor{red}{\char123} \texttt{\char38}\ \textcolor{red}{|}\ \texttt{=}\ \t
 
 Con `&` se capturan por referencia todas las variables utilizadas en el cuerpo de la lambda que estén en el ámbito de la misma, mientras que con `=` se capturan por copia. Con `this` se capturan por referencia los miembros del objeto del que es miembro la función donde se ha declarado la expresión lambda, pero con `*this` se capturan por copia. Luego podemos indicar el *nombre* de las variables que queremos capturar, ya sea por copia o por referencia con `&`. La elipsis `...` se utiliza para el [pack de expansión](https://en.cppreference.com/w/cpp/language/parameter_pack) de variables en plantillas, que explicaremos más adelante.
 
-Hay que tener en cuenta, que con el cierre de las variables lo que se está haciendo es crear una nueva variable con el mismo nombre, que será una propiedad del objeto función que se está construyendo. Por eso podemos modificar la inicialización de dichas propiedades con las siguientes formas:
+Hay que tener en cuenta, que con el cierre de las variables lo que se está haciendo es crear una nueva variable con el mismo nombre, que será una propiedad del objeto función que se está construyendo. Por eso podemos modificar la [inicialización](https://en.cppreference.com/w/cpp/language/initialization) de dichas propiedades con las siguientes formas:
 
 | Forma | Descripción |
 |:-----:|:------------|
@@ -924,27 +929,316 @@ Después viene, de forma también opcional, el modificador de comportamiento de 
 
 A continuación está `-> tipo`, para indicar el tipo de retorno de la función lambda, por si queremos hacerlo explícito en lugar de dejar al compilador inferirlo en base a las expresiones `return` del cuerpo de la misma.
 
-## Tipos avanzados
+## Clases
 
-### Clases
+Las clases son la forma de definir tipos por parte del usuario, para expresar abstracciones y estructuras de datos más complejas de las ofrecidas por el lenguaje. Su sintaxis básica es la siguiente:
+
+$$\begin{array}{l}
+\texttt{class}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{final} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{padres} \textcolor{red}{]}\ \texttt{\char123}
+\\[0.5em] \textcolor{red}{[} \texttt{public:}
+\\[0.5em] \qquad \mathit{definiciones\ p\acute{u}blicas} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{protected:}
+\\[0.5em] \qquad \mathit{definiciones\ protegidas} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{private:}
+\\[0.5em] \qquad \mathit{definiciones\ privadas} \textcolor{red}{]}
+\\[0.5em] \texttt{\char125} \texttt{;}
+\end{array}$$
+
+El orden de las secciones puede variar e incluso podemos tener varias secciones con el mismo tipo de visibilidad si fuera necesario. En caso de definir miembros fuera de una sección, se asume `private` como visibilidad por defecto. Dependiendo de la visibilidad, los miembros de la clase serán accesibles o no desde fuera:
+
+| Visibilidad | `public` | `protected` | `private` |
+|:------------|:--------:|:-----------:|:---------:|
+| Dentro de la clase actual | Sí | Sí | Sí |
+| Dentro de las clases hijas | Sí | Sí | No |
+| Fuera de las anteriores | Sí | No | No |
+
+El lenguaje C++ permite herencia múltiple entre tipos. Cuando una clase hereda de otra, puede incorporar definiciones a las que puede acceder y sobrescribir si fuera necesario. Con el modificador `final` se impide que la clase pueda ser heredadas por otras clases. Para heredar de otras clases tenemos la lista de padres, que tiene la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{virtual} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{public} \textcolor{red}{|} \texttt{protected} \textcolor{red}{|} \texttt{private} \textcolor{red}{]}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{,}\ \textcolor{red}{\dots}\ \textcolor{red}{]}$$
+
+Si no se indica la visibilidad del padre heredado, se asume por defecto que será `private`, modificando así la visibilidad de los miembros heredados para restringirlos todavía más. En cuanto al modificador `virtual`, marca la clase heredada como una clase base virtual, para evitar problemas con la herencia múltiple, cuando una clase superior es heredada múltiples veces por una descendiente. `virtual` puede usarse también después de los modificadores de visibilidad. Por ejemplo:
+
+```cpp
+// Fichero: multiple.cpp
+#include<iostream>
+
+class A {
+public:
+    void hola () {
+        std::cout << "Hola\n";
+    }
+};
+
+class B : virtual public A {};
+class C : virtual public A {};
+class D : public B, public C {};
+
+int main () {
+    D objeto;
+    objeto.hola();
+}
+```
+
+### Atributos
+
+Los atributos de una clase son las variables definidas para almacenar la información. Para definir uno se usa la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{mutable} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{inicializaci\acute{o}n} \textcolor{red}{]} \texttt{;}$$
+
+Los modificadores aceptados para los atributos son:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `mutable` | Permite que una variable no estática sea modificable al usarse desde una función constante. |
+| `volatile` | Avisa la compilador que la variable se usa de forma volátil en código concurrente, para optimizar su uso. |
+| `const` | La variable es una constante y no se puede modificar su valor. |
+
+> El modificador `mutable` no se puede usar con un tipo constante (`const T`), pero sí con un puntero a un tipo constante (`const T *` o `const T &`).
+
+Para [inicializar](https://en.cppreference.com/w/cpp/language/initialization) una variable, tenemos las siguientes formas:
+
+| Forma | Descripción |
+|:-----:|:------------|
+| `= expresión` | Se inicializa con el valor de la expresión, que también puede ser una lista de expresiones entre llaves. |
+| `(expresiones)` | Lista de valores entre paréntesis. |
+| `{expresiones}` | Lista de valores entre llaves. |
+| `{miembros}` | Lista de valores asignados a los miembros del tipo, con la forma `.miembro = expresión`. Los miembros que se declaren en la lista, tienen que estar en el orden en el que han sido definidos en el tipo o no compilará el código. |
+
+### Métodos
+
+Los métodos de una clase son las funciones definidas para ejecutar las operaciones que implementa. Para definir uno se usa la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}$$
+
+$$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{\char38} \textcolor{red}{|} \texttt{\char38\char38} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\char123}\ \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \textcolor{red}{\char125}$$
+
+Si no implementamos el cuerpo de la función dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{clase} \texttt{::} \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
+
+$$\textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{\char38} \textcolor{red}{|} \texttt{\char38\char38} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+Hay que tener en cuenta que la firma, declarada dentro de la clase, tiene que ser exactamente la misma definida fuera. Igual que pasaba con las funciones que no pertenecen a una clase, tenemos el modificador `noexcept` para indicar si el método lanza excepciones o no. Luego `-> tipo` indica cual es el tipo a devolver al usar `auto` como tipo de retorno en la firma de la función. En cuanto al resto de modificadores:
+
+| Modificador | Descripción |
+|:-----------:|:------------|
+| `constexpr` | Pide al compilador que el miembro sea constante o ejecutable por el compilador. |
+| `consteval` | Define y fuerza que la función sea ejecutable por el compilador. |
+| `volatile` | La función puede ser usada por objetos volátiles y los parámetros de la función también serán tratados como variables volátiles. |
+| `const` | La función es sólo de lectura, no puede modificar el contenido del objeto, salvo que el atributo esté definido como mutable. |
+| `&` | La función es invocada cuando el objeto que la invoca es un valor normal (*LVALUE*). |
+| `&&` | La función es invocada cuando el objeto que la invoca es un valor que ha sido movido (*RVALUE*). |
+| `inline` | Se recomienda al compilador que inserte el código del cuerpo de la función en aquellos sitios donde es invocada. Cuando el cuerpo se define dentro de la clase, se asume este modificador como implícito. |
+
+Veamos un ejemplo con un par de métodos:
+
+```cpp
+// Fichero: metodos.cpp
+#include<iostream>
+
+class Foo {
+public:
+    const int a = 1;
+    mutable int b = 2;
+    int c = 3;
+
+    int foo (int) const;
+
+    void bar () {
+        std::cout << a << ", " << b << ", "
+            << ++c << "; " << foo(c) << "\n";
+    }
+};
+
+int Foo::foo(int a) const {
+    a *= this->a + (b++);
+    return a + a;
+}
+
+int main () {
+    Foo obj;
+    obj.bar(); // 1, 2, 4; 24
+    obj.bar(); // 1, 3, 5; 40
+}
+```
+
+La expresión `this`, usada en el ejemplo, es un puntero a la propia instancia que está llamando al método. Su uso puede ser útil para resolver conflictos, cuando un parámetro de una función tiene el mismo nombre que un miembro de la clase.
+
+### Métodos virtuales
+
+Cuando heredamos de una clase podemos querer que se sobrescriban algunos métodos, para cambiar el comportamiento de una determinada operación, aprovechando así los mecanismos de herencia y polimorfismo conjuntamente. Para ello tenemos que usar el modificador `virtual`, al inicio de la firma de la función, en aquellas funciones que podrían ser rescritas en las clases hijas.
+
+> Definir qué métodos son virtuales es necesario para que el compilador las añada a la tabla de funciones virtuales (*vtable*) de la clase, que luego será apuntada por un puntero oculto (*vptr*) en las clases base, para saber cuáles son los métodos que tiene que llamar para la instancia actual.
+
+Con el modificador `= 0`, que va al final de la firma de la función, podemos indicar que es un método virtual abstracto. Esto quiere decir que el método no tiene implementación para esa clase, por lo que las clases hijas tendrán que encargarse para poder ser instanciadas.
+
+Para rescribir un método virtual, a partir de C++11, se utilizan los modificadores `override` y `final`, que son situados al final de la firma de la función. Aunque el lenguaje permite combinaciones extrañas, lo aconsejable es usar cada uno suelto. Usaremos `override` cuando simplemente queremos sobrescribir un método virtual en una clase hija. Pero usaremos `final` si queremos sobrescribirlo e impedir que las clases hijas puedan sobrescribirlo.
+
+> Antes de C++11, para sobrescribir una función virtual se usaba el modificador `virtual`. Todavía se puede seguir usando el método en C++20, pero se recomienda usar `override` y `final` en su lugar.
+
+Para comprender mejor lo anterior veamos un ejemplo:
+
+```cpp
+// Fichero: herencia.cpp
+#include <iostream>
+
+class A {
+public:
+    virtual void foo () = 0;
+    virtual void bar () {
+        std::cout << "A::bar()\n";
+    }
+};
+
+class B : public A {
+public:
+    void foo () final {
+        std::cout << "B::foo()\n";
+    }
+    void bar () override = 0;
+};
+
+class C : public B {
+public:
+    void bar () override {
+        std::cout << "C::bar()\n";
+    }
+};
+
+class D : public A {
+public:
+    void foo () override {
+        std::cout << "D::foo()\n";
+    }
+};
+
+int main () {
+    A * c = new C();
+    c->foo(); // B::foo()
+    c->bar(); // C::bar()
+
+    A * d = new D();
+    d->foo(); // D::foo()
+    d->bar(); // A::bar()
+
+    delete c;
+    delete d;
+}
+```
+
+Las clase `A` tiene dos métodos virtuales, uno de ellos abstracto, por lo que es una clase abstracta y no puede ser instanciada. Después la clase `B` hereda de `A` y sobrescribe el método abstracto `foo`, pero sobrescribe `bar` para que sea abstracto, convirtiendo la clase también en abstracta. Entonces la clase `C` hereda de `B`, sobrescribiendo `bar` para poder instanciarla. Por último tenemos la clase `D` que hereda de `A` y sobrescribe `foo` para poder instanciarla.
+
+### Métodos especiales
+
+..
+`explicit`
+..
+
+```cpp
+// Fichero: .cpp
+#include<iostream>
+
+int main () {
+}
+```
+
+### Miembros estáticos
+
+Los miembros estáticos no forman parte de los objetos instanciados de una clase, sino a la clase misma. Para acceder a ellos se usa la forma `clase::miembro`, en lugar de acceder con los operadores `.` o `->`.
+
+Para declarar una variable estática se utiliza la siguiente sintaxis:
+
+$$\texttt{static}\ \textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{;}$$
+
+Para inicializar la variable estática, se debe hacer fuera de la clase con la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{clase} \texttt{::} \mathit{nombre}\ \texttt{=}\ \mathit{inicializaci\acute{o}n} \texttt{;}$$
+
+Para declarar o definir una función estática se utiliza la siguiente sintaxis:
+
+$$\texttt{static}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
+
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\char123}\ \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \textcolor{red}{\char125}$$
+
+Si no implementamos el cuerpo de la función estática dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{clase} \texttt{::} \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
+
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+Salvo por el modificador `static`, el resto de modificadores son iguales que en los métodos de una clase. Veamos un ejemplo para hacernos una idea de todo lo anterior:
+
+```cpp
+// Fichero: estatico.cpp
+#include<iostream>
+
+class Foo {
+public:
+    static int a;
+    static int foo (int);
+};
+
+int Foo::a = 0;
+
+int Foo::foo(int b) {
+    a += b;
+    return a;
+}
+
+int main () {
+    Foo::a = 10;
+    std::cout << Foo::a      << "\n"; // 10
+    std::cout << Foo::foo(1) << "\n"; // 11
+}
+```
+
+## Estructuras
 
 ..
 
-### Estructuras
+```cpp
+// Fichero: .cpp
+#include<iostream>
+
+int main () {
+}
+```
+
+## Uniones
 
 ..
 
-### Enumeraciones
+```cpp
+// Fichero: .cpp
+#include<iostream>
+
+int main () {
+}
+```
+
+## Enumeraciones
 
 ..
 
-### Uniones
+```cpp
+// Fichero: .cpp
+#include<iostream>
 
-..
+int main () {
+}
+```
 
 ## Plantillas
 
 ..
+
+```cpp
+// Fichero: .cpp
+#include<iostream>
+
+int main () {
+}
+```
 
 ### Lambdas genéricas
 
@@ -962,13 +1256,23 @@ Las [corrutinas](https://en.cppreference.com/w/cpp/language/coroutines) son func
 
 ## Opciones avanzadas
 
-### Ejecución al compilar
+### Amigos de una clase
 
-La palabra clave [`constexpr`](https://en.cppreference.com/w/cpp/language/constexpr) es un modificador para recomendar al compilador que ejecute la expresión siguiente en tiempo de compilación. Hay una serie de restricciones en el estándar para que efectivamente se pueda ejecutar la expresión con el compilador, pero en términos generales podemos usar literales o variables inicializadas con literales.
+..
+`friend`
+..
 
-Se puede definir funciones como `constexpr`, pero tiene todavía más limitaciones que los otros tipos de expresiones. Por ejemplo, no puede ser una función virtual, ni una corrutina, entre muchas otras limitaciones. En caso de necesitar forzar al compilador a ejecutarlo, usaremos la palabra clave [`consteval`](https://en.cppreference.com/w/cpp/language/consteval), que hará fallar la compilación si no puede ejecutar. Hay que tener en cuenta que `consteval` puede llegar a ser más estricto que `constexpr`.
+### Sobrecargar de operadores
 
-Por último, podemos ejecutar sentencias [condicionales](https://en.cppreference.com/w/cpp/language/if) con `if constexpr (condición)`, haciendo que se compile sólo uno de los dos bloques de la sentencia, dependiendo de si es cierta o falsa la condición. Con C++23 se incorpora `consteval` a las sentencias condicionales.
+..
+
+```cpp
+// Fichero: .cpp
+#include<iostream>
+
+int main () {
+}
+```
 
 ### Insertando funciones
 
@@ -981,15 +1285,23 @@ Esta palabra se usa como un modificador que va al inicio de la definición de un
 #include<iostream>
 
 inline void foo (int a, int b) {
-	std::cout << a << " + " << b << " = " << a + b << "\n";
+    std::cout << a << " + " << b << " = " << a + b << "\n";
 }
 
-void main () {
-	foo(2 , 3);
+int main () {
+    foo(2 , 3);
 }
 ```
 
 > Las funciones cuyo cuerpo es definido dentro de la declaración de un `class`, `struct` o `union`, son tratadas como funciones `inline` por defecto, así como las funciones con `delete`. También se asume implícitamente como `inline` aquellas funciones con `constexpr`.
+
+### Ejecución al compilar
+
+La palabra clave [`constexpr`](https://en.cppreference.com/w/cpp/language/constexpr) es un modificador para recomendar al compilador que ejecute la expresión siguiente en tiempo de compilación. Hay una serie de restricciones en el estándar para que efectivamente se pueda ejecutar la expresión con el compilador, pero en términos generales podemos usar literales o variables inicializadas con literales.
+
+Se puede definir funciones como `constexpr`, pero tiene todavía más limitaciones que los otros tipos de expresiones. Por ejemplo, no puede ser una función virtual, ni una corrutina, entre muchas otras limitaciones. En caso de necesitar forzar al compilador a ejecutarlo, usaremos la palabra clave [`consteval`](https://en.cppreference.com/w/cpp/language/consteval), que hará fallar la compilación si no puede ejecutar. Hay que tener en cuenta que `consteval` puede llegar a ser más estricto que `constexpr`.
+
+Por último, podemos ejecutar sentencias [condicionales](https://en.cppreference.com/w/cpp/language/if) con `if constexpr (condición)`, haciendo que se compile sólo uno de los dos bloques de la sentencia, dependiendo de si es cierta o falsa la condición. Con C++23 se incorpora `consteval` a las sentencias condicionales.
 
 ## Preprocesador
 
@@ -1067,7 +1379,7 @@ int inc (int x) {
 #include<iostream>
 #include<tools.hpp>
 
-void main () {
+int main () {
     std::cout << inc(1) << "\n";
 }
 ```
@@ -1108,7 +1420,7 @@ int inc (int x) {
 import <iostream>;
 import tools;
 
-void main () {
+int main () {
     std::cout << inc(1) << "\n";
 }
 ```
@@ -1157,7 +1469,7 @@ void main () {
 // Fichero: .cpp
 #include<iostream>
 
-void main () {
+int main () {
 }
 ```
 
