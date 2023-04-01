@@ -1192,27 +1192,53 @@ int main () {
 }
 ```
 
-## Estructuras
+### Estructuras
 
-..
+Las estructuras es una forma alternativa para definir tipos por parte del usuario. Su sintaxis básica es la siguiente:
 
-```cpp
-// Fichero: .cpp
-#include<iostream>
+$$\begin{array}{l}
+\texttt{struct}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{final} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{padres} \textcolor{red}{]}\ \texttt{\char123}
+\\[0.5em] \textcolor{red}{[} \texttt{public:}
+\\[0.5em] \qquad \mathit{definiciones\ p\acute{u}blicas} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{protected:}
+\\[0.5em] \qquad \mathit{definiciones\ protegidas} \textcolor{red}{]}
+\\[0.5em] \textcolor{red}{[} \texttt{private:}
+\\[0.5em] \qquad \mathit{definiciones\ privadas} \textcolor{red}{]}
+\\[0.5em] \texttt{\char125} \texttt{;}
+\end{array}$$
 
-int main () {
-}
-```
+Su existencia en el lenguaje se debe a una herencia del lenguaje C, pero en C++ actualmente funcionan exactamente como un tipo definido con `class`, con la diferencia de que por defecto la visibilidad es pública, si no se indica ningún bloque de visibilidad.
 
 ## Uniones
 
-..
+Las uniones son un tipo de dato especial, que permite definir una abstracción que contenga diferentes tipos de información en el mismo espacio de memoria a lo largo del tiempo. Su sintaxis básica es la siguiente:
+
+$$\begin{array}{l}
+\texttt{union}\ \mathit{nombre}\ \texttt{\char123}
+\\[0.5em] \qquad \mathit{definiciones}
+\\[0.5em] \texttt{\char125} \texttt{;}
+\end{array}$$
+
+En cuanto a definiciones se permiten variables, funciones y tipos. Puede tener constructores y destructores, pero no puede tener métodos virtuales. También están limitados los tipos que se pueden usar para las variables, estos no pueden tener métodos especiales.
+
+La utilidad de las uniones viene de los tiempos de C, cuando era necesario tener diferentes estructuras de datos almacenables desde un solo tipo, algo así como una jerarquía de clases solapadas en una sola clase. En memoria se reserva el espacio para el tipo mayor de toda la unión y se almacena la información dentro de dicho espacio, para interpretarla en base a la variable que se haga referencia a la hora de recuperar la información. Por ejemplo:
 
 ```cpp
-// Fichero: .cpp
+// Fichero: union.cpp
 #include<iostream>
 
+union Foo {
+    char a;
+    short b;
+    int c;
+};
+
 int main () {
+    Foo v;
+    v.c = 0x12345678;
+    std::cout << std::hex << v.c << "\n"; // 12345678
+    std::cout << std::hex << v.b << "\n"; // 5678
+    std::cout << std::hex << (int)v.a << "\n"; // 78
 }
 ```
 
