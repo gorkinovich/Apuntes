@@ -1244,13 +1244,47 @@ int main () {
 
 ## Enumeraciones
 
-..
+Las enumeraciones son tipos de datos que asocian valores con nombres identificadores, creando constantes de forma ordenada y agrupada. Su sintaxis básica es la siguiente:
+
+$$\texttt{enum}\ \textcolor{red}{[} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{]}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123} \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,}\ \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125} \texttt{;}$$
+
+Los valores deben ser expresiones constantes, incluyendo expresiones `constexpr`. Se puede indicar un tipo básico numérico, para definir cuál es el tamaño de los valores en memoria. Luego las palabras claves `class` y `struct` sirven para crear un tipo enumerado estricto, de ese modo una variable de ese tipo sólo puede recibir valores definidos en él, teniendo que usar la sintaxis `tipo::nombre`. Sin no se usa este mecanismo, basta con usar el nombre sin cualificar.
+
+En ocasiones puede ser necesario declarar la existencia de un tipo enumerado sin incluir su definición, usando la siguiente sintaxis:
+
+$$\texttt{enum}\ \mathit{nombre}\ \texttt{:}\ \mathit{tipo} \texttt{;}$$
+
+$$\texttt{enum}\ \textcolor{red}{\char123} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{\char125}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:}\ \mathit{tipo} \textcolor{red}{]} \texttt{;}$$
+
+En caso de querer usar en un ámbito general, de tipo o de función, una enumeración estricta sin los nombres cualificados, se puede utilizar la siguiente sintaxis:
+
+$$\texttt{using}\ \texttt{enum}\ \mathit{nombre} \texttt{;}$$
+
+Esto incluye en el ámbito los nombres, para poder usarlos sin indicar el tipo. Por ejemplo:
 
 ```cpp
-// Fichero: .cpp
+// Fichero: enums.cpp
 #include<iostream>
 
+enum Bar { A = 10, B, C };
+enum class Foo : int { A, B, C };
+
 int main () {
+    Bar b = A;
+    std::cout << b << "\n";
+    {
+        std::cout << A << "\n";
+        std::cout << B << "\n";
+        std::cout << C << "\n";
+    }
+    Foo f = Foo::A;
+    std::cout << (int) f << "\n";
+    {
+        using enum Foo;
+        std::cout << (int) A << "\n";
+        std::cout << (int) B << "\n";
+        std::cout << (int) C << "\n";
+    }
 }
 ```
 
@@ -1279,6 +1313,14 @@ $$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit
 Las [corrutinas](https://en.cppreference.com/w/cpp/language/coroutines) son funciones que permiten la ejecución de código asíncrono, sin detener la ejecución de la función que las invoca.
 
 ..
+
+```cpp
+// Fichero: .cpp
+#include<iostream>
+
+int main () {
+}
+```
 
 ## Opciones avanzadas
 
