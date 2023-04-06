@@ -1010,7 +1010,7 @@ Los métodos de una clase son las funciones definidas para ejecutar las operacio
 
 $$\textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}$$
 
-$$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{\char38} \textcolor{red}{|} \texttt{\char38\char38} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\char123}\ \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \textcolor{red}{\char125}$$
+$$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{\char38} \textcolor{red}{|} \texttt{\char38\char38} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
 
 Si no implementamos el cuerpo de la función dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
 
@@ -1130,15 +1130,97 @@ Las clase `A` tiene dos métodos virtuales, uno de ellos abstracto, por lo que e
 
 ### Métodos especiales
 
-..
-`explicit`
-..
+Existe una serie de métodos especiales en los tipos, que definen cómo se construye una instancia, cómo se destruye o cómo se copia. La sintaxis de los constructores es:
+
+$$\textcolor{red}{[} \texttt{explicit} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}$$
+
+$$\textcolor{red}{\char123} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{:}\ \mathit{inicializadores} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+
+Si no implementamos el cuerpo dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase} \texttt{::} \mathit{clase} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
+
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{inicializadores} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+Un constructor puede tener una lista de parámetros, como las funciones normales. El constructor con cero parámetros se denomina [constructor por defecto](https://en.cppreference.com/w/cpp/language/default_constructor). También tenemos el caso especial del [constructor copia](https://en.cppreference.com/w/cpp/language/copy_constructor) (`clase(const clase & obj)`), así como el [constructor de movimiento](https://en.cppreference.com/w/cpp/language/move_constructor) (`clase(clase && obj)`). El primero hace una copia de `obj` para crear la nueva instancia, mientras que el segundo se queda con todos los recursos (punteros y referencias) para construir la nueva instancia.
+
+> Para forzar la invocación del constructor de movimiento, se puede utilizar la función [`std::move`](https://en.cppreference.com/w/cpp/utility/move).
+
+ Además de los modificadores previamente vistos, con [`explicit`](https://en.cppreference.com/w/cpp/language/explicit) se añade como requisito que el tipo de los argumentos ha de corresponder con el tipo de los parámetros. Esto evita que se haga una conversión implícita para hacer encajar el valor en el tipo del parámetro. Luego tenemos `=default`, que sólo se puede aplicar al constructor por defecto, el de copia y el de movimiento, que indica de forma explícita al compilador que genere la versión por defecto automáticamente. Mientras que `=delete`, que se puede aplicar a todo tipo de constructor, indica al compilador que no se va a generar ningún código para dicho constructor.
+
+Los inicializadores son una lista con la forma `nombre(expresión)` o `nombre{expresión}`, donde el nombre puede ser una variable interna o un tipo padre de la clase, que inicializa lo valores de la instancia que se está construyendo. Dependiendo de la expresión asignada, se usará un constructor u otro para inicializar cada elemento, por ello se usaba la notación con paréntesis, pero con C++11 se incorporó el uso de llaves para hacer lo mismo y unificar diferentes tipos de inicialización de objetos.
+
+A continuación, la sintaxis de los destructores es:
+
+$$\textcolor{red}{[} \texttt{virtual} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \texttt{\textasciitilde} \mathit{clase} \texttt{(} \texttt{)}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}$$
+
+$$\textcolor{red}{\char123} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+
+Si no implementamos el cuerpo dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase} \texttt{::} \texttt{\textasciitilde} \mathit{clase} \texttt{(} \texttt{)}$$
+
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+Por último, la sintaxis del operador de [copia](https://en.cppreference.com/w/cpp/language/copy_assignment)/[movimiento](https://en.cppreference.com/w/cpp/language/move_assignment) es:
+
+$$\textcolor{red}{[} \texttt{virtual} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase}\ \texttt{\char38}\ \texttt{operator =} \texttt{(} \mathit{par\acute{a}metro} \texttt{)}$$
+
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{\char123} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+
+Si no implementamos el cuerpo dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase}\ \texttt{\char38}\ \mathit{clase} \texttt{::} \texttt{operator =} \texttt{(} \mathit{par\acute{a}metro} \texttt{)}$$
+
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+Donde el parámetro puede ser `clase obj`, `const clase & obj` o `clase && obj`, siendo este último para hacer el operador de movimiento.
+
+> Para hacer un operador de copia se suele usar como tipo `const clase &`, pero en ocasiones hay desarrolladores que utilizan el patrón *copia-e-intercambio* y por ello usan como tipo `clase`. Este patrón hace un intercambio entre el objeto de origen y el de destino.
+
+Por último veamos un ejemplo de lo anterior:
 
 ```cpp
-// Fichero: .cpp
-#include<iostream>
+// Fichero: especial.cpp
+#include <iostream>
+
+class Foo {
+public:
+    Foo() {
+        std::cout << "Foo()\n";
+    }
+
+    explicit Foo(int v) {
+        std::cout << "Foo(int) -> " << v << "\n";
+    }
+
+    Foo(const Foo & obj) {
+        std::cout << "Foo(const Foo &)\n";
+    }
+
+    Foo(Foo && obj) {
+        std::cout << "Foo(Foo &&)\n";
+    }
+
+    virtual ~Foo() {
+        std::cout << "~Foo()\n";
+    }
+
+    Foo & operator =(const Foo & obj) {
+        std::cout << "operator =(const Foo &)\n";
+        return *this;
+    }
+
+    Foo & operator =(Foo && obj) {
+        std::cout << "operator =(Foo &&)\n";
+        return *this;
+    }
+};
 
 int main () {
+    Foo a, b(42), c(a), d(std::move(c));
+    b = d;
+    a = std::move(b);
 }
 ```
 
@@ -1158,7 +1240,7 @@ Para declarar o definir una función estática se utiliza la siguiente sintaxis:
 
 $$\texttt{static}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
 
-$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\char123}\ \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}\ \textcolor{red}{\char125}$$
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
 
 Si no implementamos el cuerpo de la función estática dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
 
@@ -1346,7 +1428,7 @@ int main () {
 
 La palabra clave [`inline`](https://en.cppreference.com/w/cpp/language/inline), permite indicar al compilador que debe intentar insertar el cuerpo de la misma en aquellos puntos donde es invocada. Es una recomendación para el compilador, que se usa como optimización en cuanto a la ejecución, pero como contrapartida aumenta el tamaño del programa compilado.
 
-Esta palabra se usa como un modificador que va al inicio de la definición de una función, es decir, antes del tipo de retorno de la función. Por ejemplo:
+Esta palabra se usa como un modificador que va al inicio de la definición de una función, es decir, antes del tipo de retorno de la función. También se puede utilizar para funciones especiales como el constructor, el destructor o la sobrecarga de operadores. Por ejemplo:
 
 ```cpp
 // Fichero: inline.cpp
