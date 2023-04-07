@@ -1370,41 +1370,7 @@ int main () {
 }
 ```
 
-## Plantillas
-
-..
-
-```cpp
-// Fichero: .cpp
-#include<iostream>
-
-int main () {
-}
-```
-
-### Lambdas genéricas
-
-..
-
-$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
-
-..
-
-## Corrutinas
-
-Las [corrutinas](https://en.cppreference.com/w/cpp/language/coroutines) son funciones que permiten la ejecución de código asíncrono, sin detener la ejecución de la función que las invoca.
-
-..
-
-```cpp
-// Fichero: .cpp
-#include<iostream>
-
-int main () {
-}
-```
-
-## Opciones avanzadas
+## Elementos avanzados
 
 ### Amigos de una clase
 
@@ -1443,13 +1409,110 @@ int main () {
 
 ### Sobrecargar de operadores
 
-..
+Usando la palabra clave `operator` seguido de un operador, o un tipo, se puede usar funciones para [sobrecargar operadores](https://en.cppreference.com/w/cpp/language/operators) del lenguaje. Las formas aceptadas son:
+
+| Forma | Firma Método | Firma Función | Operadores |
+|:-----:|:------------:|:-------------:|:-----------|
+| `@a` | `R A::operator @()` | `R operator @(A a)` | `+`, `-`, `~` |
+| `@a` | `R & A::operator @()` | `R & operator @(A & a)` | `++`, `--` |
+| `a@` | `R A::operator @(int)` | `R operator @(A & a, int)` | `++`, `--` |
+| `a@b` | `R A::operator @(B b)` | `R operator @(A a, B b)` | `+`, `-`, `*`, `/`, `%`, `&`, `|`, `^`, `<<`, `>>`, `,` |
+| `a@b` | `bool A::operator @(const & B b)` | `bool operator @(const & A a, const & B b)` | `==`, `!=`, `<`, `>`, `<=`, `>=` |
+| `a@b` | `auto A::operator @(const & B b)` | `auto operator @(const & A a, const & B b)` | `<=>` |
+| `@a` | `bool A::operator @()` | `bool operator @(A a)` | `!` |
+| `a@b` | `bool A::operator @(B b)` | `bool operator @(A a, B b)` | `&&`, `||` |
+| `a@b` | `R & A::operator @(B b)` | - | `=` |
+| `a@b` | `R & A::operator @(B b)` | `R & operator @(A & a, B b)` | `+=`, `-=`, `*=`, `/=`, `%=`, `&=`, `|=`, `^=`, `>>=`, `<<=` |
+| `a(b, ..., z)` | `R A::operator ()(B b, ..., Z z)` | - | `()` |
+| `a[b]` | `R & A::operator [](B b)` | - | `[]` |
+| `a->b` | `R * A::operator ->()` | - | `->` |
+| `a->*b` | `R & A::operator ->*(B b)` | `R & operator ->*(A a, B b)` | `->*` |
+| `*a` | `R & A::operator *()` | `R & operator *(A a)` | `*` |
+| `&a` | `R * A::operator &()` | `R * operator &(A a)` | `&` |
+| `(T)a` | `T A::operator T()` | - | `(T)`, `static_cast<T>()` |
+| `new T` | `void * A::operator new(size_t n)` | `void * operator new(size_t n)` | `new` |
+| `new T[n]` | `void * A::operator new[](size_t m)` | `void * operator new[](size_t m)` | `new[]` |
+| `delete a` | `void A::operator delete(void * a)` | `void operator delete(void * a)` | `delete` |
+| `delete[] a` | `void A::operator delete[](void * a)` | `void operator delete[](void * a)` | `delete[]` |
+| `co_await a` | `auto A::operator co_await()` | `auto operator co_await(A a)` | `co_await` |
+
+Dependiendo de si es un método de una clase o una función suelta, se podrán utilizar unos modificadores u otros. En cuanto a los tipos de los parámetros y del resultado, hay cierta flexibilidad para usar referencias y punteros, incluso se puede alterar el comportamiento esperado para un operador, como ocurre con `<<` a la hora de canalizar flujos de salida de datos, en lugar de desplazar bits. Por ejemplo:
 
 ```cpp
-// Fichero: .cpp
+// Fichero: sobrecarga.cpp
 #include<iostream>
 
+struct Foo {
+    int X, Y;
+};
+
+std::ostream & operator <<(std::ostream & out, const Foo & obj) {
+    out << "(" << obj.X << "," << obj.Y << ")";
+    return out;
+}
+
+inline Foo operator +(const Foo & left, const Foo & right) {
+    return Foo{
+        .X = left.X + right.X,
+        .Y = left.Y + right.Y
+    };
+}
+
 int main () {
+    Foo v{2, 3}, w{4, 5};
+    std::cout << v << " + " << w << " = "
+              << (v + w) << "\n";
+}
+```
+
+### Sobrecargar de literales
+
+Con C++11 se incorporó la posibilidad de definir [literales de usuario](https://en.cppreference.com/w/cpp/language/user_literal), permitiendo así reinterpretar los literales del lenguaje en base a un sufijo designado. Para ello hay que usar la sintaxis:
+
+$$\mathit{tipo}\ \texttt{operator}\ \texttt{""}\ \mathit{sufijo} \texttt{(} \mathit{parametros} \texttt{)}\ \texttt{\char123}\ \mathit{expresi\acute{o}nes}\ \texttt{\char125}$$
+
+En base a un *tipo* de retorno escogido, usaremos como sufijo una secuencia de letras que comience por guion bajo (`_`), ya que las secuencias que comienzan sin guion bajo se reservan para la biblioteca estándar. En cuanto a los *parámetros*, están permitidas las siguientes firmas: 
++ `(const char *)`
++ `(unsigned long long int)`
++ `(long double)`
++ `(char)`
++ `(wchar_t)`
++ `(char8_t)`
++ `(char16_t)`
++ `(char32_t)`
++ `(const char *, std::size_t)`
++ `(const wchar_t *, std::size_t)`
++ `(const char8_t *, std::size_t)`
++ `(const char16_t *, std::size_t)`
++ `(const char32_t *, std::size_t)`
+
+Por ejemplo:
+
+```cpp
+// Fichero: literales.cpp
+#include <string>
+#include <iostream>
+
+struct Foo {
+    int X, Y;
+};
+
+std::ostream & operator <<(std::ostream & out, const Foo & obj) {
+    out << "(" << obj.X << "," << obj.Y << ")";
+    return out;
+}
+
+Foo operator ""_f(const char * v, size_t) {
+    std::string texto{v};
+    auto coma = texto.find(',');
+    return Foo{
+        .X = std::stoi(texto.substr(0, coma)),
+        .Y = std::stoi(texto.substr(coma + 1))
+    };
+}
+
+int main () {
+    std::cout << "2,3"_f << "\n";
 }
 ```
 
@@ -1481,6 +1544,20 @@ La palabra clave [`constexpr`](https://en.cppreference.com/w/cpp/language/conste
 Se puede definir funciones como `constexpr`, pero tiene todavía más limitaciones que los otros tipos de expresiones. Por ejemplo, no puede ser una función virtual, ni una corrutina, entre muchas otras limitaciones. En caso de necesitar forzar al compilador a ejecutarlo, usaremos la palabra clave [`consteval`](https://en.cppreference.com/w/cpp/language/consteval), que hará fallar la compilación si no puede ejecutar. Hay que tener en cuenta que `consteval` puede llegar a ser más estricto que `constexpr`.
 
 Por último, podemos ejecutar sentencias [condicionales](https://en.cppreference.com/w/cpp/language/if) con `if constexpr (condición)`, haciendo que se compile sólo uno de los dos bloques de la sentencia, dependiendo de si es cierta o falsa la condición. Con C++23 se incorpora `consteval` a las sentencias condicionales.
+
+### Corrutinas
+
+Las [corrutinas](https://en.cppreference.com/w/cpp/language/coroutines) son funciones que permiten la ejecución de código asíncrono, sin detener la ejecución de la función que las invoca.
+
+..
+
+```cpp
+// Fichero: .cpp
+#include<iostream>
+
+int main () {
+}
+```
 
 ## Preprocesador
 
@@ -1603,6 +1680,26 @@ int main () {
     std::cout << inc(1) << "\n";
 }
 ```
+
+## Plantillas
+
+..
+
+```cpp
+// Fichero: .cpp
+#include<iostream>
+
+int main () {
+}
+```
+
+### Lambdas genéricas
+
+..
+
+$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+..
 
 ## Biblioteca estándar
 
