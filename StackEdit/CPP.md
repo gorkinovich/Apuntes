@@ -1408,9 +1408,38 @@ int main () {
 
 ### Amigos de una clase
 
-..
-`friend`
-..
+La palabra clave [`friend`](https://en.cppreference.com/w/cpp/language/friend) permite indicar al compilador que una definición externa, a un tipo, puede acceder al contenido privado del mismo. Podemos declarar como amigos de un tipo a funciones y tipos.
+
+```cpp
+// Fichero: amigos.cpp
+#include<iostream>
+
+class Bar {
+private:
+    int dato = 0;
+public:
+    void mostrar() {
+        std::cout << dato << "\n";
+    }
+
+    friend class Foo;
+};
+
+class Foo {
+public:
+    void cambiar (Bar & obj, int valor) {
+        obj.dato = valor;
+    }
+};
+
+int main () {
+    Foo a;
+    Bar b;
+    b.mostrar(); // 0
+    a.cambiar(b, 1);
+    b.mostrar(); // 1
+}
+```
 
 ### Sobrecargar de operadores
 
