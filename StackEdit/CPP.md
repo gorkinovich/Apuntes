@@ -1372,7 +1372,17 @@ int main () {
 
 ## Elementos avanzados
 
-### Amigos de una clase
+### Alias de tipos
+
+Existen dos formas de crear alias de tipos. Por un lado la heredada de C con [`typedef`](https://en.cppreference.com/w/cpp/language/typedef), que sigue la siguiente sintaxis:
+
+$$\texttt{typedef}\ \mathit{tipo}\ \mathit{nombre} \texttt{;}$$
+
+Y por el otro la incorporada en C++11 con [`using`](https://en.cppreference.com/w/cpp/language/type_alias), que sigue la siguiente sintaxis:
+
+$$\texttt{using}\ \mathit{nombre}\ \texttt{=}\ \mathit{tipo} \texttt{;}$$
+
+### Amigos de un tipo
 
 La palabra clave [`friend`](https://en.cppreference.com/w/cpp/language/friend) permite indicar al compilador que una definición externa, a un tipo, puede acceder al contenido privado del mismo. Podemos declarar como amigos de un tipo a funciones y tipos.
 
@@ -1543,7 +1553,9 @@ La palabra clave [`constexpr`](https://en.cppreference.com/w/cpp/language/conste
 
 Se puede definir funciones como `constexpr`, pero tiene todavía más limitaciones que los otros tipos de expresiones. Por ejemplo, no puede ser una función virtual, ni una corrutina, entre muchas otras limitaciones. En caso de necesitar forzar al compilador a ejecutarlo, usaremos la palabra clave [`consteval`](https://en.cppreference.com/w/cpp/language/consteval), que hará fallar la compilación si no puede ejecutar. Hay que tener en cuenta que `consteval` puede llegar a ser más estricto que `constexpr`.
 
-Por último, podemos ejecutar sentencias [condicionales](https://en.cppreference.com/w/cpp/language/if) con `if constexpr (condición)`, haciendo que se compile sólo uno de los dos bloques de la sentencia, dependiendo de si es cierta o falsa la condición. Con C++23 se incorpora `consteval` a las sentencias condicionales.
+También, podemos ejecutar sentencias [condicionales](https://en.cppreference.com/w/cpp/language/if) con `if constexpr (condición)`, haciendo que se compile sólo uno de los dos bloques de la sentencia, dependiendo de si es cierta o falsa la condición. Con C++23 se incorpora `consteval` a las sentencias condicionales.
+
+Por último, tenemos la función especial [`static_assert`](https://en.cppreference.com/w/cpp/language/static_assert), que puede recibir hasta dos argumentos, el primero una expresión booleana y el segundo una cadena de texto literal. El compilador ejecuta la expresión booleana, para asegurarse de que se cumple la condición indicada; en caso contrario falla la compilación y nos muestra el mensaje de la cadena.
 
 ### Corrutinas
 
