@@ -1557,20 +1557,6 @@ También, podemos ejecutar sentencias [condicionales](https://en.cppreference.co
 
 Por último, tenemos la función especial [`static_assert`](https://en.cppreference.com/w/cpp/language/static_assert), que puede recibir hasta dos argumentos, el primero una expresión booleana y el segundo una cadena de texto literal. El compilador ejecuta la expresión booleana, para asegurarse de que se cumple la condición indicada; en caso contrario falla la compilación y nos muestra el mensaje de la cadena.
 
-### Corrutinas
-
-Las [corrutinas](https://en.cppreference.com/w/cpp/language/coroutines) son funciones que permiten la ejecución de código asíncrono, sin detener la ejecución de la función que las invoca.
-
-..
-
-```cpp
-// Fichero: .cpp
-#include<iostream>
-
-int main () {
-}
-```
-
 ## Preprocesador
 
 El [preprocesado](https://en.cppreference.com/w/cpp/preprocessor) es la etapa inicial de la compilación, que realiza sustituciones de texto.
@@ -1713,9 +1699,39 @@ $$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit
 
 ..
 
-## Biblioteca estándar
+## Corrutinas
+
+Las [corrutinas](https://en.cppreference.com/w/cpp/language/coroutines) son funciones que permiten la ejecución de código asíncrono, sin detener por completo la ejecución de la función que las invoca. Para trabajar con corrutinas es necesario incluir la librería [`coroutine`](https://en.cppreference.com/w/cpp/header/coroutine) y utilizar los siguientes operadores:
+
+| Operador | Descripción |
+|:--------:|:------------|
+| `co_await` | Suspende la ejecución de la rutina hasta que vuelve a ser activada. |
+| `co_yield` | Suspende la ejecución de la rutina para devolver un valor. |
+| `co_return` | Completa la ejecución de la rutina devolviendo un valor. |
 
 ..
+
+```cpp
+// Fichero: corrutina.cpp
+#include<coroutine>
+#include<iostream>
+
+int main () {
+}
+```
+
+..
+
+```cpp
+// Fichero: generador.cpp
+#include<coroutine>
+#include<iostream>
+
+int main () {
+}
+```
+
+## Biblioteca estándar
 
 ### Cadenas
 
