@@ -51,6 +51,8 @@ En este caso la función `main` devuelve un valor entero, donde `0` indica que n
 
 Para poder usar aquello que vamos a definir, necesitamos de nombres identificadores. Un identificador se compone de una sucesión de letras (mayúsculas y minúsculas), dígitos (`0`-`9`) y/o el guion bajo (`_`), que no debe comenzar por dígito. No se podrán usar las [palabras reservadas](https://en.cppreference.com/w/cpp/keyword) del lenguaje como identificadores.
 
+> Es muy importante tener en cuenta en C++, que no podremos usar ningún elemento que no haya sido definido o declarado previamente a su uso. Esto implica ciertas incomodidades que no tienen muchos lenguajes modernos, por ello C y C++ suelen tener código cuyo propósito es declarar la existencia de una definición que se encuentra en otra unidad de compilación o más adelante dentro de la misma unidad.
+
 Además, el lenguaje nos permite crear espacios de nombres, donde agrupar conjuntos de definiciones. Por ejemplo, `std` es el espacio de nombres donde se encuentran las definiciones de la biblioteca estándar. Para acceder al contenido de uno se usa el operador `::`, por ejemplo, `std::cout` es el nombre cualificado para acceder a la definición `cout` dentro de `std`. La forma `::miembro` hace referencia a miembros que están en el espacio de nombres global a todos.
 
 La sintaxis básica para definir un espacio de nombres es la siguiente:
@@ -1681,6 +1683,92 @@ int main () {
 
 ## Plantillas
 
+Las [plantillas](https://en.cppreference.com/w/cpp/language/templates) es la herramienta del lenguaje para poder hacer código genérico independiente de los tipos. La sintáxis básica para definir una plantilla es:
+
+$$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]}\ \mathit{definici\acute{o}n}$$
+
+Como *definiciones* podemos tener tipos, funciones y variables. Los *requisitos* tienen que ver con los conceptos que veremos en una subsección más adelante. Los parámetros tenemos tres categorías: variables, variables de tipo y plantillas de variables de tipo.
+
+La sintaxis para definir variables como parámetros de una plantilla es:
+
+$$\textcolor{red}{\char123}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{|}\ \mathit{tipo}\ \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]}\ \textcolor{red}{|}\ \texttt{auto}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{nombre}\ \textcolor{red}{\char125}$$
+
+La primera forma es un tipo normal, con un nombre y un posible valor por defecto. La segunda forma es una variable que representa una lista de parámetros variable. La tercera forma usa `auto` y se puede combinar con `*` y `&`, como modificadores, para deducir en tiempo de compilación el tipo de la variable de la plantilla.
+
+La sintaxis para definir variables de tipo como parámetros de una plantilla es:
+
+$$\textcolor{red}{\char123} \texttt{typename} \textcolor{red}{|} \texttt{class} \textcolor{red}{|} \mathit{restricci\acute{o}n} \textcolor{red}{\char125}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{tipo} \textcolor{red}{]} \textcolor{red}{|} \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]} \textcolor{red}{]}$$
+
+Después de indicar si es una variable de tipo general, con `typename` o `class`, que son sinónimos, o si es una restricción definida con conceptos, podremos darle un nombre y un valor por defecto al parámetro. Pero también podemos convertir ese parámetro en una lista de parámetros variable.
+
+La sintaxis para definir plantillas de variables de tipo como parámetros de una plantilla es:
+
+$$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \textcolor{red}{\char123} \texttt{typename} \textcolor{red}{|} \texttt{class} \textcolor{red}{\char125}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{tipo} \textcolor{red}{]} \textcolor{red}{|} \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]} \textcolor{red}{]}$$
+
+Es similar a las variables de tipo, con el añadido de estar parametrizado como una plantilla. Esto tiene su utilidad si queremos que uno de los parámetros sea una plantilla con una forma concreta, en lugar de cualquier tipo posible que representaría `typename`.
+
+Veamos un simple ejemplo para entenderlo mejor:
+
+```cpp
+// Fichero: plantillas.cpp
+#include<iostream>
+
+template<typename T1, typename T2>
+struct Tupla {
+    T1 primero;
+    T2 segundo;
+};
+
+template<typename T1, typename T2>
+void mostrar (const Tupla<T1, T2> & valor) {
+    std::cout << "{ " << valor.primero
+              << ", " << valor.segundo
+              << " }\n";
+}
+
+int main () {
+    auto v1 = Tupla{1, true};
+    auto v2 = Tupla{3.14, "PI"};
+    mostrar(v1); // { 1, 1 }
+    mostrar(v2); // { 3.14, PI }
+}
+```
+
+En el ejemplo hemos usado el compilador para que [deduzca los tipos](https://en.cppreference.com/w/cpp/language/template_argument_deduction) que se están usando a la hora de instanciar las plantillas `Tupla` y `mostrar`, pero podríamos haber usado la forma explícita también:
+
+```cpp
+    auto v1 = Tupla<int, bool>{1, true};
+    auto v2 = Tupla<double, const char *>{3.14, "PI"};
+    mostrar<int, bool>(v1);
+    mostrar<double, const char *>(v2);
+```
+
+Claramente ganamos legibilidad cuando el compilador deduce por nosotros los tipos de las instancias de las plantillas que usemos. Pero no siempre será posible, por lo que hay que tener en cuenta cómo se pueden instanciar de forma explícita.
+
+También podemos forzar que se genere una instancia concreta de una plantilla, sobre todo cuando queremos crear una librería externa. En el caso de [tipos](https://en.cppreference.com/w/cpp/language/class_template) se usa la siguiente sintaxis:
+
+$$\textcolor{red}{[} \texttt{extern} \textcolor{red}{]}\ \texttt{template}\ \textcolor{red}{\char123} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{|} \texttt{union} \textcolor{red}{\char125}\ \mathit{nombre}\ \texttt{<} \mathit{argumentos} \texttt{>} \texttt{;}$$
+
+Sin `extern` se define la instanciación y se genera el código, con `extern` se declara la instanciación pero se asume que su código ha sido generado en otra unidad de compilación. En el caso de las [funciones](https://en.cppreference.com/w/cpp/language/function_template) la sintaxis es:
+
+$$\textcolor{red}{[} \texttt{extern} \textcolor{red}{]}\ \texttt{template}\ \mathit{tipo}\ \mathit{nombre}\ \texttt{<} \mathit{argumentos} \texttt{>}\ \texttt{(} \mathit{par\acute{a}metros} \texttt{)} \texttt{;}$$
+
+Igual que pasa con los tipos podemos definir o declarar una instanciación. El resto es casi igual a declarar la firma de una función.
+
+### Especialización
+
+..
+
+### Parámetros variables
+
+..
+
+### Conceptos
+
+..
+
+$$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \texttt{concept}\ \mathit{nombre}\ \texttt{=}\ \mathit{restrici\acute{o}n} \texttt{;}$$
+
 ..
 
 ```cpp
@@ -1691,13 +1779,21 @@ int main () {
 }
 ```
 
-### Lambdas genéricas
+### Alias
 
-..
+Se puede crear un [alias](https://en.cppreference.com/w/cpp/language/type_alias) de una plantilla con la siguiente sintaxis:
 
-$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \texttt{using}\ \mathit{nombre}\ \texttt{=}\ \mathit{declaraci\acute{o}n} \texttt{;}$$
 
-..
+Basta con indicar la declaración del tipo cuyo alias queremos crear, en lugar de la definición completa. Es decir, basta con la firma o cabecera del tipo.
+
+### Lambdas
+
+Se pueden tener plantillas de [lambdas](https://en.cppreference.com/w/cpp/language/lambda) con la siguiente sintaxis:
+
+$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+El prácticamente la misma sintaxis y elementos que las lambdas normales, pero aquí podemos poner variables de tipo entre `<` y `>`, así como indicar los requisitos que ha de cumplir la función mediante conceptos.
 
 ## Corrutinas
 
