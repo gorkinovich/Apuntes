@@ -1757,7 +1757,103 @@ Igual que pasa con los tipos podemos definir o declarar una instanciación. El r
 
 ### Especialización
 
-..
+Podemos especializar una plantilla, es decir, crear un subtipo de la misma, indicando una parte o la totalidad de los tipos que conforman los parámetros de una. En estas plantillas especializadas podemos sobrecargar la definición previa de la plantilla, redefiniendo todo su contenido si fuera necesario. Este mecanismo permite la metaprogramación, al ejecutarse expresiones en tiempo de compilación.
+
+Para especializar [parcial](https://en.cppreference.com/w/cpp/language/partial_specialization) o [totalmente](https://en.cppreference.com/w/cpp/language/template_specialization) una plantilla, hay que pasar los argumentos entre `<` y `>` a la derecha del nombre de la plantilla, por ejemplo:
+
+```cpp
+// Fichero: especializar.cpp
+#include<iostream>
+
+template<typename T>
+void mostrar_valor (T valor) {
+    std::cout << valor;
+}
+
+template<>
+void mostrar_valor<bool> (bool valor) {
+    std::cout << (valor ? "true" : "false");
+}
+
+template<>
+void mostrar_valor<const char *> (const char * valor) {
+    std::cout << '"' << valor << '"';
+}
+
+template<typename T1, typename T2>
+struct Tupla {
+    T1 primero;
+    T2 segundo;
+
+    void mostrar () {
+        std::cout << "{ ";
+        mostrar_valor(primero);
+        std::cout << ", ";
+        mostrar_valor(segundo);
+        std::cout << " }\n";
+    }
+};
+
+int main () {
+    auto v1 = Tupla{1, true};
+    auto v2 = Tupla{3.14, "PI"};
+    v1.mostrar(); // { 1, true }
+    v2.mostrar(); // { 3.14, "PI" }
+}
+```
+
+En este ejemplo tenemos una función para mostrar valores, que hemos sobrecargado para booleanos y cadenas, especializando la plantilla `mostrar_valor`. Otro ejemplo sería calcular con metaprogramación la secuencia de Fibonacci:
+
+```cpp
+// Fichero: metafibonacci.cpp
+#include <cstdint>
+#include <iostream>
+
+constexpr uint8_t MAX_VALUE = 46;
+
+template<uint8_t n>
+class MetaFibonacci {
+private:
+    template<uint8_t i, uint64_t v0, uint64_t v1>
+    class fibonacci {
+    public:
+        enum {
+            Result = fibonacci<i - 1, v1, v0 + v1>::Result
+        };
+    };
+    template<uint64_t v0, uint64_t v1>
+    class fibonacci<0, v0, v1> {
+    public:
+        enum {
+            Result = v0
+        };
+    };
+public:
+    enum {
+        Result = fibonacci<n, 0, 1>::Result
+    };
+};
+
+template<unsigned char n>
+inline void print_numbers() {
+    print_numbers<n - 1>();
+    std::cout << ", ";
+    std::cout << MetaFibonacci<n>::Result;
+}
+
+template<>
+inline void print_numbers<0>() {
+    std::cout << MetaFibonacci<0>::Result;
+}
+
+int main () {
+    std::cout << "Fibonacci: ";
+    print_numbers<MAX_VALUE>();
+    std::cout << "\n";
+}
+```
+
+Aquí tenemos la plantilla `fibonacci`, dentro de `MetaFibonacci`, que tiene tres parámetros. A continuación tiene una especialización parcial, donde solo tiene dos parámetros y el primer argumento es el valor cero.
 
 ### Parámetros variables
 
