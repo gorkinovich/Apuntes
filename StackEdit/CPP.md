@@ -1914,6 +1914,22 @@ int main () {
 
 > La función [`std::forward`](https://en.cppreference.com/w/cpp/utility/forward) permite mover el contenido de una variable. Por ejemplo, si tenemos un parámetro definido como `T && ... args` y queremos que se mueva su contenido un constructor de forma eficiente, usaremos la forma `tipo(std::forward<T>(args)...)`. Se puede usar con otras funciones, para obligar a que se mueva el contenido de la variable usada como argumento, al parámetro de dicha función que mueve valores.
 
+### Alias
+
+Se puede crear un [alias](https://en.cppreference.com/w/cpp/language/type_alias) de una plantilla con la siguiente sintaxis:
+
+$$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \texttt{using}\ \mathit{nombre}\ \texttt{=}\ \mathit{declaraci\acute{o}n} \texttt{;}$$
+
+Basta con indicar la declaración del tipo cuyo alias queremos crear, en lugar de la definición completa. Es decir, basta con la firma o cabecera del tipo.
+
+### Lambdas
+
+Se pueden tener plantillas de [lambdas](https://en.cppreference.com/w/cpp/language/lambda) con la siguiente sintaxis:
+
+$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+
+El prácticamente la misma sintaxis y elementos que las lambdas normales, pero aquí podemos poner variables de tipo entre `<` y `>`, así como indicar los requisitos que ha de cumplir la función mediante conceptos.
+
 ### Conceptos
 
 Los [conceptos](https://en.cppreference.com/w/cpp/language/constraints) son una forma de poder definir requisitos para las plantillas, de modo que definimos un concepto como una restricción que se han de cumplir, para que se pueda instanciar correctamente la plantilla. La sintaxis para definir un concepto es la siguiente:
@@ -1967,22 +1983,6 @@ int main () {
 	mostrar(datos, [](int x) { return x % 2 == 0; });
 }
 ```
-
-### Alias
-
-Se puede crear un [alias](https://en.cppreference.com/w/cpp/language/type_alias) de una plantilla con la siguiente sintaxis:
-
-$$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \texttt{using}\ \mathit{nombre}\ \texttt{=}\ \mathit{declaraci\acute{o}n} \texttt{;}$$
-
-Basta con indicar la declaración del tipo cuyo alias queremos crear, en lugar de la definición completa. Es decir, basta con la firma o cabecera del tipo.
-
-### Lambdas
-
-Se pueden tener plantillas de [lambdas](https://en.cppreference.com/w/cpp/language/lambda) con la siguiente sintaxis:
-
-$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
-
-El prácticamente la misma sintaxis y elementos que las lambdas normales, pero aquí podemos poner variables de tipo entre `<` y `>`, así como indicar los requisitos que ha de cumplir la función mediante conceptos.
 
 ## Corrutinas
 
