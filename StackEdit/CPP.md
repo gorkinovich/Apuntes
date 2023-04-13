@@ -1857,7 +1857,49 @@ Aquí tenemos la plantilla `fibonacci`, dentro de `MetaFibonacci`, que tiene tre
 
 ### Parámetros variables
 
-..
+Podemos tener plantillas con un número de parámetros variable utilizando la notación [`...`](https://en.cppreference.com/w/cpp/language/parameter_pack), que hemos visto en la sintaxis de los parámetros de las plantillas. La notación `tipo... nombre` define una lista variable de variables, mientras que `nombre...` expande esa lista de diferentes formas. Lo mismo se aplica a variables de tipo.
+
+Si queremos saber cuál es el número de elementos de una lista variable, tenemos el operador [`sizeof...(nombre)`](https://en.cppreference.com/w/cpp/language/sizeof...), donde nombre es una variable de datos o de tipos. Por ejemplo:
+
+```cpp
+// Fichero: expansion.cpp
+#include<iostream>
+
+template<typename T, typename... TS>
+void mostrar (T value, TS... args) {
+    std::cout << value;
+    if constexpr (sizeof...(TS) > 0) {
+        mostrar(args...);
+    }
+}
+
+int main () {
+    mostrar(1, ", ", 2, ", ", 3, ", ", 4, "\n");
+}
+```
+
+Podemos hacer una [reducción](https://en.cppreference.com/w/cpp/language/fold) aplicando alguno de los siguientes operadores binarios: `+`, `-`, `*`, `/`, `%`, `^`, `&`, `|`, `=`, `<`, `>`, `<<`, `>>`, `+=`, `-=`, `*=`, `/=`, `%=`, `^=`, `&=`, `|=`, `<<=`, `>>=`, `==`, `!=`, `<=`, `>=`, `&&`, `||`, `,`, `.*`, `->*`. Para ello es necesario utilizar alguna de las siguientes cuatro formas:
+
++ `(nombre @ ...)`
++ `(... @ nombre)`
++ `(nombre @ ... @ inicial)`
++ `(inicial @ ... @ nombre)`
+
+Donde `@` es un operador binario de la lista anterior, `nombre` es el nombre de la variable de datos o de tipos, e `inicial` es una expresión que representa el valor inicial para la reducción. Por ejemplo:
+
+```cpp
+// Fichero: reducir.cpp
+#include<iostream>
+
+template<typename... TS>
+auto sumar (TS... args) {
+    return (0 + ... + args);
+}
+
+int main () {
+    std::cout << sumar(1, 2, 3, 4) << "\n";
+}
+```
 
 ### Conceptos
 
