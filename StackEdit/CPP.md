@@ -1912,19 +1912,59 @@ int main () {
 }
 ```
 
+> La función [`std::forward`](https://en.cppreference.com/w/cpp/utility/forward) permite mover el contenido de una variable. Por ejemplo, si tenemos un parámetro definido como `T && ... args` y queremos que se mueva su contenido un constructor de forma eficiente, usaremos la forma `tipo(std::forward<T>(args)...)`. Se puede usar con otras funciones, para obligar a que se mueva el contenido de la variable usada como argumento, al parámetro de dicha función que mueve valores.
+
 ### Conceptos
 
-..
+Los [conceptos](https://en.cppreference.com/w/cpp/language/constraints) son una forma de poder definir requisitos para las plantillas, de modo que definimos un concepto como una restricción que se han de cumplir, para que se pueda instanciar correctamente la plantilla. La sintaxis para definir un concepto es la siguiente:
 
 $$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \texttt{concept}\ \mathit{nombre}\ \texttt{=}\ \mathit{restrici\acute{o}n} \texttt{;}$$
 
-..
+En este caso la *restricción* puede ser una composición de los siguientes elementos: otros conceptos (no puede ser una relación recursiva), conjunciones con `&&`, disyunciones con `||`, negaciones con `!` y expresiones `requires`. En el fondo estamos manejado predicados lógicos para formar una fórmula que de como resultado `true`.
+
+La expresión [`requires`](https://en.cppreference.com/w/cpp/language/requires), dentro de la definición de una restricción, sigue la siguiente sintaxis:
+
+$$\texttt{requires}\ \textcolor{red}{[} \texttt{(} \mathit{par\acute{a}metros} \texttt{)} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{requisitos}\ \texttt{\char125}$$
+
+Los *parámetros* tienen la forma `tipo nombre`, para usar dichos nombres dentro de los requisitos, para las comprobaciones realizadas en tiempo de compilación. Mientras que los *requisitos* los hay de cuatro categorías:
+
+| Categoría | Descripción |
+|:---------:|:------------|
+| Simple | Expresiones del lenguaje que no empiezan por `requires`, que el compilador comprueba si es válida sin evaluarla. Por ejemplo: `template<typename T> concept C = requires (T a, T b) { a + b; }` |
+| Tipos | Expresiones que comienzan por `typename`, para comprobar que existe el tipo indicado. Por ejemplo: `template<typename T> concept C = requires { typename T::Inner; }` |
+| Compuestas | Que tienen la forma `{expresión} noexcept -> tipo`, donde `noexcept` es opcional, *expresión* es una expresión simple, y *tipo* es el tipo en el que ha de encajar la *expresión* (permite usar `decltype((expresión))`). |
+| Anidadas | Son expresiones que empiezan con `requires`. |
+
+Además de lo anterior, el uso de los conceptos definidos puede darse en dos casos. El primero es usar un concepto como una restricción para una variable de tipo definida en los parámetros, y el segundo es usarlo en los requisitos de la plantilla. Para usar la cláusula de requisitos se usa la siguiente sintaxis:
+
+$$\texttt{requires}\ \mathit{restrici\acute{o}n}$$
+
+Donde la restricción es una composición de conceptos, que ejercen como predicados, conjunciones con `&&`, disyunciones con `||` y negaciones con `!`. Por ejemplo:
 
 ```cpp
-// Fichero: .cpp
-#include<iostream>
+// Fichero: conceptos.cpp
+#include <vector>
+#include <iostream>
+
+template<typename P, typename T>
+concept Predicado = requires (P p, T x) {
+    {p(x)} -> std::same_as<bool>;
+};
+
+template<typename T, typename P>
+void mostrar (const T & datos, P predicado)
+	requires Predicado<P, typename T::value_type> {
+	for (auto item : datos) {
+		if (predicado(item)) {
+			std::cout << item << " ";
+		}
+	}
+	std::cout << "\n";
+}
 
 int main () {
+	std::vector datos = {1, 2, 3, 4, 5, 6, 7, 8};
+	mostrar(datos, [](int x) { return x % 2 == 0; });
 }
 ```
 
