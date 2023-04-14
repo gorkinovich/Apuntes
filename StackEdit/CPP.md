@@ -1994,25 +1994,239 @@ Las [corrutinas](https://en.cppreference.com/w/cpp/language/coroutines) son func
 | `co_yield` | Suspende la ejecución de la rutina para devolver un valor. |
 | `co_return` | Completa la ejecución de la rutina devolviendo un valor. |
 
-..
+Para que el compilador permita el uso de corrutinas, es necesario crear un tipo auxiliar que defina en su interior otro tipo llamado `promise_type`, que tendrá una serie de operaciones definidas que dictarán el comportamiento de la corrutina definida:
+
+| Método | Descripción |
+|:------:|:------------|
+| `get_return_object` | Este método es invocado cuando se tiene que instanciar una corrutina. |
+| `initial_suspend` | Este método es invocado cuando se va pausar la corrutina con `co_await`. |
+| `final_suspend` | Este método es invocado cuando se va pausar por última vez la corrutina en su finalización. |
+| `unhandled_exception` | Este método es invocado cuando se produce una excepción en la corrutina. |
+| `return_value` | Este método es invocado cuando se sale de la corrutina con `co_return` devolviendo un valor. |
+| `return_void` | Este método es invocado cuando se sale de la corrutina con `co_return` sin devolver un valor. |
+| `await_transform` | Este método es invocado cuando se obtiene el valor que está esperando `co_await` en la corrutina y se quiere transformar el objeto recibido de tipo *awaitable*. |
+| `yield_value` | Este método es invocado cuando se devuelve un valor en la corrutina con `co_yield`. |
+
+En el caso de `initial_suspend`, `final_suspend`, `await_transform` y `yield_value`, el tipo de retorno será una instancia de un tipo *awaitable*, como por ejemplo, [`std::suspend_always`](https://en.cppreference.com/w/cpp/coroutine/suspend_always) o [`std::suspend_never`](https://en.cppreference.com/w/cpp/coroutine/suspend_never). El primero indica que la ejecución en efecto se ha de poner en pausa, mientras que el segundo indica lo contrario. Ambos casos no generan un valor de retorno con el operador, sino que se ha de gestionar aparte dicha obtención del valor generado. Por ejemplo:
 
 ```cpp
 // Fichero: corrutina.cpp
-#include<coroutine>
-#include<iostream>
+#include <iostream>
+#include <coroutine>
+
+template <typename T>
+struct Tarea {
+    // Usamos el manejador base de la librería estándar:
+    struct promise_type;
+    using Manejador = std::coroutine_handle<promise_type>;
+
+    // Definimos el tipo promise_type que necesita el compilador:
+    struct promise_type {
+        // El último valor generado en la corrutina:
+        T valor;
+
+        // Método para instanciar una corrutina:
+        Tarea get_return_object () {
+            return Tarea(Manejador::from_promise(*this));
+        }
+
+        // Método para cuando se va pausar la corrutina con co_await:
+        std::suspend_always initial_suspend () {
+            return {};
+        }
+
+        // Método para cuando se va pausar por última vez la corrutina:
+        std::suspend_always final_suspend () noexcept {
+            return {};
+        }
+
+        // Método para cuando se produce una excepción en la corrutina:
+        void unhandled_exception () {}
+
+        // Método para cuando se sale de la corrutina con co_return:
+        template <std::convertible_to<T> From>
+        void return_value (From && from) {
+            valor = std::forward<From>(from);
+        }
+    };
+
+    // Definimos el tipo awaitable para poder usar co_await:
+    struct Esperador {
+        Manejador & manejador;
+
+        // Método para indicar que se tiene que pausar la ejecución
+        // al estar devolviendo false como resultado:
+        bool await_ready() noexcept {
+            return false;
+        }
+
+        // Método que recibe una corrutina externa y que después,
+        // de realizar las operaciones que sean necesarias, volverá
+        // a activar la ejecución de dicha corrutina:
+        void await_suspend(std::coroutine_handle<> externo) noexcept {
+            externo.resume();
+        }
+
+        // Método que se invoca cuando se va a reactivar la ejecución
+        // de la corrutina que se ha puesto en espera con co_await:
+        T await_resume() noexcept {
+            manejador.resume();
+            return manejador.promise().valor;
+        }
+    };
+
+    // Sobrecarga el operador co_await para supender
+    Esperador operator co_await () noexcept {
+        // Como el operador co_await está siendo usado con una tarea
+        // vamos a configurar el "esperador" con una referencia al
+        // manejador del tipo promesa de la corrutina:
+        return Esperador{manejador_};
+    }
+
+    // Devuelve el resultado generado por la tarea:
+    T resultado () {
+        manejador_();
+        return std::move(manejador_.promise().valor);
+    }
+
+    // Construye una tarea con un manejador recibido:
+    Tarea (Manejador h) : manejador_(h) {}
+
+    // Destruye la tarea eliminando los recursos del manejador:
+    ~Tarea () {
+        manejador_.destroy();
+    }
+
+private:
+    Manejador manejador_;
+};
+
+Tarea<std::uint64_t> factorial (unsigned x) {
+    if (x > 1) {
+        auto y = co_await factorial(x - 1);
+        co_return x * y;
+    } else {
+        co_return 1;
+    }
+}
 
 int main () {
+    auto tarea = factorial(10);
+    std::cout << tarea.resultado() << '\n';
 }
 ```
 
-..
+En este ejemplo calculamos el factorial con una corrutina. Por un lado está la clase `Tarea`, que contiene a `promise_type` y un tipo *awaitable* llamado `Esperador`, que es lo que necesita `co_await` para trabajar. Lo ideal es hacer una clase genérica para gestionar tareas de todo tipo, ya que la complejidad que subyace a las corrutinas es considerable.
+
+Otro tipo de corrutinas son las que generan valores con `co_yield`, para crear una secuencia de valores que se van calculando de forma perezosa. Por ejemplo:
 
 ```cpp
 // Fichero: generador.cpp
-#include<coroutine>
-#include<iostream>
+#include <iostream>
+#include <coroutine>
+
+template <typename T>
+struct Generador {
+    // Usamos el manejador base de la librería estándar:
+    struct promise_type;
+    using Manejador = std::coroutine_handle<promise_type>;
+
+    // Definimos el tipo promise_type que necesita el compilador:
+    struct promise_type {
+        // El último valor generado en la corrutina:
+        T valor;
+
+        // La última excepción lanzada en la corrutina:
+        std::exception_ptr error;
+
+        // Método para instanciar una corrutina:
+        Generador get_return_object () {
+            return Generador(Manejador::from_promise(*this));
+        }
+
+        // Método para cuando se va pausar la corrutina con co_await:
+        std::suspend_always initial_suspend () {
+            return {};
+        }
+
+        // Método para cuando se va pausar por última vez la corrutina:
+        std::suspend_always final_suspend () noexcept {
+            return {};
+        }
+
+        // Método para cuando se produce una excepción en la corrutina:
+        void unhandled_exception () {
+            error = std::current_exception();
+        }
+
+        // Método para cuando se sale de la corrutina con co_return:
+        void return_void () {}
+
+        // Método para cuando se devuelve un valor en la corrutina con co_yield:
+        template <std::convertible_to<T> From>
+        std::suspend_always yield_value (From && from) {
+            valor = std::forward<From>(from);
+            return {};
+        }
+    };
+
+    // Genera el siguiente elemento de la secuencia:
+    bool siguiente () {
+        // Genera el siguiente elemento de la corrutina:
+        manejador_();
+        // Comprueba si se ha generado alguna excepción:
+        if (manejador_.promise().error) {
+            std::rethrow_exception(manejador_.promise().error);
+        }
+        // Comprueba si se ha terminado de ejecutar la corrutina:
+        return !manejador_.done();
+    }
+
+    // Devuelve el último elemento generado en la secuencia:
+    T actual () {
+        return std::move(manejador_.promise().valor);
+    }
+
+    // Construye un generador con un manejador recibido:
+    Generador (Manejador h) : manejador_(h) {}
+
+    // Destruye el generador eliminando los recursos del manejador:
+    ~Generador () {
+        manejador_.destroy();
+    }
+
+private:
+    Manejador manejador_;
+};
+
+Generador<std::uint64_t> fibonacci (unsigned n) {
+    if (n > 94) {
+        throw std::runtime_error("Secuencia demasiado grande.");
+    } if (n == 0) {
+        co_return;
+    } else {
+        std::uint64_t a = 0, b = 1, aux;
+        for (unsigned i = 0; i < n; ++i) {
+            co_yield a;
+            aux = a + b;
+            a = b;
+            b = aux;
+        }
+    }
+}
 
 int main () {
+    try {
+        auto gen = fibonacci(20);
+        while (gen.siguiente()) {
+            std::cout << gen.actual() << ' ';
+        }
+        std::cout << '\n';
+    } catch (const std::exception & ex) {
+        std::cerr << "Error: " << ex.what() << '\n';
+    } catch (...) {
+        std::cerr << "Error desconocido...\n";
+    }
 }
 ```
 
