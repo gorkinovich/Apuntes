@@ -2234,9 +2234,139 @@ int main () {
 
 ### Cadenas
 
-..
+Para trabajar con cadenas tenemos, en el módulo [`string`](https://en.cppreference.com/w/cpp/header/string), la clase genérica [`std::basic_string`](https://en.cppreference.com/w/cpp/string/basic_string). Con ella tenemos las siguientes especializaciones:
+
+| Tipo | Definición | Codificación |
+|:----:|:----------:|:-------------|
+| `std::string` | `std::basic_string<char>` | ASCI |
+| `std::wstring` | `std::basic_string<wchar_t>` | Unicode |
+| `std::u8string` | `std::basic_string<char8_t>` | UTF-8 |
+| `std::u16string` | `std::basic_string<char16_t>` | UTF-16 |
+| `std::u32string` | `std::basic_string<char32_t>` | UTF-32 |
+
+Este tipo de cadenas es mutable y permite las siguientes operaciones:
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator=` | Asignación de cadenas. |
+| General | `assign` | Asigna caracteres a una cadena. |
+| Acceso | `at` | Accede a un carácter cualquiera, con comprobación de límites. |
+| Acceso | `operator[]` | Accede a un carácter cualquiera. |
+| Acceso | `front` | Accede al primer carácter. |
+| Acceso | `back` | Accede al último carácter. |
+| Acceso | `data` | Accede al puntero al primer carácter. |
+| Acceso | `c_str` | Devuelve una versión inmutable de la cadena en estilo C. |
+| Acceso | `operator basic_string_view` | Devuelve una vista inmutable de la cadena. |
+| Iterador | `begin`<br/>`cbegin` | Iterador que apunta al inicio del recorrido. |
+| Iterador | `end`<br/>`cend` | Iterador que apunta al final del recorrido. |
+| Iterador | `rbegin`<br/>`crbegin` | Iterador que apunta al inicio del recorrido inverso. |
+| Iterador | `rend`<br/>`crend` | Iterador que apunta al final del recorrido inverso. |
+| Capacidad | `empty` | Comprueba si la cadena está vacía. |
+| Capacidad | `size`<br/>`length` | Devuelve el número de caracteres. |
+| Capacidad | `max_size` | Devuelve el tamaño máximo para cualquier cadena. |
+| Capacidad | `reserve` | Reserva espacio en la memoria. |
+| Capacidad | `capacity` | Devuelve el número máximo de caracteres actualmente reservado. |
+| Capacidad | `shrink_to_fit` | Reduce el espacio reservado al tamaño actual de la cadena. |
+| Operaciones | `clear` | Borra el contenido de la cadena. |
+| Operaciones | `insert` | Inserta caracteres. |
+| Operaciones | `erase` | Borra caracteres. |
+| Operaciones | `push_back` | Añade un carácter al final. |
+| Operaciones | `pop_back` | Elimina un carácter al final. |
+| Operaciones | `append` | Añade caracteres al final. |
+| Operaciones | `operator+=` | Añade caracteres al final. |
+| Operaciones | `compare` | Compara dos cadenas. |
+| Operaciones | `starts_with` | Comprueba si la cadena empieza con un valor dado. |
+| Operaciones | `ends_with` | Comprueba si la cadena termina con un valor dado. |
+| Operaciones | `replace` | Sustituye una sección de la cadena. |
+| Operaciones | `substr` | Devuelve un fragmento de la cadena. |
+| Operaciones | `copy` | Copia caracteres. |
+| Operaciones | `resize` | Modifica el espacio reservado en la memoria para la cadena. |
+| Operaciones | `swap` | Intercambia el contenido de dos cadenas. |
+| Búsqueda | `find` | Busca la primera ocurrencia de un valor dado. |
+| Búsqueda | `rfind` | Busca la última ocurrencia de un valor dado. |
+| Búsqueda | `find_first_of` | Busca la primera ocurrencia de un carácter dado. |
+| Búsqueda | `find_first_not_of` | Busca la primera ocurrencia que no sea el carácter dado. |
+| Búsqueda | `find_last_of` | Busca la última ocurrencia de un carácter dado. |
+| Búsqueda | `find_last_not_of` | Busca la última ocurrencia que no sea el carácter dado. |
+| Constantes | `npos` | Valor especial para definir que no se ha encontrado un valor, entre otros usos. |
+
+Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
+
+| Categoría | Función | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator+` | Concatena dos cadenas. |
+| General | `operator==`<br/>`operator!=`<br/>`operator<`<br/>`operator>`<br/>`operator<=`<br/>`operator>=`<br/>`operator<=>` | Compara dos cadenas. |
+| General | `swap` | Intercambia el contenido de dos cadenas. |
+| General | `erase`<br/>`erase_if` | Elimina caracteres dentro de la cadena. |
+| E/S | `operator>>`<br/>`operator<<` | Entrada y salida de cadenas por consola. |
+| E/S | `getline` | Lee una línea de la consola para almacenarla en una cadena. |
+| Conversiones | `stoi`<br/>`stol`<br/>`stoll` | Convierte una cadena a un entero con signo. |
+| Conversiones | `stoul`<br/>`stoull` | Convierte una cadena a un entero sin signo. |
+| Conversiones | `stof`<br/>`stod`<br/>`stold` | Convierte una cadena a un número de coma flotante. |
+| Conversiones | `to_string`<br/>`to_wstring` | Convierte números a una cadena. |
+| Literales | `operator""s` | Convierte un literal a cadena. |
+| Ayuda | `hash<T>` | Devuelve el código hash para una cadena. |
+
+En el módulo [`string_view`](https://en.cppreference.com/w/cpp/header/string_view), tenemos la clase genérica [`std::basic_string_view`](https://en.cppreference.com/w/cpp/string/basic_string_view), que nos permite tener una vista inmutable a una cadena o un fragmento de la misma. Para ello tenemos las siguientes especializaciones:
+
+| Tipo | Definición | Codificación |
+|:----:|:----------:|:-------------|
+| `std::string_view` | `std::basic_string_view<char>` | ASCI |
+| `std::wstring_view` | `std::basic_string_view<wchar_t>` | Unicode |
+| `std::u8string_view` | `std::basic_string_view<char8_t>` | UTF-8 |
+| `std::u16string_view` | `std::basic_string_view<char16_t>` | UTF-16 |
+| `std::u32string_view` | `std::basic_string_view<char32_t>` | UTF-32 |
+
+Las vistas permiten las siguientes operaciones:
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator=` | Asignación de vistas. |
+| Acceso | `at` | Accede a un carácter cualquiera, con comprobación de límites. |
+| Acceso | `operator[]` | Accede a un carácter cualquiera. |
+| Acceso | `front` | Accede al primer carácter. |
+| Acceso | `back` | Accede al último carácter. |
+| Acceso | `data` | Accede al puntero al primer carácter. |
+| Iterador | `begin`<br/>`cbegin` | Iterador que apunta al inicio del recorrido. |
+| Iterador | `end`<br/>`cend` | Iterador que apunta al final del recorrido. |
+| Iterador | `rbegin`<br/>`crbegin` | Iterador que apunta al inicio del recorrido inverso. |
+| Iterador | `rend`<br/>`crend` | Iterador que apunta al final del recorrido inverso. |
+| Capacidad | `empty` | Comprueba si la vista está vacía. |
+| Capacidad | `size`<br/>`length` | Devuelve el número de caracteres. |
+| Capacidad | `max_size` | Devuelve el tamaño máximo para cualquier cadena. |
+| Operaciones | `compare` | Compara dos vistas. |
+| Operaciones | `starts_with` | Comprueba si la vista empieza con un valor dado. |
+| Operaciones | `ends_with` | Comprueba si la vista termina con un valor dado. |
+| Operaciones | `substr` | Devuelve un fragmento de la vista. |
+| Operaciones | `copy` | Copia caracteres. |
+| Búsqueda | `find` | Busca la primera ocurrencia de un valor dado. |
+| Búsqueda | `rfind` | Busca la última ocurrencia de un valor dado. |
+| Búsqueda | `find_first_of` | Busca la primera ocurrencia de un carácter dado. |
+| Búsqueda | `find_first_not_of` | Busca la primera ocurrencia que no sea el carácter dado. |
+| Búsqueda | `find_last_of` | Busca la última ocurrencia de un carácter dado. |
+| Búsqueda | `find_last_not_of` | Busca la última ocurrencia que no sea el carácter dado. |
+| Constantes | `npos` | Valor especial para definir que no se ha encontrado un valor, entre otros usos. |
+
+Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
+
+| Categoría | Función | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator==`<br/>`operator!=`<br/>`operator<`<br/>`operator>`<br/>`operator<=`<br/>`operator>=`<br/>`operator<=>` | Compara dos vistas. |
+| E/S | `operator<<` | Salida de vistas por consola. |
+| Literales | `operator""sv` | Convierte un literal a una vista. |
+| Ayuda | `hash<T>` | Devuelve el código hash para una vista. |
+
+Además de lo anterior tenemos una serie de [funciones](https://en.cppreference.com/w/cpp/string/byte) heredadas de la biblioteca estándar C, para comprobar y transformar, tanto caracteres como cadenas de estilo C.
+
+Para manejar [expresiones regulares](https://en.cppreference.com/w/cpp/regex), en el módulo [`regex`](https://en.cppreference.com/w/cpp/header/regex), tenemos la clase genérica [`std::basic_regex`](https://en.cppreference.com/w/cpp/string/basic_regex), que tiene como especializaciones a `std::regex`, para cadenas ASCII, y a `std::wregex`, para cadenas Unicode.
 
 ### Contenedores
+
+..
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
 
 ..
 
@@ -2244,7 +2374,19 @@ int main () {
 
 ..
 
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
+
+..
+
 ### Rangos
+
+..
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
 
 ..
 
@@ -2252,7 +2394,19 @@ int main () {
 
 ..
 
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
+
+..
+
 ### Números
+
+..
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
 
 ..
 
@@ -2260,11 +2414,29 @@ int main () {
 
 ..
 
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
+
+..
+
 ### Entrada/Salida
 
 ..
 
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
+
+..
+
 ### Concurrencia
+
+..
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
 
 ..
 
