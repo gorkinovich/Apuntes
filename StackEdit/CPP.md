@@ -2234,7 +2234,7 @@ int main () {
 
 ### Cadenas
 
-Para trabajar con cadenas tenemos, en el módulo [`string`](https://en.cppreference.com/w/cpp/header/string), la clase genérica [`std::basic_string`](https://en.cppreference.com/w/cpp/string/basic_string). Con ella tenemos las siguientes especializaciones:
+Para trabajar con cadenas tenemos, en el módulo [`string`](https://en.cppreference.com/w/cpp/header/string), la clase genérica [`std::basic_string`](https://en.cppreference.com/w/cpp/string/basic_string). Este tipo trabaja con cadenas mutables y tenemos las siguientes especializaciones:
 
 | Tipo | Definición | Codificación |
 |:----:|:----------:|:-------------|
@@ -2243,69 +2243,6 @@ Para trabajar con cadenas tenemos, en el módulo [`string`](https://en.cpprefere
 | `std::u8string` | `std::basic_string<char8_t>` | UTF-8 |
 | `std::u16string` | `std::basic_string<char16_t>` | UTF-16 |
 | `std::u32string` | `std::basic_string<char32_t>` | UTF-32 |
-
-Este tipo de cadenas es mutable y permite las siguientes operaciones:
-
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| General | `operator=` | Asignación de cadenas. |
-| General | `assign` | Asigna caracteres a una cadena. |
-| Acceso | `at` | Accede a un carácter cualquiera, con comprobación de límites. |
-| Acceso | `operator[]` | Accede a un carácter cualquiera. |
-| Acceso | `front` | Accede al primer carácter. |
-| Acceso | `back` | Accede al último carácter. |
-| Acceso | `data` | Accede al puntero al primer carácter. |
-| Acceso | `c_str` | Devuelve una versión inmutable de la cadena en estilo C. |
-| Acceso | `operator basic_string_view` | Devuelve una vista inmutable de la cadena. |
-| Iterador | `begin`<br/>`cbegin` | Iterador que apunta al inicio del recorrido. |
-| Iterador | `end`<br/>`cend` | Iterador que apunta al final del recorrido. |
-| Iterador | `rbegin`<br/>`crbegin` | Iterador que apunta al inicio del recorrido inverso. |
-| Iterador | `rend`<br/>`crend` | Iterador que apunta al final del recorrido inverso. |
-| Capacidad | `empty` | Comprueba si la cadena está vacía. |
-| Capacidad | `size`<br/>`length` | Devuelve el número de caracteres. |
-| Capacidad | `max_size` | Devuelve el tamaño máximo para cualquier cadena. |
-| Capacidad | `reserve` | Reserva espacio en la memoria. |
-| Capacidad | `capacity` | Devuelve el número máximo de caracteres actualmente reservado. |
-| Capacidad | `shrink_to_fit` | Reduce el espacio reservado al tamaño actual de la cadena. |
-| Operaciones | `clear` | Borra el contenido de la cadena. |
-| Operaciones | `insert` | Inserta caracteres. |
-| Operaciones | `erase` | Borra caracteres. |
-| Operaciones | `push_back` | Añade un carácter al final. |
-| Operaciones | `pop_back` | Elimina un carácter al final. |
-| Operaciones | `append` | Añade caracteres al final. |
-| Operaciones | `operator+=` | Añade caracteres al final. |
-| Operaciones | `compare` | Compara dos cadenas. |
-| Operaciones | `starts_with` | Comprueba si la cadena empieza con un valor dado. |
-| Operaciones | `ends_with` | Comprueba si la cadena termina con un valor dado. |
-| Operaciones | `replace` | Sustituye una sección de la cadena. |
-| Operaciones | `substr` | Devuelve un fragmento de la cadena. |
-| Operaciones | `copy` | Copia caracteres. |
-| Operaciones | `resize` | Modifica el espacio reservado en la memoria para la cadena. |
-| Operaciones | `swap` | Intercambia el contenido de dos cadenas. |
-| Búsqueda | `find` | Busca la primera ocurrencia de un valor dado. |
-| Búsqueda | `rfind` | Busca la última ocurrencia de un valor dado. |
-| Búsqueda | `find_first_of` | Busca la primera ocurrencia de un carácter dado. |
-| Búsqueda | `find_first_not_of` | Busca la primera ocurrencia que no sea el carácter dado. |
-| Búsqueda | `find_last_of` | Busca la última ocurrencia de un carácter dado. |
-| Búsqueda | `find_last_not_of` | Busca la última ocurrencia que no sea el carácter dado. |
-| Constantes | `npos` | Valor especial para definir que no se ha encontrado un valor, entre otros usos. |
-
-Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
-
-| Categoría | Función | Descripción |
-|:---------:|:-------:|:------------|
-| General | `operator+` | Concatena dos cadenas. |
-| General | `operator==`<br/>`operator!=`<br/>`operator<`<br/>`operator>`<br/>`operator<=`<br/>`operator>=`<br/>`operator<=>` | Compara dos cadenas. |
-| General | `swap` | Intercambia el contenido de dos cadenas. |
-| General | `erase`<br/>`erase_if` | Elimina caracteres dentro de la cadena. |
-| E/S | `operator>>`<br/>`operator<<` | Entrada y salida de cadenas por consola. |
-| E/S | `getline` | Lee una línea de la consola para almacenarla en una cadena. |
-| Conversiones | `stoi`<br/>`stol`<br/>`stoll` | Convierte una cadena a un entero con signo. |
-| Conversiones | `stoul`<br/>`stoull` | Convierte una cadena a un entero sin signo. |
-| Conversiones | `stof`<br/>`stod`<br/>`stold` | Convierte una cadena a un número de coma flotante. |
-| Conversiones | `to_string`<br/>`to_wstring` | Convierte números a una cadena. |
-| Literales | `operator""s` | Convierte un literal a cadena. |
-| Ayuda | `hash<T>` | Devuelve el código hash para una cadena. |
 
 En el módulo [`string_view`](https://en.cppreference.com/w/cpp/header/string_view), tenemos la clase genérica [`std::basic_string_view`](https://en.cppreference.com/w/cpp/string/basic_string_view), que nos permite tener una vista inmutable a una cadena o un fragmento de la misma. Para ello tenemos las siguientes especializaciones:
 
@@ -2317,44 +2254,70 @@ En el módulo [`string_view`](https://en.cppreference.com/w/cpp/header/string_vi
 | `std::u16string_view` | `std::basic_string_view<char16_t>` | UTF-16 |
 | `std::u32string_view` | `std::basic_string_view<char32_t>` | UTF-32 |
 
-Las vistas permiten las siguientes operaciones:
+Los miembros principales que disponemos para trabajar con cadenas son:
 
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| General | `operator=` | Asignación de vistas. |
-| Acceso | `at` | Accede a un carácter cualquiera, con comprobación de límites. |
-| Acceso | `operator[]` | Accede a un carácter cualquiera. |
-| Acceso | `front` | Accede al primer carácter. |
-| Acceso | `back` | Accede al último carácter. |
-| Acceso | `data` | Accede al puntero al primer carácter. |
-| Iterador | `begin`<br/>`cbegin` | Iterador que apunta al inicio del recorrido. |
-| Iterador | `end`<br/>`cend` | Iterador que apunta al final del recorrido. |
-| Iterador | `rbegin`<br/>`crbegin` | Iterador que apunta al inicio del recorrido inverso. |
-| Iterador | `rend`<br/>`crend` | Iterador que apunta al final del recorrido inverso. |
-| Capacidad | `empty` | Comprueba si la vista está vacía. |
-| Capacidad | `size`<br/>`length` | Devuelve el número de caracteres. |
-| Capacidad | `max_size` | Devuelve el tamaño máximo para cualquier cadena. |
-| Operaciones | `compare` | Compara dos vistas. |
-| Operaciones | `starts_with` | Comprueba si la vista empieza con un valor dado. |
-| Operaciones | `ends_with` | Comprueba si la vista termina con un valor dado. |
-| Operaciones | `substr` | Devuelve un fragmento de la vista. |
-| Operaciones | `copy` | Copia caracteres. |
-| Búsqueda | `find` | Busca la primera ocurrencia de un valor dado. |
-| Búsqueda | `rfind` | Busca la última ocurrencia de un valor dado. |
-| Búsqueda | `find_first_of` | Busca la primera ocurrencia de un carácter dado. |
-| Búsqueda | `find_first_not_of` | Busca la primera ocurrencia que no sea el carácter dado. |
-| Búsqueda | `find_last_of` | Busca la última ocurrencia de un carácter dado. |
-| Búsqueda | `find_last_not_of` | Busca la última ocurrencia que no sea el carácter dado. |
-| Constantes | `npos` | Valor especial para definir que no se ha encontrado un valor, entre otros usos. |
+| Categoría | Tipos | Miembro | Descripción |
+|:---------:|:-----:|:-------:|:------------|
+| General | `basic_string`<br/>`basic_string_view` | `operator=` | Asignación de valores. |
+| General | `basic_string` | `assign` | Asigna caracteres a una cadena. |
+| Iterador | `basic_string`<br/>`basic_string_view` | `begin`<br/>`cbegin` | Iterador que apunta al inicio del recorrido. |
+| Iterador | `basic_string`<br/>`basic_string_view` | `end`<br/>`cend` | Iterador que apunta al final del recorrido. |
+| Iterador | `basic_string`<br/>`basic_string_view` | `rbegin`<br/>`crbegin` | Iterador que apunta al inicio del recorrido inverso. |
+| Iterador | `basic_string`<br/>`basic_string_view` | `rend`<br/>`crend` | Iterador que apunta al final del recorrido inverso. |
+| Acceso | `basic_string`<br/>`basic_string_view` | `at` | Accede a un carácter cualquiera, con comprobación de límites. |
+| Acceso | `basic_string`<br/>`basic_string_view` | `operator[]` | Accede a un carácter cualquiera. |
+| Acceso | `basic_string`<br/>`basic_string_view` | `front` | Accede al primer carácter. |
+| Acceso | `basic_string`<br/>`basic_string_view` | `back` | Accede al último carácter. |
+| Acceso | `basic_string`<br/>`basic_string_view` | `data` | Accede al puntero al primer carácter. |
+| Acceso | `basic_string` | `c_str` | Devuelve una versión inmutable de la cadena en estilo C. |
+| Acceso | `basic_string` | `operator basic_string_view` | Devuelve una vista inmutable de la cadena. |
+| Capacidad | `basic_string`<br/>`basic_string_view` | `empty` | Comprueba si la cadena está vacía. |
+| Capacidad | `basic_string`<br/>`basic_string_view` | `size`<br/>`length` | Devuelve el número de caracteres. |
+| Capacidad | `basic_string`<br/>`basic_string_view` | `max_size` | Devuelve el tamaño máximo para cualquier cadena. |
+| Capacidad | `basic_string` | `capacity` | Devuelve el número máximo de caracteres actualmente reservado. |
+| Capacidad | `basic_string` | `reserve` | Reserva espacio en la memoria. |
+| Capacidad | `basic_string` | `shrink_to_fit` | Reduce el espacio reservado al tamaño actual de la cadena. |
+| Operaciones | `basic_string` | `append` | Añade caracteres al final. |
+| Operaciones | `basic_string` | `operator+=` | Añade caracteres al final. |
+| Operaciones | `basic_string` | `clear` | Borra el contenido de la cadena. |
+| Operaciones | `basic_string` | `insert` | Inserta caracteres. |
+| Operaciones | `basic_string` | `erase` | Borra caracteres. |
+| Operaciones | `basic_string` | `push_back` | Añade un carácter al final. |
+| Operaciones | `basic_string` | `pop_back` | Elimina un carácter al final. |
+| Operaciones | `basic_string`<br/>`basic_string_view` | `compare` | Compara dos cadenas. |
+| Operaciones | `basic_string`<br/>`basic_string_view` | `starts_with` | Comprueba si la cadena empieza con un valor dado. |
+| Operaciones | `basic_string`<br/>`basic_string_view` | `ends_with` | Comprueba si la cadena termina con un valor dado. |
+| Operaciones | `basic_string`<br/>`basic_string_view` | `substr` | Devuelve un fragmento de la cadena. |
+| Operaciones | `basic_string`<br/>`basic_string_view` | `copy` | Copia caracteres. |
+| Operaciones | `basic_string` | `replace` | Sustituye una sección de la cadena. |
+| Operaciones | `basic_string` | `resize` | Modifica el espacio reservado en la memoria para la cadena. |
+| Operaciones | `basic_string` | `swap` | Intercambia el contenido de dos cadenas. |
+| Búsqueda | `basic_string`<br/>`basic_string_view` | `find` | Busca la primera ocurrencia de un valor dado. |
+| Búsqueda | `basic_string`<br/>`basic_string_view` | `rfind` | Busca la última ocurrencia de un valor dado. |
+| Búsqueda | `basic_string`<br/>`basic_string_view` | `find_first_of` | Busca la primera ocurrencia de un carácter dado. |
+| Búsqueda | `basic_string`<br/>`basic_string_view` | `find_first_not_of` | Busca la primera ocurrencia que no sea el carácter dado. |
+| Búsqueda | `basic_string`<br/>`basic_string_view` | `find_last_of` | Busca la última ocurrencia de un carácter dado. |
+| Búsqueda | `basic_string`<br/>`basic_string_view` | `find_last_not_of` | Busca la última ocurrencia que no sea el carácter dado. |
+| Constantes | `basic_string`<br/> `basic_string_view` | `npos` | Valor especial para definir que no se ha encontrado un valor, entre otros usos. |
 
 Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
 
-| Categoría | Función | Descripción |
-|:---------:|:-------:|:------------|
-| General | `operator==`<br/>`operator!=`<br/>`operator<`<br/>`operator>`<br/>`operator<=`<br/>`operator>=`<br/>`operator<=>` | Compara dos vistas. |
-| E/S | `operator<<` | Salida de vistas por consola. |
-| Literales | `operator""sv` | Convierte un literal a una vista. |
-| Ayuda | `hash<T>` | Devuelve el código hash para una vista. |
+| Categoría | Tipos | Miembro | Descripción |
+|:---------:|:-----:|:-------:|:------------|
+| General | `basic_string` | `operator+` | Concatena dos cadenas. |
+| General | `basic_string`<br/>`basic_string_view` | `operator==`<br/>`operator!=`<br/>`operator<`<br/>`operator>`<br/>`operator<=`<br/>`operator>=`<br/>`operator<=>` | Compara dos cadenas. |
+| General | `basic_string` | `erase`<br/>`erase_if` | Elimina caracteres dentro de la cadena. |
+| General | `basic_string` | `swap` | Intercambia el contenido de dos cadenas. |
+| E/S | `basic_string` | `operator>>` | Entrada de cadenas por consola. |
+| E/S | `basic_string`<br/>`basic_string_view` | `operator<<` | Salida de cadenas por consola. |
+| E/S | `basic_string` | `getline` | Lee una línea de la consola para almacenarla en una cadena. |
+| Conversiones | `basic_string` | `stoi`<br/>`stol`<br/>`stoll` | Convierte una cadena a un entero con signo. |
+| Conversiones | `basic_string` | `stoul`<br/>`stoull` | Convierte una cadena a un entero sin signo. |
+| Conversiones | `basic_string` | `stof`<br/>`stod`<br/>`stold` | Convierte una cadena a un número de coma flotante. |
+| Conversiones | `basic_string` | `to_string`<br/>`to_wstring` | Convierte números a una cadena. |
+| Literales | `basic_string` | `operator""s` | Convierte un literal a cadena. |
+| Literales | `basic_string_view` | `operator""sv` | Convierte un literal a una vista. |
+| Útiles | `basic_string`<br/>`basic_string_view` | `hash<T>` | Devuelve el código hash para un valor. |
 
 Además de lo anterior tenemos una serie de [funciones](https://en.cppreference.com/w/cpp/string/byte) heredadas de la biblioteca estándar C, para comprobar y transformar, tanto caracteres como cadenas de estilo C.
 
@@ -2362,13 +2325,105 @@ Para manejar [expresiones regulares](https://en.cppreference.com/w/cpp/regex), e
 
 ### Contenedores
 
-..
+Estos son los contenedores principales de la biblioteca estándar:
 
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | ` ` | . |
+| Tipo | Descripción |
+|:----:|:------------|
+| [`std::array<T,N>`](https://en.cppreference.com/w/cpp/container/array) | Array de tamaño fijo. |
+| [`std::vector<T>`](https://en.cppreference.com/w/cpp/container/vector) | Array de tamaño dinámico. |
+| [`std::deque<T>`](https://en.cppreference.com/w/cpp/container/deque) | Cola doblemente encabezada. |
+| [`std::list<T>`](https://en.cppreference.com/w/cpp/container/list) | Lista doblemente enlazada. |
+| [`std::forward_list<T>`](https://en.cppreference.com/w/cpp/container/forward_list) | Lista simplemente enlazada. |
+| [`std::map<K,T>`](https://en.cppreference.com/w/cpp/container/map) | Diccionario clave-valor, sin repetición de claves. |
+| [`std::multimap<K,T>`](https://en.cppreference.com/w/cpp/container/multimap) | Diccionario clave-valor, con repetición de claves. |
+| [`std::unordered_map<K,T>`](https://en.cppreference.com/w/cpp/container/unordered_map) | Diccionario clave-valor, sin repetición de claves y organizadas mediante valores hash. |
+| [`std::unordered_multimap<K,T>`](https://en.cppreference.com/w/cpp/container/unordered_multimap) | Diccionario clave-valor, con repetición de claves y organizadas mediante valores hash. |
+| [`std::set<T>`](https://en.cppreference.com/w/cpp/container/set) | Conjunto de valores sin repetición. |
+| [`std::multiset<T>`](https://en.cppreference.com/w/cpp/container/multiset) | Conjunto de valores con repetición. |
+| [`std::unordered_set<T>`](https://en.cppreference.com/w/cpp/container/unordered_set) | Conjunto de valores sin repetición y organizados mediante valores hash. |
+| [`std::unordered_multiset<T>`](https://en.cppreference.com/w/cpp/container/unordered_multiset) | Conjunto de valores con repetición y organizados mediante valores hash. |
+| [`std::stack<T>`](https://en.cppreference.com/w/cpp/container/stack) | Pila de elementos (LIFO). |
+| [`std::queue<T>`](https://en.cppreference.com/w/cpp/container/queue) | Cola de elementos (FIFO). |
+| [`std::priority_queue<T>`](https://en.cppreference.com/w/cpp/container/priority_queue) | Cola de elementos con prioridades. |
+| [`std::span<T>`](https://en.cppreference.com/w/cpp/container/span) | Vista mutable de un contenedor. |
 
-..
+Donde `T` es el tipo de los elementos del contenedor, `N` es un entero con el tamaño del contenedor y `K` es el tipo de las claves del contenedor. Entonces, los miembros principales que disponemos para trabajar con contenedores son:
+
+| Categoría | Tipos | Miembro | Descripción |
+|:---------:|:-----:|:-------:|:------------|
+| General | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue`, `priority_queue`, `span` | `operator=` | Asignación de contenedores. |
+| General | `vector`, `deque`, `list`, `forward_list` | `assign` | Asigna elementos a un contenedor. |
+| Iterador | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `span` | `begin`<br/>`cbegin` | Iterador que apunta al inicio del recorrido. |
+| Iterador | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `span` | `end`<br/>`cend` | Iterador que apunta al final del recorrido. |
+| Iterador | `array`, `vector`, `deque`, `list`, `map`, `multimap`, `set`, `multiset`, `span` | `rbegin`<br/>`crbegin` | Iterador que apunta al inicio del recorrido inverso. |
+| Iterador | `array`, `vector`, `deque`, `list`, `map`, `multimap`, `set`, `multiset`, `span` | `rend`<br/>`crend` | Iterador que apunta al final del recorrido inverso. |
+| Iterador | `forward_list` | `before_begin`<br/>`cbefore_begin` | Iterador que apunta al elemento anterior al inicio del recorrido. |
+| Acceso | `array`, `vector`, `deque`, `map`, `unordered_map` | `at` | Accede a un elemento cualquiera, con comprobación de límites. |
+| Acceso | `array`, `vector`, `deque`, `map`, `unordered_map`, `span` | `operator[]` | Accede a un elemento cualquiera. |
+| Acceso | `array`, `vector`, `deque`, `list`, `forward_list`, `queue`, `span` | `front` | Accede al primer elemento. |
+| Acceso | `array`, `vector`, `deque`, `list`, `queue`, `span` | `back` | Accede al último elemento. |
+| Acceso  | `stack`, `priority_queue` | `top` | Accede al elemento en la cima. |
+| Acceso | `array`, `vector`, `span` | `data` | Accede al puntero al primer elemento. |
+| Capacidad | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue`, `priority_queue`, `span` | `empty` | Comprueba si el contenedor está vacío. |
+| Capacidad | `array`, `vector`, `deque`, `list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue`, `priority_queue`, `span` | `size` | Devuelve el número de elementos. |
+| Capacidad | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `max_size` | Devuelve el tamaño máximo para cualquier contenedor. |
+| Capacidad | `vector` | `capacity` | Devuelve el número máximo de elementos actualmente reservado. |
+| Capacidad | `vector`, `unordered_map`, `unordered_multimap`, `unordered_set`, `unordered_multiset` | `reserve` | Reserva espacio en la memoria. |
+| Capacidad | `vector`, `deque` | `shrink_to_fit` | Reduce el espacio reservado al tamaño actual del contenedor. |
+| Capacidad | `span` | `size_bytes` | Devuelve el tamaño de la secuencia en bytes. |
+| Operaciones | `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `clear` | Borra el contenido del contenedor. |
+| Operaciones | `vector`, `deque`, `list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `insert` | Inserta elementos. |
+| Operaciones | `vector`, `deque`, `list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `erase` | Borra elementos. |
+| Operaciones | `stack`, `queue`, `priority_queue` | `push` | Añade un elemento al contenedor. |
+| Operaciones | `stack`, `queue`, `priority_queue` | `pop` |  Elimina un elemento del contenedor. |
+| Operaciones | `vector`, `deque`, `list` | `push_back` | Añade un elemento al final. |
+| Operaciones | `vector`, `deque`, `list` | `pop_back` | Elimina un elemento al final. |
+| Operaciones | `deque`, `list`, `forward_list` | `push_front` | Añade un elemento al inicio. |
+| Operaciones | `deque`, `list`, `forward_list` | `pop_front` | Elimina un elemento al inicio. |
+| Operaciones | `vector`, `deque`, `list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue`, `priority_queue` | `emplace` | Añade elementos en una posición dada. |
+| Operaciones | `vector`, `deque`, `list` | `emplace_back` | Añade elementos al final del contenedor. |
+| Operaciones | `deque`, `list`, `forward_list` | `emplace_front` | Añade elementos al inicio del contenedor. |
+| Operaciones | `forward_list` | `insert_after` | Inserta elementos después de una posición dada. |
+| Operaciones | `forward_list` | `erase_after` | Borra elementos después de una posición dada. |
+| Operaciones | `forward_list` | `emplace_after` | Añade elementos después de una posición dada. |
+| Operaciones | `map`, `unordered_map` | `insert_or_assign` | Inserta un elemento o actualiza el valor si la clave ya existe. |
+| Operaciones | `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `emplace_hint` | Añade elementos en una posición dada. |
+| Operaciones | `map`, `unordered_map` | `try_emplace` | Añade elementos en una posición dada si la clave no existe. |
+| Operaciones | `array` | `fill` | Rellena el contenedor con un valor dado. |
+| Operaciones | `vector`, `deque`, `list`, `forward_list` | `resize` | Modifica el espacio reservado en la memoria para el contenedor. |
+| Operaciones | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue`, `priority_queue` | `swap` | Intercambia el contenido de dos contenedores. |
+| Operaciones | `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `merge` | Fusiona dos contenedores ordenados previamente. |
+| Operaciones | `list` | `splice` | Mueve elementos desde otro contenedor. |
+| Operaciones | `forward_list` | `splice_after` | Mueve elementos desde otro contenedor. |
+| Operaciones | `list`, `forward_list` | `remove`<br/>`remove_if` | Elimina elementos dentro del contenedor. |
+| Operaciones | `list`, `forward_list` | `reverse` | Invierte el orden de los elementos del contendor. |
+| Operaciones | `list`, `forward_list` | `unique` | Elimina duplicados consecutivos del contenedor. |
+| Operaciones | `list`, `forward_list` | `sort` | Ordena los elementos del contenedor. |
+| Operaciones | `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `extract` | Extrae elementos de otro contenedor. |
+| Búsqueda | `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `count` | Cuenta el número de apariciones de un elemento dentro del contenedor. |
+| Búsqueda | `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `find` | Busca un elemento dentro del contenedor. |
+| Búsqueda | `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `contains` | Comprueba si existe un elemento dentro del contenedor. |
+| Búsqueda | `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `equal_range` | Devuelve un rango de elementos que encaje con una clave. |
+| Búsqueda | `map`, `multimap`, `set`, `multiset` | `lower_bound` | Devuelve un iterador al primer elemento mayor o igual que una clave. |
+| Búsqueda | `map`, `multimap`, `set`, `multiset` | `upper_bound` | Devuelve un iterador al primer elemento mayor que una clave. |
+| Selección | `span` | `first` | Obtiene una selección de los primeros N elementos. |
+| Selección | `span` | `last` | Obtiene una selección de los últimos N elementos. |
+| Selección | `span` | `subspan` | Obtiene una selección de N elementos. |
+
+> El tipo `span` no dispone de los métodos `cbegin`, `cend`, `crbegin` y `crend`, para crear iteradores constantes.
+
+Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
+
+| Categoría | Tipos | Miembro | Descripción |
+|:---------:|:-----:|:-------:|:------------|
+| General | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue` | `operator==`<br/>`operator!=` | Compara dos contenedores. |
+| General | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `set`, `multiset`, `stack`, `queue` | `operator<`<br/>`operator>`<br/>`operator<=`<br/>`operator>=`<br/>`operator<=>` | Compara dos contenedores. |
+| General | `vector`, `deque`, `list`, `forward_list`, `multiset` | `erase` | Elimina elementos dentro del contenedor. |
+| General | `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset` | `erase_if` | Elimina elementos dentro del contenedor. |
+| General | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue`, `priority_queue` | `swap` | Intercambia el contenido de dos contenedores. |
+| General | `array` | `get<N>` | Accede a un elemento de un contenedor de tamaño fijo. |
+| Útiles | `array` | `tuple_element<T>` | Devuelve el tipo de los elementos del contenedor. |
+| Útiles | `array` | `tuple_size<T>` | Devuelve el tamaño del contenedor. |
 
 ### Iteradores
 
