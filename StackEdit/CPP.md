@@ -2543,36 +2543,52 @@ Los miembros principales que disponemos para trabajar con `basic_ostream` son:
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
 | General | `operator=` | Operador de asignación. |
-| | ` ` | . |
+| Salida | `operator<<` | Envía información con formato a la salida. |
+| Salida | `put` | Envía un carácter a la salida. |
+| Salida | `write` | Envía una cadena de texto a la salida. |
+| Posición | `tellp` | Devuelve la posición actual en el flujo. |
+| Posición | `seekp` | Modifica la posición actual en el flujo. |
+| Varios | `flush` | Sincroniza el flujo con el dispositivo subyacente. |
+| Varios | `swap` | Intercambio de flujos entre objetos. |
 
 Los miembros principales que disponemos para trabajar con `basic_istream` son:
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
 | General | `operator=` | Operador de asignación. |
-| | ` ` | . |
+| Salida  | `operator>>` | Obtiene información con formato de la entrada. |
+| Salida  | `get` | Obtiene un carácter de la entrada. |
+| Salida  | `peek` | Obtiene un carácter de la entrada sin eliminarlo del buffer. |
+| Salida  | `unget` | Recupera de vuelta el último carácter extraído del buffer de entrada, para volver a añadirlo al inicio del mismo. |
+| Salida  | `putback` | Añade un carácter al inicio del buffer de entrada. |
+| Salida  | `getline` | Obtiene una línea de texto de la entrada. |
+| Salida  | `ignore` | Descarta caracteres de la entrada hasta encontrar el valor dado como argumento. |
+| Salida  | `read` | Obtiene un bloque de tamaño fijo de texto de la entrada. |
+| Salida  | `readsome` | Obtiene un bloque de texto con lo que hay en el buffer de entrada. |
+| Salida  | `gcount` | Obtiene el número de caracteres obtenido por la última operación de lectura sin formato. |
+| Posición | `tellp` | Devuelve la posición actual en el flujo. |
+| Posición | `seekp` | Modifica la posición actual en el flujo. |
+| Varios | `sync` | Sincroniza el flujo con el dispositivo subyacente. |
+| Varios | `swap` | Intercambio de flujos entre objetos. |
 
 Los miembros principales que disponemos para trabajar con `basic_fstream` son:
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
 | General | `operator=` | Operador de asignación. |
-| | ` ` | . |
+| General | `swap` | Intercambio de flujos entre objetos. |
+| Operaciones | `is_open` | Comprueba si el flujo tiene un fichero abierto. |
+| Operaciones | `open` | Abre un fichero y lo asocia al flujo. |
+| Operaciones | `close` | Cierra el fichero asociado al flujo. |
 
 Los miembros principales que disponemos para trabajar con `basic_stringstream` son:
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
 | General | `operator=` | Operador de asignación. |
-| | ` ` | . |
-
-Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
-
-| Módulo | Miembro | Descripción |
-|:------:|:-------:|:------------|
-| | ` ` | . |
-
-..
+| General | `swap` | Intercambio de flujos entre objetos. |
+| Operaciones | `str` | Modifica u obtiene la cadena actual del flujo. |
+| Operaciones | `view` | Obtiene una vista a la cadena actual del flujo. |
 
 Para trabajar con la consola tenemos, en el módulo [`iostream`](https://en.cppreference.com/w/cpp/header/iostream), los objetos [`std::cout`](https://en.cppreference.com/w/cpp/io/cout) para la salida estándar, [`std::cin`](https://en.cppreference.com/w/cpp/io/cin) para la entrada estándar, [`std::cerr`](https://en.cppreference.com/w/cpp/io/cerr) para la salida de errores estándar. Estos objetos trabajan con ASCII, usando el tipo `char`, pero para Unicode tenemos `std::wcout`, `std::wcin` y `std::wcerr`, usando el tipo `wchar_t`.
 
@@ -2592,6 +2608,50 @@ int main () {
 ```
 
 Con la función estática `global`, podemos pasarle una configuración determinada para la localización, que para ello construimos un objeto `std::locale` indicando con una cadena el lenguaje o configuración a usar. Por temas históricos, la configuración `C` es la utilizada por defecto en C, pero si queremos usar texto en español podemos usar valores como `es_ES`, `es` o `spanish`, entre otras.
+
+> Por defecto, la biblioteca estándar de C++, tiene activada la compatibilidad con la E/S de C. Si no se necesita las funciones del estándar de C para la E/S, se puede desactivar la compatibilidad con la función [`sync_with_stdio`](https://en.cppreference.com/w/cpp/io/ios_base/sync_with_stdio) con la sentencia `std::ios_base::sync_with_stdio(false);`.
+
+Además tenemos las siguientes [funciones](https://en.cppreference.com/w/cpp/io/manip) dentro del espacio de nombres `std`, que se pueden usar con los operadores de entrada `>>` y salida `<<`, para dar formato a dichas operaciones:
+
+| Módulo | Miembro | Descripción |
+|:------:|:-------:|:------------|
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `boolalpha`<br/>`noboolalpha` | Activa o desactiva la representación alfabética de los booleanos. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `showbase`<br/>`noshowbase` | Activa o desactiva el uso del prefijo que indica la base numérica. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `showpoint`<br/>`noshowpoint` | Activa o desactiva si se debe mostrar siempre el punto decimal en números reales. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `showpos`<br/>`noshowpos` | Activa o desactiva si se debe mostrar siempre el signo positivo en números. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `skipws`<br/>`noskipws` | Activa o desactiva si se deben descartar lo espacios en blanco iniciales con la entrada. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `uppercase`<br/>`nouppercase` | Activa o desactiva si el texto ha de estar sólo en mayúsculas. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `unitbuf`<br/>`nounitbuf` | Activa o desactiva si se debe procesar el buffer de salida con cada operación de salida. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `internal`<br/>`left`<br/>`right` | Configura la alineación del texto en la columna actual. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `dec`<br/>`hex`<br/>`oct` | Configura la base numérica a usar para los enteros. |
+| [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `fixed`<br/>`scientific`<br/>`hexfloat`<br/>`defaultfloat` | Configura el formato usado para los números reales. |
+| [`istream`](https://en.cppreference.com/w/cpp/header/istream) | `ws` | Descarta los espacios en blanco iniciales de la entrada. |
+| [`ostream`](https://en.cppreference.com/w/cpp/header/ostream) | `ends` | Inserta el carácter nulo (`'\0'`) en un flujo de salida. |
+| [`ostream`](https://en.cppreference.com/w/cpp/header/ostream) | `flush` | Limpia el buffer de salida procesando su contenido. |
+| [`ostream`](https://en.cppreference.com/w/cpp/header/ostream) | `endl` | Inserta un salto de línea (`'\n'`) y limpia el buffer de salida procesando su contenido. |
+| [`ostream`](https://en.cppreference.com/w/cpp/header/ostream) | `emit_on_flush`<br/>`noemit_on_flush` | Controla cuándo se emite un `basic_syncbuf` al limpiar el buffer. |
+| [`ostream`](https://en.cppreference.com/w/cpp/header/ostream) | `flush_emit` | Limpia el buffer y emite su contenido si está usando un `basic_syncbuf`. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `resetiosflags` | Limpia los `ios_base` flags indicados. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `setiosflags` | Activa los `ios_base` flags indicados. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `setbase` | Modifica los `ios_base` flags indicados. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `setfill` | Modifica el carácter de relleno. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `setprecision` | Modifica la precisión de la parte decimal de los números reales. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `setw` | Modifica el ancho de columna para las operaciones de E/S. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `get_money` | Obtiene un valor de tipo monetario. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `put_money` | Envía un valor de tipo monetario. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `get_time` | Obtiene un valor de tipo fecha o tiempo. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `put_time` | Envía un valor de tipo fecha o tiempo. |
+| [`iomanip`](https://en.cppreference.com/w/cpp/header/iomanip) | `quoted` | Inserta y extrae cadenas con comillas con espacios embebidos. |
+
+### Sistema de ficheros
+
+..
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
+
+..
 
 ### Concurrencia
 
