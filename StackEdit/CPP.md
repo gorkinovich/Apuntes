@@ -2258,7 +2258,7 @@ Los miembros principales que disponemos para trabajar con cadenas son:
 
 | Categoría | Tipos | Miembro | Descripción |
 |:---------:|:-----:|:-------:|:------------|
-| General | `basic_string`<br/>`basic_string_view` | `operator=` | Asignación de valores. |
+| General | `basic_string`<br/>`basic_string_view` | `operator=` | Operador de asignación. |
 | General | `basic_string` | `assign` | Asigna caracteres a una cadena. |
 | Iterador | `basic_string`<br/>`basic_string_view` | `begin`<br/>`cbegin` | Iterador que apunta al inicio del recorrido. |
 | Iterador | `basic_string`<br/>`basic_string_view` | `end`<br/>`cend` | Iterador que apunta al final del recorrido. |
@@ -2327,31 +2327,31 @@ Para manejar [expresiones regulares](https://en.cppreference.com/w/cpp/regex), e
 
 Estos son los contenedores principales de la biblioteca estándar:
 
-| Tipo | Descripción |
-|:----:|:------------|
-| [`std::array<T,N>`](https://en.cppreference.com/w/cpp/container/array) | Array de tamaño fijo. |
-| [`std::vector<T>`](https://en.cppreference.com/w/cpp/container/vector) | Array de tamaño dinámico. |
-| [`std::deque<T>`](https://en.cppreference.com/w/cpp/container/deque) | Cola doblemente encabezada. |
-| [`std::list<T>`](https://en.cppreference.com/w/cpp/container/list) | Lista doblemente enlazada. |
-| [`std::forward_list<T>`](https://en.cppreference.com/w/cpp/container/forward_list) | Lista simplemente enlazada. |
-| [`std::map<K,T>`](https://en.cppreference.com/w/cpp/container/map) | Diccionario clave-valor, sin repetición de claves. |
-| [`std::multimap<K,T>`](https://en.cppreference.com/w/cpp/container/multimap) | Diccionario clave-valor, con repetición de claves. |
-| [`std::unordered_map<K,T>`](https://en.cppreference.com/w/cpp/container/unordered_map) | Diccionario clave-valor, sin repetición de claves y organizadas mediante valores hash. |
-| [`std::unordered_multimap<K,T>`](https://en.cppreference.com/w/cpp/container/unordered_multimap) | Diccionario clave-valor, con repetición de claves y organizadas mediante valores hash. |
-| [`std::set<T>`](https://en.cppreference.com/w/cpp/container/set) | Conjunto de valores sin repetición. |
-| [`std::multiset<T>`](https://en.cppreference.com/w/cpp/container/multiset) | Conjunto de valores con repetición. |
-| [`std::unordered_set<T>`](https://en.cppreference.com/w/cpp/container/unordered_set) | Conjunto de valores sin repetición y organizados mediante valores hash. |
-| [`std::unordered_multiset<T>`](https://en.cppreference.com/w/cpp/container/unordered_multiset) | Conjunto de valores con repetición y organizados mediante valores hash. |
-| [`std::stack<T>`](https://en.cppreference.com/w/cpp/container/stack) | Pila de elementos (LIFO). |
-| [`std::queue<T>`](https://en.cppreference.com/w/cpp/container/queue) | Cola de elementos (FIFO). |
-| [`std::priority_queue<T>`](https://en.cppreference.com/w/cpp/container/priority_queue) | Cola de elementos con prioridades. |
-| [`std::span<T>`](https://en.cppreference.com/w/cpp/container/span) | Vista mutable de un contenedor. |
+| Tipo | Módulo | Descripción |
+|:----:|:------:|:------------|
+| [`std::array<T,N>`](https://en.cppreference.com/w/cpp/container/array) | [`array`](https://en.cppreference.com/w/cpp/header/array) | Array de tamaño fijo. |
+| [`std::vector<T>`](https://en.cppreference.com/w/cpp/container/vector) | [`vector`](https://en.cppreference.com/w/cpp/header/vector) | Array de tamaño dinámico. |
+| [`std::deque<T>`](https://en.cppreference.com/w/cpp/container/deque) | [`deque`](https://en.cppreference.com/w/cpp/header/deque) | Cola doblemente encabezada. |
+| [`std::list<T>`](https://en.cppreference.com/w/cpp/container/list) | [`list`](https://en.cppreference.com/w/cpp/header/list) | Lista doblemente enlazada. |
+| [`std::forward_list<T>`](https://en.cppreference.com/w/cpp/container/forward_list) | [`forward_list`](https://en.cppreference.com/w/cpp/header/forward_list) | Lista simplemente enlazada. |
+| [`std::map<K,T>`](https://en.cppreference.com/w/cpp/container/map) | [`map`](https://en.cppreference.com/w/cpp/header/map) | Diccionario clave-valor, sin repetición de claves. |
+| [`std::multimap<K,T>`](https://en.cppreference.com/w/cpp/container/multimap) | [`map`](https://en.cppreference.com/w/cpp/header/map) | Diccionario clave-valor, con repetición de claves. |
+| [`std::unordered_map<K,T>`](https://en.cppreference.com/w/cpp/container/unordered_map) | [`unordered_map`](https://en.cppreference.com/w/cpp/header/unordered_map) | Diccionario clave-valor, sin repetición de claves y organizadas mediante valores hash. |
+| [`std::unordered_multimap<K,T>`](https://en.cppreference.com/w/cpp/container/unordered_multimap) | [`unordered_map`](https://en.cppreference.com/w/cpp/header/unordered_map) | Diccionario clave-valor, con repetición de claves y organizadas mediante valores hash. |
+| [`std::set<T>`](https://en.cppreference.com/w/cpp/container/set) | [`set`](https://en.cppreference.com/w/cpp/header/set) | Conjunto de valores sin repetición. |
+| [`std::multiset<T>`](https://en.cppreference.com/w/cpp/container/multiset) | [`set`](https://en.cppreference.com/w/cpp/header/set) | Conjunto de valores con repetición. |
+| [`std::unordered_set<T>`](https://en.cppreference.com/w/cpp/container/unordered_set) | [`unordered_set`](https://en.cppreference.com/w/cpp/header/unordered_set) | Conjunto de valores sin repetición y organizados mediante valores hash. |
+| [`std::unordered_multiset<T>`](https://en.cppreference.com/w/cpp/container/unordered_multiset) | [`unordered_set`](https://en.cppreference.com/w/cpp/header/unordered_set) | Conjunto de valores con repetición y organizados mediante valores hash. |
+| [`std::stack<T>`](https://en.cppreference.com/w/cpp/container/stack) | [`stack`](https://en.cppreference.com/w/cpp/header/stack) | Pila de elementos (LIFO). |
+| [`std::queue<T>`](https://en.cppreference.com/w/cpp/container/queue) | [`queue`](https://en.cppreference.com/w/cpp/header/queue) | Cola de elementos (FIFO). |
+| [`std::priority_queue<T>`](https://en.cppreference.com/w/cpp/container/priority_queue) | [`queue`](https://en.cppreference.com/w/cpp/header/queue) | Cola de elementos con prioridades. |
+| [`std::span<T>`](https://en.cppreference.com/w/cpp/container/span) | [`span`](https://en.cppreference.com/w/cpp/header/span) | Vista mutable de un contenedor. |
 
 Donde `T` es el tipo de los elementos del contenedor, `N` es un entero con el tamaño del contenedor y `K` es el tipo de las claves del contenedor. Entonces, los miembros principales que disponemos para trabajar con contenedores son:
 
 | Categoría | Tipos | Miembro | Descripción |
 |:---------:|:-----:|:-------:|:------------|
-| General | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue`, `priority_queue`, `span` | `operator=` | Asignación de contenedores. |
+| General | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue`, `priority_queue`, `span` | `operator=` | Operador de asignación. |
 | General | `vector`, `deque`, `list`, `forward_list` | `assign` | Asigna elementos a un contenedor. |
 | Iterador | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `span` | `begin`<br/>`cbegin` | Iterador que apunta al inicio del recorrido. |
 | Iterador | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `span` | `end`<br/>`cend` | Iterador que apunta al final del recorrido. |
@@ -2477,13 +2477,121 @@ Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
 
 ### Entrada/Salida
 
-..
+Estos son los [tipos principales](https://en.cppreference.com/w/cpp/io) de la biblioteca estándar para manejar la entrada y salida:
+
+| Tipo | Módulo | `char` | `wchar_t` | Descripción |
+|:----:|:------:|:------:|:---------:|:------------|
+| [`std::ios_base`](https://en.cppreference.com/w/cpp/io/ios_base) | [`ios`](https://en.cppreference.com/w/cpp/header/ios) |  |  | Gestiona los flags para formatear la entrada y salida, así como las excepciones. |
+| [`std::basic_ios<T>`](https://en.cppreference.com/w/cpp/io/basic_ios) | [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `std::ios` | `std::wios` | Gestiona flujos de datos arbitrarios. |
+| [`std::basic_ostream<T>`](https://en.cppreference.com/w/cpp/io/basic_ostream) | [`ostream`](https://en.cppreference.com/w/cpp/header/ostream) | `std::ostream` | `std::wostream` | Encapsula un dispositivo abstracto para operaciones de salida. |
+| [`std::basic_istream<T>`](https://en.cppreference.com/w/cpp/io/basic_istream) | [`istream`](https://en.cppreference.com/w/cpp/header/istream) | `std::istream` | `std::wistream` | Encapsula un dispositivo abstracto para operaciones de entrada. |
+| [`std::basic_iostream<T>`](https://en.cppreference.com/w/cpp/io/basic_iostream) | [`istream`](https://en.cppreference.com/w/cpp/header/istream) | `std::iostream` | `std::wiostream` | Encapsula un dispositivo abstracto para operaciones de entrada y salida. |
+| [`std::basic_ostringstream<T>`](https://en.cppreference.com/w/cpp/io/basic_ostringstream) | [`sstream`](https://en.cppreference.com/w/cpp/header/sstream) | `std::ostringstream` | `std::wostringstream` | Encapsula un dispositivo de cadenas para operaciones de salida. |
+| [`std::basic_istringstream<T>`](https://en.cppreference.com/w/cpp/io/basic_istringstream) | [`sstream`](https://en.cppreference.com/w/cpp/header/sstream) | `std::istringstream` | `std::wistringstream` | Encapsula un dispositivo de cadenas para operaciones de entrada. |
+| [`std::basic_stringstream<T>`](https://en.cppreference.com/w/cpp/io/basic_stringstream) | [`sstream`](https://en.cppreference.com/w/cpp/header/sstream) | `std::stringstream` | `std::wstringstream` | Encapsula un dispositivo de cadenas para operaciones de entrada y salida. |
+| [`std::basic_ofstream<T>`](https://en.cppreference.com/w/cpp/io/basic_ofstream) | [`fstream`](https://en.cppreference.com/w/cpp/header/fstream) | `std::ofstream` | `std::wofstream` | Encapsula un fichero para operaciones de salida. |
+| [`std::basic_ifstream<T>`](https://en.cppreference.com/w/cpp/io/basic_ifstream) | [`fstream`](https://en.cppreference.com/w/cpp/header/fstream) | `std::ifstream` | `std::wifstream` | Encapsula un fichero para operaciones de entrada. |
+| [`std::basic_fstream<T>`](https://en.cppreference.com/w/cpp/io/basic_fstream) | [`fstream`](https://en.cppreference.com/w/cpp/header/fstream) | `std::fstream` | `std::wfstream` | Encapsula un fichero para operaciones de entrada y salida. |
+
+Los miembros principales que disponemos para trabajar con `ios_base` son:
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
+| General | `operator=` | Operador de asignación. |
+| Formato | `flags` | Modifica los flags de formato. |
+| Formato | `setf` | Activa flags de formato. |
+| Formato | `unsetf` | Desactiva flags de formato. |
+| Formato | `precision` | Configura la precisión de la parte decimal en números reales. |
+| Formato | `width` | Configura el ancho de columna. |
+| Localización | `imbue` | Cambia la configuración para la localización. |
+| Localización | `getloc` | Obtiene la configuración para la localización. |
+
+También como parte de `ios_base` tenemos los siguientes tipos y valores definidos, a los que se puede acceder usando `std::ios` o `std::wios`:
+
+| Tipo | Descripción | Valores |
+|:----:|:------------|:--------|
+| [`openmode`](https://en.cppreference.com/w/cpp/io/ios_base/openmode) | Modo de apertura del flujo. | `app`: Se sitúa al final del flujo después de cada escritura.<br/>`binary`: Abre el flujo en modo binario.<br/>`in`: Abre el flujo para lectura.<br/>`out`: Abre el flujo para escritura.<br/>`trunc`: Borra el contenido del flujo al abrirlo.<br/>`ate`: Se sitúa al final del flujo después de abrirlo. |
+| [`fmtflags`](https://en.cppreference.com/w/cpp/io/ios_base/fmtflags) | Flags de formato. | `dec`: Usa la notación decimal para números enteros.<br/>`oct`: Usa la notación octal para números enteros.<br/>`hex`: Usa la notación hexadecimal para números enteros.<br/>`basefield`: `dec | oct | hex`.<br/>`left`: Ajuste a la izquierda.<br/>`right`: Ajuste a la derecha.<br/>`internal`: Ajuste interno.<br/>`adjustfield`: `left | right | internal`.<br/>`scientific`: Muestra tipos de coma flotante con notación científica.<br/>`fixed`: Muestra tipos de coma flotante con notación fija.<br/>`floatfield`: `scientific | fixed`.<br/>`boolalpha`: Muestra los valores booleanos de forma alfabética.<br/>`showbase`: Muestra un prefijo para indicar la base de un número entero.<br/>`showpoint`: Muestra siempre el separador decimal con números reales.<br/>`showpos`: Muestra el signo `+` para números positivos.<br/>`skipws`: Descarta los espacios en blanco iniciales con operaciones de entrada.<br/>`unitbuf`: Procesa el buffer de salida con cada operación de salida.<br/>`uppercase`: Salida en mayúsculas. |
+| [`iostate`](https://en.cppreference.com/w/cpp/io/ios_base/iostate) | Estado del flujo. | `goodbit`: Sin errores.<br/>`badbit`: Error de flujo irrecuperable.<br/>`failbit`: Operación de E/S fallida.<br/>`eofbit`: La entrada ha alcanzado el final de fichero. |
+| [`seekdir`](https://en.cppreference.com/w/cpp/io/ios_base/seekdir) | Posición de partida para desplazarse. | `beg`: Inicio del flujo.<br/>`end`: Final del flujo.<br/>`cur`: Posición actual del flujo. |
+
+Los miembros principales que disponemos para trabajar con `basic_ios` son:
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator=` | Operador de asignación. |
+| Estado | `good` | Comprueba que no ha ocurrido ningún error de E/S. |
+| Estado | `eof` | Comprueba si se ha llegado al final de fichero. |
+| Estado | `fail` | Comprueba que si ha ocurrido algún error de E/S. |
+| Estado | `bad` | Comprueba que si ha ocurrido algún error irrecuperable de E/S. |
+| Estado | `operator!` | Comprueba que si ha ocurrido algún error de E/S. |
+| Estado | `operator bool` | Comprueba que no ha ocurrido ningún error de E/S. |
+| Estado | `rdstate` | Devuelve los flags de estado del flujo. |
+| Estado | `setstate` | Modifica los flags de estado del flujo. |
+| Estado | `clear` | Borra los flags de estado del flujo. |
+| Formato | `copyfmt` | Copia la información de formato. |
+| Formato | `fill` | Configura el carácter de relleno. |
+| Varios | `exceptions` | Gestiona la máscara de excepciones. |
+| Varios | `imbue` | Cambia la configuración para la localización. |
+| Varios | `rdbuf` | Gestiona el buffer asociado al flujo. |
+| Varios | `tie` | Gestiona el flujo enlazado. |
+| Varios | `narrow` | Convierte un carácter a su equivalente estándar. |
+| Varios | `widen` | Convierte un carácter a su equivalente local. |
+
+Los miembros principales que disponemos para trabajar con `basic_ostream` son:
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator=` | Operador de asignación. |
+| | ` ` | . |
+
+Los miembros principales que disponemos para trabajar con `basic_istream` son:
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator=` | Operador de asignación. |
+| | ` ` | . |
+
+Los miembros principales que disponemos para trabajar con `basic_fstream` son:
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator=` | Operador de asignación. |
+| | ` ` | . |
+
+Los miembros principales que disponemos para trabajar con `basic_stringstream` son:
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| General | `operator=` | Operador de asignación. |
+| | ` ` | . |
+
+Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
+
+| Módulo | Miembro | Descripción |
+|:------:|:-------:|:------------|
 | | ` ` | . |
 
 ..
+
+Para trabajar con la consola tenemos, en el módulo [`iostream`](https://en.cppreference.com/w/cpp/header/iostream), los objetos [`std::cout`](https://en.cppreference.com/w/cpp/io/cout) para la salida estándar, [`std::cin`](https://en.cppreference.com/w/cpp/io/cin) para la entrada estándar, [`std::cerr`](https://en.cppreference.com/w/cpp/io/cerr) para la salida de errores estándar. Estos objetos trabajan con ASCII, usando el tipo `char`, pero para Unicode tenemos `std::wcout`, `std::wcin` y `std::wcerr`, usando el tipo `wchar_t`.
+
+Para enviar un mensaje a la pantalla se utiliza el operador `<<` con `std::cout` o `std::cerr`, ya que son de tipo `std::ostream`. Mientras que para obtener un valor se usa `>>` con `std::cin`, ya que es de tipo `std:istream`.
+
+Para una correcta localización, a la hora de mostrar texto por la consola, podemos usar la función [`setlocale`](https://en.cppreference.com/w/cpp/locale/setlocale) de C, pero en C++ existe el tipo [`std::locale`](https://en.cppreference.com/w/cpp/locale/locale), en el módulo [`locale`](https://en.cppreference.com/w/cpp/header/locale). Por ejemplo:
+
+```cpp
+#include<iostream>
+
+int main () {
+    std::locale::global(std::locale("es_ES"));
+    std::cout << "¡Hola España!\n";
+    std::locale::global(std::locale("C"));
+    std::cout << "¡Adios España!\n";
+}
+```
+
+Con la función estática `global`, podemos pasarle una configuración determinada para la localización, que para ello construimos un objeto `std::locale` indicando con una cadena el lenguaje o configuración a usar. Por temas históricos, la configuración `C` es la utilizada por defecto en C, pero si queremos usar texto en español podemos usar valores como `es_ES`, `es` o `spanish`, entre otras.
 
 ### Concurrencia
 
@@ -2494,12 +2602,4 @@ Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
 | | ` ` | . |
 
 ..
-
-```cpp
-// Fichero: .cpp
-#include<iostream>
-
-int main () {
-}
-```
 
