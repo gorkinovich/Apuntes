@@ -2495,13 +2495,115 @@ Con C++20 se incorporó el concepto de los [rangos](https://en.cppreference.com/
 | Adaptador | `std::ranges::keys_view`<br/>`std::views::keys` | Una vista que selecciona el primer campo de una tupla clave-valor. |
 | Adaptador | `std::ranges::values_view`<br/>`std::views::values` | Una vista que selecciona el segundo campo de una tupla clave-valor. |
 
+> Los adaptadores se pueden combinar utilizando el operador `|`. Por ejemplo, si `v` es una secuencia de números, `v | std::views::take(3) | std::views::reverse` devolverá una vista que recorrerá al revés los primeros tres elementos de la secuencia.
+
 ### Algoritmos
 
-..
+La biblioteca estándar dispone de una serie de [algoritmos](https://en.cppreference.com/w/cpp/algorithm) genéricos, en el módulo [`algorithm`](https://en.cppreference.com/w/cpp/header/algorithm), para trabajar con contenedores, iteradores y rangos. El primera tabla son funciones que no modifican la secuencia:
 
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | ` ` | . |
+| Función | Función (Rangos) | Descripción |
+|:-------:|:----------------:|:------------|
+| `std::all_of` | `std::ranges::all_of` | Comprueba si se cumple un predicado para todos los elementos de una secuencia. |
+| `std::any_of` | `std::ranges::any_of` | Comprueba si se cumple un predicado para algún elemento de una secuencia. |
+| `std::none_of` | `std::ranges::none_of` | Comprueba si se cumple un predicado para ningún elemento de una secuencia. |
+| `std::for_each` | `std::ranges::for_each` | Aplica una función a cada elemento de una secuencia. |
+| `std::for_each_n` | `std::ranges::for_each_n` | Aplica una función a los N primeros elementos de una secuencia. |
+| `std::count`<br/>`std::count_if` | `std::ranges::count`<br/>`std::ranges::count_if` | Obtiene el número de elementos de una secuencia que cumple un criterio específico. |
+| `std::mismatch` | `std::ranges::mismatch` | Encuentra la primera posición donde dos secuencias difieren. |
+| `std::find`<br/>`std::find_if`<br/>`std::find_if_not` | `std::ranges::find`<br/>`std::ranges::find_if`<br/>`std::ranges::find_if_not` | Busca el primer elemento de una secuencia que cumpla un criterio específico. |
+| `std::find_end` | `std::ranges::find_end` | Busca en una secuencia de elementos la última posición de una determinada secuencia dada. |
+| `std::find_first_of` | `std::ranges::find_first_of` | Busca un elemento cualquier dentro de un conjunto dado. |
+| `std::adjacent_find` | `std::ranges::adjacent_find` | Busca los dos primeros elementos adyacentes que son iguales o que cumplen un predicado dado. |
+| `std::search` | `std::ranges::search` | Busca una secuencia de elementos. |
+| `std::search_n` | `std::ranges::search_n` | Busca un número consecutivo de copias de un elemento en una secuencia. |
+
+La segunda tabla son funciones que modifican la secuencia:
+
+| Función | Función (Rangos) | Descripción |
+|:-------:|:----------------:|:------------|
+| `std::copy`<br/>`std::copy_if` | `std::ranges::copy`<br/>`std::ranges::copy_if` | Copia una secuencia de elementos a una nueva localización. |
+| `std::copy_n` | `std::ranges::copy_n` | Copia un número de elementos a una nueva localización. |
+| `std::copy_backward` | `std::ranges::copy_backward` | Copia una secuencia de elementos en sentido inverso a una nueva localización. |
+| `std::move` | `std::ranges::move` | Mueve una secuencia de elementos a una nueva localización. |
+| `std::move_backward` | `std::ranges::move_backward` | Mueve una secuencia de elementos en sentido inverso a una nueva localización. |
+| `std::fill` | `std::ranges::fill` | Copia y asigna un valor a los elementos de una secuencia. |
+| `std::fill_n` | `std::ranges::fill_n` | Copia y asigna un valor a un número de elementos en una secuencia. |
+| `std::transform` | `std::ranges::transform` | Aplica una función a una secuencia de elementos y almacena el resultado en una nueva localización. |
+| `std::generate` | `std::ranges::generate` | Asigna el resultado de llamar sucesivas veces a una función a los elementos de una secuencia. |
+| `std::generate_n` | `std::ranges::generate_n` | Asigna el resultado de llamar sucesivas veces a una función a un número de elementos en una secuencia. |
+| `std::remove`<br/>`std::remove_if` | `std::ranges::remove`<br/>`std::ranges::remove_if` | Elimina elementos de una secuencia que cumplan un criterio específico. |
+| `std::remove_copy`<br/>`std::remove_copy_if` | `std::ranges::remove_copy`<br/>`std::ranges::remove_copy_if` | Copia los elementos de una secuencia, omitiendo aquellos que cumplan un criterio específico. |
+| `std::replace`<br/>`std::replace_if` | `std::ranges::replace`<br/>`std::ranges::replace_if` | Sustituye con un valor dado aquellos elementos de una secuencia que cumplan un criterio específico. |
+| `std::replace_copy`<br/>`std::replace_copy_if` | `std::ranges::replace_copy`<br/>`std::ranges::replace_copy_if` | Copia los elementos de una secuencia, sustituyendo con un valor dado aquellos que cumplan un criterio específico. |
+| `std::swap` | - | Intercambia los valores de dos objetos. |
+| `std::swap_ranges` | `std::ranges::swap_ranges` | Intercambia los valores de dos secuencias. |
+| `std::iter_swap` | - | Intercambia los valores apuntados por dos iteradores. |
+| `std::reverse` | `std::ranges::reverse` | Invierte el orden de una secuencia de elementos. |
+| `std::reverse_copy` | `std::ranges::reverse_copy` | Crea una copia con el orden invertido de una secuencia de elementos. |
+| `std::rotate` | `std::ranges::rotate` | Rota el orden de una secuencia de elementos. |
+| `std::rotate_copy` | `std::ranges::rotate_copy` | Crea una copia con el orden de los elementos de una secuencia rotados. |
+| `std::shift_left`<br/>`std::shift_right` | - | Rota el valor de los elementos de una secuencia. |
+| `std::shuffle` | `std::ranges::shuffle` | Reordena aleatoriamente los elementos de una secuencia. |
+| `std::sample` | `std::ranges::sample` | Selecciona N elementos aleatoriamente de una secuencia. |
+| `std::unique` | `std::ranges::unique` | Elimina los duplicados consecutivos en una secuencia de elementos. |
+| `std::unique_copy` | `std::ranges::unique_copy` | Crea una copia de una secuencia de elementos donde se elimina los duplicados consecutivos. |
+
+La tercera tabla son funciones que particionan una secuencia:
+
+| Función | Función (Rangos) | Descripción |
+|:-------:|:----------------:|:------------|
+| `std::` | `std::ranges::` | . |
+
+..
+La cuarta tabla son funciones que ordenan una secuencia:
+
+| Función | Función (Rangos) | Descripción |
+|:-------:|:----------------:|:------------|
+| `std::` | `std::ranges::` | . |
+
+..
+La quinta tabla son funciones que trabajan con una secuencia ordenada:
+
+| Categoría | Función | Función (Rangos) | Descripción |
+|:---------:|:-------:|:----------------:|:------------|
+| Búsqueda | `std::` | `std::ranges::` | . |
+| Mezcla | `std::` | `std::ranges::` | . |
+| Conjunto | `std::` | `std::ranges::` | . |
+
+..
+La sexta tabla son funciones que trabajan con un montículo:
+
+| Función | Función (Rangos) | Descripción |
+|:-------:|:----------------:|:------------|
+| `std::` | `std::ranges::` | . |
+
+..
+La séptima tabla son funciones para encontrar el mínimo o el máximo en una secuencia:
+
+| Función | Función (Rangos) | Descripción |
+|:-------:|:----------------:|:------------|
+| `std::` | `std::ranges::` | . |
+
+..
+La octava tabla son funciones que comparan secuencias:
+
+| Función | Función (Rangos) | Descripción |
+|:-------:|:----------------:|:------------|
+| `std::` | `std::ranges::` | . |
+
+..
+La novena tabla son funciones que permutan una secuencia:
+
+| Función | Función (Rangos) | Descripción |
+|:-------:|:----------------:|:------------|
+| `std::` | `std::ranges::` | . |
+
+..
+La décima tabla son funciones numéricas sobre una secuencia:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `std::`<br/>`std::` | . |
 
 ..
 
@@ -2742,7 +2844,7 @@ A las anteriores, también se le suman las siguientes funciones para comprobar p
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
-| | ` ` | . |
+| | `std::` | . |
 
 ..
 
@@ -2752,7 +2854,7 @@ A las anteriores, también se le suman las siguientes funciones para comprobar p
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
-| | ` ` | . |
+| | `std::` | . |
 
 ..
 
@@ -2762,7 +2864,7 @@ A las anteriores, también se le suman las siguientes funciones para comprobar p
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
-| | ` ` | . |
+| | `std::` | . |
 
 ..
 
