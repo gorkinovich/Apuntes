@@ -2302,7 +2302,7 @@ Los miembros principales que disponemos para trabajar con cadenas son:
 
 Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
 
-| Categoría | Tipos | Miembro | Descripción |
+| Categoría | Tipos | Función | Descripción |
 |:---------:|:-----:|:-------:|:------------|
 | General | `basic_string` | `operator+` | Concatena dos cadenas. |
 | General | `basic_string`<br/>`basic_string_view` | `operator==`<br/>`operator!=`<br/>`operator<`<br/>`operator>`<br/>`operator<=`<br/>`operator>=`<br/>`operator<=>` | Compara dos cadenas. |
@@ -2414,7 +2414,7 @@ Donde `T` es el tipo de los elementos del contenedor, `N` es un entero con el ta
 
 Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
 
-| Categoría | Tipos | Miembro | Descripción |
+| Categoría | Tipos | Función | Descripción |
 |:---------:|:-----:|:-------:|:------------|
 | General | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `unordered_map`, `unordered_multimap`, `set`, `multiset`, `unordered_set`, `unordered_multiset`, `stack`, `queue` | `operator==`<br/>`operator!=` | Compara dos contenedores. |
 | General | `array`, `vector`, `deque`, `list`, `forward_list`, `map`, `multimap`, `set`, `multiset`, `stack`, `queue` | `operator<`<br/>`operator>`<br/>`operator<=`<br/>`operator>=`<br/>`operator<=>` | Compara dos contenedores. |
@@ -2425,17 +2425,13 @@ Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
 | Útiles | `array` | `tuple_element<T>` | Devuelve el tipo de los elementos del contenedor. |
 | Útiles | `array` | `tuple_size<T>` | Devuelve el tamaño del contenedor. |
 
-### Iteradores
+### Iteradores y rangos
 
 ..
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
 | | ` ` | . |
-
-..
-
-### Rangos
 
 ..
 
@@ -2613,7 +2609,7 @@ Con la función estática `global`, podemos pasarle una configuración determina
 
 Además tenemos las siguientes [funciones](https://en.cppreference.com/w/cpp/io/manip) dentro del espacio de nombres `std`, que se pueden usar con los operadores de entrada `>>` y salida `<<`, para dar formato a dichas operaciones:
 
-| Módulo | Miembro | Descripción |
+| Módulo | Función | Descripción |
 |:------:|:-------:|:------------|
 | [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `boolalpha`<br/>`noboolalpha` | Activa o desactiva la representación alfabética de los booleanos. |
 | [`ios`](https://en.cppreference.com/w/cpp/header/ios) | `showbase`<br/>`noshowbase` | Activa o desactiva el uso del prefijo que indica la base numérica. |
@@ -2645,13 +2641,66 @@ Además tenemos las siguientes [funciones](https://en.cppreference.com/w/cpp/io/
 
 ### Sistema de ficheros
 
-..
+Estos son los tipos principales de la biblioteca estándar, dentro del módulo [`filesystem`](https://en.cppreference.com/w/cpp/header/filesystem), para gestionar el sistema de ficheros:
 
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | ` ` | . |
+| Tipo | Descripción |
+|:----:|:------------|
+| [`std::path`](https://en.cppreference.com/w/cpp/filesystem/path) | Clase para representar rutas en el sistema de ficheros. |
+| [`std::filesystem_error`](https://en.cppreference.com/w/cpp/filesystem/filesystem_error) | Clase para representar errores en el sistema de ficheros. |
+| [`std::directory_entry`](https://en.cppreference.com/w/cpp/filesystem/directory_entry) | Clase para representar un elemento en un directorio. |
+| [`std::directory_iterator`](https://en.cppreference.com/w/cpp/filesystem/directory_iterator) | Clase para iterar sobre el contenido de un directorio. |
+| [`std::recursive_directory_iterator`](https://en.cppreference.com/w/cpp/filesystem/recursive_directory_iterator) | Clase para iterar sobre el contenido de un directorio y sus subdirectorios. |
+| [`std::file_status`](https://en.cppreference.com/w/cpp/filesystem/file_status) | Clase para representar el tipo y los permisos de un fichero. |
+| [`std::space_info`](https://en.cppreference.com/w/cpp/filesystem/space_info) | Clase para obtener información sobre el espacio disponible en un sistema de ficheros. |
+| [`std::file_type`](https://en.cppreference.com/w/cpp/filesystem/file_type) | Enumeración para . |
+| [`std::perms`](https://en.cppreference.com/w/cpp/filesystem/perms) | Enumeración para . |
+| [`std::perm_options`](https://en.cppreference.com/w/cpp/filesystem/perm_options) | Enumeración para . |
+| [`std::copy_options`](https://en.cppreference.com/w/cpp/filesystem/copy_options) | Enumeración para . |
+| [`std::directory_options`](https://en.cppreference.com/w/cpp/filesystem/directory_options) | Enumeración para . |
+| [`std::file_time_type`](https://en.cppreference.com/w/cpp/filesystem/file_time_type) | Tipo para representar marcas de tiempo para ficheros. |
 
-..
+Además, tenemos las siguientes [funciones](https://en.cppreference.com/w/cpp/filesystem) dentro del espacio de nombres `std`, para realizar operaciones sobre el sistema de ficheros:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `absolute` | Crea una ruta absoluta. |
+| `canonical`<br/>`weakly_canonical` | Crea una ruta canónica. |
+| `relative`<br/>`proximate` | Crea una ruta relativa. |
+| `copy` | Copia ficheros o directorios. |
+| `copy_file` | Copia el contenido de ficheros. |
+| `copy_symlink` | Copia un enlaces simbólicos. |
+| `create_directory`<br/>`create_directories` | Crea directorios nuevos. |
+| `create_hard_link` | Crea enlaces duros. |
+| `create_symlink`<br/>`create_directory_symlink` | Crea enlaces simbólicos. |
+| `current_path` | Obtiene o modifica el directorio de trabajo actual. |
+| `exists` | Comprueba si una ruta existe o no. |
+| `equivalent` | Comprueba si dos rutas hacen referencia al mismo elemento. |
+| `file_size` | Obtiene el tamaño de un fichero. |
+| `hard_link_count` | Obtiene el número de enlaces duros asociados a un fichero. |
+| `last_write_time` | Obtiene o modifica la marca de tiempo de la última modificación. |
+| `permissions` | Modifica los permisos de acceso a un fichero. |
+| `read_symlink` | Obtiene el destino de un enlace simbólico. |
+| `remove`<br/>`remove_all` | El primero elimina un fichero o directorio vacío. El segundo además elimina el contenido de un directorio recursivamente. |
+| `rename` | Mueve o renombra un fichero o directorio. |
+| `resize_file` | Cambia el tamaño de un fichero, ya sea truncando el contenido o rellenando con ceros. |
+| `space` | Obtiene el espacio libre disponible en el sistema de ficheros. |
+| `status`<br/>`symlink_status` | Determina los atributos de un fichero. |
+| `temp_directory_path` | Obtiene un directorio para ficheros temporales. |
+
+A las anteriores, también se le suman las siguientes funciones para comprobar propiedades de los ficheros:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `is_block_file` | Comprueba si la ruta es un dispositivo de bloque. |
+| `is_character_file` | Comprueba si la ruta es un dispositivo de caracteres. |
+| `is_directory` | Comprueba si la ruta es un directorio. |
+| `is_empty` | Comprueba si la ruta es un fichero o directorio vacío. |
+| `is_fifo` | Comprueba si la ruta es una tubería con nombre. |
+| `is_other` | Comprueba si la ruta es otro tipo de fichero. |
+| `is_regular_file` | Comprueba si la ruta es un fichero normal. |
+| `is_socket` | Comprueba si la ruta es un socket IPC con nombre. |
+| `is_symlink` | Comprueba si la ruta es un enlace simbólico. |
+| `status_known` | Comprueba si el estado para un fichero es conocido. |
 
 ### Concurrencia
 
