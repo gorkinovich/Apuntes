@@ -2427,41 +2427,75 @@ Además tenemos las siguientes funciones dentro del espacio de nombres `std`:
 
 ### Iteradores y rangos
 
-..
+Estos son algunos de los tipos y funciones de la biblioteca estándar, en el módulo [`iterator`](https://en.cppreference.com/w/cpp/header/iterator), para manejar [iteradores](https://en.cppreference.com/w/cpp/iterator):
 
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | ` ` | . |
+| Tipo | Elemento | Descripción |
+|:----:|:--------:|:------------|
+| Función | `std::ranges::iter_move` | Mueve el contenido de un iterador a otro. |
+| Función | `std::ranges::iter_swap` | Intercambia el contenido entre dos iteradores. |
+| Clase | `std::reverse_iterator<T>` | Recorre una secuencia en orden inverso. |
+| Función | `std::make_reverse_iterator<T>` | Crea un `reverse_iterator` infiriendo el tipo con el argumento. |
+| Clase | `std::move_iterator<T>` | Recorre una secuencia moviendo su contenido. |
+| Función | `std::make_move_iterator<T>` | Crea un `move_iterator` infiriendo el tipo con el argumento. |
+| Clase | `std::back_insert_iterator<T>` | Iterador para insertar al final de un contenedor. |
+| Función | `std::back_inserter<T>` | Crea un `back_insert_iterator` infiriendo el tipo con el argumento. |
+| Clase | `std::front_insert_iterator<T>` | Iterador para insertar al inicio de un contenedor. |
+| Función | `std::front_inserter<T>` | Crea un `front_insert_iterator` infiriendo el tipo con el argumento. |
+| Clase | `std::insert_iterator<T>` | Iterador para insertar en un contenedor. |
+| Función | `std::inserter<T>` | Crea un `insert_iterator` infiriendo el tipo con el argumento. |
+| Función | `std::advance<T,U>` | Avanza un iterador N posiciones. |
+| Función | `std::distance<T>` | Devuelve la distancia entre el inicio y el final del recorrido. |
+| Función | `std::next<T>` | Avanza un iterador una posición. |
+| Función | `std::prev<T>` | Retrocede un iterador una posición. |
+| Función | `std::begin<T>`<br/>`std::cbegin<T>` | Iterador que apunta al inicio del recorrido. |
+| Función | `std::end<T>`<br/>`std::cend<T>` | Iterador que apunta al final del recorrido. |
+| Función | `std::rbegin<T>`<br/>`std::crbegin<T>` | Iterador que apunta al inicio del recorrido inverso. |
+| Función | `std::rend<T>`<br/>`std::crend<T>` | Iterador que apunta al final del recorrido inverso. |
+| Función | `std::size<T>`<br/>`std::ssize<T>` | Devuelve el número de elementos de la secuencia. |
+| Función | `std::empty<T>` | Comprueba si la secuencia está vacía. |
+| Función | `std::data<T>` | Accede al puntero al primer elemento de la secuencia. |
 
-..
+Con C++20 se incorporó el concepto de los [rangos](https://en.cppreference.com/w/cpp/ranges), como un mecanismo más genérico para definir secuencias iterables. Para ello tenemos los espacios de nombres `std::ranges` y `std::views`. Estos son algunos de los tipos y funciones de la biblioteca estándar, en el módulo [`iterator`](https://en.cppreference.com/w/cpp/header/iterator) y [`ranges`](https://en.cppreference.com/w/cpp/header/ranges), para manejar rangos:
 
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | ` ` | . |
-
-..
+| Categoría | Elemento | Descripción |
+|:---------:|:--------:|:------------|
+| Operaciones | `std::ranges::advance` | Avanza un iterador N posiciones. |
+| Operaciones | `std::ranges::distance` | Devuelve la distancia entre el inicio y el final del recorrido. |
+| Operaciones | `std::ranges::next` | Avanza un iterador una posición. |
+| Operaciones | `std::ranges::prev` | Retrocede un iterador una posición. |
+| Acceso | `std::ranges::begin`<br/>`std::ranges::cbegin` | Iterador que apunta al inicio del recorrido. |
+| Acceso | `std::ranges::end`<br/>`std::ranges::cend` | Iterador que apunta al final del recorrido. |
+| Acceso | `std::ranges::rbegin`<br/>`std::ranges::crbegin` | Iterador que apunta al inicio del recorrido inverso. |
+| Acceso | `std::ranges::rend`<br/>`std::ranges::crend` | Iterador que apunta al final del recorrido inverso. |
+| Acceso | `std::ranges::size`<br/>`std::ranges::ssize` | Devuelve el número de elementos de la secuencia. |
+| Acceso | `std::ranges::empty` | Comprueba si la secuencia está vacía. |
+| Acceso | `std::ranges::data`<br/>`std::ranges::cdata` | Accede al puntero al primer elemento de la secuencia. |
+| Vistas | `std::ranges::view_interface` | Clase que representa una vista a una secuencia. |
+| Vistas | `std::ranges::subrange` | Clase que representa una vista a una secuencia, mediante un rango compuesto por un par iterador-limite. |
+| Factoría | `std::ranges::empty_view`<br/>`std::views::empty` | Una vista sin elementos. |
+| Factoría | `std::ranges::single_view`<br/>`std::views::single` | Una vista con un solo elemento. |
+| Factoría | `std::ranges::iota_view`<br/>`std::views::iota` | Una vista compuesta por un valor inicial que se va incrementando con cada paso. |
+| Factoría | `std::ranges::basic_istream_view`<br/>`std::views::istream` | Una vista que está asociada a un flujo de entrada al que aplica el operador `>>` a cada paso. |
+| Adaptador | `std::views::all_t`<br/>`std::views::all` | Una vista que incluye todos los elementos de un rango. |
+| Adaptador | `std::ranges::ref_view` | Una vista de los elementos de otro rango. |
+| Adaptador | `std::ranges::owning_view` | Una vista con la propiedad única de los elementos de un rango. |
+| Adaptador | `std::ranges::filter_view`<br/>`std::views::filter` | Una vista con los elementos de una secuencia que satisfacen un predicado. |
+| Adaptador | `std::ranges::transform_view`<br/>`std::views::transform` | Una vista que aplica una función de transformación a los elementos de una secuencia. |
+| Adaptador | `std::ranges::take_view`<br/>`std::views::take` | Una vista que toma los N primeros elementos de otra secuencia. |
+| Adaptador | `std::ranges::take_while_view`<br/>`std::views::take_while` | Una vista que toma los N primeros elementos de otra secuencia mientras se cumpla un predicado. |
+| Adaptador | `std::ranges::drop_view`<br/>`std::views::drop` | Una vista que descarta los N primeros elementos de otra secuencia. |
+| Adaptador | `std::ranges::drop_while_view`<br/>`std::views::drop_while` | Una vista que descarta los N primeros elementos de otra secuencia mientras se cumpla un predicado. |
+| Adaptador | `std::ranges::join_view`<br/>`std::views::join` | Una vista que aplana una vista de secuencias. |
+| Adaptador | `std::ranges::split_view`<br/>`std::views::split` | Una vista obtenida de dividir otra vista usando un delimitador. |
+| Adaptador | `std::ranges::lazy_split_view`<br/>`std::views::lazy_split` | Una vista obtenida de dividir otra vista usando un delimitador. |
+| Adaptador | `std::views::counted` | Crea un rango con un iterador y un tamaño. |
+| Adaptador | `std::ranges::common_view`<br/>`std::views::common` | Convierte una vista en un objeto de tipo `common_range`. |
+| Adaptador | `std::ranges::reverse_view`<br/>`std::views::reverse` | Una vista que recorre otra secuencia en sentido inverso. |
+| Adaptador | `std::ranges::elements_view`<br/>`std::views::elements` | Una vista que selecciona un campo determinado de las tuplas de una secuencia. |
+| Adaptador | `std::ranges::keys_view`<br/>`std::views::keys` | Una vista que selecciona el primer campo de una tupla clave-valor. |
+| Adaptador | `std::ranges::values_view`<br/>`std::views::values` | Una vista que selecciona el segundo campo de una tupla clave-valor. |
 
 ### Algoritmos
-
-..
-
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | ` ` | . |
-
-..
-
-### Números
-
-..
-
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | ` ` | . |
-
-..
-
-### Utilidades
 
 ..
 
@@ -2701,6 +2735,26 @@ A las anteriores, también se le suman las siguientes funciones para comprobar p
 | `is_socket` | Comprueba si la ruta es un socket IPC con nombre. |
 | `is_symlink` | Comprueba si la ruta es un enlace simbólico. |
 | `status_known` | Comprueba si el estado para un fichero es conocido. |
+
+### Utilidades
+
+..
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
+
+..
+
+### Números
+
+..
+
+| Categoría | Miembro | Descripción |
+|:---------:|:-------:|:------------|
+| | ` ` | . |
+
+..
 
 ### Concurrencia
 
