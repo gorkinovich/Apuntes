@@ -56,13 +56,13 @@ Además, el lenguaje nos permite crear espacios de nombres, donde agrupar conjun
 
 La sintaxis básica para definir un espacio de nombres es la siguiente:
 
-$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \texttt{namespace}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}$$
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \texttt{namespace}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{definiciones}\ \texttt{\\}}$$
 
 La palabra clave `inline` incluye las definiciones dentro del espacio de nombres que contenga al espacio definido. Si no se incluye un nombre identificador, el ámbito de sus miembros se circunscribe a la unidad de compilación.
 
 Alternativamente, podemos definir espacios de nombre de la siguiente manera para no tener que anidarlos manualmente:
 
-$$\texttt{namespace}\ \mathit{nombre_1} \textcolor{red}{[} \texttt{::}\ \textcolor{red}{\cdots}\ \texttt{::}\ \textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \mathit{nombre_n} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}$$
+$$\texttt{namespace}\ \mathit{nombre_1} \textcolor{red}{[} \texttt{::}\ \textcolor{red}{\cdots}\ \texttt{::}\ \textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \mathit{nombre_n} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{definiciones}\ \texttt{\\}}$$
 
 Existe la posibilidad de utilizar los miembros de un espacio de nombres, en una unidad de compilación, sin tener que utilizar su nombre cualificado. Para ello se utiliza la sintaxis:
 
@@ -142,7 +142,7 @@ En la cabecera [`cstdint`](https://en.cppreference.com/w/cpp/header/cstdint) se 
 
 La sintaxis para definir números reales es la siguiente:
 
-$$\mathit{d\acute{\imath}gitos} \textcolor{red}{[} \texttt{.} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \textcolor{red}{\char123} \texttt{e} \textcolor{red}{|} \texttt{E} \textcolor{red}{\char125} \textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \mathit{sufijo} \textcolor{red}{]}$$
+$$\mathit{d\acute{\imath}gitos} \textcolor{red}{[} \texttt{.} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \textcolor{red}{\\{} \texttt{e} \textcolor{red}{|} \texttt{E} \textcolor{red}{\\}} \textcolor{red}{[} \texttt{+} \textcolor{red}{|} \texttt{-} \textcolor{red}{]} \mathit{d\acute{\imath}gitos} \textcolor{red}{]} \textcolor{red}{[} \mathit{sufijo} \textcolor{red}{]}$$
 
 > Desde C++17 se puede usar el prefijo `0x` o `0X` para usar dígitos hexadecimales al definir un número real. Sin embargo, para indicar el exponente se utiliza `p` o `P`, en lugar de `e` y `E`. Por ejemplo, `0x1EFp2`.
 
@@ -160,7 +160,7 @@ Los sufijos validos son:
 
 La sintaxis para definir caracteres es la siguiente:
 
-$$\textcolor{red}{[} \mathit{prefijo} \textcolor{red}{]} \texttt{'} \textcolor{red}{\char123} \mathit{letra} \textcolor{red}{|} \mathit{secuencia\ de\ escape} \textcolor{red}{\char125} \texttt{'}$$
+$$\textcolor{red}{[} \mathit{prefijo} \textcolor{red}{]} \texttt{'} \textcolor{red}{\\{} \mathit{letra} \textcolor{red}{|} \mathit{secuencia\ de\ escape} \textcolor{red}{\\}} \texttt{'}$$
 
 Las [secuencias de escape](https://en.cppreference.com/w/cpp/language/escape) disponibles son:
 
@@ -207,7 +207,7 @@ Los prefijos validos son:
 
 Lo valores booleanos están representados por el tipo `bool`. Estos se utilizan para dar valor a condiciones que pueden ser ciertas o falsas. Su sintaxis es la siguiente:
 
-$$\textcolor{red}{\char123} \texttt{true} \textcolor{red}{|} \texttt{false} \textcolor{red}{\char125}$$
+$$\textcolor{red}{\\{} \texttt{true} \textcolor{red}{|} \texttt{false} \textcolor{red}{\\}}$$
 
 > Por compatibilidad con el lenguaje C, el valor `true` equivale al entero `1` y `false` al `0`. Por ello hay que entender la siguiente regla: una condición será falsa si su valor es cero y cierta con cualquier otro valor.
 
@@ -246,7 +246,7 @@ int main () {
 
 Los arrays son bloques de memoria que contienen un número fijo de elementos, a los que se acceden de forma indexada. La sintaxis básica para definir arrays es la siguiente:
 
-$$\mathit{tipo}\ \mathit{nombre} \texttt{[} \textcolor{red}{[} \mathit{tam_1} \textcolor{red}{]} \texttt{]} \textcolor{red}{[} \texttt{[} \mathit{tam_2} \texttt{]} \textcolor{red}{\dots} \texttt{[} \mathit{tam_n} \texttt{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{=}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
+$$\mathit{tipo}\ \mathit{nombre} \texttt{[} \textcolor{red}{[} \mathit{tam_1} \textcolor{red}{]} \texttt{]} \textcolor{red}{[} \texttt{[} \mathit{tam_2} \texttt{]} \textcolor{red}{\dots} \texttt{[} \mathit{tam_n} \texttt{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{=}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{]} \textcolor{red}{[} \texttt{,} \textcolor{red}{\dots}\ \textcolor{red}{]} \texttt{;}$$
 
 Entre corchetes indicamos el *tamaño* de cada dimensión del array, pudiendo inicializar el contenido con una serie de *valores*. Se puede omitir el tamaño de la primera dimensión si se inicializa la variable. Por ejemplo:
 
@@ -421,10 +421,10 @@ Esta es la precedencia de mayor a menor de los operadores del lenguaje:
 | 10 | `x == y`, `x != y` | Igual y distinto | Izquierda |
 | 11 | `x & y` | Conjunción binaria | Izquierda |
 | 12 | `x ^ y` | Disyunción exclusiva binaria | Izquierda |
-| 13 | `x | y` | Disyunción binaria | Izquierda |
+| 13 | `x \| y` | Disyunción binaria | Izquierda |
 | 14 | `x && y` | Conjunción booleana | Izquierda |
-| 15 | `x || y` | Disyunción booleana | Izquierda |
-| 16 | `x ? y : z`<br/>`throw x`<br/>`co_yield x`<br/>`x = y`<br/>`x += y`, `x -= y`, `x *= y`, `x /= y`, `x %= y`, `x &= y`, `x |= y`, `x ^= y`, `x <<= y`, `x >>= y` | Condicional<br/>Lanzar excepción<br/>Lanzar valor<br/>Asignación<br/>Asignación compuesta | Derecha |
+| 15 | `x \|\| y` | Disyunción booleana | Izquierda |
+| 16 | `x ? y : z`<br/>`throw x`<br/>`co_yield x`<br/>`x = y`<br/>`x += y`, `x -= y`, `x *= y`, `x /= y`, `x %= y`, `x &= y`, `x \|= y`, `x ^= y`, `x <<= y`, `x >>= y` | Condicional<br/>Lanzar excepción<br/>Lanzar valor<br/>Asignación<br/>Asignación compuesta | Derecha |
 | 17 | `x, y` | Coma | Izquierda |
 
 Donde `x`, `y` y `z` son expresiones, y `T` es un tipo.
@@ -449,11 +449,11 @@ El primer bloque de operadores booleanos son los lógicos:
 |:---------:|:-----------:|
 | `!X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de `X`. |
 | `X && Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
-| `X || Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
+| `X \|\| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de `X` con `Y`. |
 
 Estos operadores nos permiten componer condiciones más complejas. Para entenderlos mejor aquí tenemos sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
 
-|   `X`   |   `Y`   |  `!X`   |  `!Y`   | `X && Y`  | `X || Y` |
+|   `X`   |   `Y`   |  `!X`   |  `!Y`   | `X && Y`  | `X \|\| Y` |
 |:-------:|:-------:|:-------:|:-------:|:---------:|:--------:|
 | `true`  | `true`  | `false` | `false` |  `true`   | `true`   |
 | `false` | `true`  | `true`  | `false` |  `false`  | `true`   |
@@ -500,14 +500,14 @@ El segundo bloque son los operadores a nivel de bits:
 |:---------:|:-----------:|
 | `~X` | [Negación](https://es.wikipedia.org/wiki/Negaci%C3%B3n_l%C3%B3gica) de los bits de `X`. |
 | `X & Y` | [Conjunción](https://es.wikipedia.org/wiki/Conjunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
-| `X | Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
+| `X \| Y` | [Disyunción](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_l%C3%B3gica) de los bits de `X` con `Y`. |
 | `X ^ Y` | [Disyunción exclusiva](https://es.wikipedia.org/wiki/Disyunci%C3%B3n_exclusiva) de los bits de `X` con `Y`. |
 | `X << Y` | Desplazamiento a la izquierda `Y` bits de `X`. |
 | `X >> Y` | Desplazamiento a la derecha `Y` bits de `X`. |
 
 De modo similar a los operadores lógicos, están son sus [tablas de la verdad](https://es.wikipedia.org/wiki/Tabla_de_verdad):
 
-| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X | Y` | `X ^ Y` |
+| `X` | `Y` | `~X` | `~Y` | `X & Y` | `X \| Y` | `X ^ Y` |
 |:---:|:---:|:----:|:----:|:-------:|:-------:|:-------:|
 | `1` | `1` |  `0` |  `0` |   `1`   |   `1`   |   `0`   |
 | `0` | `1` |  `1` |  `0` |   `0`   |   `1`   |   `1`   |
@@ -527,7 +527,7 @@ Estos son los operadores de asignación disponibles:
 | `X /= Y` | Equivale a `X = X / Y`. |
 | `X %= Y` | Equivale a `X = X % Y`. |
 | `X &= Y` | Equivale a `X = X & Y`. |
-| `X |= Y` | Equivale a `X = X | Y`. |
+| `X \|= Y` | Equivale a `X = X \| Y`. |
 | `X ^= Y` | Equivale a `X = X ^ Y`. |
 | `X <<= Y` | Equivale a `X = X << Y`. |
 | `X >>= Y` | Equivale a `X = X >> Y`. |
@@ -647,12 +647,12 @@ int main () {
 La sentencia de control `switch` permite evaluar una expresión y ejecutar un bloque dependiendo del valor obtenido. Su sintaxis es:
 
 $$\begin{array}{l}
-\texttt{switch}\ \texttt{(} \mathit{expresi\acute{o}n} \texttt{)}\ \texttt{\char123}
-\\[0.5em] \qquad \textcolor{red}{[} \texttt{case}\ \mathit{literal_1} \texttt{:}\ \mathit{expresiones_1} \textcolor{red}{]}
-\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
-\\[0.5em] \qquad \textcolor{red}{[} \texttt{case}\ \mathit{literal_n} \texttt{:}\ \mathit{expresiones_n} \textcolor{red}{]}
-\\[0.5em] \qquad \textcolor{red}{[} \texttt{default:}\ \mathit{expresiones} \textcolor{red}{]}
-\\[0.5em] \texttt{\char125}
+\texttt{switch}\ \texttt{(} \mathit{expresi\acute{o}n} \texttt{)}\ \texttt{\\{}
+\\\\[0.5em] \qquad \textcolor{red}{[} \texttt{case}\ \mathit{literal_1} \texttt{:}\ \mathit{expresiones_1} \textcolor{red}{]}
+\\\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\\\[0.5em] \qquad \textcolor{red}{[} \texttt{case}\ \mathit{literal_n} \texttt{:}\ \mathit{expresiones_n} \textcolor{red}{]}
+\\\\[0.5em] \qquad \textcolor{red}{[} \texttt{default:}\ \mathit{expresiones} \textcolor{red}{]}
+\\\\[0.5em] \texttt{\\}}
 \end{array}$$
 
 Dependiendo del valor de la *expresión*, se va buscando en orden una cláusula `case` donde encaje su valor. La primera que encaje será el punto de entrada de la ejecución, ejecutando sus expresiones hasta encontrar la sentencia `break` al final de dicho bloque, pues de lo contrario saltaría a ejecutar el cuerpo de la siguiente cláusula. Si no se encaja con ninguna cláusula, se ejecutará la cláusula `default` de estar definida. Por ejemplo:
@@ -791,11 +791,11 @@ Donde *excepción* debe ser una expresión que devuelva un valor. La biblioteca 
 Una vez lanzada la excepción, por nosotros o por el sistema, tendremos que capturarla con la sentencia `try`-`catch`, cuya sintaxis es:
 
 $$\begin{array}{l}
-\texttt{try}\ \texttt{\char123}\ \mathit{expresiones_0}\ \texttt{\char125}
-\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_1}\ \textcolor{red}{[} \mathit{nombre_1} \textcolor{red}{]} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones_1}\ \texttt{\char125} \textcolor{red}{]}
-\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
-\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_n}\ \textcolor{red}{[} \mathit{nombre_n} \textcolor{red}{]} \texttt{)}\ \texttt{\char123}\ \mathit{expresiones_n}\ \texttt{\char125} \textcolor{red}{]}
-\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(...)}\ \texttt{\char123}\ \mathit{expresiones_c}\ \texttt{\char125} \textcolor{red}{]}
+\texttt{try}\ \texttt{\\{}\ \mathit{expresiones_0}\ \texttt{\\}}
+\\\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_1}\ \textcolor{red}{[} \mathit{nombre_1} \textcolor{red}{]} \texttt{)}\ \texttt{\\{}\ \mathit{expresiones_1}\ \texttt{\\}} \textcolor{red}{]}
+\\\\[0.5em] \qquad\qquad \textcolor{red}{\vdots}
+\\\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(} \mathit{tipo_n}\ \textcolor{red}{[} \mathit{nombre_n} \textcolor{red}{]} \texttt{)}\ \texttt{\\{}\ \mathit{expresiones_n}\ \texttt{\\}} \textcolor{red}{]}
+\\\\[0.5em] \textcolor{red}{[} \texttt{catch}\ \texttt{(...)}\ \texttt{\\{}\ \mathit{expresiones_c}\ \texttt{\\}} \textcolor{red}{]}
 \end{array}$$
 
 Hay que tener en cuenta que `try` debe ir acompañado al menos de un `catch`. En caso de lanzarse una excepción, se comprobará en el orden que están definidas las cláusulas `catch`, para ejecutar el bloque de expresiones que primero encaje con el error recibido. Esto significa que el orden importa, por lo que si la primera es un `catch (...)`, todas las que vengan después quedarán tapadas por esta primera, ya que es el modelo más genérico para capturar excepciones. Dentro de un `catch` se puede usar `throw;`, que relanza la última excepción capturada.
@@ -820,7 +820,7 @@ int main () {
 
 Una [función](https://en.cppreference.com/w/cpp/language/function) es un bloque de código con nombre, que podemos parametrizar, para obtener diferentes resultados. Para definir una se utiliza la siguiente sintaxis:
 
-$$\mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}}$$
 
 Una función tiene un tipo de retorno, pero si no devuelve nada usará `void` como tipo del resultado. También se permite usar `auto` como tipo de retorno, para inferir el tipo en tiempo de compilación. Luego se puede tener entre cero y N parámetros, cuya sintaxis es:
 
@@ -895,11 +895,11 @@ Las [expresiones lambda](https://en.cppreference.com/w/cpp/language/lambda) es u
 
 La sintaxis básica para definir una lambda es la siguiente:
 
-$$\texttt{[} \mathit{capturas} \texttt{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\texttt{[} \mathit{capturas} \texttt{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}}$$
 
 En cuanto a los *parámetros* se usa las mismas reglas que las funciones normales para su definición. Pero antes, tenemos las *capturas*, que es una lista de variables sobre las que vamos a hacer el cierre (*closure*), para poder usarlas en el cuerpo de la lambda. Hay que tener en cuenta que las lambdas se traducen en objetos de la clase [`std::function`](https://en.cppreference.com/w/cpp/utility/functional/function), por lo que se pueden devolver como resultados de una función y por ello hay que gestionar cómo se cierran las variables. Para ello esta lista de cero o más variables, separadas por comas, podrán declararse con la siguiente sintaxis:
 
-$$\textcolor{red}{\char123} \texttt{\char38}\ \textcolor{red}{|}\ \texttt{=}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{*} \textcolor{red}{]} \texttt{this}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{\char38} \textcolor{red}{]} \mathit{nombre}\ \textcolor{red}{[} \mathit{inicializaci\acute{o}n} \textcolor{red}{|} \texttt{...} \textcolor{red}{]}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{\char38} \textcolor{red}{]} \texttt{...} \mathit{nombre}\ \mathit{inicializaci\acute{o}n} \textcolor{red}{\char125}$$
+$$\textcolor{red}{\\{} \texttt{\\&}\ \textcolor{red}{|}\ \texttt{=}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{*} \textcolor{red}{]} \texttt{this}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{\\&} \textcolor{red}{]} \mathit{nombre}\ \textcolor{red}{[} \mathit{inicializaci\acute{o}n} \textcolor{red}{|} \texttt{...} \textcolor{red}{]}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{\\&} \textcolor{red}{]} \texttt{...} \mathit{nombre}\ \mathit{inicializaci\acute{o}n} \textcolor{red}{\\}}$$
 
 Con `&` se capturan por referencia todas las variables utilizadas en el cuerpo de la lambda que estén en el ámbito de la misma, mientras que con `=` se capturan por copia. Con `this` se capturan por referencia los miembros del objeto del que es miembro la función donde se ha declarado la expresión lambda, pero con `*this` se capturan por copia. Luego podemos indicar el *nombre* de las variables que queremos capturar, ya sea por copia o por referencia con `&`. La elipsis `...` se utiliza para el [pack de expansión](https://en.cppreference.com/w/cpp/language/parameter_pack) de variables en plantillas, que explicaremos más adelante.
 
@@ -935,14 +935,14 @@ A continuación está `-> tipo`, para indicar el tipo de retorno de la función 
 Las clases son la forma de definir tipos por parte del usuario, para expresar abstracciones y estructuras de datos más complejas de las ofrecidas por el lenguaje. Su sintaxis básica es la siguiente:
 
 $$\begin{array}{l}
-\texttt{class}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{final} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{padres} \textcolor{red}{]}\ \texttt{\char123}
-\\[0.5em] \textcolor{red}{[} \texttt{public:}
-\\[0.5em] \qquad \mathit{definiciones\ p\acute{u}blicas} \textcolor{red}{]}
-\\[0.5em] \textcolor{red}{[} \texttt{protected:}
-\\[0.5em] \qquad \mathit{definiciones\ protegidas} \textcolor{red}{]}
-\\[0.5em] \textcolor{red}{[} \texttt{private:}
-\\[0.5em] \qquad \mathit{definiciones\ privadas} \textcolor{red}{]}
-\\[0.5em] \texttt{\char125} \texttt{;}
+\texttt{class}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{final} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{padres} \textcolor{red}{]}\ \texttt{\\{}
+\\\\[0.5em] \textcolor{red}{[} \texttt{public:}
+\\\\[0.5em] \qquad \mathit{definiciones\ p\acute{u}blicas} \textcolor{red}{]}
+\\\\[0.5em] \textcolor{red}{[} \texttt{protected:}
+\\\\[0.5em] \qquad \mathit{definiciones\ protegidas} \textcolor{red}{]}
+\\\\[0.5em] \textcolor{red}{[} \texttt{private:}
+\\\\[0.5em] \qquad \mathit{definiciones\ privadas} \textcolor{red}{]}
+\\\\[0.5em] \texttt{\\}} \texttt{;}
 \end{array}$$
 
 El orden de las secciones puede variar e incluso podemos tener varias secciones con el mismo tipo de visibilidad si fuera necesario. En caso de definir miembros fuera de una sección, se asume `private` como visibilidad por defecto. Dependiendo de la visibilidad, los miembros de la clase serán accesibles o no desde fuera:
@@ -1011,13 +1011,13 @@ Los métodos de una clase son las funciones definidas para ejecutar las operacio
 
 $$\textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}$$
 
-$$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{\char38} \textcolor{red}{|} \texttt{\char38\char38} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+$$\textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{\\&} \textcolor{red}{|} \texttt{\\&\\&} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\\{} \texttt{;}\ \textcolor{red}{|}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{\\}}$$
 
 Si no implementamos el cuerpo de la función dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
 
 $$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{clase} \texttt{::} \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
 
-$$\textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{\char38} \textcolor{red}{|} \texttt{\char38\char38} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\textcolor{red}{[} \texttt{volatile} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{const} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{\\&} \textcolor{red}{|} \texttt{\\&\\&} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}}$$
 
 Hay que tener en cuenta que la firma, declarada dentro de la clase, tiene que ser exactamente la misma definida fuera. Igual que pasaba con las funciones que no pertenecen a una clase, tenemos el modificador `noexcept` para indicar si el método lanza excepciones o no. Luego `-> tipo` indica cual es el tipo a devolver al usar `auto` como tipo de retorno en la firma de la función. En cuanto al resto de modificadores:
 
@@ -1135,13 +1135,13 @@ Existe una serie de métodos especiales en los tipos, que definen cómo se const
 
 $$\textcolor{red}{[} \texttt{explicit} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}$$
 
-$$\textcolor{red}{\char123} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{:}\ \mathit{inicializadores} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+$$\textcolor{red}{\\{} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \textcolor{red}{[} \texttt{:}\ \mathit{inicializadores} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{\\}}$$
 
 Si no implementamos el cuerpo dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
 
 $$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase} \texttt{::} \mathit{clase} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
 
-$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{inicializadores} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{inicializadores} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}}$$
 
 Un constructor puede tener una lista de parámetros, como las funciones normales. El constructor con cero parámetros se denomina [constructor por defecto](https://en.cppreference.com/w/cpp/language/default_constructor). También tenemos el caso especial del [constructor copia](https://en.cppreference.com/w/cpp/language/copy_constructor) (`clase(const clase & obj)`), así como el [constructor de movimiento](https://en.cppreference.com/w/cpp/language/move_constructor) (`clase(clase && obj)`). El primero hace una copia de `obj` para crear la nueva instancia, mientras que el segundo se queda con todos los recursos (punteros y referencias) para construir la nueva instancia.
 
@@ -1153,27 +1153,27 @@ Los inicializadores son una lista con la forma `nombre(expresión)` o `nombre{ex
 
 A continuación, la sintaxis de los destructores es:
 
-$$\textcolor{red}{[} \texttt{virtual} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \texttt{\textasciitilde} \mathit{clase} \texttt{(} \texttt{)}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}$$
+$$\textcolor{red}{[} \texttt{virtual} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \texttt{\\~{}}\ \mathit{clase} \texttt{(} \texttt{)}\ \textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}$$
 
-$$\textcolor{red}{\char123} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+$$\textcolor{red}{\\{} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{\\}}$$
 
 Si no implementamos el cuerpo dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
 
-$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase} \texttt{::} \texttt{\textasciitilde} \mathit{clase} \texttt{(} \texttt{)}$$
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase} \texttt{::} \texttt{\\~{}}\ \mathit{clase} \texttt{(} \texttt{)}$$
 
-$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}}$$
 
 Por último, la sintaxis del operador de [copia](https://en.cppreference.com/w/cpp/language/copy_assignment)/[movimiento](https://en.cppreference.com/w/cpp/language/move_assignment) es:
 
-$$\textcolor{red}{[} \texttt{virtual} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase}\ \texttt{\char38}\ \texttt{operator =} \texttt{(} \mathit{par\acute{a}metro} \texttt{)}$$
+$$\textcolor{red}{[} \texttt{virtual} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase}\ \texttt{\\&}\ \texttt{operator =} \texttt{(} \mathit{par\acute{a}metro} \texttt{)}$$
 
-$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{\char123} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{\\{} \textcolor{red}{[} \texttt{= default} \textcolor{red}{|} \texttt{= delete} \textcolor{red}{]} \texttt{;}\ \textcolor{red}{|}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{\\}}$$
 
 Si no implementamos el cuerpo dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
 
-$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase}\ \texttt{\char38}\ \mathit{clase} \texttt{::} \texttt{operator =} \texttt{(} \mathit{par\acute{a}metro} \texttt{)}$$
+$$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{clase}\ \texttt{\\&}\ \mathit{clase} \texttt{::} \texttt{operator =} \texttt{(} \mathit{par\acute{a}metro} \texttt{)}$$
 
-$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}}$$
 
 Donde el parámetro puede ser `clase obj`, `const clase & obj` o `clase && obj`, siendo este último para hacer el operador de movimiento.
 
@@ -1241,13 +1241,13 @@ Para declarar o definir una función estática se utiliza la siguiente sintaxis:
 
 $$\texttt{static}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
 
-$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\char123} \texttt{;}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125} \textcolor{red}{\char125}$$
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{\\{} \texttt{;}\ \textcolor{red}{|}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}} \textcolor{red}{\\}}$$
 
 Si no implementamos el cuerpo de la función estática dentro de la clase, hay que hacerlo fuera con la siguiente sintaxis:
 
 $$\textcolor{red}{[} \texttt{inline} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{constexpr} \textcolor{red}{|} \texttt{consteval} \textcolor{red}{]}\ \mathit{tipo}\ \mathit{clase} \texttt{::} \mathit{nombre} \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}$$
 
-$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\textcolor{red}{[} \texttt{noexcept} \textcolor{red}{[} \texttt{(} \mathit{booleano} \texttt{)} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}}$$
 
 Salvo por el modificador `static`, el resto de modificadores son iguales que en los métodos de una clase. Veamos un ejemplo para hacernos una idea de todo lo anterior:
 
@@ -1280,14 +1280,14 @@ int main () {
 Las estructuras es una forma alternativa para definir tipos por parte del usuario. Su sintaxis básica es la siguiente:
 
 $$\begin{array}{l}
-\texttt{struct}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{final} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{padres} \textcolor{red}{]}\ \texttt{\char123}
-\\[0.5em] \textcolor{red}{[} \texttt{public:}
-\\[0.5em] \qquad \mathit{definiciones\ p\acute{u}blicas} \textcolor{red}{]}
-\\[0.5em] \textcolor{red}{[} \texttt{protected:}
-\\[0.5em] \qquad \mathit{definiciones\ protegidas} \textcolor{red}{]}
-\\[0.5em] \textcolor{red}{[} \texttt{private:}
-\\[0.5em] \qquad \mathit{definiciones\ privadas} \textcolor{red}{]}
-\\[0.5em] \texttt{\char125} \texttt{;}
+\texttt{struct}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{final} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{:}\ \mathit{padres} \textcolor{red}{]}\ \texttt{\\{}
+\\\\[0.5em] \textcolor{red}{[} \texttt{public:}
+\\\\[0.5em] \qquad \mathit{definiciones\ p\acute{u}blicas} \textcolor{red}{]}
+\\\\[0.5em] \textcolor{red}{[} \texttt{protected:}
+\\\\[0.5em] \qquad \mathit{definiciones\ protegidas} \textcolor{red}{]}
+\\\\[0.5em] \textcolor{red}{[} \texttt{private:}
+\\\\[0.5em] \qquad \mathit{definiciones\ privadas} \textcolor{red}{]}
+\\\\[0.5em] \texttt{\\}} \texttt{;}
 \end{array}$$
 
 Su existencia en el lenguaje se debe a una herencia del lenguaje C, pero en C++ actualmente funcionan exactamente como un tipo definido con `class`, con la diferencia de que por defecto la visibilidad es pública, si no se indica ningún bloque de visibilidad.
@@ -1297,9 +1297,9 @@ Su existencia en el lenguaje se debe a una herencia del lenguaje C, pero en C++ 
 Las uniones son un tipo de dato especial, que permite definir una abstracción que contenga diferentes tipos de información en el mismo espacio de memoria a lo largo del tiempo. Su sintaxis básica es la siguiente:
 
 $$\begin{array}{l}
-\texttt{union}\ \mathit{nombre}\ \texttt{\char123}
-\\[0.5em] \qquad \mathit{definiciones}
-\\[0.5em] \texttt{\char125} \texttt{;}
+\texttt{union}\ \mathit{nombre}\ \texttt{\\{}
+\\\\[0.5em] \qquad \mathit{definiciones}
+\\\\[0.5em] \texttt{\\}} \texttt{;}
 \end{array}$$
 
 En cuanto a definiciones se permiten variables, funciones y tipos. Puede tener constructores y destructores, pero no puede tener métodos virtuales. También están limitados los tipos que se pueden usar para las variables, estos no pueden tener métodos especiales.
@@ -1329,7 +1329,7 @@ int main () {
 
 Las enumeraciones son tipos de datos que asocian valores con nombres identificadores, creando constantes de forma ordenada y agrupada. Su sintaxis básica es la siguiente:
 
-$$\texttt{enum}\ \textcolor{red}{[} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{]}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\char123} \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,}\ \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\char125} \texttt{;}$$
+$$\texttt{enum}\ \textcolor{red}{[} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{]}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:}\ \mathit{tipo} \textcolor{red}{]}\ \texttt{\\{} \mathit{nombre_1}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_1} \textcolor{red}{]} \textcolor{red}{[} \texttt{,}\ \textcolor{red}{\dots} \texttt{,}\ \mathit{nombre_n}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor_n} \textcolor{red}{]} \textcolor{red}{]} \texttt{\\}} \texttt{;}$$
 
 Los valores deben ser expresiones constantes, incluyendo expresiones `constexpr`. Se puede indicar un tipo básico numérico, para definir cuál es el tamaño de los valores en memoria. Luego las palabras claves `class` y `struct` sirven para crear un tipo enumerado estricto, de ese modo una variable de ese tipo sólo puede recibir valores definidos en él, teniendo que usar la sintaxis `tipo::nombre`. Sin no se usa este mecanismo, basta con usar el nombre sin cualificar.
 
@@ -1337,7 +1337,7 @@ En ocasiones puede ser necesario declarar la existencia de un tipo enumerado sin
 
 $$\texttt{enum}\ \mathit{nombre}\ \texttt{:}\ \mathit{tipo} \texttt{;}$$
 
-$$\texttt{enum}\ \textcolor{red}{\char123} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{\char125}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:}\ \mathit{tipo} \textcolor{red}{]} \texttt{;}$$
+$$\texttt{enum}\ \textcolor{red}{\\{} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{\\}}\ \mathit{nombre}\ \textcolor{red}{[} \texttt{:}\ \mathit{tipo} \textcolor{red}{]} \texttt{;}$$
 
 En caso de querer usar en un ámbito general, de tipo o de función, una enumeración estricta sin los nombres cualificados, se puede utilizar la siguiente sintaxis:
 
@@ -1427,13 +1427,13 @@ Usando la palabra clave `operator` seguido de un operador, o un tipo, se puede u
 | `@a` | `R A::operator @()` | `R operator @(A a)` | `+`, `-`, `~` |
 | `@a` | `R & A::operator @()` | `R & operator @(A & a)` | `++`, `--` |
 | `a@` | `R A::operator @(int)` | `R operator @(A & a, int)` | `++`, `--` |
-| `a@b` | `R A::operator @(B b)` | `R operator @(A a, B b)` | `+`, `-`, `*`, `/`, `%`, `&`, `|`, `^`, `<<`, `>>`, `,` |
+| `a@b` | `R A::operator @(B b)` | `R operator @(A a, B b)` | `+`, `-`, `*`, `/`, `%`, `&`, `\|`, `^`, `<<`, `>>`, `,` |
 | `a@b` | `bool A::operator @(const & B b)` | `bool operator @(const & A a, const & B b)` | `==`, `!=`, `<`, `>`, `<=`, `>=` |
 | `a@b` | `auto A::operator @(const & B b)` | `auto operator @(const & A a, const & B b)` | `<=>` |
 | `@a` | `bool A::operator @()` | `bool operator @(A a)` | `!` |
-| `a@b` | `bool A::operator @(B b)` | `bool operator @(A a, B b)` | `&&`, `||` |
+| `a@b` | `bool A::operator @(B b)` | `bool operator @(A a, B b)` | `&&`, `\|\|` |
 | `a@b` | `R & A::operator @(B b)` | - | `=` |
-| `a@b` | `R & A::operator @(B b)` | `R & operator @(A & a, B b)` | `+=`, `-=`, `*=`, `/=`, `%=`, `&=`, `|=`, `^=`, `>>=`, `<<=` |
+| `a@b` | `R & A::operator @(B b)` | `R & operator @(A & a, B b)` | `+=`, `-=`, `*=`, `/=`, `%=`, `&=`, `\|=`, `^=`, `>>=`, `<<=` |
 | `a(b, ..., z)` | `R A::operator ()(B b, ..., Z z)` | - | `()` |
 | `a[b]` | `R & A::operator [](B b)` | - | `[]` |
 | `a->b` | `R * A::operator ->()` | - | `->` |
@@ -1480,7 +1480,7 @@ int main () {
 
 Con C++11 se incorporó la posibilidad de definir [literales de usuario](https://en.cppreference.com/w/cpp/language/user_literal), permitiendo así reinterpretar los literales del lenguaje en base a un sufijo designado. Para ello hay que usar la sintaxis:
 
-$$\mathit{tipo}\ \texttt{operator}\ \texttt{""}\ \mathit{sufijo} \texttt{(} \mathit{parametros} \texttt{)}\ \texttt{\char123}\ \mathit{expresi\acute{o}nes}\ \texttt{\char125}$$
+$$\mathit{tipo}\ \texttt{operator}\ \texttt{""}\ \mathit{sufijo} \texttt{(} \mathit{parametros} \texttt{)}\ \texttt{\\{}\ \mathit{expresi\acute{o}nes}\ \texttt{\\}}$$
 
 En base a un *tipo* de retorno escogido, usaremos como sufijo una secuencia de letras que comience por guion bajo (`_`), ya que las secuencias que comienzan sin guion bajo se reservan para la biblioteca estándar. En cuanto a los *parámetros*, están permitidas las siguientes firmas: 
 + `(const char *)`
@@ -1566,15 +1566,15 @@ El [preprocesado](https://en.cppreference.com/w/cpp/preprocessor) es la etapa in
 
 La directiva más básica es definir [macros](https://en.cppreference.com/w/cpp/preprocessor/replace), que consiste en un identificador que se va a sustituir por un texto determinado. Para ello se usa la siguiente sintaxis:
 
-$$\texttt{\char35define}\ \mathit{nombre}\ \textcolor{red}{[} \mathit{texto} \textcolor{red}{]}$$
+$$\texttt{\\#define}\ \mathit{nombre}\ \textcolor{red}{[} \mathit{texto} \textcolor{red}{]}$$
 
 El texto es opcional, porque podemos simplemente definir una macro para hacer comprobaciones condicionales, que se verán en la siguiente sección. Si queremos eliminar una macro usaremos la directiva:
 
-$$\texttt{\char35undef}\ \mathit{nombre}$$
+$$\texttt{\\#undef}\ \mathit{nombre}$$
 
 Aunque no es recomendable, se pueden definir macros con parámetros con la directiva:
 
-$$\texttt{\char35define}\ \mathit{nombre} \texttt{(} \textcolor{red}{\char123} \mathit{par\acute{a}metros} \textcolor{red}{[} \texttt{,}\ \texttt{...} \textcolor{red}{]} \textcolor{red}{|} \texttt{...} \textcolor{red}{\char125} \texttt{)}\ \textcolor{red}{[} \mathit{texto} \textcolor{red}{]}$$
+$$\texttt{\\#define}\ \mathit{nombre} \texttt{(} \textcolor{red}{\\{} \mathit{par\acute{a}metros} \textcolor{red}{[} \texttt{,}\ \texttt{...} \textcolor{red}{]} \textcolor{red}{|} \texttt{...} \textcolor{red}{\\}} \texttt{)}\ \textcolor{red}{[} \mathit{texto} \textcolor{red}{]}$$
 
 Los parámetros es una lista separada por comas de nombres. La elipsis `...` se utiliza para crear macros que tengan un número arbitrario de argumentos en sus usos. Para este último caso se utiliza las macros:
 + `__VA_OPT__(texto)`: Que añade el texto indicado si la lista de argumentos arbitrario no está vacía.
@@ -1647,7 +1647,7 @@ $$\texttt{export}\ \texttt{module}\ \mathit{identificador} \texttt{;}$$
 
 El identificador es una serie de nombres separados por `:`, para construir un nombre cualificado para el módulo. La sintaxis para exportar definiciones en el módulo es la siguiente:
 
-$$\texttt{export}\ \textcolor{red}{\char123}\ \mathit{definici\acute{o}n}\ \textcolor{red}{|}\ \texttt{\char123}\ \mathit{definiciones}\ \texttt{\char125}\ \textcolor{red}{\char125}$$
+$$\texttt{export}\ \textcolor{red}{\\{}\ \mathit{definici\acute{o}n}\ \textcolor{red}{|}\ \texttt{\\{}\ \mathit{definiciones}\ \texttt{\\}}\ \textcolor{red}{\\}}$$
 
 En caso de necesitar usar directivas del preprocesador, antes de declarar el módulo, hay que utilizar el módulo global con `module;`, para utilizar las directivas y después ya declarar el módulo. Otro aspecto de la definición de módulos es `module : private;`, que inicia la sección privada que no va a formar parte de la construcción del módulo por parte del compilador. Hay que entender que la parte pública del módulo sería una suerte de cabecera de la unidad de compilación, por lo que modificar cualquier cosa en ella, exportada o no, provoca que se recompilen todas las unidades de compilación que utilicen el módulo. Esto no ocurre con la parte privada del módulo.
 
@@ -1690,19 +1690,19 @@ Como *definiciones* podemos tener tipos, funciones y variables. Los *requisitos*
 
 La sintaxis para definir variables como parámetros de una plantilla es:
 
-$$\textcolor{red}{\char123}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{|}\ \mathit{tipo}\ \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]}\ \textcolor{red}{|}\ \texttt{auto}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{nombre}\ \textcolor{red}{\char125}$$
+$$\textcolor{red}{\\{}\ \mathit{tipo}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{valor} \textcolor{red}{]} \textcolor{red}{]}\ \textcolor{red}{|}\ \mathit{tipo}\ \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]}\ \textcolor{red}{|}\ \texttt{auto}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \mathit{nombre}\ \textcolor{red}{\\}}$$
 
 La primera forma es un tipo normal, con un nombre y un posible valor por defecto. La segunda forma es una variable que representa una lista de parámetros variable. La tercera forma usa `auto` y se puede combinar con `*` y `&`, como modificadores, para deducir en tiempo de compilación el tipo de la variable de la plantilla.
 
 La sintaxis para definir variables de tipo como parámetros de una plantilla es:
 
-$$\textcolor{red}{\char123} \texttt{typename} \textcolor{red}{|} \texttt{class} \textcolor{red}{|} \mathit{restricci\acute{o}n} \textcolor{red}{\char125}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{tipo} \textcolor{red}{]} \textcolor{red}{|} \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]} \textcolor{red}{]}$$
+$$\textcolor{red}{\\{} \texttt{typename} \textcolor{red}{|} \texttt{class} \textcolor{red}{|} \mathit{restricci\acute{o}n} \textcolor{red}{\\}}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{tipo} \textcolor{red}{]} \textcolor{red}{|} \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]} \textcolor{red}{]}$$
 
 Después de indicar si es una variable de tipo general, con `typename` o `class`, que son sinónimos, o si es una restricción definida con conceptos, podremos darle un nombre y un valor por defecto al parámetro. Pero también podemos convertir ese parámetro en una lista de parámetros variable.
 
 La sintaxis para definir plantillas de variables de tipo como parámetros de una plantilla es:
 
-$$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \textcolor{red}{\char123} \texttt{typename} \textcolor{red}{|} \texttt{class} \textcolor{red}{\char125}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{tipo} \textcolor{red}{]} \textcolor{red}{|} \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]} \textcolor{red}{]}$$
+$$\texttt{template} \texttt{<} \mathit{par\acute{a}metros} \texttt{>}\ \textcolor{red}{\\{} \texttt{typename} \textcolor{red}{|} \texttt{class} \textcolor{red}{\\}}\ \textcolor{red}{[} \mathit{nombre}\ \textcolor{red}{[} \texttt{=}\ \mathit{tipo} \textcolor{red}{]} \textcolor{red}{|} \texttt{...}\ \textcolor{red}{[} \mathit{nombre} \textcolor{red}{]} \textcolor{red}{]}$$
 
 Es similar a las variables de tipo, con el añadido de estar parametrizado como una plantilla. Esto tiene su utilidad si queremos que uno de los parámetros sea una plantilla con una forma concreta, en lugar de cualquier tipo posible que representaría `typename`.
 
@@ -1746,7 +1746,7 @@ Claramente ganamos legibilidad cuando el compilador deduce por nosotros los tipo
 
 También podemos forzar que se genere una instancia concreta de una plantilla, sobre todo cuando queremos crear una librería externa. En el caso de [tipos](https://en.cppreference.com/w/cpp/language/class_template) se usa la siguiente sintaxis:
 
-$$\textcolor{red}{[} \texttt{extern} \textcolor{red}{]}\ \texttt{template}\ \textcolor{red}{\char123} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{|} \texttt{union} \textcolor{red}{\char125}\ \mathit{nombre}\ \texttt{<} \mathit{argumentos} \texttt{>} \texttt{;}$$
+$$\textcolor{red}{[} \texttt{extern} \textcolor{red}{]}\ \texttt{template}\ \textcolor{red}{\\{} \texttt{class} \textcolor{red}{|} \texttt{struct} \textcolor{red}{|} \texttt{union} \textcolor{red}{\\}}\ \mathit{nombre}\ \texttt{<} \mathit{argumentos} \texttt{>} \texttt{;}$$
 
 Sin `extern` se define la instanciación y se genera el código, con `extern` se declara la instanciación pero se asume que su código ha sido generado en otra unidad de compilación. En el caso de las [funciones](https://en.cppreference.com/w/cpp/language/function_template) la sintaxis es:
 
@@ -1925,7 +1925,7 @@ Basta con indicar la declaración del tipo cuyo alias queremos crear, en lugar d
 
 Se pueden tener plantillas de [lambdas](https://en.cppreference.com/w/cpp/language/lambda) con la siguiente sintaxis:
 
-$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{expresiones}\ \texttt{\char125}$$
+$$\texttt{[} \mathit{capturas} \texttt{]}\ \textcolor{red}{[} \texttt{<} \mathit{tipos} \texttt{>}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]} \textcolor{red}{]}\ \texttt{(} \textcolor{red}{[} \mathit{par\acute{a}metros} \textcolor{red}{]} \texttt{)}\ \textcolor{red}{[} \mathit{modificadores} \textcolor{red}{]}\ \textcolor{red}{[} \texttt{->}\ \mathit{tipo} \textcolor{red}{]}\ \textcolor{red}{[} \mathit{requisitos} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{expresiones}\ \texttt{\\}}$$
 
 El prácticamente la misma sintaxis y elementos que las lambdas normales, pero aquí podemos poner variables de tipo entre `<` y `>`, así como indicar los requisitos que ha de cumplir la función mediante conceptos.
 
@@ -1939,7 +1939,7 @@ En este caso la *restricción* puede ser una composición de los siguientes elem
 
 La expresión [`requires`](https://en.cppreference.com/w/cpp/language/requires), dentro de la definición de una restricción, sigue la siguiente sintaxis:
 
-$$\texttt{requires}\ \textcolor{red}{[} \texttt{(} \mathit{par\acute{a}metros} \texttt{)} \textcolor{red}{]}\ \texttt{\char123}\ \mathit{requisitos}\ \texttt{\char125}$$
+$$\texttt{requires}\ \textcolor{red}{[} \texttt{(} \mathit{par\acute{a}metros} \texttt{)} \textcolor{red}{]}\ \texttt{\\{}\ \mathit{requisitos}\ \texttt{\\}}$$
 
 Los *parámetros* tienen la forma `tipo nombre`, para usar dichos nombres dentro de los requisitos, para las comprobaciones realizadas en tiempo de compilación. Mientras que los *requisitos* los hay de cuatro categorías:
 
@@ -2682,7 +2682,7 @@ También como parte de `ios_base` tenemos los siguientes tipos y valores definid
 | Tipo | Descripción | Valores |
 |:----:|:------------|:--------|
 | [`openmode`](https://en.cppreference.com/w/cpp/io/ios_base/openmode) | Modo de apertura del flujo. | `app`: Se sitúa al final del flujo después de cada escritura.<br/>`binary`: Abre el flujo en modo binario.<br/>`in`: Abre el flujo para lectura.<br/>`out`: Abre el flujo para escritura.<br/>`trunc`: Borra el contenido del flujo al abrirlo.<br/>`ate`: Se sitúa al final del flujo después de abrirlo. |
-| [`fmtflags`](https://en.cppreference.com/w/cpp/io/ios_base/fmtflags) | Flags de formato. | `dec`: Usa la notación decimal para números enteros.<br/>`oct`: Usa la notación octal para números enteros.<br/>`hex`: Usa la notación hexadecimal para números enteros.<br/>`basefield`: `dec | oct | hex`.<br/>`left`: Ajuste a la izquierda.<br/>`right`: Ajuste a la derecha.<br/>`internal`: Ajuste interno.<br/>`adjustfield`: `left | right | internal`.<br/>`scientific`: Muestra tipos de coma flotante con notación científica.<br/>`fixed`: Muestra tipos de coma flotante con notación fija.<br/>`floatfield`: `scientific | fixed`.<br/>`boolalpha`: Muestra los valores booleanos de forma alfabética.<br/>`showbase`: Muestra un prefijo para indicar la base de un número entero.<br/>`showpoint`: Muestra siempre el separador decimal con números reales.<br/>`showpos`: Muestra el signo `+` para números positivos.<br/>`skipws`: Descarta los espacios en blanco iniciales con operaciones de entrada.<br/>`unitbuf`: Procesa el buffer de salida con cada operación de salida.<br/>`uppercase`: Salida en mayúsculas. |
+| [`fmtflags`](https://en.cppreference.com/w/cpp/io/ios_base/fmtflags) | Flags de formato. | `dec`: Usa la notación decimal para números enteros.<br/>`oct`: Usa la notación octal para números enteros.<br/>`hex`: Usa la notación hexadecimal para números enteros.<br/>`basefield`: `dec \| oct \| hex`.<br/>`left`: Ajuste a la izquierda.<br/>`right`: Ajuste a la derecha.<br/>`internal`: Ajuste interno.<br/>`adjustfield`: `left \| right \| internal`.<br/>`scientific`: Muestra tipos de coma flotante con notación científica.<br/>`fixed`: Muestra tipos de coma flotante con notación fija.<br/>`floatfield`: `scientific \| fixed`.<br/>`boolalpha`: Muestra los valores booleanos de forma alfabética.<br/>`showbase`: Muestra un prefijo para indicar la base de un número entero.<br/>`showpoint`: Muestra siempre el separador decimal con números reales.<br/>`showpos`: Muestra el signo `+` para números positivos.<br/>`skipws`: Descarta los espacios en blanco iniciales con operaciones de entrada.<br/>`unitbuf`: Procesa el buffer de salida con cada operación de salida.<br/>`uppercase`: Salida en mayúsculas. |
 | [`iostate`](https://en.cppreference.com/w/cpp/io/ios_base/iostate) | Estado del flujo. | `goodbit`: Sin errores.<br/>`badbit`: Error de flujo irrecuperable.<br/>`failbit`: Operación de E/S fallida.<br/>`eofbit`: La entrada ha alcanzado el final de fichero. |
 | [`seekdir`](https://en.cppreference.com/w/cpp/io/ios_base/seekdir) | Posición de partida para desplazarse. | `beg`: Inicio del flujo.<br/>`end`: Final del flujo.<br/>`cur`: Posición actual del flujo. |
 
@@ -2928,7 +2928,7 @@ En el módulo [`functional`](https://en.cppreference.com/w/cpp/header/functional
 
 En el módulo [`format`](https://en.cppreference.com/w/cpp/header/format), tenemos herramientas para dar [formato a cadenas](https://en.cppreference.com/w/cpp/utility/format). La función principal es [`std::format`](https://en.cppreference.com/w/cpp/utility/format/format), pero no usa el formato de cadenas de C, en su lugar usa la sintaxis:
 
-$$\texttt{\char123} \textcolor{red}{[} \mathit{\acute{\imath}ndice} \textcolor{red}{]} \textcolor{red}{[} \texttt{:} \mathit{formato} \textcolor{red}{]} \texttt{\char125}$$
+$$\texttt{\\{} \textcolor{red}{[} \mathit{\acute{\imath}ndice} \textcolor{red}{]} \textcolor{red}{[} \texttt{:} \mathit{formato} \textcolor{red}{]} \texttt{\\}}$$
 
 El *formato* depende de las especializaciones que tengamos del tipo genérico [`std::formatter`](https://en.cppreference.com/w/cpp/utility/format/formatter). Este mecanismo para dar formato a cadenas, es una alternativa a tipos como `stringstream`.
 
