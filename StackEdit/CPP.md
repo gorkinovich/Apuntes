@@ -2552,96 +2552,94 @@ La tercera tabla son funciones que particionan una secuencia:
 
 | Función | Función (Rangos) | Descripción |
 |:-------:|:----------------:|:------------|
-| `std::is_partitioned` | `std::ranges::is_partitioned` | . |
-| `std::partition` | `std::ranges::partition` | . |
-| `std::partition_copy` | `std::ranges::partition_copy` | . |
-| `std::stable_partition` | `std::ranges::stable_partition` | . |
-| `std::partition_point` | `std::ranges::partition_point` | . |
+| `std::is_partitioned` | `std::ranges::is_partitioned` | Comprueba si una secuencia está particionada en base a un predicado dado. |
+| `std::partition` | `std::ranges::partition` | Divide una secuencia en dos grupos de elementos. |
+| `std::partition_copy` | `std::ranges::partition_copy` | Copia la división de una secuencia en dos grupos de elementos. |
+| `std::stable_partition` | `std::ranges::stable_partition` | Divide una secuencia en dos grupos de elementos, manteniendo el orden relativo de los mismos entre sí. |
+| `std::partition_point` | `std::ranges::partition_point` | Localiza el punto de partición en una secuencia particionada. |
 
 La cuarta tabla son funciones que ordenan una secuencia:
 
 | Función | Función (Rangos) | Descripción |
 |:-------:|:----------------:|:------------|
-| `std::is_sorted` | `std::ranges::is_sorted` | . |
-| `std::is_sorted_until` | `std::ranges::is_sorted_until` | . |
-| `std::sort` | `std::ranges::sort` | . |
-| `std::partial_sort` | `std::ranges::partial_sort` | . |
-| `std::partial_sort_copy` | `std::ranges::partial_sort_copy` | . |
-| `std::stable_sort` | `std::ranges::stable_sort` | . |
-| `std::nth_element` | `std::ranges::nth_element` | . |
+| `std::is_sorted` | `std::ranges::is_sorted` | Comprueba si una secuencia está ordenada en sentido ascendente. |
+| `std::is_sorted_until` | `std::ranges::is_sorted_until` | Busca la mayor subsecuencia ordenada en una secuencia de elementos. |
+| `std::sort` | `std::ranges::sort` | Ordena en sentido ascendente una secuencia de elementos. |
+| `std::partial_sort` | `std::ranges::partial_sort` | Ordena los N primeros elementos de una secuencia. |
+| `std::partial_sort_copy` | `std::ranges::partial_sort_copy` | Copia la ordenación de los N primeros elementos de una secuencia. |
+| `std::stable_sort` | `std::ranges::stable_sort` | Ordena una secuencia de elementos, manteniendo el orden previo entre valores iguales. |
+| `std::nth_element` | `std::ranges::nth_element` | Ordena de forma parcial una secuencia, asegurando que está particionada por un elemento dado. |
 
 La quinta tabla son funciones que trabajan con una secuencia ordenada:
 
 | Categoría | Función | Función (Rangos) | Descripción |
 |:---------:|:-------:|:----------------:|:------------|
-| Búsqueda | `std::lower_bound` | `std::ranges::lower_bound` | . |
-| Búsqueda | `std::upper_bound` | `std::ranges::upper_bound` | . |
-| Búsqueda | `std::binary_search` | `std::ranges::binary_search` | . |
-| Búsqueda | `std::equal_range` | `std::ranges::equal_range` | . |
-| Mezcla | `std::merge` | `std::ranges::merge` | . |
-| Mezcla | `std::inplace_merge` | `std::ranges::inplace_merge` | . |
-| Conjunto | `std::includes` | `std::ranges::includes` | . |
-| Conjunto | `std::set_difference` | `std::ranges::set_difference` | . |
-| Conjunto | `std::set_intersection` | `std::ranges::set_intersection` | . |
-| Conjunto | `std::set_symmetric_difference` | `std::ranges::set_symmetric_difference` | . |
-| Conjunto | `std::set_union` | `std::ranges::set_union` | . |
+| Búsqueda | `std::lower_bound` | `std::ranges::lower_bound` | Devuelve un iterador al primer elemento no menor que un valor dado. |
+| Búsqueda | `std::upper_bound` | `std::ranges::upper_bound` | Devuelve un iterador al primer elemento mayor que un valor dado. |
+| Búsqueda | `std::binary_search` | `std::ranges::binary_search` | Comprueba si un elemento existe en una secuencia parcialmente ordenada. |
+| Búsqueda | `std::equal_range` | `std::ranges::equal_range` | Devuelve una secuencia de elementos que encaja con una clave específica. |
+| Mezcla | `std::merge` | `std::ranges::merge` | Fusiona dos secuencias de elementos ordenados. |
+| Mezcla | `std::inplace_merge` | `std::ranges::inplace_merge` | Fusiona dos secuencias de elementos ordenados dentro de una misma secuencia. |
+| Conjunto | `std::includes` | `std::ranges::includes` | Comprueba si una secuencia es subconjunto de otra. |
+| Conjunto | `std::set_difference` | `std::ranges::set_difference` | Calcula la diferencia entre dos conjuntos. |
+| Conjunto | `std::set_intersection` | `std::ranges::set_intersection` | Calcula la intersección entre dos conjuntos. |
+| Conjunto | `std::set_symmetric_difference` | `std::ranges::set_symmetric_difference` | Calcula la diferencia simétrica entre dos conjuntos. |
+| Conjunto | `std::set_union` | `std::ranges::set_union` | Calcula la unión entre dos conjuntos. |
 
 La sexta tabla son funciones que trabajan con un montículo:
 
 | Función | Función (Rangos) | Descripción |
 |:-------:|:----------------:|:------------|
-| `std::is_heap` | `std::ranges::is_heap` | . |
-| `std::is_heap_until` | `std::ranges::is_heap_until` | . |
-| `std::make_heap` | `std::ranges::make_heap` | . |
-| `std::push_heap` | `std::ranges::push_heap` | . |
-| `std::pop_heap` | `std::ranges::pop_heap` | . |
-| `std::sort_heap` | `std::ranges::sort_heap` | . |
+| `std::is_heap` | `std::ranges::is_heap` | Comprueba si una secuencia es un montículo de máximos. |
+| `std::is_heap_until` | `std::ranges::is_heap_until` | Busca la mayor subsecuencia ordenada como un montículo en una secuencia de elementos. |
+| `std::make_heap` | `std::ranges::make_heap` | Crea un montículo de máximos con una secuencia de elementos. |
+| `std::push_heap` | `std::ranges::push_heap` | Añade un elemento a un montículo de máximos. |
+| `std::pop_heap` | `std::ranges::pop_heap` | Saca un elemento de un montículo de máximos. |
+| `std::sort_heap` | `std::ranges::sort_heap` | Ordena un montículo de máximos como una secuencia de elementos en sentido ascendente. |
 
 La séptima tabla son funciones para encontrar el mínimo o el máximo en una secuencia:
 
 | Función | Función (Rangos) | Descripción |
 |:-------:|:----------------:|:------------|
-| `std::max` | `std::ranges::max` | . |
-| `std::max_element` | `std::ranges::max_element` | . |
-| `std::min` | `std::ranges::min` | . |
-| `std::min_element` | `std::ranges::min_element` | . |
-| `std::minmax` | `std::ranges::minmax` | . |
-| `std::minmax_element` | `std::ranges::minmax_element` | . |
-| `std::clamp` | `std::ranges::clamp` | . |
+| `std::max` | `std::ranges::max` | Obtiene mayor elemento entre los valores dados. |
+| `std::max_element` | `std::ranges::max_element` | Obtiene el elemento máximo de una secuencia. |
+| `std::min` | `std::ranges::min` | Obtiene menor elemento entre los valores dados. |
+| `std::min_element` | `std::ranges::min_element` | Obtiene el elemento mínimo de una secuencia. |
+| `std::minmax` | `std::ranges::minmax` | Obtiene el mayor y el menor elemento entre los valores dados. |
+| `std::minmax_element` | `std::ranges::minmax_element` | Obtiene el elemento máximo y mínimo de una secuencia. |
+| `std::clamp` | `std::ranges::clamp` | Restringe un valor entre un par de valores límites dados. |
 
 La octava tabla son funciones que comparan secuencias:
 
 | Función | Función (Rangos) | Descripción |
 |:-------:|:----------------:|:------------|
-| `std::equal` | `std::ranges::equal` | . |
-| `std::lexicographical_compare` | `std::ranges::lexicographical_compare` | . |
-| `std::lexicographical_compare_three_way` | - | . |
+| `std::equal` | `std::ranges::equal` | Comprueba si una secuencia es igual a otra. |
+| `std::lexicographical_compare` | `std::ranges::lexicographical_compare` | Comprueba si una secuencia es menor lexicográficamente que otra. |
+| `std::lexicographical_compare_three_way` | - | Comprueba una secuencia con otra con el operador de comparación `<=>`. |
 
 La novena tabla son funciones que permutan una secuencia:
 
 | Función | Función (Rangos) | Descripción |
 |:-------:|:----------------:|:------------|
-| `std::is_permutation` | `std::ranges::is_permutation` | . |
-| `std::next_permutation` | `std::ranges::next_permutation` | . |
-| `std::prev_permutation` | `std::ranges::prev_permutation` | . |
+| `std::is_permutation` | `std::ranges::is_permutation` | Comprueba si una secuencia es una permutación de otra. |
+| `std::next_permutation` | `std::ranges::next_permutation` | Obtiene la siguiente permutación lexicográfica de una secuencia de elementos. |
+| `std::prev_permutation` | `std::ranges::prev_permutation` | Obtiene la anterior permutación lexicográfica de una secuencia de elementos. |
 
 La décima tabla son funciones numéricas sobre una secuencia, del módulo [`numeric`](https://en.cppreference.com/w/cpp/header/numeric):
 
 | Función | Descripción |
 |:-------:|:------------|
-| `std::iota` | . |
-| `std::accumulate` | . |
-| `std::inner_product` | . |
-| `std::adjacent_difference` | . |
-| `std::partial_sum` | . |
-| `std::reduce` | . |
-| `std::exclusive_scan` | . |
-| `std::inclusive_scan` | . |
-| `std::transform_reduce` | . |
-| `std::transform_exclusive_scan` | . |
-| `std::transform_inclusive_scan` | . |
-
-..
+| `std::iota` | Rellena una secuencia con incrementos sucesivos de un valor inicial. |
+| `std::accumulate` | Suma o reduce una secuencia de elementos. |
+| `std::inner_product` | Calcula el producto interior de dos secuencias de elementos. |
+| `std::adjacent_difference` | Calcula la diferencia entre elementos adyacentes en una secuencia. |
+| `std::partial_sum` | Calcula la suma parcial de una secuencia de elementos. |
+| `std::reduce` | Reduce una secuencia de elementos sin un orden concreto. |
+| `std::exclusive_scan` | Similar a `partial_sum`, excluyendo el último elemento de la secuencia. |
+| `std::inclusive_scan` | Similar a `partial_sum`, incluyendo el último elemento de la secuencia. |
+| `std::transform_reduce` | Aplica una función a una secuencia y después la reduce. |
+| `std::transform_exclusive_scan` | Aplica una función a una secuencia y después la operación `exclusive_scan`. |
+| `std::transform_inclusive_scan` | Aplica una función a una secuencia y después la operación `inclusive_scan`. |
 
 ### Entrada/Salida
 
