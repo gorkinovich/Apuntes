@@ -2641,6 +2641,12 @@ La décima tabla son funciones numéricas sobre una secuencia, del módulo [`num
 | `std::transform_exclusive_scan` | Aplica una función a una secuencia y después la operación `exclusive_scan`. |
 | `std::transform_inclusive_scan` | Aplica una función a una secuencia y después la operación `inclusive_scan`. |
 
+> Por defecto los algoritmos son secuenciales en su ejecución, pero se puede como primer parámetro indicar una política de ejecución en algunos de ellos. Las opciones son:
+> + `seq`: Ejecución secuencial.
+> + `par`: Ejecución paralela si está disponible.
+> + `par_unseq`: Ejecución paralela y/o vectorizada si está disponible.
+> + `unseq`: Ejecución vectorizada si está disponible.
+
 ### Entrada/Salida
 
 Estos son los [tipos principales](https://en.cppreference.com/w/cpp/io) de la biblioteca estándar para manejar la entrada y salida:
@@ -2872,15 +2878,62 @@ A las anteriores, también se le suman las siguientes funciones para comprobar p
 | `is_symlink` | Comprueba si la ruta es un enlace simbólico. |
 | `status_known` | Comprueba si el estado para un fichero es conocido. |
 
+### Memoria
+
+Existen muchos tipos y funciones para la [gestión dinámica de la memoria](https://en.cppreference.com/w/cpp/memory) en la biblioteca estándar, pero nos vamos a centrar en los punteros inteligentes. Hay dos tipos genéricos para crear punteros inteligentes y uno auxiliar:
+
+| Tipo | Descripción |
+|:----:|:------------|
+| [`std::unique_ptr<T>`](https://en.cppreference.com/w/cpp/memory/unique_ptr) | Puntero con semánticas de propiedad única. |
+| [`std::shared_ptr<T>`](https://en.cppreference.com/w/cpp/memory/shared_ptr) | Puntero con semánticas de propiedad compartida. |
+| [`std::weak_ptr<T>`](https://en.cppreference.com/w/cpp/memory/weak_ptr) | Referencia débil a un objeto gestionado por `shared_ptr`. |
+
+Un `unique_ptr` no comparte la propiedad del puntero, por lo que no se puede copiar su contenido, mientras que un `shared_ptr` sí se puede compartir, porque lleva la cuenta del número de referencias que hay al objeto apuntado. Es el caso de `shared_ptr` el que se asemejaría más a los punteros inteligentes de C# o Python, pero aquí no hay recolector de basura, por lo que cuando se llega a cero en el contador de referencias, se elimina de la memoria el objeto apuntado.
+
+Para facilitar la construcción de instancias, usando punteros inteligentes, se utilizan las funciones [`std::make_unique<T>`](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique) y [`std::make_shared<T>`](https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared), que por debajo implementan la reserva de memoria con el operador `new`, invocando un constructor del tipo `T` en base a los argumentos pasados.
+
+También son muy importantes, para la gestión de memoria, las funciones [`std::move`](https://en.cppreference.com/w/cpp/utility/move) y [`std::forward`](https://en.cppreference.com/w/cpp/utility/forward). La primera cambia la semántica del argumento de copiar a mover su valor. La segunda, dependiendo del tipo, elige entre dar al argumento la semántica de copiar o mover, para tener referencias a objetos que no queremos que su contenido se mueva.
+
 ### Utilidades
 
-..
+Dentro de la biblioteca estándar tenemos los siguientes tipos como [utilidades](https://en.cppreference.com/w/cpp/utility) varias:
 
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | `std::` | . |
+| Módulo | Tipo | Descripción |
+|:------:|:----:|:------------|
+| [`functional`](https://en.cppreference.com/w/cpp/header/functional) | [`std::hash<T>`](https://en.cppreference.com/w/cpp/utility/hash) | Calcula un valor hash para un objeto de un tipo `T`. |
+| [`bitset`](https://en.cppreference.com/w/cpp/header/bitset) | [`std::bitset<N>`](https://en.cppreference.com/w/cpp/utility/bitset) | Representa una secuencia de tamaño fijo de `N` bits. |
+| [`utility`](https://en.cppreference.com/w/cpp/header/utility) | [`std::pair<T1,T2>`](https://en.cppreference.com/w/cpp/utility/pair) | Representa una tupla de dos componentes. |
+| [`tuple`](https://en.cppreference.com/w/cpp/header/tuple) | [`std::tuple<...>`](https://en.cppreference.com/w/cpp/utility/tuple) | Representa una tupla de N componentes. |
+| [`variant`](https://en.cppreference.com/w/cpp/header/variant) | [`std::variant<...>`](https://en.cppreference.com/w/cpp/utility/variant) | Representa una unión de tipos, para almacenar un objeto de alguno de dichos tipos. Se utiliza como sustituto de los tipos `union`. |
+| [`optional`](https://en.cppreference.com/w/cpp/header/optional) | [`std::optional<T>`](https://en.cppreference.com/w/cpp/utility/optional) | Representa un valor opcional, que puede contener o no la instancia actual. Es un concepto prestado de la programación funcional y las [mónadas](https://es.wikipedia.org/wiki/M%C3%B3nada_(programaci%C3%B3n_funcional)). |
+| [`any`](https://en.cppreference.com/w/cpp/header/any) | [`std::any`](https://en.cppreference.com/w/cpp/utility/any) | Representa una unión de cualquier tipo, para almacenar cualquier tipo de objeto. |
+| [`typeinfo`](https://en.cppreference.com/w/cpp/header/typeinfo) | [`std::type_info`](https://en.cppreference.com/w/cpp/types/type_info) | Contiene información sobre la implementación de un tipo. El operador `typeid(T)` devuelve este tipo de objetos si está activado el RTTI al compilar. |
 
-..
+Para trabajar con el [tiempo](https://en.cppreference.com/w/cpp/chrono), en el módulo [`chrono`](https://en.cppreference.com/w/cpp/header/chrono), tenemos los siguientes tipos:
+
+| Tipo | Descripción |
+|:----:|:------------|
+| [`std::system_clock`](https://en.cppreference.com/w/cpp/chrono/system_clock) | Reloj en tiempo real del sistema (*wall clock*). |
+| [`std::steady_clock`](https://en.cppreference.com/w/cpp/chrono/steady_clock) | Reloj monótono que nunca va a ser ajustado. |
+| [`std::high_resolution_clock`](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock) | Reloj con la mayor precisión disponible. |
+| [`std::is_clock`<br/>`std::is_clock_v`](https://en.cppreference.com/w/cpp/chrono/is_clock) | Comprueba si un tipo es un reloj. |
+| [`std::utc_clock`](https://en.cppreference.com/w/cpp/chrono/utc_clock) | Reloj de tipo UTC (*Coordinated Universal Time*). |
+| [`std::tai_clock`](https://en.cppreference.com/w/cpp/chrono/tai_clock) | Reloj de tipo TAI (*International Atomic Time*). |
+| [`std::gps_clock`](https://en.cppreference.com/w/cpp/chrono/gps_clock) | Reloj para GPS. |
+| [`std::file_clock`](https://en.cppreference.com/w/cpp/chrono/file_clock) | Reloj usado para marcas de tiempo de ficheros. |
+| [`std::local_t`](https://en.cppreference.com/w/cpp/chrono/local_t) | Pseudo-reloj que representa la hora local. |
+| [`std::time_point`](https://en.cppreference.com/w/cpp/chrono/time_point) | Representa una marca en el tiempo. |
+| [`std::clock_cast`](https://en.cppreference.com/w/cpp/chrono/clock_cast) | Convierte marcas de tiempo de un reloj a otro. |
+
+En el módulo [`functional`](https://en.cppreference.com/w/cpp/header/functional), tenemos herramientas para trabajar con [funciones](https://en.cppreference.com/w/cpp/utility/functional). El tipo principal es [`std::function`](https://en.cppreference.com/w/cpp/utility/functional/function), que representa una función del programa como valor, permitiendo que las funciones sean ciudadanos de primera clase como en los lenguajes de programación funcional. También hay tipos que encapsulan operadores matemáticos como funciones, para poder usarlos en algoritmos de la biblioteca estándar en lugar de crear una lambda para ello.
+
+En el módulo [`format`](https://en.cppreference.com/w/cpp/header/format), tenemos herramientas para dar [formato a cadenas](https://en.cppreference.com/w/cpp/utility/format). La función principal es [`std::format`](https://en.cppreference.com/w/cpp/utility/format/format), pero no usa el formato de cadenas de C, en su lugar usa la sintaxis:
+
+$$\texttt{\char123} \textcolor{red}{[} \mathit{\acute{\imath}ndice} \textcolor{red}{]} \textcolor{red}{[} \texttt{:} \mathit{formato} \textcolor{red}{]} \texttt{\char125}$$
+
+El *formato* depende de las especializaciones que tengamos del tipo genérico [`std::formatter`](https://en.cppreference.com/w/cpp/utility/format/formatter). Este mecanismo para dar formato a cadenas, es una alternativa a tipos como `stringstream`.
+
+Por último, en el módulo [`type_traits`](https://en.cppreference.com/w/cpp/header/type_traits), podemos encontrar un buen repertorio de tipos y funciones para trabajar con [metaprogramación](https://en.cppreference.com/w/cpp/meta). Mediante plantillas podemos ejecutar operaciones varias en tiempo de compilación, usando el paradigma de la programación funcional con una sintaxis no del todo amable.
 
 ### Números
 
