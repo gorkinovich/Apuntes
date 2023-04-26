@@ -1,5 +1,4 @@
-﻿
-# C++
+﻿# C++
 
 [C++](https://isocpp.org/) es un lenguaje de propósito general creado por Bjarne Stroustrup en los años 80. Es un lenguaje multiparadigma de tipado estático, que compila a código máquina, por lo que sus ejecutables no son portables pero su código si puede serlo. Estos son algunos enlaces de interés:
 
@@ -2937,21 +2936,134 @@ Por último, en el módulo [`type_traits`](https://en.cppreference.com/w/cpp/hea
 
 ### Números
 
-..
+Dentro de la biblioteca estándar tenemos diferentes herramientas [matemáticas](https://en.cppreference.com/w/cpp/numeric). La primera de ellas son las [funciones comunes](https://en.cppreference.com/w/cpp/numeric/math), que están en su mayoría en el módulo [`cmath`](https://en.cppreference.com/w/cpp/header/cmath):
 
 | Categoría | Miembro | Descripción |
 |:---------:|:-------:|:------------|
-| | `std::` | . |
+| Básicas | `abs`<br/>`fabs` | Valor absoluto. |
+| Básicas | `fmod` | Resto de una división. |
+| Básicas | `remainder` | Resto con signo de una división. |
+| Básicas | `remquo` | Resto con signo de una división y los tres últimos bits del resultado de la división. |
+| Básicas | `fma` | `fma(x,y,z)` equivale a `x * y + z`. |
+| Básicas | `fmax` | El mayor de dos números. |
+| Básicas | `fmin` | El menor de dos números. |
+| Básicas | `fdim` | Diferencia positiva de dos números: `fmax(0,x-y)`. |
+| Básicas | `nan` | Devuelve el valor *NaN*. |
+| Interpolación | `lerp` | Calcula la función de interpolación lineal. |
+| Exponencial | `exp` | Calcula el valor de *e^x^*. |
+| Exponencial | `exp2` | Calcula el valor de *2^x^*. |
+| Exponencial | `expm1` | Calcula el valor de *e^x^-1*. |
+| Exponencial | `log` | Calcula el valor de *ln x*. |
+| Exponencial | `log10` | Calcula el valor de *log~10~ x*. |
+| Exponencial | `log2` | Calcula el valor de *log~2~ x*. |
+| Exponencial | `log1p` | Calcula el valor de *ln(1+x)*. |
+| Potencias | `pow` | Calcula el valor de *x^y^*. |
+| Potencias | `sqrt` | Calcula la raíz cuadrada de *x*. |
+| Potencias | `cbrt` | Calcula la raíz cúbica de *x*. |
+| Potencias | `hypot` | Calcula la hipotenusa. |
+| Trigonometría | `sin` | Calcula el seno en radianes. |
+| Trigonometría | `cos` | Calcula el coseno en radianes. |
+| Trigonometría | `tan` | Calcula la tangente en radianes. |
+| Trigonometría | `asin` | Calcula el arcoseno en radianes. |
+| Trigonometría | `acos` | Calcula el arcocoseno en radianes. |
+| Trigonometría | `atan` | Calcula la arcotangente en radianes. |
+| Trigonometría | `atan2` | Calcula la arcotangente de *y/x* en radianes. |
+| Hiperbólicas | `sinh` | Calcula el seno hiperbólico en radianes. |
+| Hiperbólicas | `cosh` | Calcula el coseno hiperbólico en radianes. |
+| Hiperbólicas | `tanh` | Calcula la tangente hiperbólica en radianes. |
+| Hiperbólicas | `asinh` | Calcula el arcoseno hiperbólico en radianes. |
+| Hiperbólicas | `acosh` | Calcula el arcocoseno hiperbólico en radianes. |
+| Hiperbólicas | `atanh` | Calcula la arcotangente hiperbólica en radianes. |
+| Precisión | `erf` | Función de error. |
+| Precisión | `erfc` | Función complementaria de error. |
+| Precisión | `tgamma` | Función gamma. |
+| Precisión | `lgamma` | Logaritmo natural de la función gamma. |
+| Redondeo | `ceil` | El siguiente entero mayor o igual. |
+| Redondeo | `floor` | El siguiente entero menor o igual. |
+| Redondeo | `trunc` | El siguiente entero menor o igual en magnitud. |
+| Redondeo | `round`<br/>`lround`<br/>`llround` | El entero más cercano. |
+| Redondeo | `nearbyint` | El entero más cercano usando el modo actual de redondeo. |
+| Redondeo | `rint`<br/>`lrint`<br/>`llrint` | El entero más cercano usando el modo actual de redondeo con excepciones si el resultado difiere. |
+| Manipulación | `frexp` | Descompone un número entre su significado y su potencia de `2`. |
+| Manipulación | `ldexp` | Multiplica un número por `2` elevado a la potencia. |
+| Manipulación | `modf` | Descompone un número en su parte entera y la decimal. |
+| Manipulación | `scalbn`<br/>`scalbln` | Multiplica un número por `FLT_RADIX` elevado a la potencia. |
+| Manipulación | `ilogb` | Extrae el exponente de un número. |
+| Manipulación | `logb` | Extrae el exponente de un número. |
+| Manipulación | `nextafter`<br/>`nexttoward` | Siguiente valor de coma flotante representable. |
+| Manipulación | `copysign` | Copia el signo de un valor de coma flotante. |
+| Clasificación | `fpclassify` | Obtiene la categoría de un valor de coma flotante. |
+| Clasificación | `isfinite` | Comprueba si el valor es finito. |
+| Clasificación | `isinf` | Comprueba si el valor es infinito. |
+| Clasificación | `isnan` | Comprueba si el valor no es valido. |
+| Clasificación | `isnormal` | Comprueba si el valor es normal. |
+| Clasificación | `signbit` | Comprueba si el valor es negativo. |
+| Clasificación | `isgreater` | Comprueba si el primer valor es mayor que el segundo. |
+| Clasificación | `isgreaterequal` | Comprueba si el primer valor es mayor o igual que el segundo. |
+| Clasificación | `isless` | Comprueba si el primer valor es menor que el segundo. |
+| Clasificación | `islessequal` | Comprueba si el primer valor es menor o igual que el segundo. |
+| Clasificación | `islessgreater` | Comprueba si el primer valor es menor o mayor que el segundo. |
+| Clasificación | `isunordered` | Comprueba si dos valores no son ordenables. |
 
-..
+Las anteriores funciones funcionan con el tipo `double`, pero tienen versiones terminadas en `f` para `float` y en `l` para `long double`. Además, dentro de `cmath` hay constantes como `INFINITY` o `NAN`, para representar el infinito o un número inválido con los números reales, que son macros heredadas del lenguaje C.
+
+En el módulo [`numeric`](https://en.cppreference.com/w/cpp/header/numeric) tenemos las siguientes funciones adicionales:
+
+| Función | Descripción |
+|:-------:|:------------|
+| `std::gcd` | Calcula el máximo común divisor de dos números. |
+| `std::lcm` | Calcula el mínimo común múltiplo de dos números. |
+| `std::midpoint` | Calcula el punto medio entre dos números. |
+| `std::lerp` | Calcula la función de interpolación lineal. |
+| `std::iota` | Rellena una secuencia con incrementos sucesivos de un valor inicial. |
+| `std::accumulate` | Suma o reduce una secuencia de elementos. |
+| `std::inner_product` | Calcula el producto interior de dos secuencias de elementos. |
+| `std::adjacent_difference` | Calcula la diferencia entre elementos adyacentes en una secuencia. |
+| `std::partial_sum` | Calcula la suma parcial de una secuencia de elementos. |
+| `std::reduce` | Reduce una secuencia de elementos sin un orden concreto. |
+| `std::exclusive_scan` | Similar a `partial_sum`, excluyendo el último elemento de la secuencia. |
+| `std::inclusive_scan` | Similar a `partial_sum`, incluyendo el último elemento de la secuencia. |
+| `std::transform_reduce` | Aplica una función a una secuencia y después la reduce. |
+| `std::transform_exclusive_scan` | Aplica una función a una secuencia y después la operación `exclusive_scan`. |
+| `std::transform_inclusive_scan` | Aplica una función a una secuencia y después la operación `inclusive_scan`. |
+
+Por último, tenemos los siguientes módulos matemáticos:
+
+| Módulo | Descripción |
+|:------:|:------------|
+| [`bit`](https://en.cppreference.com/w/cpp/header/bit) | Recoge una serie de funciones para trabajar a nivel de bits con valores y secuencias. |
+| [`complex`](https://en.cppreference.com/w/cpp/header/complex) | Tiene la clase [`std::complex<T>`](https://en.cppreference.com/w/cpp/numeric/complex) que representa los números complejos. |
+| [`limits`](https://en.cppreference.com/w/cpp/header/limits) | Tiene la clase [`std::numeric_limits<T>`](https://en.cppreference.com/w/cpp/types/numeric_limits) que da información sobre los tipos numéricos del lenguaje. |
+| [`numbers`](https://en.cppreference.com/w/cpp/header/numbers) | Recoge un conjunto de [constantes](https://en.cppreference.com/w/cpp/numeric/constants), como el número `e` o `pi`. |
+| [`random`](https://en.cppreference.com/w/cpp/header/random) | Recoge una serie de tipos para generar [números aleatorios](https://en.cppreference.com/w/cpp/numeric/random). Por un lado, tenemos distribuciones como [`std::uniform_int_distribution<T>`](https://en.cppreference.com/w/cpp/numeric/random/uniform_int_distribution), para producir números enteros aleatorios de forma uniforme, y [`std::uniform_real_distribution<T>`](https://en.cppreference.com/w/cpp/numeric/random/uniform_real_distribution), para hacer lo mismo con números reales, entre otras. Por otro lado, las distribuciones requieren de generadores como `std::default_random_engine`, entre otros.  |
+| [`valarray`](https://en.cppreference.com/w/cpp/header/valarray) | Tiene la clase [`std::valarray<T>`](https://en.cppreference.com/w/cpp/numeric/valarray) que representa un array especializado en números para optimizar operaciones matemáticas. |
 
 ### Concurrencia
 
-..
+La biblioteca estándar incorpora soporte para la [concurrencia](https://en.cppreference.com/w/cpp/thread). Estos son los principales tipos disponibles:
 
-| Categoría | Miembro | Descripción |
-|:---------:|:-------:|:------------|
-| | `std::` | . |
-
-..
+| Módulo | Tipo | Descripción |
+|:------:|:----:|:------------|
+| [`thread`](https://en.cppreference.com/w/cpp/header/thread) | [`std::thread`](https://en.cppreference.com/w/cpp/thread/thread) | Gestiona un hilo separado de ejecución. |
+| [`thread`](https://en.cppreference.com/w/cpp/header/thread) | [`std::jthread`](https://en.cppreference.com/w/cpp/thread/jthread) | Gestiona un hilo separado de ejecución, con soporte para que se vuelva a unir al hilo principal por sí solo y para que pueda ser cancelado. |
+| [`atomic`](https://en.cppreference.com/w/cpp/header/atomic) | [`std::atomic<T>`](https://en.cppreference.com/w/cpp/atomic/atomic) | Gestiona que las operaciones que se hagan sobre un objeto sean atómicas. |
+| [`atomic`](https://en.cppreference.com/w/cpp/header/atomic) | [`std::atomic_ref<T>`](https://en.cppreference.com/w/cpp/atomic/atomic_ref) | Gestiona que las operaciones que se hagan sobre una referencia a un objeto sean atómicas. |
+| [`atomic`](https://en.cppreference.com/w/cpp/header/atomic) | [`std::atomic_flag`](https://en.cppreference.com/w/cpp/atomic/atomic_flag) | Gestiona que las operaciones que se hagan sobre un booleano sean atómicas. Además, estas operaciones están libres de bloqueos. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::mutex`](https://en.cppreference.com/w/cpp/thread/mutex) | Representa una primitiva para sincronizar el acceso ordenado, a datos compartidos por múltiples hilos, mediante el bloqueo de la ejecución. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::timed_mutex`](https://en.cppreference.com/w/cpp/thread/timed_mutex) | Similar a `mutex`, pero los bloqueos tienen un tiempo de espera máximo. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::recursive_mutex`](https://en.cppreference.com/w/cpp/thread/recursive_mutex) | Similar a `mutex`, pero el se pueden acumular bloqueos de forma recursiva por el mismo hilo. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::recursive_timed_mutex`](https://en.cppreference.com/w/cpp/thread/recursive_timed_mutex) | Similar a `mutex`, pero el se pueden acumular bloqueos de forma recursiva por el mismo hilo con un tiempo de espera máximo. |
+| [`shared_mutex`](https://en.cppreference.com/w/cpp/header/shared_mutex) | [`std::shared_mutex`](https://en.cppreference.com/w/cpp/thread/shared_mutex) | Similar a `mutex`, pero puede permitir acceso compartido a varios hilos. |
+| [`shared_mutex`](https://en.cppreference.com/w/cpp/header/shared_mutex) | [`std::shared_timed_mutex`](https://en.cppreference.com/w/cpp/thread/shared_timed_mutex) | Similar a `shared_mutex`, pero los bloqueos tienen un tiempo de espera máximo. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::lock_guard<M>`](https://en.cppreference.com/w/cpp/thread/lock_guard) | Gestiona el bloqueo de un *mutex* y liberándolo cuando se sale del ámbito donde el candado ha sido declarado. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::scoped_lock<...>`](https://en.cppreference.com/w/cpp/thread/scoped_lock) | Similar a `lock_guard`, pero permite gestionar varios *mutex* a la vez. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::unique_lock<M>`](https://en.cppreference.com/w/cpp/thread/unique_lock) | Gestiona cómo se mueve la propiedad de un *mutex*. |
+| [`shared_mutex`](https://en.cppreference.com/w/cpp/header/shared_mutex) | [`std::shared_lock<M>`](https://en.cppreference.com/w/cpp/thread/shared_lock) | Gestiona cómo se mueve la propiedad de un *shared mutex*. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::lock<...>`](https://en.cppreference.com/w/cpp/thread/lock) | Función para bloquear un grupo de *mutex*, si alguno estuviera bloqueado se bloquea la ejecución del hilo actual. |
+| [`mutex`](https://en.cppreference.com/w/cpp/header/mutex) | [`std::try_lock<...>`](https://en.cppreference.com/w/cpp/thread/try_lock) | Función para bloquear un grupo de *mutex*, si alguno estuviera bloqueado devuelve un índice para indicar cuál ha sido, si no devuelve el valor `-1`. |
+| [`future`](https://en.cppreference.com/w/cpp/header/future) | [`std::future<T>`](https://en.cppreference.com/w/cpp/thread/future) | Espera por un valor que es asignado de forma asíncrona. |
+| [`future`](https://en.cppreference.com/w/cpp/header/future) | [`std::shared_future<T>`](https://en.cppreference.com/w/cpp/thread/shared_future) | Espera por un valor, posiblemente referenciado por otros objetos de tipo `future`, que es asignado de forma asíncrona. |
+| [`future`](https://en.cppreference.com/w/cpp/header/future) | [`std::promise<T>`](https://en.cppreference.com/w/cpp/thread/promise) | Almacena un valor para recuperarlo de forma asíncrona. |
+| [`future`](https://en.cppreference.com/w/cpp/header/future) | [`std::packaged_task<...>`](https://en.cppreference.com/w/cpp/thread/packaged_task) | Encapsula una función para almacenar su valor de retorno para recuperarlo de forma asíncrona. |
+| [`future`](https://en.cppreference.com/w/cpp/header/future) | [`std::async<...>`](https://en.cppreference.com/w/cpp/thread/async) | Ejecuta una función de forma asíncrona, potencialmente en un nuevo hilo, y devuelve un objeto de tipo `future` con el que se obtendrá el resultado. |
 
